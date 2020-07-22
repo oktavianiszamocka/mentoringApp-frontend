@@ -1,0 +1,28 @@
+version: 2.1
+
+# Define the jobs we want to run for this project
+jobs:
+  build:
+    docker:
+      - image: circleci/node:12.16.1
+    steps:
+      - checkout
+      - run:
+          name: start #running the app
+          command: npm start
+      - run:
+          name: test #running tests
+          command: npm test
+ # test:
+ #   docker:
+ #     - image: circleci/<language>:<version TAG>
+ #   steps:
+ #     - checkout
+ #     - run: my-command
+
+# Orchestrate our job run sequence
+#workflows:
+ # build_and_test:
+  #  jobs:
+   #   - build
+    #  - test
