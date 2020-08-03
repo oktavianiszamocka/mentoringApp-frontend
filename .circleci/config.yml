@@ -7,9 +7,6 @@ jobs:
       - image: circleci/node:12.16.1
     steps:
       - checkout
-       - run:
-          name: install #running the app
-          command: npm install
       - run:
           name: start #running the app
           command: npm start
