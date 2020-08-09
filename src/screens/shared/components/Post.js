@@ -20,12 +20,25 @@ const StyledP=styled.p`
   padding: 2rem;
 `;
 
+
+const imgTheme = {
+  width: "70px",
+  borderRadius: "50%"
+};
+
+const spanTheme = {
+  fontSize: "1.5rem",
+  marginLeft: "1.7rem",
+  marginTop: "1.0rem"
+};
+
 const Post=({text, user})=>{
   
   return (
     <StyledSection>
       <StyledHeader>
-        <Avatar firstName={user.firstName} lastName={user.lastName} imageUrl={user.imageUrl} />
+      <Avatar firstName={user.firstName} lastName={user.lastName} imageUrl={user.imageUrl} 
+      imgTheme={imgTheme} spanTheme={spanTheme}/>
       </StyledHeader>
       <StyledP>
         {text}
