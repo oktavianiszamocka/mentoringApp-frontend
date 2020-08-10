@@ -5,3 +5,12 @@
 #pjatkimg {
     margin-left: 1.4rem;
 }
+
+.divider-vertical {
+    height: 40px;
+    width: 1px;
+    margin: 0 5px;
+    overflow: hidden;
+    background-color: black;
+    border-right: 2px solid #C6C6C6;
+ }
