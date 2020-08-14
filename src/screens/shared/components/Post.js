@@ -1,5 +1,6 @@
 import React from 'react';
 import Avatar from '../components/Avatar';
+import CategoryBar from '../components/CategoryBar';
 import styled from 'styled-components';
 
 
@@ -18,8 +19,16 @@ const StyledHeader=styled.header`
 
 const StyledP=styled.p`
   padding: 2rem;
+  
 `;
 
+const StyledC=styled.p`
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 1px 1px 0 0;
+  
+ 
+`;
 
 const imgTheme = {
   width: "70px",
@@ -32,7 +41,16 @@ const spanTheme = {
   marginTop: "1.0rem"
 };
 
+
 const Post=({text, user})=>{
+
+  
+const category={
+  categoryName1: "Java",
+  categoryName2: "Backend",
+  categoryName3: "ASP.NET Core"
+}; 
+
   
   return (
     <StyledSection>
@@ -41,10 +59,16 @@ const Post=({text, user})=>{
       imgTheme={imgTheme} spanTheme={spanTheme}/>
       </StyledHeader>
       <StyledP>
-        {text}
+      {text}
       </StyledP>
+      <StyledC>
+      <CategoryBar categoryName1={category.categoryName1} categoryName2={category.categoryName2} categoryName3={category.categoryName3}/>
+    
+      </StyledC>
+
     </StyledSection>
   );
 };
 
 export default Post;
+
