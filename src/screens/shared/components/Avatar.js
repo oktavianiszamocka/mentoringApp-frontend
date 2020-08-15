@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 const StyledDiv=styled.div`
   display: flex;
+  margin: 5px;
 `;
 
 
