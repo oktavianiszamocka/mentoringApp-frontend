@@ -2,7 +2,7 @@ import './index.css';
 import React, { Suspense } from 'react';
 import { Router, Route, Redirect } from 'react-router-dom';
 import { Provider, history } from './utils/storage/store';
-import { routes } from './utils/helpers/routing';
+
 
 // import Admin from './Admin/routes';
 import Login from './Auth/Login';
