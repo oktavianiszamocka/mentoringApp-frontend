@@ -1,5 +1,4 @@
 import React from 'react';
-import Avatar from '../shared/components/Avatar';
 import Header from '../shared/components/Header';
 import Post from '../shared/components/Post';
 import Note from '../shared/components/Note';

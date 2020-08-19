@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 const StyledDiv = styled.div`
   display: flex;
+  margin: 5px;
 `;
 
 const StyledImg = styled.img`
