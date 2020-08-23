@@ -1,21 +1,21 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-const Wrapper = styled.section`
+const StyledSection = styled.section`
   margin: 2rem;
   padding: 3em;
   background-color: #ffcc66;
 `;
 
-const content = styled.p`
+const StyledP = styled.p`
   padding: 2rem;
 `;
 
 const Note = ({ text }) => {
   return (
-    <Wrapper>
-      <content>{text}</content>
-    </Wrapper>
+    <StyledSection>
+      <StyledP>{text}</StyledP>
+    </StyledSection>
   );
 };
 
