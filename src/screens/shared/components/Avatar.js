@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import Font from '../../../globals/font';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -8,14 +9,14 @@ const StyledDiv = styled.div`
 `;
 
 const StyledImg = styled.img`
-  border-radius: 5px;
+  border-radius: 1.5rem;
   width: ${(props) => props.width};
   height: ${(props) => props.width};
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
 
 const StyledSpan = styled.span`
-  font-family: 'Open Sans Condensed', sans-serif;
+  font-family: ${Font.fontFamily};
   font-size: 1rem;
   margin-left: 1rem;
   margin-top: 1rem;

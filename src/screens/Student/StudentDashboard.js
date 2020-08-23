@@ -3,6 +3,8 @@ import Header from '../shared/components/Header';
 import Post from '../shared/components/Post';
 import Note from '../shared/components/Note';
 import Title from '../shared/components/Title';
+import Avatar from '../shared/components/Avatar';
+
 import '../../index.css';
 
 const StudentDashboard = () => {
@@ -18,7 +20,7 @@ const StudentDashboard = () => {
   };
   return (
     <div>
-      <Avatar {...user} />
+      <Header />
     </div>
   );
 };
