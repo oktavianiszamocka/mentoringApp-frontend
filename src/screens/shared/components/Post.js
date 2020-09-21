@@ -1,8 +1,10 @@
 import React from 'react';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import Avatar from '../components/Avatar';
 import CategoryBar from '../components/CategoryBar';
 import Comment from '../components/Comment';
-import styled from 'styled-components';
+
 
 const StyledDiv = styled.div`
   display: flex;
@@ -61,7 +63,6 @@ const inputStyle = {
 
 const Post = ({ text, user }) => {
 
-
   const category = {
     categoryName1: "Java",
     categoryName2: "Backend",
@@ -98,5 +99,14 @@ const Post = ({ text, user }) => {
     </StyledSection>
   );
 };
-export default Post;
 
+Post.propTypes={
+  text: PropTypes.string.isRequired,
+  user: PropTypes.objectOf(PropTypes.shape({
+    firstName: PropTypes.string.isRequired,
+    lastName: PropTypes.string.isRequired,
+    imageUrl: PropTypes.string.isRequired
+  })).isRequired
+};
+
+export default Post;
