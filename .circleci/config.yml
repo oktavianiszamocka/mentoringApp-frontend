@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run:
           name: update-npm
-          command: "sudo npm install -g npm@latest"
+          command: 'sudo npm install -g npm@latest'
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -18,23 +18,22 @@ jobs:
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
-          - ./node_modules
-     # - run:
-    #      name: start #running the app
-       #   command: npm start
+            - ./node_modules
       - run:
-          name: test #running tests
-          command: npm test
- # test:
- #   docker:
- #     - image: circleci/<language>:<version TAG>
- #   steps:
- #     - checkout
- #     - run: my-command
-
+          name: start #running the app
+          command: npm start
+    #  - run:
+    #      name: test #running tests
+    #      command: npm test
+  # test:
+  #   docker:
+  #     - image: circleci/<language>:<version TAG>
+  #   steps:
+  #     - checkout
+  #     - run: my-command
 # Orchestrate our job run sequence
 #workflows:
- # build_and_test:
-  #  jobs:
-   #   - build
-    #  - test
+# build_and_test:
+#  jobs:
+#   - build
+#  - test
