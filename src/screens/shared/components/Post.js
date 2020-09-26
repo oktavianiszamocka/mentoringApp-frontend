@@ -91,10 +91,10 @@ const Post = ({ text, user }) => {
 
         <TagsComponent tagName1={tags.tagName1} tagName2={tags.tagName2} tagName3={tags.tagName3} />
         <hr />
-
-        <Button variant="contained">All comments</Button>
-        <Comment />
-
+        <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
+          <Button style={{ fontSize: 10 }} variant="default">All comments</Button>
+          <Comment />
+        </div>
         <hr />
 
         <StyledDiv>
@@ -104,7 +104,7 @@ const Post = ({ text, user }) => {
 
       </StyledC>
 
-    </StyledSection>
+    </StyledSection >
   );
 };
 export default Post;
