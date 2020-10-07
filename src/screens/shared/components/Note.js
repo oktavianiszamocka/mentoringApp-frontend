@@ -2,9 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledSection = styled.section`
-  margin: 2rem;
-  padding: 3em;
+  margin: 0.5rem;
+  padding: 2rem;
   background-color: #ffcc66;
+  box-shadow: 4px 1px 5px grey;
 `;
 
 const StyledP = styled.p`
