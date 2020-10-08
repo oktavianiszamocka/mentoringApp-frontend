@@ -5,10 +5,11 @@ import { Provider } from 'mobx-react';
 import postsStore from 'src/stores/postsStore';
 import authStore from 'src/stores/authStore';
 
+import Header from 'src/screens/shared/components/Header';
+import MessagePage from 'src/screens/MessagePage/MessagePage';
 import Login from './Auth/Login';
 import UpsertPassword from './Auth/UpsertPassword';
 import MainPage from './MainPage/MainPage';
-import Header from 'src/screens/shared/components/Header';
 
 const stores = {
   postsStore,
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/login" component={Login} />
           <Route path={['/reset-password', '/register']} component={UpsertPassword} />
           <Route path="/main-page" component={MainPage} />
+          <Route path="/message" component={MessagePage} />
         </Switch>
       </BrowserRouter>
     </Provider>
