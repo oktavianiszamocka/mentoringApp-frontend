@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Grid, colors } from '@material-ui/core';
 import AvatarImage from '../../assets/images/avatar.jpg';
 import UserAvailability from './UserAvailability';
+import SearchBar from './SearchBar';
 
 import '../../index.css';
 
@@ -32,7 +33,9 @@ export default function MessagePage() {
       <Grid container spacing={4}>
         <Grid item xs={4} container direction="column" spacing={3}>
           <Grid item>
-            <Paper style={{ height: '6rem' }}>search</Paper>
+            <Paper style={{ height: '6rem' }}>
+              <SearchBar />
+            </Paper>
           </Grid>
           <Grid item>
             <Paper style={{ height: '25rem' }}>chat</Paper>
