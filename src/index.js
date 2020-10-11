@@ -5,9 +5,8 @@ import App from './screens';
 import StudentDashboard from './screens/Student/StudentDashboard';
 import 'bootstrap/dist/css/bootstrap.css';
 import * as serviceWorker from './serviceWorker';
-import StudentMessage from './screens/Student/StudentMessages';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<StudentDashboard />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
