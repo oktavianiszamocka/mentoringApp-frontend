@@ -1,34 +1,27 @@
-import React from 'react';
-import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
-import { Provider } from 'mobx-react';
+import './index.css';
+import React, { Suspense } from 'react';
+import { Router, Route, Redirect } from 'react-router-dom';
+import { Provider, history } from './utils/storage/store';
 
-import postsStore from 'src/stores/postsStore';
-import authStore from 'src/stores/authStore';
 
-import Header from 'src/screens/shared/components/Header';
-import MessagePage from 'src/screens/MessagePage/MessagePage';
+// import Admin from './Admin/routes';
 import Login from './Auth/Login';
 import UpsertPassword from './Auth/UpsertPassword';
-import MainPage from './MainPage/MainPage';
 
-const stores = {
-  postsStore,
-  authStore,
-};
+const renderRoute = route => <Route key={route.path} {...route} />;
 
 const App = () => {
   return (
-    <Provider {...stores}>
-      <Header />
-      <BrowserRouter>
-        <Switch>
-          <Route path="/" exact render={() => <Redirect to="/login" />} />
-          <Route path="/login" component={Login} />
-          <Route path={['/reset-password', '/register']} component={UpsertPassword} />
-          <Route path="/main-page" component={MainPage} />
-          <Route path="/message" component={MessagePage} />
-        </Switch>
-      </BrowserRouter>
+    <Provider>
+       <Router history={history}>
+          <Suspense fallback="loading">
+            <Route path="/" exact render={() => <Redirect to="/login" />} />
+            <Route path="/login" component={Login} />
+            <Route path={["/reset-password", "/register"]} component={UpsertPassword} />
+            {/* <Route path="/admin" component={Admin} /> */}
+            {/* {routes.map(renderRoute)} */}
+          </Suspense>
+        </Router>
     </Provider>
   );
 };
