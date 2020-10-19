@@ -1,8 +1,10 @@
 import React from 'react';
 import Avatar from '../components/Avatar';
-import CategoryBar from '../components/CategoryBar';
+import TagsComponent from './TagsComponent';
 import Comment from '../components/Comment';
 import styled from 'styled-components';
+import { Button } from '@material-ui/core';
+import { spacing } from '@material-ui/system';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -62,10 +64,14 @@ const inputStyle = {
 const Post = ({ text, user }) => {
 
 
-  const category = {
-    categoryName1: "Java",
-    categoryName2: "Backend",
-    categoryName3: "ASP.NET Core"
+  const tags = {
+    tagName1: "Java",
+    tagName2: "Backend",
+    tagName3: ".NET Core",
+    tagName4: "React",
+    tagName5: "Frontend",
+    tagName6: "C++",
+
   };
   const StyledDiv = styled.div`
   display: flex;
@@ -83,9 +89,12 @@ const Post = ({ text, user }) => {
 
       <StyledC>
 
-        <CategoryBar categoryName1={category.categoryName1} categoryName2={category.categoryName2} categoryName3={category.categoryName3} />
+        <TagsComponent tagName1={tags.tagName1} tagName2={tags.tagName2} tagName3={tags.tagName3} />
         <hr />
-        <Comment />
+        <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
+          <Button style={{ fontSize: 10 }} variant="default">All comments</Button>
+          <Comment />
+        </div>
         <hr />
 
         <StyledDiv>
@@ -95,7 +104,7 @@ const Post = ({ text, user }) => {
 
       </StyledC>
 
-    </StyledSection>
+    </StyledSection >
   );
 };
 export default Post;
