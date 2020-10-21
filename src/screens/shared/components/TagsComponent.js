@@ -20,13 +20,7 @@ const TagsComponent = ({ tags, spanTheme }) => {
   return (
     <StyledDiv>
       {tags.map((tag) => (
-<<<<<<< HEAD
         <StyledSpan spanTheme={spanTheme}>{tag}</StyledSpan>
-=======
-        <StyledSpan key={tag.IdTag} spanTheme={spanTheme}>
-          {tag.Name}
-        </StyledSpan>
->>>>>>> f231c557f96b28a1107595e6f3a4ed61230391b6
       ))}
     </StyledDiv>
   );
