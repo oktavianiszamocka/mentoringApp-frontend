@@ -7,19 +7,20 @@ const StyledSection = styled.section`
   margin: 2rem;
 `;
 
-const StyledH1 = styled.h1`
-  text-align: ${(props) => props.textAlign};
-  font-size: ${(props) => props.fontSize};
-  font-family: ${Font.fontFamily};
+const StyledH2 = styled.h2`
+  font-family: sans-serif !important;
+  font-size: 2rem;
+  font-weight: 100;
+  text-transform: uppercase;
   color: ${(props) => props.fontColor};
 `;
 
 const Title = ({ text, textAlign, fontSize, fontColor }) => {
   return (
     <StyledSection>
-      <StyledH1 textAlign={textAlign} fontSize={fontSize} fontColor={fontColor}>
+      <StyledH2 textAlign={textAlign} fontSize={fontSize} fontColor={fontColor}>
         {text}
-      </StyledH1>
+      </StyledH2>
     </StyledSection>
   );
 };

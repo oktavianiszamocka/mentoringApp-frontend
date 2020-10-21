@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './screens';
 import StudentDashboard from './screens/Student/StudentDashboard';
-import 'bootstrap/dist/css/bootstrap.css';
+import './index.css';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<StudentDashboard />, document.getElementById('root'));
