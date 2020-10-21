@@ -44,7 +44,6 @@ const StyledBox = styled(Box)({
 
 const getUser = () => axios.get('https://run.mocky.io/v3/2b2ecfa1-3095-4348-b16a-bb66dafc710c');
 const getNotes = () => axios.get('https://run.mocky.io/v3/2f01d5f2-21e3-40fe-86fd-a9ccecd078d1');
-
 const getPost = () => axios.get('https://run.mocky.io/v3/0accdcfe-fbf9-46c2-a0ff-69605bb9d213');
 
 const StudentDashboard = () => {
@@ -56,11 +55,16 @@ const StudentDashboard = () => {
     setNotes(notes.filter((n) => n.IdNote != idNote));
   };
 
-  useEffect(async () => {
+  const loadData = async () => {
+    console.log('asdadasd');
     const res = await Promise.all([getUser(), getNotes(), getPost()]);
     setUser(res[0].data);
     setNotes(res[1].data);
     setPosts(res[2].data);
+  };
+
+  useEffect(async () => {
+    loadData();
   }, []);
 
   const handleSubmit = (e) => {
