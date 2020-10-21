@@ -8,7 +8,11 @@ import Grid from '@material-ui/core/Grid';
 import { styled } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import axios from 'axios';
+<<<<<<< HEAD
 import UpsertPostForm from './Post/Form';
+=======
+import UpsertPost from './Post/Form';
+>>>>>>> f231c557f96b28a1107595e6f3a4ed61230391b6
 
 const StyledBox = styled(Box)({
   padding: '1.5rem',
@@ -43,12 +47,16 @@ const StyledBox = styled(Box)({
 
 const getUser = () => axios.get('https://run.mocky.io/v3/2b2ecfa1-3095-4348-b16a-bb66dafc710c');
 const getNotes = () => axios.get('https://run.mocky.io/v3/2f01d5f2-21e3-40fe-86fd-a9ccecd078d1');
+<<<<<<< HEAD
 const getPost = () => axios.get('https://run.mocky.io/v3/0accdcfe-fbf9-46c2-a0ff-69605bb9d213');
+=======
+>>>>>>> f231c557f96b28a1107595e6f3a4ed61230391b6
 
 const StudentDashboard = () => {
   const [notes, setNotes] = useState();
   const [user, setUser] = useState();
   const [posts, setPosts] = useState();
+<<<<<<< HEAD
 
   const onNoteCloseHandler = (idNote) => {
     setNotes(notes.filter((n) => n.IdNote != idNote));
@@ -76,6 +84,24 @@ const StudentDashboard = () => {
   };
 
   console.log('posts', posts);
+=======
+
+  const onNoteCloseHandler = (idNote) => {
+    setNotes(notes.filter((n) => n.IdNote != idNote));
+  };
+
+  useEffect(async () => {
+    const res = await Promise.all([getUser(), getNotes()]);
+    setUser(res[0].data);
+    setNotes(res[1].data);
+  }, []);
+
+  const handleSubmit = (e, v) => {
+    e.preventDefault();
+    console.log('e :>> ', e, v);
+    setPosts(); // todo add elements
+  };
+>>>>>>> f231c557f96b28a1107595e6f3a4ed61230391b6
   return (
     <Grid container>
       {Header()}
@@ -93,8 +119,14 @@ const StudentDashboard = () => {
         </StyledBox>
       </Grid>
       <Grid item lg={8}>
+<<<<<<< HEAD
         <UpsertPostForm onSubmit={handleSubmit} user={user} />
         {posts && posts.map((post) => <Post postData={post} user={user} />)}
+=======
+        <UpsertPost onSubmit={handleSubmit} initialValues={{ title: '' }} user={user} />
+        {posts && posts.map((post) => <Post user={user} />)}
+        <Post user={user} />
+>>>>>>> f231c557f96b28a1107595e6f3a4ed61230391b6
       </Grid>
     </Grid>
   );
