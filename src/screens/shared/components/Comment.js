@@ -28,13 +28,7 @@ const StyledDiv = styled.div`
 const Comment = () => {
   return (
     <StyledDiv>
-      <Avatar
-        firstName={user.firstName}
-        lastName={user.lastName}
-        imageUrl={user.imageUrl}
-        imgTheme={imgTheme}
-        spanTheme={spanTheme}
-      />
+      <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
       <div className="media-body p-2 shadow-sm rounded bg-light border">
         <small className="float-right text-muted">{user.time}</small>
         <h6 className="mt-2 mb-4 text-muted">{user.comment}</h6>
