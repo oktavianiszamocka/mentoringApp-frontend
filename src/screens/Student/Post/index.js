@@ -82,9 +82,7 @@ const Post = ({ user, postData }) => {
           {postData && <TagsComponent tags={postData.tags} />}
           <hr />
           <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
-            <Button style={{ fontSize: 10 }} variant="default">
-              All comments
-            </Button>
+
             <Comment />
           </div>
           <hr />
