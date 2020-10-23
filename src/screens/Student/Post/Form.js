@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
+import MUIRichTextEditor from 'mui-rte';
 
 const StyledSection = styled.section`
   margin: 2rem;
@@ -26,6 +27,12 @@ const imgTheme = {
   borderRadius: '50%',
 };
 
+var divStyle = {
+  background: "#eee",
+  paddingBottom: "30px",
+  marginBottom: "10px",
+  marginTop: "10px"
+};
 // const PostSchema = Yup.object().shape({
 //   title: Yup.string().required(),
 //   subtitle: Yup.string(),
@@ -49,7 +56,16 @@ const UpsertPostForm = (props) => {
               <Field as={TextField} name="subtitle" label="subtitle" />
             </div>
           </div>
-          <Field as={TextField} name="text" label="text" fullWidth />
+
+          <div style={divStyle}>
+            <MUIRichTextEditor
+              name="text"
+              label="text"
+              inlineToolbar={true}
+              fullWidth
+
+            /> </div>
+          <hr />
           <Field as={TextField} name="tags" label="tags" fullWidth />
           <div style={{ textAlignLast: 'right' }}>
             <Button
