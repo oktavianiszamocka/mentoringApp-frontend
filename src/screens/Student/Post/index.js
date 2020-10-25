@@ -4,6 +4,8 @@ import TagsComponent from '../../shared/components/TagsComponent';
 import Comment from '../../shared/components/Comment';
 import styled from 'styled-components';
 import { Button } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import BorderColorIcon from '@material-ui/icons/BorderColor';
 import axios from 'axios';
 import UpsertPost from './Form';
 
@@ -17,12 +19,15 @@ const StyledSection = styled.section`
   background-color: #e0e0e0;
   border-radius: 5px;
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
+
 `;
 
 const StyledHeader = styled.header`
   background-color: #f5f5f5;
   padding: 2rem;
-  border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0; 
+  display: inline,
+  margin: 1000
 `;
 
 const StyledP = styled.p`
@@ -59,7 +64,7 @@ const inputStyle = {
   marginLeft: '20px',
 };
 
-const Post = ({ user, postData }) => {
+const Post = ({idPost, user, postData, onDeleteHandler }) => {
 
 
   const StyledDiv = styled.div`
@@ -67,11 +72,17 @@ const Post = ({ user, postData }) => {
   `;
 
   console.log('postData', postData);
+
   return (
     <>
       <StyledSection>
         <StyledHeader>
-          <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
+          <div style={{display: 'flex'}}>          
+            <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
+            <BorderColorIcon style={{  marginLeft: '56rem' }} />
+            <DeleteIcon onClick={() => onDeleteHandler(idPost)} style={{  marginLeft: '1rem' }} />
+          </div>
+          
           {postData && <div> {postData.title} </div>}
         
         </StyledHeader>

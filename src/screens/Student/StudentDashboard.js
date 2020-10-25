@@ -62,6 +62,10 @@ const StudentDashboard = () => {
     setNotes(notes.filter((n) => n.IdNote != idNote));
   };
 
+  const onPostDeleteHandler = (idPost) => {
+    setPosts(posts.filter((p) => p.IdPost != idPost));
+  };
+
   const loadData = async () => {
     console.log('asdadasd');
     const res = await Promise.all([ getUser(), getNotes(), getPost()]);
@@ -108,7 +112,7 @@ const StudentDashboard = () => {
       </Grid>
       <Grid item lg={8}>
         <UpsertPostForm onSubmit={handleSubmit} user={user} />
-        {posts && posts.map((post) => <Post postData={post} user={post.writer} />)}
+        {posts && posts.map((post) => <Post idPost={post.idPost} postData={post} user={post.writer} onDeleteHandler={() => onPostDeleteHandler(post.IdPost)}/>)}
       </Grid>
     </Grid>
   );
