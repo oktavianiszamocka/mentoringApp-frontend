@@ -81,8 +81,17 @@ const Post = ({ user, postData }) => {
         <StyledC>
           {postData && <TagsComponent tags={postData.tags} />}
           <hr />
-          <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
 
+          <div style={{ textAlignLast: 'right' }}>
+            <Button style={{ margin: '5px', fontSize: '10px', }}
+              color="default"
+              variant="contained"
+            >
+              All comments
+                </Button>
+          </div>
+
+          <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
             <Comment />
           </div>
           <hr />
