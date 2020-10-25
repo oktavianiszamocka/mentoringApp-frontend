@@ -73,10 +73,10 @@ const Post = ({ user, postData }) => {
         <StyledHeader>
           <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
           {postData && <div> {postData.title} </div>}
-          {postData && <div> {postData.subtitle} </div>}
+        
         </StyledHeader>
 
-        {postData && <StyledP> {postData.text} </StyledP>}
+        {postData && <StyledP> {postData.content} </StyledP>}
 
         <StyledC>
           {postData && <TagsComponent tags={postData.tags} />}
@@ -85,7 +85,8 @@ const Post = ({ user, postData }) => {
             <Button style={{ fontSize: 10 }} variant="default">
               All comments
             </Button>
-            <Comment />
+
+            {postData.newestComment && <Comment comment={postData.newestComment}/> }
           </div>
           <hr />
 
