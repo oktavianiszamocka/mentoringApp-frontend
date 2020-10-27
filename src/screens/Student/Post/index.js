@@ -81,12 +81,18 @@ const Post = ({ user, postData }) => {
         <StyledC>
           {postData && <TagsComponent tags={postData.tags} />}
           <hr />
-          <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
-            <Button style={{ fontSize: 10 }} variant="default">
+
+          <div style={{ textAlignLast: 'right' }}>
+            <Button style={{ margin: '5px', fontSize: '10px', }}
+              color="default"
+              variant="contained"
+            >
               All comments
+
             </Button>
 
             {postData.newestComment && <Comment comment={postData.newestComment}/> }
+
           </div>
           <hr />
 
