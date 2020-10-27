@@ -71,8 +71,6 @@ const Post = ({idPost, user, postData, onDeleteHandler }) => {
     display: flex;
   `;
 
-  console.log('postData', postData);
-
   return (
     <>
       <StyledSection>
