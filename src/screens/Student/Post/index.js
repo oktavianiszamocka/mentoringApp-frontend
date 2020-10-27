@@ -73,10 +73,10 @@ const Post = ({ user, postData }) => {
         <StyledHeader>
           <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
           {postData && <div> {postData.title} </div>}
-        
+          {postData && <div> {postData.subtitle} </div>}
         </StyledHeader>
 
-        {postData && <StyledP> {postData.content} </StyledP>}
+        {postData && <StyledP> {postData.text} </StyledP>}
 
         <StyledC>
           {postData && <TagsComponent tags={postData.tags} />}
@@ -88,11 +88,11 @@ const Post = ({ user, postData }) => {
               variant="contained"
             >
               All comments
+                </Button>
+          </div>
 
-            </Button>
-
-            {postData.newestComment && <Comment comment={postData.newestComment}/> }
-
+          <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
+            <Comment />
           </div>
           <hr />
 
