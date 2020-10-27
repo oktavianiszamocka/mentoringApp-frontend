@@ -73,26 +73,17 @@ const Post = ({ user, postData }) => {
         <StyledHeader>
           <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
           {postData && <div> {postData.title} </div>}
-        
+          {postData && <div> {postData.subtitle} </div>}
         </StyledHeader>
 
-        {postData && <StyledP> {postData.content} </StyledP>}
+        {postData && <StyledP> {postData.text} </StyledP>}
 
         <StyledC>
           {postData && <TagsComponent tags={postData.tags} />}
           <hr />
+          <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
 
-          <div style={{ textAlignLast: 'right' }}>
-            <Button style={{ margin: '5px', fontSize: '10px', }}
-              color="default"
-              variant="contained"
-            >
-              All comments
-
-            </Button>
-
-            {postData.newestComment && <Comment comment={postData.newestComment}/> }
-
+            <Comment />
           </div>
           <hr />
 
