@@ -42,9 +42,16 @@ const StyledBox = styled(Box)({
 //   tagName6: 'C++',
 // };
 
+const host = 'http://localhost:57864/api';
+const userId = 1;
 const getUser = () => axios.get('https://run.mocky.io/v3/2b2ecfa1-3095-4348-b16a-bb66dafc710c');
-const getNotes = () => axios.get('https://run.mocky.io/v3/2f01d5f2-21e3-40fe-86fd-a9ccecd078d1');
-const getPost = () => axios.get('https://run.mocky.io/v3/0accdcfe-fbf9-46c2-a0ff-69605bb9d213');
+const getNotes = () => axios.get(`${host}/personal-notes/${userId}`);
+const getPost = () => axios.get(`${host}/posts`);
+//endpoint to get all comment
+// eg. get all comment from post with id 1 = http://localhost:57864/api/posts/1/comment
+var postId = 1;
+const getComment = () => axios.get(`${host}/posts/${postId}/comment`)
+
 
 const StudentDashboard = () => {
   const [notes, setNotes] = useState();
@@ -57,12 +64,13 @@ const StudentDashboard = () => {
 
   const loadData = async () => {
     console.log('asdadasd');
-    const res = await Promise.all([getUser(), getNotes(), getPost()]);
+    const res = await Promise.all([ getUser(), getNotes(), getPost()]);
     setUser(res[0].data);
-    setNotes(res[1].data);
-    setPosts(res[2].data);
+    setNotes(res[1].data.data);
+    setPosts(res[2].data.data);
   };
 
+  console.log(posts);
   useEffect(async () => {
     loadData();
   }, []);
@@ -73,7 +81,6 @@ const StudentDashboard = () => {
       ...posts,
       {
         title: e.title,
-        subtitle: e.subtitle,
         text: e.text,
         tags: tags.split(','),
       },
@@ -81,7 +88,7 @@ const StudentDashboard = () => {
     setPosts(newPosts); // todo add elements
   };
 
-  console.log('posts', posts);
+
 
   return (
     <Grid container>
@@ -92,8 +99,8 @@ const StudentDashboard = () => {
           {notes &&
             notes.map((item) => (
               <Note
-                key={item.IdNote}
-                {...item}
+                key={item.idNote}
+                text={item.description}
                 onCloseHandler={() => onNoteCloseHandler(item.IdNote)}
               />
             ))}
@@ -101,7 +108,7 @@ const StudentDashboard = () => {
       </Grid>
       <Grid item lg={8}>
         <UpsertPostForm onSubmit={handleSubmit} user={user} />
-        {posts && posts.map((post) => <Post postData={post} user={user} />)}
+        {posts && posts.map((post) => <Post postData={post} user={post.writer} />)}
       </Grid>
     </Grid>
   );
