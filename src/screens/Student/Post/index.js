@@ -82,20 +82,17 @@ const Post = ({user, postData, onDeleteHandler }) => {
           </div>
           
           {postData && <div> {postData.title} </div>}
-        
+          {postData && <div> {postData.subtitle} </div>}
         </StyledHeader>
 
-        {postData && <StyledP> {postData.content} </StyledP>}
+        {postData && <StyledP> {postData.text} </StyledP>}
 
         <StyledC>
           {postData && <TagsComponent tags={postData.tags} />}
           <hr />
           <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
-            <Button style={{ fontSize: 10 }} variant="default">
-              All comments
-            </Button>
 
-            {postData.newestComment && <Comment comment={postData.newestComment}/> }
+            <Comment />
           </div>
           <hr />
 

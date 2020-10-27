@@ -1,28 +1,30 @@
 import React from 'react';
-import styled from 'styled-components';
+import Chip from '@material-ui/core/Chip';
+import { makeStyles } from '@material-ui/core/styles';
 
-const StyledDiv = styled.div`
-  display: flex;
-`;
 
-const StyledSpan = styled.span`
-  font-family: 'Open Sans Condensed', sans-serif;
-  background-color: #c0c0c0;
-  border-radius: 25px;
-  border: 2px solid #c0c0c0;
-  padding: 10px;
-  margin: 3px;
-  width: 120px;
-  height: 50px;
-`;
 
-const TagsComponent = ({ tags, spanTheme }) => {
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+      padding: theme.spacing(0.2)
+    },
+  },
+}));
+
+const TagsComponent = ({ tags }) => {
+  const classes = useStyles();
+
   return (
-    <StyledDiv>
+    <div className={classes.root}>
       {tags.map((tag) => (
-        <StyledSpan spanTheme={spanTheme}>{tag}</StyledSpan>
+        <Chip label={tag} ></Chip>
       ))}
-    </StyledDiv>
+    </div>
   );
 };
 
