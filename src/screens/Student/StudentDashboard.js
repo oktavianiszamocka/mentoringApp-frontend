@@ -63,7 +63,7 @@ const StudentDashboard = () => {
   };
 
   const onPostDeleteHandler = (idPost) => {
-    setPosts(posts.filter((p) => p.IdPost != idPost));
+    setPosts(posts.filter((p) => p.idPost != idPost));
   };
 
   const loadData = async () => {
@@ -135,7 +135,7 @@ const handleNoteSubmit = (e) => {
       </Grid>
       <Grid item lg={8}>
         <UpsertPostForm onSubmit={handleSubmit} user={user} />
-        {posts && posts.map((post) => <Post idPost={post.idPost} postData={post} user={post.writer} onDeleteHandler={() => onPostDeleteHandler(post.IdPost)}/>)}
+        {posts && posts.map((post) => <Post postData={post} user={post.writer} onDeleteHandler={() => onPostDeleteHandler(post.idPost)}/>)}
       </Grid>
     </Grid>
   );

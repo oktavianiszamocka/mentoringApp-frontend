@@ -64,7 +64,7 @@ const inputStyle = {
   marginLeft: '20px',
 };
 
-const Post = ({idPost, user, postData, onDeleteHandler }) => {
+const Post = ({user, postData, onDeleteHandler }) => {
 
 
   const StyledDiv = styled.div`
@@ -73,12 +73,12 @@ const Post = ({idPost, user, postData, onDeleteHandler }) => {
 
   return (
     <>
-      <StyledSection>
+      {postData && <StyledSection>
         <StyledHeader>
           <div style={{display: 'flex'}}>          
             <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
             <BorderColorIcon style={{  marginLeft: '56rem' }} />
-            <DeleteIcon onClick={() => onDeleteHandler(idPost)} style={{  marginLeft: '1rem' }} />
+            <DeleteIcon onClick={() => onDeleteHandler(postData.idPost)} style={{  marginLeft: '1rem' }} />
           </div>
           
           {postData && <div> {postData.title} </div>}
@@ -115,7 +115,7 @@ const Post = ({idPost, user, postData, onDeleteHandler }) => {
             />
           </StyledDiv>
         </StyledC>
-      </StyledSection>
+      </StyledSection> }
     </>
   );
 };
