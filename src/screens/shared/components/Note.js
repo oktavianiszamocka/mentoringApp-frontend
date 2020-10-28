@@ -3,6 +3,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { styled as mStyled } from '@material-ui/core/styles';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import Paper from "@material-ui/core/Paper";
 
 const StyledSection = styled.section`
   margin: 0.2rem;
@@ -24,19 +25,31 @@ const StyledCloseIcon = mStyled(CloseIcon)({
   top: '5px',
 });
 
-const Note = ({ idNote, text, onCloseHandler }) => {
+const PaperNote = mStyled(Paper)({
+  margin: '0.2rem',
+  marginTop : '2rem',
+  padding: '0.5rem',
+  minHeight: '50px',
+  backgroundColor: '#ffff80',
+  fontSize: '0.8rem',
+  position: 'relative',
+  
+})
+
+const Note = ({ idNote, desc, onCloseHandler }) => {
   return (
-    <StyledSection>
+    <PaperNote elevation = {3}>
       <StyledCloseIcon onClick={() => onCloseHandler(idNote)} />
-      {text}
-    </StyledSection>
+      {desc}
+      </PaperNote>
   );
 };
 
 Note.propTypes = {
   idNote: PropTypes.number.isRequired,
-  text: PropTypes.string.isRequired,
+  desc: PropTypes.string.isRequired,
   onCloseHandler: PropTypes.func.isRequired,
 };
+
 
 export default Note;
