@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 import axios from 'axios';
 import UpsertPost from './Form';
+import AllComments from '../../shared/components/AllComments';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -93,6 +94,10 @@ const Post = ({ user, postData }) => {
 
           <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
             <Comment />
+          </div>
+          <hr />
+          <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
+            <AllComments />
           </div>
           <hr />
 
