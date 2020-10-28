@@ -3,11 +3,12 @@ import Header from '../shared/components/Header';
 import Post from './Post';
 import Note from '../shared/components/Note';
 import Title from '../shared/components/Title';
-import {Grid, Button} from '@material-ui/core';
+// import AvatarImage from '../../assets/images/avatar.jpg';
+import Grid from '@material-ui/core/Grid';
 import { styled } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import axios from 'axios';
-import NoteForm from './NoteForm/noteForm'
+
 import UpsertPostForm from './Post/Form';
 
 const StyledBox = styled(Box)({
@@ -49,14 +50,9 @@ const StudentDashboard = () => {
   const [notes, setNotes] = useState();
   const [user, setUser] = useState();
   const [posts, setPosts] = useState();
-  const [showNewNote, setNewNote] = useState(false);
 
   const onNoteCloseHandler = (idNote) => {
-    setNotes(notes.filter((n) => n.idNote != idNote));
-  };
-
-  const onPostDeleteHandler = (idPost) => {
-    setPosts(posts.filter((p) => p.idPost != idPost));
+    setNotes(notes.filter((n) => n.IdNote != idNote));
   };
 
   const loadData = async () => {
@@ -85,22 +81,7 @@ const StudentDashboard = () => {
     setPosts(newPosts); // todo add elements
   };
 
-
-
-const handleNoteSubmit = (e) => {
-  console.log(e.notetext);
-  const newNotes = [
-    {
-      desc: e.notetext,
-      idNote : 8
-    },
-    notes[0],
-    notes[1]
-  ];
-
-  setNotes(newNotes);
-};
-
+  console.log('posts', posts);
 
   return (
     <Grid container>
@@ -108,36 +89,19 @@ const handleNoteSubmit = (e) => {
       <Grid item xs={2}>
         <StyledBox boxShadow="2px 1px 5px grey">
           <Title text="Notes"></Title>
-          {showNewNote && <div> 
-            <NoteForm onSubmit={handleNoteSubmit} />
-            </div>}
-
           {notes &&
             notes.map((item) => (
               <Note
-
-              idNote={item.idNote}
-                desc={item.description}
-                onCloseHandler={() => onNoteCloseHandler(item.idNote)}
-
-
+                key={item.IdNote}
+                {...item}
+                onCloseHandler={() => onNoteCloseHandler(item.IdNote)}
               />
             ))}
-            <Button size='small' 
-                    variant='contained' 
-                    color='primary' 
-                    onClick={() => setNewNote(true)}
-                    style={{marginTop : 10, marginLeft : 100 }}
-                    >Add Note</Button>
-
         </StyledBox>
       </Grid>
       <Grid item lg={8}>
         <UpsertPostForm onSubmit={handleSubmit} user={user} />
-
-        {posts && posts.map((post) => <Post postData={post} user={post.writer} onDeleteHandler={() => onPostDeleteHandler(post.idPost)}/>)}
-
-
+        {posts && posts.map((post) => <Post postData={post} user={user} />)}
       </Grid>
     </Grid>
   );

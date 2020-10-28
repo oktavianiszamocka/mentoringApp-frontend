@@ -4,8 +4,6 @@ import TagsComponent from '../../shared/components/TagsComponent';
 import Comment from '../../shared/components/Comment';
 import styled from 'styled-components';
 import { Button } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
-import BorderColorIcon from '@material-ui/icons/BorderColor';
 import axios from 'axios';
 import UpsertPost from './Form';
 import AllComments from '../../shared/components/AllComments';
@@ -20,15 +18,12 @@ const StyledSection = styled.section`
   background-color: #e0e0e0;
   border-radius: 5px;
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
-
 `;
 
 const StyledHeader = styled.header`
   background-color: #f5f5f5;
   padding: 2rem;
-  border-radius: 5px 5px 0 0; 
-  display: inline,
-  margin: 1000
+  border-radius: 5px 5px 0 0;
 `;
 
 const StyledP = styled.p`
@@ -65,23 +60,19 @@ const inputStyle = {
   marginLeft: '20px',
 };
 
-const Post = ({user, postData, onDeleteHandler }) => {
+const Post = ({ user, postData }) => {
 
 
   const StyledDiv = styled.div`
     display: flex;
   `;
 
+  console.log('postData', postData);
   return (
     <>
-      {postData && <StyledSection>
+      <StyledSection>
         <StyledHeader>
-          <div style={{display: 'flex'}}>          
-            <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
-            <BorderColorIcon style={{  marginLeft: '56rem' }} />
-            <DeleteIcon onClick={() => onDeleteHandler(postData.idPost)} style={{  marginLeft: '1rem' }} />
-          </div>
-          
+          <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
           {postData && <div> {postData.title} </div>}
           {postData && <div> {postData.subtitle} </div>}
         </StyledHeader>
@@ -91,8 +82,6 @@ const Post = ({user, postData, onDeleteHandler }) => {
         <StyledC>
           {postData && <TagsComponent tags={postData.tags} />}
           <hr />
-          <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
-
 
           <div style={{ textAlignLast: 'right' }}>
             <Button style={{ margin: '5px', fontSize: '10px', }}
@@ -109,7 +98,6 @@ const Post = ({user, postData, onDeleteHandler }) => {
           <hr />
           <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
             <AllComments />
-
           </div>
           <hr />
 
@@ -129,7 +117,7 @@ const Post = ({user, postData, onDeleteHandler }) => {
             />
           </StyledDiv>
         </StyledC>
-      </StyledSection> }
+      </StyledSection>
     </>
   );
 };
