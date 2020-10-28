@@ -86,6 +86,7 @@ const StudentDashboard = () => {
   };
 
 
+
 const handleNoteSubmit = (e) => {
   console.log(e.notetext);
   const newNotes = [
@@ -114,9 +115,11 @@ const handleNoteSubmit = (e) => {
           {notes &&
             notes.map((item) => (
               <Note
+
               idNote={item.idNote}
                 desc={item.description}
                 onCloseHandler={() => onNoteCloseHandler(item.idNote)}
+
 
               />
             ))}
@@ -131,7 +134,9 @@ const handleNoteSubmit = (e) => {
       </Grid>
       <Grid item lg={8}>
         <UpsertPostForm onSubmit={handleSubmit} user={user} />
+
         {posts && posts.map((post) => <Post postData={post} user={post.writer} onDeleteHandler={() => onPostDeleteHandler(post.idPost)}/>)}
+
 
       </Grid>
     </Grid>

@@ -8,6 +8,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import axios from 'axios';
 import UpsertPost from './Form';
+import AllComments from '../../shared/components/AllComments';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -92,7 +93,23 @@ const Post = ({user, postData, onDeleteHandler }) => {
           <hr />
           <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
 
+
+          <div style={{ textAlignLast: 'right' }}>
+            <Button style={{ margin: '5px', fontSize: '10px', }}
+              color="default"
+              variant="contained"
+            >
+              All comments
+                </Button>
+          </div>
+
+          <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
             <Comment />
+          </div>
+          <hr />
+          <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
+            <AllComments />
+
           </div>
           <hr />
 
