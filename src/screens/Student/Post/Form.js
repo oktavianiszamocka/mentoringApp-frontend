@@ -46,7 +46,7 @@ const UpsertPostForm = (props) => {
             <StyledImg src={props.user && props.user.imageUrl} width="75px" />
             <div style={{ display: 'inline-grid' }}>
               <Field as={TextField} name="title" label="title" />
-
+              <Field as={TextField} name="subtitle" label="subtitle" />
             </div>
           </div>
           <Field as={TextField} name="text" label="text" fullWidth />
