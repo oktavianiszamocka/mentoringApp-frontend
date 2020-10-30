@@ -14,15 +14,12 @@ const StyledDiv = styled.div`
   display: flex;
   margin: 5px;
 `;
-
 const StyledSection = styled.section`
   margin: 2rem;
   background-color: #e0e0e0;
   border-radius: 5px;
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
-
 `;
-
 const StyledHeader = styled.header`
   background-color: #f5f5f5;
   padding: 2rem;
@@ -30,50 +27,45 @@ const StyledHeader = styled.header`
   display: inline,
   margin: 1000
 `;
-
 const StyledP = styled.p`
   padding: 2rem;
 `;
-
 const StyledC = styled.p`
   padding: 1rem;
   background-color: #f5f5f5;
   border-radius: 1px 1px 0 0;
   margin: 1px;
 `;
-
 const imgTheme = {
   width: '50px',
   borderRadius: '50%',
 };
-
 const spanTheme = {
   fontSize: '1.5rem',
   marginLeft: '1.7rem',
   marginTop: '1.0rem',
 };
-
 const StyledAvatar = styled.img`
   display: 300px;
   border-radius: ${(props) => props.imgTheme.borderRadius};
   width: ${(props) => props.imgTheme.width};
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
-
 const inputStyle = {
   color: 'blue',
   marginLeft: '20px',
 };
 
+
 const Post = ({user, postData, onDeleteHandler }) => {
 
-
-  const StyledDiv = styled.div`
+const StyledDiv = styled.div`
     display: flex;
   `;
 
   return (
     <>
+    
       {postData && <StyledSection>
         <StyledHeader>
           <div style={{display: 'flex'}}>          
@@ -81,38 +73,24 @@ const Post = ({user, postData, onDeleteHandler }) => {
             <BorderColorIcon style={{  marginLeft: '56rem' }} />
             <DeleteIcon onClick={() => onDeleteHandler(postData.idPost)} style={{  marginLeft: '1rem' }} />
           </div>
-          
+
           {postData && <div> {postData.title} </div>}
-          {postData && <div> {postData.subtitle} </div>}
-        </StyledHeader>
-
-        {postData && <StyledP> {postData.text} </StyledP>}
-
+          </StyledHeader>
+        {postData && <StyledP> {postData.content} </StyledP>}
         <StyledC>
           {postData && <TagsComponent tags={postData.tags} />}
           <hr />
           <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
-
-
-          <div style={{ textAlignLast: 'right' }}>
-            <Button style={{ margin: '5px', fontSize: '10px', }}
-              color="default"
-              variant="contained"
-            >
+            <Button style={{ fontSize: 10 }} variant="default">
               All comments
-                </Button>
-          </div>
-
-          <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
-            <Comment />
+            </Button>
+            {postData.newestComment && <Comment comment={postData.newestComment}/> }
           </div>
           <hr />
           <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
             <AllComments />
-
           </div>
           <hr />
-
           <StyledDiv>
             <StyledAvatar
               src={user && user.imageUrl}
@@ -133,4 +111,5 @@ const Post = ({user, postData, onDeleteHandler }) => {
     </>
   );
 };
+
 export default Post;
