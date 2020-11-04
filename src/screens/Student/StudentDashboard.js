@@ -83,39 +83,41 @@ const StudentDashboard = () => {
 };
 
   return (
-    <Grid container>
-      {Header()}
-      <Grid item xs={2}>
-        <StyledBox boxShadow="2px 1px 5px grey">
-          <Title text="Notes"></Title>
-          {showNewNote && <div> 
-            <NoteForm onSubmit={handleNoteSubmit} />
-            </div>}
+    <div style={{marginTop: '6rem'}}>
+      <Grid container>
+        {Header()}
+        <Grid item xs={2}>
+          <StyledBox boxShadow="2px 1px 5px grey">
+            <Title text="Notes"></Title>
+            {showNewNote && <div> 
+              <NoteForm onSubmit={handleNoteSubmit} />
+              </div>}
 
-          {notes &&
-            notes.map((item) => (
-              <Note
+            {notes &&
+              notes.map((item) => (
+                <Note
 
-              idNote={item.idNote}
-                desc={item.description}
-                onCloseHandler={() => onNoteCloseHandler(item.idNote)}
-              />
-            ))}
-            <Button size='small' 
-                    variant='contained' 
-                    color='primary' 
-                    onClick={() => setNewNote(true)}
-                    style={{marginTop : 10, marginLeft : 100 }}
-                    >Add Note</Button>
+                idNote={item.idNote}
+                  desc={item.description}
+                  onCloseHandler={() => onNoteCloseHandler(item.idNote)}
+                />
+              ))}
+              <Button size='small' 
+                      variant='contained' 
+                      color='primary' 
+                      onClick={() => setNewNote(true)}
+                      style={{marginTop : 10, marginLeft : 100 }}
+                      >Add Note</Button>
 
-        </StyledBox>
+          </StyledBox>
+        </Grid>
+        <Grid item lg={8}>
+          <UpsertPostForm onSubmit={handleSubmit} user={user} />
+
+          {posts && posts.map((post) => <Post postData={post} user={post.writer} onDeleteHandler={() => onPostDeleteHandler(post.idPost)}/>)}
+        </Grid>
       </Grid>
-      <Grid item lg={8}>
-        <UpsertPostForm onSubmit={handleSubmit} user={user} />
-
-        {posts && posts.map((post) => <Post postData={post} user={post.writer} onDeleteHandler={() => onPostDeleteHandler(post.idPost)}/>)}
-      </Grid>
-    </Grid>
+    </div>
   );
 };
 

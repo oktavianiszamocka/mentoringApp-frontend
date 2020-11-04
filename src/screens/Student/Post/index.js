@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
-import axios from 'axios';
+import {Grid} from '@material-ui/core';
 import UpsertPost from './Form';
 import AllComments from '../../shared/components/AllComments';
 
@@ -64,8 +64,8 @@ const StyledDiv = styled.div`
   `;
 
   return (
-    <>
-    
+    <Grid container>
+      <>
       {postData && <StyledSection>
         <StyledHeader>
           <div style={{display: 'flex'}}>          
@@ -73,7 +73,6 @@ const StyledDiv = styled.div`
             <BorderColorIcon style={{  marginLeft: '56rem' }} />
             <DeleteIcon onClick={() => onDeleteHandler(postData.idPost)} style={{  marginLeft: '1rem' }} />
           </div>
-
           {postData && <div> {postData.title} </div>}
           </StyledHeader>
         {postData && <StyledP> {postData.content} </StyledP>}
@@ -109,6 +108,8 @@ const StyledDiv = styled.div`
         </StyledC>
       </StyledSection> }
     </>
+    </Grid>
+    
   );
 };
 
