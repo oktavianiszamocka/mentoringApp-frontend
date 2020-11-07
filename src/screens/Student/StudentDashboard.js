@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../shared/components/Header';
-import Post from './Post';
-import Note from '../shared/components/Note';
-import Title from '../shared/components/Title';
 import { Grid, Button } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import axios from 'axios';
+import Api from 'api';
+import Header from '../shared/components/Header';
+import Post from './Post';
+import Note from '../shared/components/Note';
+import Title from '../shared/components/Title';
 import NoteForm from './NoteForm/noteForm';
 import UpsertPostForm from './Post/Form';
 
@@ -22,9 +23,9 @@ const userId = 1;
 const getUser = () => axios.get('https://run.mocky.io/v3/2b2ecfa1-3095-4348-b16a-bb66dafc710c');
 const getNotes = () => axios.get(`${host}/personal-notes/${userId}`);
 const getPost = () => axios.get(`${host}/posts`);
-//endpoint to get all comment
+// endpoint to get all comment
 // eg. get all comment from post with id 1 = http://localhost:57864/api/posts/1/comment
-var postId = 1;
+const postId = 1;
 const getComment = () => axios.get(`${host}/posts/${postId}/comment`);
 
 const StudentDashboard = () => {
@@ -86,15 +87,15 @@ const StudentDashboard = () => {
         {Header()}
         <Grid item xs={2}>
           <StyledBox boxShadow="2px 1px 5px grey">
-            <Title text="Notes"></Title>
+            <Title text="Notes" />
             {showNewNote && (
               <div>
                 <NoteForm onSubmit={handleNoteSubmit} />
               </div>
             )}
 
-            {notes &&
-              notes.map((item) => (
+            {notes
+              && notes.map((item) => (
                 <Note
                   idNote={item.idNote}
                   desc={item.description}
@@ -115,8 +116,8 @@ const StudentDashboard = () => {
         <Grid item lg={8}>
           <UpsertPostForm onSubmit={handleSubmit} user={user} />
 
-          {posts &&
-            posts.map((post) => (
+          {posts
+            && posts.map((post) => (
               <Post
                 postData={post}
                 user={post.writer}
