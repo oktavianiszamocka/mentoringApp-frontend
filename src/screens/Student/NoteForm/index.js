@@ -10,37 +10,38 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: 'center',
     background: '#ffff80',
-    Height: '50px',
+  },
+  submitButton: {
+    marginTop: '10px',
   },
 }));
 
 const NoteSchema = Yup.object().shape({
-  notetext: Yup.string().required('Please enter the note text'),
+  note: Yup.string().min(1).max(300).required('Please enter the note text'),
 });
 
-const NoteForm = (props) => {
+const NoteForm = ({ onSubmit }) => {
   const classes = useStyles();
-  return (
-    <Formik
-      onSubmit={props.onSubmit}
-      validationSchema={NoteSchema}
-      initialValues={props.initialValues}
-    >
-      <Form>
-        <Paper elevation={3} className={classes.paper}>
-          <div style={{ display: 'inline-grid' }}>
-            <Field as={TextField} name="notetext" placeholder="Please write your note here" />
-          </div>
 
+  return (
+    <Formik onSubmit={onSubmit} initialValues={{ note: '' }} validationSchema={NoteSchema}>
+      <Form>
+        <Paper elevation={1} className={classes.paper}>
+          <Field
+            as={TextField}
+            name="note"
+            placeholder="Please write your note here"
+            maxLength={300}
+            multiline
+          />
           <Button
-            style={{ margin: '15px' }}
+            className={classes.submitButton}
             size="small"
             type="submit"
-            color="primary"
+            color="secondary"
             variant="contained"
             autoFocus
           >
-            {' '}
             Submit
           </Button>
         </Paper>
@@ -51,13 +52,6 @@ const NoteForm = (props) => {
 
 NoteForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.object,
-};
-
-NoteForm.defaultProps = {
-  initialValues: {
-    notetext: '',
-  },
 };
 
 export default NoteForm;

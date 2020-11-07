@@ -8,7 +8,7 @@ import Header from '../shared/components/Header';
 import Post from './Post';
 import Note from '../shared/components/Note';
 import Title from '../shared/components/Title';
-import NoteForm from './NoteForm/noteForm';
+import NoteForm from './NoteForm';
 import UpsertPostForm from './Post/Form';
 
 const StyledBox = styled(Box)({
@@ -67,14 +67,12 @@ const StudentDashboard = () => {
   };
 
   const handleNoteSubmit = (e) => {
-    console.log(e.notetext);
     const newNotes = [
       {
-        desc: e.notetext,
-        idNote: 8,
+        description: e.note,
+        idNote: 20,
       },
-      notes[0],
-      notes[1],
+      ...notes,
     ];
 
     setNotes(newNotes);

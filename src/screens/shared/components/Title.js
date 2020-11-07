@@ -12,6 +12,7 @@ const StyledH2 = styled.h2`
   font-weight: 100;
   letter-spacing: 0.8rem;
   margin: 0;
+  margin-bottom: 1rem;
   padding: 0;
   text-transform: uppercase;
   text-align: center;
