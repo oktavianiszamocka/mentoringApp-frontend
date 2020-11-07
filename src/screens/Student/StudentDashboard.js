@@ -18,15 +18,15 @@ const StyledBox = styled(Box)({
   width: '12rem',
 });
 
-const host = 'http://localhost:57864/api';
-const userId = 1;
-const getUser = () => axios.get('https://run.mocky.io/v3/2b2ecfa1-3095-4348-b16a-bb66dafc710c');
-const getNotes = () => axios.get(`${host}/personal-notes/${userId}`);
-const getPost = () => axios.get(`${host}/posts`);
+// const host = 'http://localhost:57864/api';
+// const userId = 1;
+// const getUser = () => axios.get('https://run.mocky.io/v3/2b2ecfa1-3095-4348-b16a-bb66dafc710c');
+// const getNotes = () => axios.get(`${host}/personal-notes/${userId}`);
+// const getPost = () => axios.get(`${host}/posts`);
 // endpoint to get all comment
 // eg. get all comment from post with id 1 = http://localhost:57864/api/posts/1/comment
-const postId = 1;
-const getComment = () => axios.get(`${host}/posts/${postId}/comment`);
+// const postId = 1;
+// const getComment = () => axios.get(`${host}/posts/${postId}/comment`);
 
 const StudentDashboard = () => {
   const [notes, setNotes] = useState();
@@ -35,21 +35,20 @@ const StudentDashboard = () => {
   const [showNewNote, setNewNote] = useState(false);
 
   const onNoteCloseHandler = (idNote) => {
-    setNotes(notes.filter((n) => n.idNote != idNote));
+    setNotes(notes.filter((n) => n.idNote !== idNote));
   };
 
   const onPostDeleteHandler = (idPost) => {
-    setPosts(posts.filter((p) => p.idPost != idPost));
+    setPosts(posts.filter((p) => p.idPost !== idPost));
   };
 
   const loadData = async () => {
-    const res = await Promise.all([getUser(), getNotes(), getPost()]);
-    setUser(res[0].data);
-    setNotes(res[1].data.data);
-    setPosts(res[2].data.data);
+    const res = await Promise.all([Api.getNotes()]);
+    setNotes(res[0].data.data);
+    // setUser(res[0].data);
+    // setPosts(res[2].data.data);
   };
 
-  console.log(posts);
   useEffect(async () => {
     loadData();
   }, []);
@@ -88,12 +87,7 @@ const StudentDashboard = () => {
         <Grid item xs={2}>
           <StyledBox boxShadow="2px 1px 5px grey">
             <Title text="Notes" />
-            {showNewNote && (
-              <div>
-                <NoteForm onSubmit={handleNoteSubmit} />
-              </div>
-            )}
-
+            {showNewNote && <NoteForm onSubmit={handleNoteSubmit} />}
             {notes
               && notes.map((item) => (
                 <Note

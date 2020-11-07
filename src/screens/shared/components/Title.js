@@ -1,33 +1,36 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import Font from '../../../globals/font';
 
 const StyledSection = styled.section`
-  margin: 2rem;
+  margin: 0rem;
 `;
 
 const StyledH2 = styled.h2`
   font-family: sans-serif !important;
-  font-size: 2rem;
+  font-size: 1.2rem;
   font-weight: 100;
+  letter-spacing: 0.8rem;
+  margin: 0;
+  padding: 0;
   text-transform: uppercase;
+  text-align: center;
   color: ${(props) => props.fontColor};
 `;
 
-const Title = ({ text, textAlign, fontSize, fontColor }) => {
-  return (
-    <StyledSection>
-      <StyledH2 textAlign={textAlign} fontSize={fontSize} fontColor={fontColor}>
-        {text}
-      </StyledH2>
-    </StyledSection>
-  );
-};
+const Title = ({
+  text, textAlign, fontSize, fontColor,
+}) => (
+  <StyledSection>
+    <StyledH2 textAlign={textAlign} fontSize={fontSize} fontColor={fontColor}>
+      {text}
+    </StyledH2>
+  </StyledSection>
+);
 
 Title.defaultProps = {
   textAlign: 'center',
-  fontSize: '1.5em',
+  fontSize: '1.0rem',
   fontColor: 'black',
 };
 

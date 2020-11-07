@@ -9,8 +9,10 @@ const apiToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54b
 
 axios.defaults.headers.common.Authorization = apiToken;
 
-const getNotes = (userId) => axios.get(`${apiUrl}/personal-notes/${userId}`);
+const getUserId = () => 1;
+const getNotes = () => axios.get(`${apiUrl}/personal-notes/${getUserId()}`);
 
 export default {
+  getUserId,
   getNotes,
 };
