@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Grid, Button } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import axios from 'axios';
 import Api from 'api';
 import Header from '../shared/components/Header';
 import Post from './Post';
@@ -32,7 +31,7 @@ const StudentDashboard = () => {
   const [notes, setNotes] = useState();
   const [user, setUser] = useState();
   const [posts, setPosts] = useState();
-  const [showNewNote, setNewNote] = useState(false);
+  const [newNoteVisible, setNewNoteVisible] = useState(false);
 
   const onNoteCloseHandler = (idNote) => {
     setNotes(notes.filter((n) => n.idNote !== idNote));
@@ -76,6 +75,7 @@ const StudentDashboard = () => {
     ];
 
     setNotes(newNotes);
+    setNewNoteVisible(false);
   };
 
   return (
@@ -85,7 +85,7 @@ const StudentDashboard = () => {
         <Grid item xs={2}>
           <StyledBox boxShadow="2px 1px 5px grey">
             <Title text="Notes" />
-            {showNewNote && <NoteForm onSubmit={handleNoteSubmit} />}
+            {newNoteVisible && <NoteForm onSubmit={handleNoteSubmit} />}
             {notes
               && notes.map((item) => (
                 <Note
@@ -98,7 +98,7 @@ const StudentDashboard = () => {
               size="small"
               variant="contained"
               color="primary"
-              onClick={() => setNewNote(true)}
+              onClick={() => setNewNoteVisible(true)}
               style={{ marginTop: 10, marginLeft: 100 }}
             >
               Add Note
