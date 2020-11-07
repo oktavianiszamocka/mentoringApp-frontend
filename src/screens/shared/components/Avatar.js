@@ -2,17 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Font from '../../../globals/font';
+import MaterialAvatar from '@material-ui/core/Avatar';
+
 
 const StyledDiv = styled.div`
   display: flex;
   margin: 5px;
-`;
-
-const StyledImg = styled.img`
-  border-radius: 1.5rem;
-  width: ${(props) => props.width};
-  height: ${(props) => props.width};
-  box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
 
 const StyledSpan = styled.span`
@@ -25,7 +20,7 @@ const StyledSpan = styled.span`
 const Avatar = ({ firstName, lastName, imageUrl, width }) => {
   return (
     <StyledDiv>
-      <StyledImg src={imageUrl} width={width} />
+      <MaterialAvatar src={imageUrl} style={{width: width, height: width, boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)', borderRadius: '1.5rem' }}></MaterialAvatar>
       <StyledSpan>{`${firstName} ${lastName}`}</StyledSpan>
     </StyledDiv>
   );
