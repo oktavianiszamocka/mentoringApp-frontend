@@ -3,11 +3,11 @@ import Header from '../shared/components/Header';
 import Post from './Post';
 import Note from '../shared/components/Note';
 import Title from '../shared/components/Title';
-import {Grid, Button} from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import axios from 'axios';
-import NoteForm from './NoteForm/noteForm'
+import NoteForm from './NoteForm/noteForm';
 import UpsertPostForm from './Post/Form';
 
 const StyledBox = styled(Box)({
@@ -25,8 +25,7 @@ const getPost = () => axios.get(`${host}/posts`);
 //endpoint to get all comment
 // eg. get all comment from post with id 1 = http://localhost:57864/api/posts/1/comment
 var postId = 1;
-const getComment = () => axios.get(`${host}/posts/${postId}/comment`)
-
+const getComment = () => axios.get(`${host}/posts/${postId}/comment`);
 
 const StudentDashboard = () => {
   const [notes, setNotes] = useState();
@@ -43,8 +42,7 @@ const StudentDashboard = () => {
   };
 
   const loadData = async () => {
-    console.log('asdadasd');
-    const res = await Promise.all([ getUser(), getNotes(), getPost()]);
+    const res = await Promise.all([getUser(), getNotes(), getPost()]);
     setUser(res[0].data);
     setNotes(res[1].data.data);
     setPosts(res[2].data.data);
@@ -69,52 +67,62 @@ const StudentDashboard = () => {
   };
 
   const handleNoteSubmit = (e) => {
-  console.log(e.notetext);
-  const newNotes = [
-    {
-      desc: e.notetext,
-      idNote : 8
-    },
-    notes[0],
-    notes[1]
-  ];
+    console.log(e.notetext);
+    const newNotes = [
+      {
+        desc: e.notetext,
+        idNote: 8,
+      },
+      notes[0],
+      notes[1],
+    ];
 
-  setNotes(newNotes);
-};
+    setNotes(newNotes);
+  };
 
   return (
-    <div style={{marginTop: '6rem'}}>
+    <div style={{ marginTop: '6rem' }}>
       <Grid container>
         {Header()}
         <Grid item xs={2}>
           <StyledBox boxShadow="2px 1px 5px grey">
             <Title text="Notes"></Title>
-            {showNewNote && <div> 
-              <NoteForm onSubmit={handleNoteSubmit} />
-              </div>}
+            {showNewNote && (
+              <div>
+                <NoteForm onSubmit={handleNoteSubmit} />
+              </div>
+            )}
 
             {notes &&
               notes.map((item) => (
                 <Note
-
-                idNote={item.idNote}
+                  idNote={item.idNote}
                   desc={item.description}
                   onCloseHandler={() => onNoteCloseHandler(item.idNote)}
                 />
               ))}
-              <Button size='small' 
-                      variant='contained' 
-                      color='primary' 
-                      onClick={() => setNewNote(true)}
-                      style={{marginTop : 10, marginLeft : 100 }}
-                      >Add Note</Button>
-
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={() => setNewNote(true)}
+              style={{ marginTop: 10, marginLeft: 100 }}
+            >
+              Add Note
+            </Button>
           </StyledBox>
         </Grid>
         <Grid item lg={8}>
           <UpsertPostForm onSubmit={handleSubmit} user={user} />
 
-          {posts && posts.map((post) => <Post postData={post} user={post.writer} onDeleteHandler={() => onPostDeleteHandler(post.idPost)}/>)}
+          {posts &&
+            posts.map((post) => (
+              <Post
+                postData={post}
+                user={post.writer}
+                onDeleteHandler={() => onPostDeleteHandler(post.idPost)}
+              />
+            ))}
         </Grid>
       </Grid>
     </div>
