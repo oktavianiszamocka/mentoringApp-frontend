@@ -16,14 +16,12 @@ const StyledSpan = styled.span`
   height: 50px;
 `;
 
-const TagsComponent = ({ tags, spanTheme }) => {
-  return (
-    <StyledDiv>
-      {tags.map((tag) => (
-        <StyledSpan spanTheme={spanTheme}>{tag}</StyledSpan>
-      ))}
-    </StyledDiv>
-  );
-};
+const TagsComponent = ({ tags, spanTheme }) => (
+  <StyledDiv>
+    {tags.map((tag) => (
+      <StyledSpan spanTheme={spanTheme}>{tag}</StyledSpan>
+    ))}
+  </StyledDiv>
+);
 
 export default TagsComponent;
