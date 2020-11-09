@@ -3,6 +3,7 @@ import { Grid, Button } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Api from 'api';
+import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
 import Header from '../shared/components/Header';
 import Post from './Post';
 import Note from '../shared/components/Note';
@@ -15,6 +16,7 @@ const StyledBox = styled(Box)({
   marginTop: '2rem',
   marginRight: '2rem',
   width: '12rem',
+  boxShadow: '2px 1px 5px grey',
 });
 
 // const host = 'http://localhost:57864/api';
@@ -28,17 +30,39 @@ const StyledBox = styled(Box)({
 // const getComment = () => axios.get(`${host}/posts/${postId}/comment`);
 
 const StudentDashboard = () => {
-  const [notes, setNotes] = useState();
+  const [deleteNoteDialogOptions, setDeleteNoteDialogOptions] = useState({
+    title: 'Delete note',
+    mainText: 'Are you sure you want to delete this note?',
+    idNote: null,
+    open: false,
+  });
+  const [notes, setNotes] = useState([]);
   const [user, setUser] = useState();
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([]);
   const [newNoteVisible, setNewNoteVisible] = useState(false);
 
   const onNoteCloseHandler = (idNote) => {
-    setNotes(notes.filter((n) => n.idNote !== idNote));
+    setDeleteNoteDialogOptions({
+      ...deleteNoteDialogOptions,
+      open: true,
+      idNote,
+    });
+  };
+
+  const onNoteDeleteDialogClosed = (confirmed, idNote) => {
+    if (confirmed) {
+      // TODO call to API
+      setNotes(notes.filter((n) => n.idNote !== idNote));
+    }
+    setDeleteNoteDialogOptions({
+      ...deleteNoteDialogOptions,
+      open: false,
+    });
   };
 
   const onPostDeleteHandler = (idPost) => {
-    setPosts(posts.filter((p) => p.idPost !== idPost));
+    // setDeleteConfirmOpened(true);
+    // setPosts(posts.filter((p) => p.idPost !== idPost));
   };
 
   const loadData = async () => {
@@ -80,10 +104,11 @@ const StudentDashboard = () => {
 
   return (
     <div style={{ marginTop: '6rem' }}>
+      <ConfirmDialog {...deleteNoteDialogOptions} onDialogClosed={onNoteDeleteDialogClosed} />
       <Grid container>
         {Header()}
         <Grid item xs={2}>
-          <StyledBox boxShadow="2px 1px 5px grey">
+          <StyledBox>
             <Title text="Notes" />
             {newNoteVisible && <NoteForm onSubmit={handleNoteSubmit} />}
             {notes
