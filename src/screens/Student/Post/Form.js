@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, useFormik, Field } from 'formik';
+
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import Button from '@material-ui/core/Button';
@@ -14,6 +15,7 @@ import {Grid} from '@material-ui/core';
 
 const StyledSection = styled.section`
   margin: 2rem;
+  padding: 1rem;
   background-color: #f5f5f5;
   border-radius: 5px;
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);

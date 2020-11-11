@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import Avatar from '../../shared/components/Avatar';
-import TagsComponent from '../../shared/components/TagsComponent';
-import Comment from '../../shared/components/Comment';
 import styled from 'styled-components';
-import { Button } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
-import {Grid} from '@material-ui/core';
-import UpsertPost from './Form';
+
+import Comment from '../../shared/components/Comment';
+import TagsComponent from '../../shared/components/TagsComponent';
+import Avatar from '../../shared/components/Avatar';
 import AllComments from '../../shared/components/AllComments';
 
-const StyledDiv = styled.div`
-  display: flex;
-  margin: 5px;
-`;
 const StyledSection = styled.section`
   margin: 2rem;
   background-color: #e0e0e0;
@@ -56,60 +51,74 @@ const inputStyle = {
   marginLeft: '20px',
 };
 
-
-const Post = ({user, postData, onDeleteHandler }) => {
-
-const StyledDiv = styled.div`
+const Post = ({ user, postData, onDeleteHandler }) => {
+  const StyledDiv = styled.div`
     display: flex;
   `;
 
   return (
     <Grid container>
       <>
-      {postData && <StyledSection>
-        <StyledHeader>
-          <div style={{display: 'flex'}}>          
-            <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
-            <BorderColorIcon style={{  marginLeft: '56rem' }} />
-            <DeleteIcon onClick={() => onDeleteHandler(postData.idPost)} style={{  marginLeft: '1rem' }} />
-          </div>
-          {postData && <div> {postData.title} </div>}
-          </StyledHeader>
-        {postData && <StyledP> {postData.content} </StyledP>}
-        <StyledC>
-          {postData && <TagsComponent tags={postData.tags} />}
-          <hr />
-          <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
-            <Button style={{ fontSize: 10 }} variant="default">
-              All comments
-            </Button>
-            {postData.newestComment && <Comment comment={postData.newestComment}/> }
-          </div>
-          <hr />
-          <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
-            <AllComments />
-          </div>
-          <hr />
-          <StyledDiv>
-            <StyledAvatar
-              src={user && user.imageUrl}
-              imgTheme={imgTheme}
-              width="50px"
-              border-radius="30%"
-            />
-            <input
-              className="media-body p-2 shadow-sm rounded bg-light border"
-              type="text"
-              placeholder="Write a comment.."
-              style={inputStyle}
-              name="comment"
-            />
-          </StyledDiv>
-        </StyledC>
-      </StyledSection> }
-    </>
+        {postData && (
+          <StyledSection>
+            <StyledHeader>
+              <div style={{ display: 'flex' }}>
+                <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
+                <BorderColorIcon style={{ marginLeft: '56rem' }} />
+                <DeleteIcon
+                  onClick={() => onDeleteHandler(postData.idPost)}
+                  style={{ marginLeft: '1rem' }}
+                />
+              </div>
+              {postData && (
+              <div>
+                {' '}
+                {postData.title}
+                {' '}
+              </div>
+              )}
+            </StyledHeader>
+            {postData && (
+            <StyledP>
+              {' '}
+              {postData.content}
+              {' '}
+            </StyledP>
+            )}
+            <StyledC>
+              {postData && <TagsComponent tags={postData.tags} />}
+              <hr />
+              <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
+                <Button style={{ fontSize: 10 }} variant="default">
+                  All comments
+                </Button>
+                {postData.newestComment && <Comment comment={postData.newestComment} />}
+              </div>
+              <hr />
+              <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
+                <AllComments />
+              </div>
+              <hr />
+              <StyledDiv>
+                <StyledAvatar
+                  src={user && user.imageUrl}
+                  imgTheme={imgTheme}
+                  width="50px"
+                  border-radius="30%"
+                />
+                <input
+                  className="media-body p-2 shadow-sm rounded bg-light border"
+                  type="text"
+                  placeholder="Write a comment.."
+                  style={inputStyle}
+                  name="comment"
+                />
+              </StyledDiv>
+            </StyledC>
+          </StyledSection>
+        )}
+      </>
     </Grid>
-    
   );
 };
 
