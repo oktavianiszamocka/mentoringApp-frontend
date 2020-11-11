@@ -1,10 +1,16 @@
-import React from 'react';
-import { Formik, Form, Field } from 'formik';
+import React, { useState, useEffect } from 'react';
+import { Formik, Form, useFormik, Field } from 'formik';
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
+import postFont from '../../../globals/postFont';
+import InputBase from '@material-ui/core/InputBase';
+import { makeStyles } from "@material-ui/core/styles";
+import AddIcon from '@material-ui/icons/Add';
+import Chip from '@material-ui/core/Chip';
+import {Grid} from '@material-ui/core';
 
 const StyledSection = styled.section`
   margin: 2rem;
@@ -19,12 +25,12 @@ const StyledImg = styled.img`
   height: ${(props) => props.width};
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
   align-self: center;
-  margin-right: 40px;
+  margin-right: 30px;
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
 `;
-const imgTheme = {
-  width: '50px',
-  borderRadius: '50%',
-};
 
 // const PostSchema = Yup.object().shape({
 //   title: Yup.string().required(),
@@ -33,24 +39,70 @@ const imgTheme = {
 //   tags: Yup.string(),
 // });
 
-const UpsertPostForm = (props) => {
+const useStyles = makeStyles({
+  underline: {
+    "&&&:before": {
+      borderBottom: "none",
+    },
+    "&&:after": {
+      borderBottom: "none"
+    }
+  }
+});
+
+export default function UpsertPostForm(props) {
+  const classes = useStyles();
+  const [tag, setTag] = useState('aa');
+  const [tags, setTags] = useState([]);
+  const [key, setKey] = useState(0);
+
+  const handleSubmitTag = (e) => {
+    {console.log(tag)}
+    const newTags = [
+      ...tags,
+      { id: key, label: tag}
+    ];
+    console.log(newTags);
+    setTags(newTags); // todo add elements  
+    setKey(key + 1);
+    {console.log(tags)}
+  };
+
+  const handleDelete = (chipToDelete) => {
+   // setTags(tags.filter((t) => t.id != idPost));
+   {console.log("from delete")}
+  {console.log(chipToDelete.id)}
+   setTags(tags.filter((tag) => tag.id !== chipToDelete.id));
+  };
+
+  const formik = useFormik({
+    initialValues: props.initialValues,
+    onSubmit: props.onSubmit
+  });
+
+  const addIcon = <AddIcon onClick={handleSubmitTag} />
+
   return (
-    <Formik
-      onSubmit={props.onSubmit}
+    <form
+      onSubmit={formik.handleSubmit}
       // validationSchema={PostSchema}
-      initialValues={props.initialValues}
+     // initialValues={props.initialValues}
     >
-      <Form>
         <StyledSection>
           <div style={{ display: 'flex' }}>
             <StyledImg src={props.user && props.user.imageUrl} width="75px" />
-            <div style={{ display: 'inline-grid' }}>
-              <Field as={TextField} name="title" label="title" />
-
-            </div>
+            <TextField style={{marginTop: '20px', fontFamily: postFont.fontFamily}} name="title" label="Enter title here" variant="outlined"/>            
           </div>
-          <Field as={TextField} name="text" label="text" fullWidth />
-          <Field as={TextField} name="tags" label="tags" fullWidth />
+          <Grid container>
+            <TextField multiline InputProps={{ classes }} style={{fontFamily: postFont.fontFamily, margin: '16px', width: '70rem'}} name="text" label="Input post text"/>
+            <Grid item xs={12}>
+            <TextField size='small' onChange={(e) => { setTag(e.target.value)}} style={{ margin: '15px', width: '150px'}} name="tag" label="Add tag" variant="outlined" InputProps={{endAdornment: addIcon}} />
+            </Grid>                
+            {tags && tags.map( item => 
+                <Chip color="primary"
+                onDelete={() => handleDelete(item)} label={item.label} style={{marginRight: '4px', marginLeft: '15px', marginBottom: '1px' }}/>
+            )}     
+          </Grid>
           <div style={{ textAlignLast: 'right' }}>
             <Button
               style={{ margin: '15px' }}
@@ -63,8 +115,7 @@ const UpsertPostForm = (props) => {
             </Button>
           </div>
         </StyledSection>
-      </Form>
-    </Formik>
+    </form>
   );
 };
 
@@ -76,10 +127,7 @@ UpsertPostForm.propTypes = {
 UpsertPostForm.defaultProps = {
   initialValues: {
     title: '',
-    subtitle: '',
     text: '',
-    tags: '',
+    tag: '',
   },
 };
-
-export default UpsertPostForm;
