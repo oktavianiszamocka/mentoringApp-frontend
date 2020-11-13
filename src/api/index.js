@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiUrl = 'http://localhost:57864/api';
+const apiUrl = 'http://localhost:5000/api';
 
 // TODO - just for development. Otherwise token should be received
 // after login request.
@@ -11,8 +11,10 @@ axios.defaults.headers.common.Authorization = apiToken;
 
 const getUserId = () => 1;
 const getNotes = () => axios.get(`${apiUrl}/personal-notes/${getUserId()}`);
+const getPosts = () => axios.get(`${apiUrl}/posts`);
 
 export default {
   getUserId,
   getNotes,
+  getPosts,
 };

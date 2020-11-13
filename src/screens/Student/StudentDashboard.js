@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Grid, Button } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Api from 'api';
 import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
+import Api from '../../api/index';
 import Header from '../shared/components/Header';
 import Post from './Post';
 import Note from '../shared/components/Note';
@@ -26,7 +26,7 @@ const StyledBox = styled(Box)({
 // const getPost = () => axios.get(`${host}/posts`);
 // endpoint to get all comment
 // eg. get all comment from post with id 1 = http://localhost:57864/api/posts/1/comment
-// const postId = 1;
+const postId = 1;
 // const getComment = () => axios.get(`${host}/posts/${postId}/comment`);
 
 const StudentDashboard = () => {
@@ -70,10 +70,10 @@ const StudentDashboard = () => {
   };
 
   const loadData = async () => {
-    const res = await Promise.all([Api.getNotes()]);
+    const res = await Promise.all([Api.getNotes(), Api.getPosts()]);
     setNotes(res[0].data.data);
-    // setUser(res[0].data);
-    // setPosts(res[2].data.data);
+    // setUser(res[1].data);
+    setPosts(res[1].data.data);
   };
 
   useEffect(async () => {
@@ -82,6 +82,7 @@ const StudentDashboard = () => {
 
   const handleSubmit = (e) => {
     const { tags } = e;
+    console.log(tags);
     const newPosts = [
       ...posts,
       {
@@ -136,7 +137,6 @@ const StudentDashboard = () => {
         </Grid>
         <Grid item lg={8}>
           <UpsertPostForm onNewPostSubmitHandler={handleSubmit} user={user} />
-
           {posts
             && posts.map((post) => (
               <Post
