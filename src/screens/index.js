@@ -8,7 +8,7 @@ import MyProfileDashboard from './shared/components/MyProfileDashboard';
 import Login from './Auth/Login';
 import UpsertPassword from './Auth/UpsertPassword';
 
-const renderRoute = (route) => <Route key={route.path} {...route} />;
+// const renderRoute = (route) => <Route key={route.path} {...route} />;
 
 const App = () => (
   <Provider>
