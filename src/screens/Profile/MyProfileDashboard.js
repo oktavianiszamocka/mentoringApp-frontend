@@ -4,13 +4,13 @@ import { Button, Grid } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import MaterialAvatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
-import Title from './Title';
-import Header from './Header';
-import NoteForm from '../../Student/NoteForm';
-import Note from './Note';
-import Api from '../../../api/index';
-import ConfirmDialog from './ConfirmDialog';
-import imageUrl from '../../../assets/images/taylor.jpg';
+import Title from '../shared/components/Title';
+import Header from '../shared/components/Header';
+import NoteForm from '../Student/NoteForm';
+import Note from '../shared/components/Note';
+import Api from '../../api/index';
+import ConfirmDialog from '../shared/components/ConfirmDialog';
+import imageUrl from '../../assets/images/taylor.jpg';
 import MyProfile from './MyProfile';
 
 const StyledBox = styled(Box)({

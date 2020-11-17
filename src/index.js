@@ -4,7 +4,6 @@ import App from './screens';
 import StudentDashboard from './screens/Student/StudentDashboard';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import MyProfileDashboard from './screens/shared/components/MyProfileDashboard';
 
 ReactDOM.render(<App/>, document.getElementById('root'));
 

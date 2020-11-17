@@ -66,11 +66,11 @@ const useStyles = makeStyles(() => ({
 const menuOptions = [
   {
     title: 'Main page',
-    url: '../main-page',
+    url: '../mainpage',
   },
   {
     title: 'Messages',
-    url: '',
+    url: '../message',
   },
   {
     title: 'My projects',

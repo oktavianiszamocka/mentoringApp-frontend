@@ -5,9 +5,9 @@ import Box from '@material-ui/core/Box';
 import MaterialAvatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import EditIcon from '@material-ui/icons/Edit';
-import Title from './Title';
-import imageUrl from '../../../assets/images/taylor.jpg';
-import font from '../../../globals/postFont';
+import Title from '../shared/components/Title';
+import imageUrl from '../../assets/images/taylor.jpg';
+import font from '../../globals/postFont';
 
 const StyledSection = styled.section`
   margin: 2rem;
