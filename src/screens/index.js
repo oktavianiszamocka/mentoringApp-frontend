@@ -3,6 +3,7 @@ import { Router, Route, Redirect } from 'react-router-dom';
 import { Provider, history } from './utils/storage/store';
 import StudentDashboard from './Student/StudentDashboard';
 import MyProfileDashboard from './shared/components/MyProfileDashboard';
+import Message from './MessagePage/MessagePage';
 
 // import Admin from './Admin/routes';
 import Login from './Auth/Login';
@@ -19,6 +20,7 @@ const App = () => (
         <Route path={['/reset-password', '/register']} component={UpsertPassword} />
         <Route path="/main-page" component={StudentDashboard} />
         <Route path="/my-profile" component={MyProfileDashboard} />
+        <Route path = "/message" component={Message} />
         {/* <Route path="/admin" component={Admin} /> */}
         {/* {routes.map(renderRoute)} */}
       </Suspense>

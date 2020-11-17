@@ -4,7 +4,7 @@ import { Paper, Grid, colors } from '@material-ui/core';
 import AvatarImage from '../../assets/images/avatar.jpg';
 import UserAvailability from './UserAvailability';
 import SearchBar from './SearchBar';
-import MessageForm from '../shared/components/MessageForm'
+//import MessageForm from '../shared/components/MessageForm'
 
 import '../../index.css';
 
@@ -47,8 +47,8 @@ export default function MessagePage() {
             <UserAvailability user={user} active={isAvailable} />
           </Grid>
           <Grid item>
-            <Paper style={{ height: '25rem' }}>chat post
-            <MessageForm />
+            <Paper style={{ height: '25rem' }}>message form
+      
             </Paper>
           </Grid>
         </Grid>
