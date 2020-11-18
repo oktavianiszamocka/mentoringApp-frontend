@@ -28,8 +28,12 @@ const MyProfileDashboard = () => {
     idNote: null,
     open: false,
   });
+
   const [notes, setNotes] = useState([]);
   const [newNoteVisible, setNewNoteVisible] = useState(false);
+  const [user, setUser] = useState();
+  const [userProfile, setProfile] = useState();
+
   const onNoteCloseHandler = (idNote) => {
     setDeleteNoteDialogOptions({
       ...deleteNoteDialogOptions,
@@ -49,14 +53,18 @@ const MyProfileDashboard = () => {
     });
   };
 
+  
   const loadData = async () => {
-    const res = await Promise.all([Api.getNotes()]);
+    const res = await Promise.all([Api.getNotes(), Api.getUserAvaAndName(), Api.getUserProfile()]);
     setNotes(res[0].data.data);
-    // setUser(res[1].data);
+    setUser(res[1].data.data);
+    setProfile(res[2].data.data);
+    
   };
 
   useEffect(async () => {
     loadData();
+    
   }, []);
 
   const handleNoteSubmit = (e) => {
@@ -101,7 +109,13 @@ const MyProfileDashboard = () => {
           </StyledBox>
         </Grid>
         <Grid item xs={7}>
-          <MyProfile />
+        {(user && userProfile)
+        &&
+
+          <MyProfile user={user} profileInfo={userProfile}/>
+
+        }
+          
         </Grid>
       </Grid>
     </div>
