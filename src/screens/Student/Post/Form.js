@@ -8,12 +8,14 @@ import * as Yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
+import MUIRichTextEditor from 'mui-rte';
 import InputBase from '@material-ui/core/InputBase';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Chip from '@material-ui/core/Chip';
 import { Grid } from '@material-ui/core';
 import postFont from '../../../globals/postFont';
+
 
 const StyledSection = styled.section`
   margin: 2rem;
@@ -36,6 +38,12 @@ const StyledImg = styled.img`
 
 `;
 
+var divStyle = {
+  background: "#eee",
+  paddingBottom: "30px",
+  marginBottom: "10px",
+  marginTop: "10px"
+};
 // const PostSchema = Yup.object().shape({
 //   title: Yup.string().required(),
 //   subtitle: Yup.string(),
@@ -95,6 +103,19 @@ export default function UpsertPostForm(props) {
             <StyledImg src={props.user && props.user.imageUrl} width="75px" />
             <TextField style={{ marginTop: '20px', fontFamily: postFont.fontFamily }} name="title" label="Enter title here" variant="outlined" />
           </div>
+
+
+          <div style={divStyle}>
+            <MUIRichTextEditor
+              name="text"
+              label="text"
+              inlineToolbar={true}
+              fullWidth
+
+            /> </div>
+          <hr />
+         
+
           <Grid container>
             <TextField multiline InputProps={{ classes }} style={{ fontFamily: postFont.fontFamily, margin: '16px', width: '70rem' }} name="text" label="Input post text" />
             <Grid item xs={12}>
