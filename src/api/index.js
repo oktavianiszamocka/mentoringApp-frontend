@@ -20,5 +20,5 @@ export default {
   getNotes,
   getPosts,
   getUserProfile,
-  getUserAvaAndName 
+  getUserAvaAndName,
 };

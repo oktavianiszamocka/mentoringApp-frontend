@@ -1,11 +1,5 @@
-import React from 'react'
+import React from 'react';
 
-const UpsertPassword = () => {
-    return (
-        <div>
-            adsf
-        </div>
-    )
-}
+const UpsertPassword = () => <div>adsf</div>;
 
 export default UpsertPassword;

@@ -82,7 +82,7 @@ const StudentDashboard = () => {
 
   const handleSubmit = (e) => {
     const { tags } = e;
-    console.log(tags);
+
     const newPosts = [
       ...posts,
       {

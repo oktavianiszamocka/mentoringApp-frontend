@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paper, Grid, colors } from '@material-ui/core';
+import { Paper, Grid } from '@material-ui/core';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import PropTypes from 'prop-types';
 import Avatar from '../shared/components/Avatar';
