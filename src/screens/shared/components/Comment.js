@@ -1,15 +1,8 @@
 import React from 'react';
 import Avatar from '../components/Avatar';
 import styled from 'styled-components';
-import photo from '../../../assets/images/taylor.jpg';
+import moment from 'moment';
 
-const user = {
-  firstName: 'Joker',
-  lastName: 'the Kitty',
-  imageUrl: photo.toString(),
-  comment: 'That is cool!!',
-  time: '1hr ago',
-};
 
 const imgTheme = {
   width: '50px',
@@ -25,13 +18,15 @@ const StyledDiv = styled.div`
   display: flex;
 `;
 
-const Comment = () => {
+const Comment = ({comment}) => {
+
+  var momentTime = moment(JSON.stringify(comment.createdOn), 'YYYY-MM-DD hh:mm:ss').fromNow();
   return (
     <StyledDiv>
-      <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
+      <Avatar {...comment.createdBy} imgTheme={imgTheme} spanTheme={spanTheme} />
       <div className="media-body p-2 shadow-sm rounded bg-light border">
-        <small className="float-right text-muted">{user.time}</small>
-        <h6 className="mt-2 mb-4 text-muted">{user.comment}</h6>
+        <small className="float-right text-muted">{momentTime}</small>
+        <h6 className="mt-2 mb-4 text-muted">{comment.comment}</h6>
       </div>
     </StyledDiv>
   );
