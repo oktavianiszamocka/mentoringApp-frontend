@@ -76,7 +76,7 @@ const StudentDashboard = () => {
     setPosts(res[1].data.data);
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     loadData();
   }, []);
 

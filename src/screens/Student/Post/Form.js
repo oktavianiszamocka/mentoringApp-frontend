@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Formik, Form, useFormik, Field,
+  Formik, Form, useFormik, Field, ErrorMessage, FieldArray,
 } from 'formik';
 
 import PropTypes from 'prop-types';
@@ -9,11 +9,11 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
 import MUIRichTextEditor from 'mui-rte';
-import InputBase from '@material-ui/core/InputBase';
+import { InputBase, IconButton, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Chip from '@material-ui/core/Chip';
-import { Grid } from '@material-ui/core';
+
 import postFont from '../../../globals/postFont';
 
 const StyledSection = styled.section`
@@ -36,12 +36,12 @@ const StyledImg = styled.img`
   margin-bottom: 10px;
 `;
 
-const divStyle = {
+const messageStyle = {
   background: '#eee',
-  paddingBottom: '30px',
-  marginBottom: '10px',
-  marginTop: '10px',
+  padding: '10px',
+  minHeight: '200px',
 };
+
 // const PostSchema = Yup.object().shape({
 //   title: Yup.string().required(),
 //   subtitle: Yup.string(),
@@ -60,92 +60,98 @@ const useStyles = makeStyles({
   },
 });
 
-export default function UpsertPostForm(props) {
+export default function UpsertPostForm({ initialValues, onSubmit, user }) {
   const classes = useStyles();
-  const [tag, setTag] = useState('aa');
+  const [post, setPost] = useState({
+    title: 'cos',
+    message: 'cos innego',
+    tags: ['tag1', 'tag2'],
+  });
+
+  const [tag, setTag] = useState('');
   const [tags, setTags] = useState([]);
   const [key, setKey] = useState(0);
 
-  const handleSubmitTag = (e) => {
-    {
-      console.log(tag);
-    }
+  // TODO delete
+  const onSubmitTest = (values, { setSubmitting }) => {
+    // console.log(values);
+    setSubmitting(false);
+  };
+
+  const handleAddTag = (e) => {
     const newTags = [...tags, { id: key, label: tag }];
-    console.log(newTags);
     setTags(newTags); // todo add elements
     setKey(key + 1);
-    {
-      console.log(tags);
-    }
   };
 
-  const handleDelete = (chipToDelete) => {
-    setTags(tags.filter((tag) => tag.id !== chipToDelete.id));
+  const handleTagDelete = (arrayHelper, chipToDelete) => {
+    arrayHelper.remove(chipToDelete);
   };
 
-  const formik = useFormik({
-    initialValues: props.initialValues,
-    onSubmit: props.onSubmit,
-  });
-
-  const addIcon = <AddIcon onClick={handleSubmitTag} />;
+  const addIcon = <AddIcon onClick={handleAddTag} />;
 
   return (
-    <Formik
-      onSubmit={props.onSubmit}
-      // validationSchema={PostSchema}
-      initialValues={props.initialValues}
-    >
-      <Form>
+    <Formik onSubmit={onSubmitTest} initialValues={post}>
+      <Form style={{ maxWidth: '900px' }}>
         <StyledSection>
           <div style={{ display: 'flex' }}>
-            <StyledImg src={props.user && props.user.imageUrl} width="75px" />
+            <StyledImg src={user && user.imageUrl} width="75px" />
             <TextField
-              style={{ marginTop: '20px', fontFamily: postFont.fontFamily }}
+              style={{ marginTop: '20px', width: '100%' }}
               name="title"
               label="Enter title here"
               variant="outlined"
             />
+            <ErrorMessage name="title" component="div" />
           </div>
 
-          <div style={divStyle}>
-            <MUIRichTextEditor name="text" label="text" inlineToolbar fullWidth />
-            {' '}
+          <div style={messageStyle}>
+            <MUIRichTextEditor
+              name="message"
+              label="Enter here the post message..."
+              inlineToolbar
+              fullWidth
+            />
           </div>
           <hr />
 
-          <Grid container>
-            <TextField
-              multiline
-              InputProps={{ classes }}
-              style={{ fontFamily: postFont.fontFamily, margin: '16px', width: '70rem' }}
-              name="text"
-              label="Input post text"
-            />
-            <Grid item xs={12}>
-              <TextField
-                size="small"
-                onChange={(e) => {
-                  setTag(e.target.value);
-                }}
-                style={{ margin: '15px', width: '150px' }}
-                name="tag"
-                label="Add tag"
-                variant="outlined"
-                InputProps={{ endAdornment: addIcon }}
-              />
-            </Grid>
-            {tags
-              && tags.map((item) => (
-                <Chip
-                  name="tags[0]"
-                  color="primary"
-                  onDelete={() => handleDelete(item)}
-                  label={item.label}
-                  style={{ marginRight: '4px', marginLeft: '15px', marginBottom: '1px' }}
-                />
-              ))}
-          </Grid>
+          <FieldArray
+            name="tags"
+            render={(ah) => (
+              <>
+                <Grid item xs={12} alignItems="center" justify="center" style={{ margin: '20px' }}>
+                  <TextField
+                    size="small"
+                    value={tag}
+                    onChange={(e) => setTag(e.target.value)}
+                    style={{ width: '150px', verticalAlign: 'pointer' }}
+                    label="Add tag"
+                    variant="outlined"
+                  />
+                  <AddIcon
+                    style={{ padding: '10px', cursor: 'pointer' }}
+                    onClick={() => {
+                      if (tag && tag.trim().length > 0) ah.push(tag);
+                      setTag('');
+                    }}
+                  />
+                </Grid>
+                {ah.form.values && ah.form.values.tags.length > 0 ? (
+                  ah.form.values.tags.map((item) => (
+                    <Chip
+                      color="primary"
+                      onDelete={() => handleTagDelete(ah, item)}
+                      label={item}
+                      style={{ marginRight: '4px', marginLeft: '15px', marginBottom: '1px' }}
+                    />
+                  ))
+                ) : (
+                  <div>There are no tags...</div>
+                )}
+              </>
+            )}
+          />
+
           <div style={{ textAlignLast: 'right' }}>
             <Button
               style={{ margin: '15px' }}
