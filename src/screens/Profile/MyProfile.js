@@ -5,9 +5,9 @@ import Box from '@material-ui/core/Box';
 import MaterialAvatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import EditIcon from '@material-ui/icons/Edit';
-import Title from './Title';
-import imageUrl from '../../../assets/images/taylor.jpg';
-import font from '../../../globals/postFont';
+import Title from '../shared/components/Title';
+import font from '../../globals/postFont';
+import moment from 'moment';
 
 const StyledSection = styled.section`
   margin: 2rem;
@@ -26,13 +26,16 @@ const StyledInfoSection = styled.section`
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
 
-const MyProfile = () => (
-  <div>
+const MyProfile = ({user, profileInfo}) =>{
+ var dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('LL');
+
+  return(
+    <div>
     <StyledSection>
       <Grid container spacing={1}>
         <Grid item xs={2}>
           <MaterialAvatar
-            src={imageUrl}
+            src={user.imageUrl}
             style={{
               width: '100px', height: '100px', boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)', borderRadius: '1.5rem',
             }}
@@ -47,7 +50,7 @@ const MyProfile = () => (
             fontSize: '35px',
           }}
           >
-            TAYLOR SWIFT
+            {`${user.firstName} ${user.lastName}`}
           </h1>
         </Grid>
         <Button
@@ -70,14 +73,16 @@ const MyProfile = () => (
           </Grid>
           <EditIcon />
         </Grid>
-        <p>Name:</p>
-        <p>Surname:</p>
-        <p>Date of Birth:</p>
-        <p>Nationality:</p>
+        <p>Name : {user.firstName}</p>
+        <p>Surname : {user.lastName}</p>
+        <p>E-mail : </p>
+        <p>Phone : {profileInfo.phone}</p>
+        <p>Date of Birth : {dateOfBirthFormat} </p>
+        <p>Nationality : {profileInfo.country}</p>
         <Divider />
-        <p>Username:</p>
-        <p>Password:</p>
-        <p>E-mail:</p>
+        <p>Major : {profileInfo.major} </p>
+        <p>Semester : {profileInfo.semester}</p>
+      
 
       </StyledInfoSection>
       <StyledInfoSection>
@@ -86,16 +91,20 @@ const MyProfile = () => (
           justify="center"
         >
           <Grid item xs={11}>
-            <Title text="Education" textAlign="center" fontSize="10px" fontColor="black" />
+            <Title text="Technical" textAlign="center" fontSize="10px" fontColor="black" />
           </Grid>
           <EditIcon />
         </Grid>
-        <p>University:</p>
-        <p>Faculty:</p>
-        <p>Name:</p>
+        <p>Skill : {profileInfo.skills}</p>
+        <p>Experience : {profileInfo.experiences} </p>
       </StyledInfoSection>
     </StyledSection>
   </div>
-);
+
+  )
+
+} 
+  
+  
 
 export default MyProfile;

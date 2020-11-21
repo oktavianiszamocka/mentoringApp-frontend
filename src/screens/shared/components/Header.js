@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { AppBar, Toolbar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,8 +13,11 @@ import Link from '@material-ui/core/Link';
 import Divider from '@material-ui/core/Divider';
 import Font from '../../../globals/font';
 import Avatar from './Avatar';
+import Api from '../../../api/index'
 
-const user = {
+
+
+const userConst = {
   firstName: 'Jan',
   lastName: 'Kowalsi',
   imageUrl:
@@ -65,11 +68,11 @@ const useStyles = makeStyles(() => ({
 const menuOptions = [
   {
     title: 'Main page',
-    url: '../main-page',
+    url: '../mainpage',
   },
   {
     title: 'Messages',
-    url: '',
+    url: '../message',
   },
   {
     title: 'My projects',
@@ -81,7 +84,7 @@ const menuOptions = [
   },
 ];
 
-export default function Header() {
+const Header = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -93,6 +96,18 @@ export default function Header() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const [user, setUser] = useState();
+
+  const loadData = async () => {
+    const res = await Promise.all([Api.getUserAvaAndName()]);
+    setUser(res[0].data.data);
+  };
+
+  useEffect(async () => {
+    loadData();
+    
+  }, []);
+
 
   return (
     <AppBar position="fixed" color="white" elevation="3">
@@ -117,13 +132,16 @@ export default function Header() {
           ))}
         </div>
         <div style={{ display: 'flex' }}>
-          <Avatar
+          {user  &&
+            <Avatar
             firstName={user.firstName}
             lastName={user.lastName}
             imageUrl={user.imageUrl}
             imgTheme={imgTheme}
             width="50px"
           />
+          }
+
           <IconButton onClick={handleMenu}>
             <ArrowDropDownIcon fontSize="large" />
           </IconButton>
@@ -142,13 +160,16 @@ export default function Header() {
             open={open}
             onClose={handleClose}
           >
-            <Avatar
-              firstName={user.firstName}
-              lastName={user.lastName}
-              imageUrl={user.imageUrl}
-              imgTheme={imgTheme}
-              width="50px"
-            />
+            {user &&
+                <Avatar
+                firstName={user.firstName}
+                lastName={user.lastName}
+                imageUrl={user.imageUrl}
+                imgTheme={imgTheme}
+                width="50px"
+              />
+            }
+
             <Divider />
             <MenuItem onClick={handleClose}>Settings</MenuItem>
             <Divider />
@@ -159,3 +180,5 @@ export default function Header() {
     </AppBar>
   );
 }
+
+export default Header;
