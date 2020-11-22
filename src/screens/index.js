@@ -20,7 +20,7 @@ const App = () => (
         <Route path={['/reset-password', '/register']} component={UpsertPassword} />
         <Route path="/mainpage" component={StudentDashboard} />
         <Route path="/profile" component={MyProfileDashboard} />
-        <Route path = "/message" component={Message} />
+        <Route path="/message" component={Message} />
         {/* <Route path="/admin" component={Admin} /> */}
         {/* {routes.map(renderRoute)} */}
       </Suspense>
