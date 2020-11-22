@@ -146,8 +146,8 @@ export default function UpsertPostForm({ initialValues, onSubmit, user }) {
                     />
                   ))
                 ) : (
-                  <div>There are no tags...</div>
-                )}
+                    <div>There are no tags...</div>
+                  )}
               </>
             )}
           />
