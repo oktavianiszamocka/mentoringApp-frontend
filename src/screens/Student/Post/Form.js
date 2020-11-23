@@ -13,7 +13,6 @@ import { InputBase, IconButton, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Chip from '@material-ui/core/Chip';
-
 import postFont from '../../../globals/postFont';
 
 const StyledSection = styled.section`
@@ -146,8 +145,8 @@ export default function UpsertPostForm({ initialValues, onSubmit, user }) {
                     />
                   ))
                 ) : (
-                    <div>There are no tags...</div>
-                  )}
+                  <div>There are no tags...</div>
+                )}
               </>
             )}
           />
