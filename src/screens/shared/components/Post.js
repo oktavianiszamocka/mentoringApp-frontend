@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 import axios from 'axios';
+import MUIRichTextEditor from 'mui-rte';
 import Avatar from './Avatar';
 import TagsComponent from './TagsComponent';
 import Comment from './Comment';
+
 import UpsertPost from '../../Student/Post/Form';
 
 const StyledDiv = styled.div`
@@ -93,9 +95,7 @@ const Post = ({ user }) => {
           {postData && <TagsComponent tags={postData.tags} />}
           <hr />
           <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
-            <Button style={{ fontSize: 10 }} variant="default">
-              All comments
-            </Button>
+
             <Comment />
           </div>
           <hr />

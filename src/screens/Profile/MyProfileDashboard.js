@@ -2,15 +2,12 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Button, Grid } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
-import MaterialAvatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
 import Title from '../shared/components/Title';
 import Header from '../shared/components/Header';
 import NoteForm from '../Student/NoteForm';
 import Note from '../shared/components/Note';
 import Api from '../../api/index';
 import ConfirmDialog from '../shared/components/ConfirmDialog';
-import imageUrl from '../../assets/images/taylor.jpg';
 import MyProfile from './MyProfile';
 
 const StyledBox = styled(Box)({
@@ -53,18 +50,15 @@ const MyProfileDashboard = () => {
     });
   };
 
-  
   const loadData = async () => {
     const res = await Promise.all([Api.getNotes(), Api.getUserAvaAndName(), Api.getUserProfile()]);
     setNotes(res[0].data.data);
     setUser(res[1].data.data);
     setProfile(res[2].data.data);
-    
   };
 
   useEffect(async () => {
     loadData();
-    
   }, []);
 
   const handleNoteSubmit = (e) => {
@@ -90,13 +84,13 @@ const MyProfileDashboard = () => {
             <Title text="Notes" />
             {newNoteVisible && <NoteForm onSubmit={handleNoteSubmit} />}
             {notes
-                  && notes.map((item) => (
-                    <Note
-                      idNote={item.idNote}
-                      desc={item.description}
-                      onCloseHandler={() => onNoteCloseHandler(item.idNote)}
-                    />
-                  ))}
+              && notes.map((item) => (
+                <Note
+                  idNote={item.idNote}
+                  desc={item.description}
+                  onCloseHandler={() => onNoteCloseHandler(item.idNote)}
+                />
+              ))}
             <Button
               size="small"
               variant="contained"
@@ -109,13 +103,7 @@ const MyProfileDashboard = () => {
           </StyledBox>
         </Grid>
         <Grid item xs={7}>
-        {(user && userProfile)
-        &&
-
-          <MyProfile user={user} profileInfo={userProfile}/>
-
-        }
-          
+          {user && userProfile && <MyProfile user={user} profileInfo={userProfile} />}
         </Grid>
       </Grid>
     </div>

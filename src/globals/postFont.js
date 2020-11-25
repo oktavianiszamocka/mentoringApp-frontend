@@ -1,6 +1,5 @@
 const postFont = {
-    fontFamily: "'Lato', sans-serif",
-  };
-  
-  export default postFont;
-  
+  fontFamily: "'Lato', sans-serif",
+};
+
+export default postFont;

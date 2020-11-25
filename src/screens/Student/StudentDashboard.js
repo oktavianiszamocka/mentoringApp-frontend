@@ -76,13 +76,13 @@ const StudentDashboard = () => {
     setPosts(res[1].data.data);
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     loadData();
   }, []);
 
   const handleSubmit = (e) => {
     const { tags } = e;
-    console.log(tags);
+
     const newPosts = [
       ...posts,
       {
