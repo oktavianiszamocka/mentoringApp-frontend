@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 
 const apiUrl = 'http://localhost:57864/api';
 
@@ -14,6 +15,7 @@ const getNotes = () => axios.get(`${apiUrl}/personal-notes/${getUserId()}`);
 const getPosts = () => axios.get(`${apiUrl}/posts`);
 const getUserAvaAndName = () => axios.get(`${apiUrl}/profiles/user/${getUserId()}`);
 const getUserProfile = () => axios.get(`${apiUrl}/profiles/${getUserId()}`);
+const postNote = (noteData) => axios.post(`${apiUrl}/personal-notes`, noteData);
 
 export default {
   getUserId,
@@ -21,4 +23,5 @@ export default {
   getPosts,
   getUserProfile,
   getUserAvaAndName,
+  postNote,
 };

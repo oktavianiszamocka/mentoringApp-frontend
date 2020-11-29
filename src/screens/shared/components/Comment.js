@@ -1,8 +1,7 @@
 import React from 'react';
-import Avatar from '../components/Avatar';
 import styled from 'styled-components';
 import moment from 'moment';
-
+import Avatar from './Avatar';
 
 const imgTheme = {
   width: '50px',
@@ -18,9 +17,8 @@ const StyledDiv = styled.div`
   display: flex;
 `;
 
-const Comment = ({comment}) => {
-
-  var momentTime = moment(JSON.stringify(comment.createdOn), 'YYYY-MM-DD hh:mm:ss').fromNow();
+const Comment = ({ comment }) => {
+  const momentTime = moment(JSON.stringify(comment.createdOn), 'YYYY-MM-DD hh:mm:ss').fromNow();
   return (
     <StyledDiv>
       <Avatar {...comment.createdBy} imgTheme={imgTheme} spanTheme={spanTheme} />

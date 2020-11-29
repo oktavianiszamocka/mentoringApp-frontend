@@ -13,9 +13,7 @@ import Link from '@material-ui/core/Link';
 import Divider from '@material-ui/core/Divider';
 import Font from '../../../globals/font';
 import Avatar from './Avatar';
-import Api from '../../../api/index'
-
-
+import Api from '../../../api/index';
 
 const userConst = {
   firstName: 'Jan',
@@ -105,9 +103,7 @@ const Header = () => {
 
   useEffect(async () => {
     loadData();
-    
   }, []);
-
 
   return (
     <AppBar position="fixed" color="white" elevation="3">
@@ -132,15 +128,15 @@ const Header = () => {
           ))}
         </div>
         <div style={{ display: 'flex' }}>
-          {user  &&
+          {user && (
             <Avatar
-            firstName={user.firstName}
-            lastName={user.lastName}
-            imageUrl={user.imageUrl}
-            imgTheme={imgTheme}
-            width="50px"
-          />
-          }
+              firstName={user.firstName}
+              lastName={user.lastName}
+              imageUrl={user.imageUrl}
+              imgTheme={imgTheme}
+              width="50px"
+            />
+          )}
 
           <IconButton onClick={handleMenu}>
             <ArrowDropDownIcon fontSize="large" />
@@ -160,15 +156,16 @@ const Header = () => {
             open={open}
             onClose={handleClose}
           >
-            {user &&
+            {user
+                && (
                 <Avatar
-                firstName={user.firstName}
-                lastName={user.lastName}
-                imageUrl={user.imageUrl}
-                imgTheme={imgTheme}
-                width="50px"
-              />
-            }
+                  firstName={user.firstName}
+                  lastName={user.lastName}
+                  imageUrl={user.imageUrl}
+                  imgTheme={imgTheme}
+                  width="50px"
+                />
+                )}
 
             <Divider />
             <MenuItem onClick={handleClose}>Settings</MenuItem>
@@ -179,6 +176,6 @@ const Header = () => {
       </Toolbar>
     </AppBar>
   );
-}
+};
 
 export default Header;

@@ -3,6 +3,7 @@ import { Grid, Button } from '@material-ui/core';
 import { styled } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
+import moment from 'moment';
 import Api from '../../api/index';
 import Header from '../shared/components/Header';
 import Post from './Post';
@@ -94,7 +95,21 @@ const StudentDashboard = () => {
     setPosts(newPosts); // todo add elements
   };
 
+  const postNewNote = async (desc) => {
+    const noteData = {
+      Title: 'title',
+      Description: desc,
+      User: Api.getUserId(),
+      CreatedOn: moment(),
+      LastModified: moment(),
+
+    };
+    const res = await Api.postNote(noteData);
+    console.log(res.data);
+  };
+
   const handleNoteSubmit = (e) => {
+    postNewNote(e.note);
     const newNotes = [
       {
         description: e.note,
