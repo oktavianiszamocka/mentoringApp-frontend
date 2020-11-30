@@ -59,7 +59,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function UpsertPostForm({ initialValues, onSubmit, user }) {
+export default function UpsertPostForm({ onNewPostSubmitHandler, user }) {
   const classes = useStyles();
   const [post, setPost] = useState({
     title: 'cos',
@@ -90,7 +90,7 @@ export default function UpsertPostForm({ initialValues, onSubmit, user }) {
   const addIcon = <AddIcon onClick={handleAddTag} />;
 
   return (
-    <Formik onSubmit={onSubmitTest} initialValues={post}>
+    <Formik onSubmit={onNewPostSubmitHandler} initialValues={post}>
       <Form style={{ maxWidth: '900px' }}>
         <StyledSection>
           <div style={{ display: 'flex' }}>

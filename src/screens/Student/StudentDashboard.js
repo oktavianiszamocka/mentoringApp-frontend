@@ -82,14 +82,12 @@ const StudentDashboard = () => {
   }, []);
 
   const handleSubmit = (e) => {
-    const { tags } = e;
-
     const newPosts = [
       ...posts,
       {
         title: e.title,
         text: e.text,
-        tags: tags.split(','),
+        tags: e.tags,
       },
     ];
     setPosts(newPosts); // todo add elements
