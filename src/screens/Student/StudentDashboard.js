@@ -26,7 +26,7 @@ const StyledBox = styled(Box)({
 // const getPost = () => axios.get(`${host}/posts`);
 // endpoint to get all comment
 // eg. get all comment from post with id 1 = http://localhost:57864/api/posts/1/comment
-const postId = 1;
+//const postId = 1;
 // const getComment = () => axios.get(`${host}/posts/${postId}/comment`);
 
 const StudentDashboard = () => {

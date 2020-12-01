@@ -14,6 +14,7 @@ const getNotes = () => axios.get(`${apiUrl}/personal-notes/${getUserId()}`);
 const getPosts = () => axios.get(`${apiUrl}/posts`);
 const getUserAvaAndName = () => axios.get(`${apiUrl}/profiles/user/${getUserId()}`);
 const getUserProfile = () => axios.get(`${apiUrl}/profiles/${getUserId()}`);
+const getPostComment = (idPost) => axios.get(`${apiUrl}/posts/${idPost}/comment`);
 
 export default {
   getUserId,
@@ -21,4 +22,5 @@ export default {
   getPosts,
   getUserProfile,
   getUserAvaAndName,
+  getPostComment,
 };

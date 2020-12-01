@@ -3,11 +3,10 @@ import styled from 'styled-components';
 import { Button, Grid } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
-
 import Comment from '../../shared/components/Comment';
 import TagsComponent from '../../shared/components/TagsComponent';
 import Avatar from '../../shared/components/Avatar';
-import AllComments from '../../shared/components/AllComments';
+import AllComments from './AllComments';
 
 const StyledSection = styled.section`
   margin: 2rem;
@@ -55,6 +54,7 @@ const Post = ({ user, postData, onDeleteHandler }) => {
   const StyledDiv = styled.div`
     display: flex;
   `;
+  const [showAllComments, setShowAllComments] = useState(false);
 
   return (
     <Grid container>
@@ -88,15 +88,23 @@ const Post = ({ user, postData, onDeleteHandler }) => {
             <StyledC>
               {postData && <TagsComponent tags={postData.tags} />}
               <hr />
+              {!showAllComments && (
               <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
-                <Button style={{ fontSize: 10 }} variant="default">
+
+                {postData.hasMoreThanOneComment && (
+                <Button style={{ fontSize: 10 }} variant="default" onClick={() => setShowAllComments(true)}>
                   All comments
                 </Button>
-                {postData.newestComment && <Comment comment={postData.newestComment} />}
+                )}
+
+                { postData.newestComment
+                && <Comment comment={postData.newestComment} />}
+
               </div>
+              ) }
               <hr />
               <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
-                <AllComments />
+                {showAllComments && <AllComments idPost={postData.idPost} /> }
               </div>
               <hr />
               <StyledDiv>
