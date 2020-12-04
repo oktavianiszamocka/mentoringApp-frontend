@@ -20,16 +20,6 @@ const StyledBox = styled(Box)({
   boxShadow: '1px 1px 2px grey',
 });
 
-// const host = 'http://localhost:57864/api';
-// const userId = 1;
-// const getUser = () => axios.get('https://run.mocky.io/v3/2b2ecfa1-3095-4348-b16a-bb66dafc710c');
-// const getNotes = () => axios.get(`${host}/personal-notes/${userId}`);
-// const getPost = () => axios.get(`${host}/posts`);
-// endpoint to get all comment
-// eg. get all comment from post with id 1 = http://localhost:57864/api/posts/1/comment
-//const postId = 1;
-// const getComment = () => axios.get(`${host}/posts/${postId}/comment`);
-
 const StudentDashboard = () => {
   const [deleteNoteDialogOptions, setDeleteNoteDialogOptions] = useState({
     title: 'Delete note',
@@ -54,11 +44,15 @@ const StudentDashboard = () => {
     });
   };
 
-  const onNoteDeleteDialogClosed = (confirmed, idNote) => {
+  const onNoteDeleteDialogClosed = async (confirmed, idNote) => {
     if (confirmed) {
-      // TODO call to API
-      setNotes(notes.filter((n) => n.idNote !== idNote));
+      await Api.deleteNote(idNote);
+
+      const response = await Api.getNotes();
+      setNotes(response.data.data);
+      // setNotes(notes.filter((n) => n.idNote !== idNote));
     }
+
     setDeleteNoteDialogOptions({
       ...deleteNoteDialogOptions,
       open: false,
@@ -93,25 +87,21 @@ const StudentDashboard = () => {
     setPosts(newPosts); // todo add elements
   };
 
-  const postNewNote = async (desc) => {
+  const handleNoteSubmit = async (e) => {
     const noteData = {
-      Title: 'title',
-      Description: desc,
+      Description: e.note,
       User: Api.getUserId(),
       CreatedOn: moment(),
       LastModified: moment(),
 
     };
-    const res = await Api.postNote(noteData);
-    console.log(res.data);
-  };
+    const newNote = await Api.postNote(noteData)
+      .then((response) => response.data);
 
-  const handleNoteSubmit = (e) => {
-    postNewNote(e.note);
     const newNotes = [
       {
-        description: e.note,
-        idNote: 20,
+        description: newNote.description,
+        idNote: newNote.idNote,
       },
       ...notes,
     ];

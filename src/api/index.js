@@ -17,6 +17,7 @@ const getUserAvaAndName = () => axios.get(`${apiUrl}/profiles/user/${getUserId()
 const getUserProfile = () => axios.get(`${apiUrl}/profiles/${getUserId()}`);
 const postNote = (noteData) => axios.post(`${apiUrl}/personal-notes`, noteData);
 const getPostComment = (idPost) => axios.get(`${apiUrl}/posts/${idPost}/comment`);
+const deleteNote = (idNote) => axios.delete(`${apiUrl}/personal-notes/${idNote}`);
 
 export default {
   getUserId,
@@ -26,4 +27,5 @@ export default {
   getUserAvaAndName,
   postNote,
   getPostComment,
+  deleteNote,
 };
