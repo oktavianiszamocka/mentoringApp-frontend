@@ -50,7 +50,8 @@ const inputStyle = {
   marginLeft: '20px',
 };
 
-const Post = ({ user, postData, onDeleteHandler }) => {
+
+const Post = ({ user, postData, onDeleteHandler, currentUser }) => {
   const StyledDiv = styled.div`
     display: flex;
   `;
@@ -109,7 +110,7 @@ const Post = ({ user, postData, onDeleteHandler }) => {
               <hr />
               <StyledDiv>
                 <StyledAvatar
-                  src={user && user.imageUrl}
+                  src={currentUser && currentUser.imageUrl}
                   imgTheme={imgTheme}
                   width="50px"
                   border-radius="30%"
