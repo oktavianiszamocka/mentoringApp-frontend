@@ -20,11 +20,11 @@ const NoteSchema = Yup.object().shape({
   note: Yup.string().min(1).max(300).required('Please enter the note text'),
 });
 
-const NoteForm = ({ onSubmit }) => {
+const NoteForm = ({ onSubmit, initialValue }) => {
   const classes = useStyles();
 
   return (
-    <Formik onSubmit={onSubmit} initialValues={{ note: '' }} validationSchema={NoteSchema}>
+    <Formik onSubmit={onSubmit} initialValues={{ note: initialValue }} validationSchema={NoteSchema}>
       <Form>
         <Paper elevation={1} className={classes.paper}>
           <Field

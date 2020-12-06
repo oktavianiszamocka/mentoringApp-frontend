@@ -4,6 +4,7 @@ import { styled } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
 import moment from 'moment';
+import Pagination from '@material-ui/lab/Pagination';
 import Api from '../../api/index';
 import Header from '../shared/components/Header';
 import Post from './Post';
@@ -21,6 +22,10 @@ const StyledBox = styled(Box)({
 });
 
 const StudentDashboard = () => {
+  const defaultInitialValueNote = {
+    idNote: '',
+    description: '',
+  };
   const [deleteNoteDialogOptions, setDeleteNoteDialogOptions] = useState({
     title: 'Delete note',
     mainText: 'Are you sure you want to delete this note?',
@@ -35,6 +40,12 @@ const StudentDashboard = () => {
   });
   const [posts, setPosts] = useState([]);
   const [newNoteVisible, setNewNoteVisible] = useState(false);
+  const [onUpdateAction, setUpdateAction] = useState(false);
+  const [updateNoteInitialValue, setUpdateNoteInitialValue] = useState(defaultInitialValueNote);
+  const [page, setPage] = useState(1);
+  const [count, setCount] = useState(0);
+  const [pageNote, setPageNote] = useState(1);
+  const [countNote, setCountNote] = useState(0);
 
   const onNoteCloseHandler = (idNote) => {
     setDeleteNoteDialogOptions({
@@ -48,7 +59,7 @@ const StudentDashboard = () => {
     if (confirmed) {
       await Api.deleteNote(idNote);
 
-      const response = await Api.getNotes();
+      const response = await Api.getNotes(pageNote);
       setNotes(response.data.data);
       // setNotes(notes.filter((n) => n.idNote !== idNote));
     }
@@ -65,15 +76,17 @@ const StudentDashboard = () => {
   };
 
   const loadData = async () => {
-    const res = await Promise.all([Api.getNotes(), Api.getPosts()]);
+    const res = await Promise.all([Api.getNotes(pageNote), Api.getPosts(page)]);
     setNotes(res[0].data.data);
+    setCountNote(res[0].data.totalPages);
     // setUser(res[1].data);
     setPosts(res[1].data.data);
+    setCount(res[1].data.totalPages);
   };
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [page]);
 
   const handleSubmit = (e) => {
     const newPosts = [
@@ -87,7 +100,7 @@ const StudentDashboard = () => {
     setPosts(newPosts); // todo add elements
   };
 
-  const handleNoteSubmit = async (e) => {
+  const handleNotePostSubmit = async (e) => {
     const noteData = {
       Description: e.note,
       User: Api.getUserId(),
@@ -96,6 +109,33 @@ const StudentDashboard = () => {
 
     };
     const newNote = await Api.postNote(noteData)
+      .then((response) => response.data);
+    /*
+    const newNotes = [
+      {
+        description: newNote.description,
+        idNote: newNote.idNote,
+      },
+      ...notes,
+    ];
+*/
+    const getNotes = await Api.getNotes(pageNote)
+      .then((response) => response.data);
+    setNotes(getNotes.data);
+
+    // setNotes(newNotes);
+    setNewNoteVisible(false);
+  };
+
+  const handleNoteUpdateSubmit = async (e) => {
+    const noteData = {
+      idNote: updateNoteInitialValue.idNote,
+      Description: e.note,
+      User: Api.getUserId(),
+      LastModified: moment(),
+
+    };
+    const newNote = await Api.updateNote(noteData)
       .then((response) => response.data);
 
     const newNotes = [
@@ -108,6 +148,29 @@ const StudentDashboard = () => {
 
     setNotes(newNotes);
     setNewNoteVisible(false);
+    setUpdateAction(false);
+    setUpdateNoteInitialValue(defaultInitialValueNote);
+  };
+
+  const onNoteUpdateHandler = (id, desc) => {
+    const noteData = {
+      idNote: id,
+      description: desc,
+    };
+    setUpdateAction(true);
+    setUpdateNoteInitialValue(noteData);
+    setNewNoteVisible(true);
+    setNotes(notes.filter((n) => n.idNote !== id));
+  };
+
+  const handlePageChange = (e, value) => {
+    setPage(value);
+  };
+  const handlePageNoteChange = async (e, value) => {
+    setPageNote(value);
+    const getNotes = await Api.getNotes(pageNote)
+      .then((response) => response.data);
+    setNotes(getNotes.data);
   };
 
   return (
@@ -118,15 +181,24 @@ const StudentDashboard = () => {
         <Grid item xs={2}>
           <StyledBox>
             <Title text="Notes" />
-            {newNoteVisible && <NoteForm onSubmit={handleNoteSubmit} />}
+            {newNoteVisible && (
+            <NoteForm
+              onSubmit={onUpdateAction ? handleNoteUpdateSubmit : handleNotePostSubmit}
+              initialValue={updateNoteInitialValue.description}
+            />
+            )}
+
             {notes
               && notes.map((item) => (
                 <Note
                   idNote={item.idNote}
                   desc={item.description}
                   onCloseHandler={() => onNoteCloseHandler(item.idNote)}
+                  onUpdateHandler={() => onNoteUpdateHandler(item.idNote, item.description)}
                 />
+
               ))}
+
             <Button
               size="small"
               variant="contained"
@@ -136,6 +208,14 @@ const StudentDashboard = () => {
             >
               Add Note
             </Button>
+            <Pagination
+              color="primary"
+              count={countNote}
+              page={pageNote}
+              siblingCount={1}
+              boundaryCount={1}
+              onChange={handlePageNoteChange}
+            />
           </StyledBox>
         </Grid>
         <Grid item lg={8}>
@@ -148,7 +228,16 @@ const StudentDashboard = () => {
                 onDeleteHandler={() => onPostDeleteHandler(post.idPost)}
               />
             ))}
+          <Pagination
+            color="primary"
+            count={count}
+            page={page}
+            siblingCount={1}
+            boundaryCount={1}
+            onChange={handlePageChange}
+          />
         </Grid>
+
       </Grid>
     </div>
   );
