@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Button, Grid } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
+import EditIcon from '@material-ui/icons/Edit';
 import Comment from '../../shared/components/Comment';
 import TagsComponent from '../../shared/components/TagsComponent';
 import Avatar from '../../shared/components/Avatar';
@@ -50,8 +51,9 @@ const inputStyle = {
   marginLeft: '20px',
 };
 
-
-const Post = ({ user, postData, onDeleteHandler, currentUser }) => {
+const Post = ({
+  user, postData, onDeleteHandler, onEditHandler, currentUser,
+}) => {
   const StyledDiv = styled.div`
     display: flex;
   `;
@@ -65,7 +67,10 @@ const Post = ({ user, postData, onDeleteHandler, currentUser }) => {
             <StyledHeader>
               <div style={{ display: 'flex' }}>
                 <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
-                <BorderColorIcon style={{ marginLeft: '56rem' }} />
+                <EditIcon
+                  style={{ marginLeft: '56rem' }}
+                  onClick={() => onEditHandler(postData.idPost, postData.title, postData.content, postData.tags, user)}
+                />
                 <DeleteIcon
                   onClick={() => onDeleteHandler(postData.idPost)}
                   style={{ marginLeft: '1rem' }}
@@ -123,6 +128,7 @@ const Post = ({ user, postData, onDeleteHandler, currentUser }) => {
                   name="comment"
                 />
               </StyledDiv>
+
             </StyledC>
           </StyledSection>
         )}

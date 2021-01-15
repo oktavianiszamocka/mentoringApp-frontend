@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Formik, Form, useFormik, Field, ErrorMessage, FieldArray,
-} from 'formik';
+import React, { useState } from 'react';
+import { ErrorMessage, FieldArray, withFormik } from 'formik';
 
-import PropTypes from 'prop-types';
-import * as Yup from 'yup';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
-import MUIRichTextEditor from 'mui-rte';
-import { InputBase, IconButton, Grid } from '@material-ui/core';
+import { Grid, Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import Chip from '@material-ui/core/Chip';
-import postFont from '../../../globals/postFont';
+
+import { EditorState, ContentState, convertToRaw } from 'draft-js';
+import { RichTextEditorDraftjs } from './RichTextEditorDraftJS';
 
 const StyledSection = styled.section`
   margin: 2rem;
@@ -41,13 +37,6 @@ const messageStyle = {
   minHeight: '200px',
 };
 
-// const PostSchema = Yup.object().shape({
-//   title: Yup.string().required(),
-//   subtitle: Yup.string(),
-//   text: Yup.string().required(),
-//   tags: Yup.string(),
-// });
-
 const useStyles = makeStyles({
   underline: {
     '&&&:before': {
@@ -59,28 +48,32 @@ const useStyles = makeStyles({
   },
 });
 
-export default function UpsertPostForm({ onNewPostSubmitHandler, user, initialValues }) {
+const Yup = require('yup');
+
+const PostForm = (props) => {
+  const {
+    values,
+    touched,
+    dirty,
+    errors,
+    handleChange,
+    handleBlur,
+    handleReset,
+    handleSubmit,
+    setFieldValue,
+    isSubmitting,
+    user,
+
+  } = props;
+
   const classes = useStyles();
-  /*
-  const [post, setPost] = useState({
-    title: 'cos',
-    message: 'cos innego',
-    tags: ['tag1', 'tag2'],
-  });
-*/
   const [tag, setTag] = useState('');
   const [tags, setTags] = useState([]);
   const [key, setKey] = useState(0);
 
-  // TODO delete
-  const onSubmitTest = (values, { setSubmitting }) => {
-    // console.log(values);
-    setSubmitting(false);
-  };
-
   const handleAddTag = (e) => {
     const newTags = [...tags, { id: key, label: tag }];
-    setTags(newTags); // todo add elements
+    setTags(newTags);
     setKey(key + 1);
   };
 
@@ -91,36 +84,45 @@ export default function UpsertPostForm({ onNewPostSubmitHandler, user, initialVa
   const addIcon = <AddIcon onClick={handleAddTag} />;
 
   return (
-    <Formik onSubmit={onNewPostSubmitHandler} initialValues={initialValues}>
-      <Form style={{ maxWidth: '900px' }}>
+    <form onSubmit={handleSubmit}>
+      <div style={{ maxWidth: '900px' }}>
         <StyledSection>
           <div style={{ display: 'flex' }}>
             <StyledImg src={user && user.imageUrl} width="75px" />
-            <Field
-              as={TextField}
-              style={{ marginTop: '20px', width: '100%' }}
-              name="title"
-              label="Enter title here"
-              variant="outlined"
-            />
-            <ErrorMessage name="title" component="div" />
-          </div>
 
-          <div style={messageStyle}>
-            <MUIRichTextEditor
-              name="message"
-              label="Enter here the post message..."
-              inlineToolbar
-              fullWidth
+            {touched.title && errors.title && <p>{errors.title}</p>}
+            <TextField
+              id="title"
+              label="Enter title here"
+              error={touched.title && typeof errors.title !== 'undefined'}
+              value={values.title}
+              onChange={handleChange}
+              variant="outlined"
+              style={{ marginTop: '20px', width: '100%' }}
             />
+            <ErrorMessage name="title" />
+          </div>
+          <div style={messageStyle}>
+
+            <RichTextEditorDraftjs
+              editorState={values.content}
+              onChange={setFieldValue}
+              onBlur={handleBlur}
+            />
+            <ErrorMessage name="content" />
           </div>
           <hr />
-
           <FieldArray
             name="tags"
             render={(ah) => (
               <>
-                <Grid item xs={12} alignItems="center" justify="center" style={{ margin: '20px' }}>
+                <Grid
+                  item
+                  xs={12}
+                  alignItems="center"
+                  justify="center"
+                  style={{ margin: '20px' }}
+                >
                   <TextField
                     size="small"
                     value={tag}
@@ -160,25 +162,58 @@ export default function UpsertPostForm({ onNewPostSubmitHandler, user, initialVa
               color="primary"
               variant="contained"
               autoFocus
+              disabled={!dirty || isSubmitting}
             >
               Post
             </Button>
           </div>
+
         </StyledSection>
-      </Form>
-    </Formik>
+      </div>
+
+    </form>
   );
-}
-
-UpsertPostForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.object,
 };
+const CreatePostForm = withFormik({
+  mapPropsToValues: (props) => ({
+    title: props.initialValues && props.initialValues.title || '',
+    content: props.initialValues
+        && EditorState.createWithContent(ContentState.createFromText(props.initialValues.content))
+        || EditorState.createEmpty(),
+    tags: props.initialValues && props.initialValues.tags || [],
+    user: props.user,
+  }),
 
-UpsertPostForm.defaultProps = {
-  initialValues: {
-    title: '',
-    text: '',
-    tags: '',
+  validationSchema: Yup.object().shape({
+    title: Yup.string()
+      .max(255, 'Title should not be longer than 255 characters!')
+      .required('title is required'),
+    content: Yup.object()
+      .required('Post Content is required'),
+
+  }),
+
+  handleSubmit: (values, { setSubmitting, resetForm, props }) => {
+    const { blocks } = convertToRaw(values.content.getCurrentContent());
+    const contentValue = blocks.map((block) => (!block.text.trim() && '\n') || block.text).join('\n');
+    const finalValues = {
+      title: values.title,
+      content: contentValue,
+      tags: values.tags,
+    };
+
+    props.formSumbitCallback(finalValues);
+
+    setTimeout(() => {
+      setSubmitting(false);
+
+      resetForm({
+
+      });
+    }, 1000);
   },
-};
+
+  displayName: 'PostForm',
+})(PostForm);
+
+export default CreatePostForm;
