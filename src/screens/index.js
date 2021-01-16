@@ -5,7 +5,6 @@ import {
 import StudentDashboard from './Student/StudentDashboard';
 import MyProfileDashboard from './Profile/MyProfileDashboard';
 import Message from './MessagePage/MessagePage';
-import PostFormik from './Student/Post/FormwithFormik';
 
 // import Admin from './Admin/routes';
 import Login from './Auth/Login';

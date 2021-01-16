@@ -72,6 +72,71 @@ const StudentDashboard = () => {
   const [projects, setProjects] = useState([]);
   const [newPost, setNewPost] = useState(defaultInitialValuePost);
 
+  const loadData = async () => {
+    const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
+    const res = await Promise.all([Api.getNotes(pageNote), postType, Api.getUserProject(), Api.getUserAvaAndName()]);
+    setNotes(res[0].data.data);
+    setCountNote(res[0].data.totalPages);
+    setPosts(res[1].data.data);
+    setCount(res[1].data.totalPages);
+    setProjects(res[2].data.data);
+    setUser(res[3].data.data);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, [page, projects]);
+
+  const handleNotePostSubmit = async (e) => {
+    const noteData = {
+      Description: e.note,
+      User: Api.getUserId(),
+      CreatedOn: moment(),
+      LastModified: moment(),
+
+    };
+    const newNote = await Api.postNote(noteData)
+      .then((response) => response.data);
+    const getNotes = await Api.getNotes(pageNote)
+      .then((response) => response.data);
+    setNotes(getNotes.data);
+    setNewNoteVisible(false);
+  };
+
+  const handleNoteUpdateSubmit = async (e) => {
+    const noteData = {
+      idNote: updateNoteInitialValue.idNote,
+      Description: e.note,
+      User: Api.getUserId(),
+      LastModified: moment(),
+    };
+    const newNote = await Api.updateNote(noteData)
+      .then((response) => response.data);
+    const newNotes = [
+      {
+        description: newNote.description,
+        idNote: newNote.idNote,
+      },
+      ...notes,
+    ];
+
+    setNotes(newNotes);
+    setNewNoteVisible(false);
+    setUpdateAction(false);
+    setUpdateNoteInitialValue(defaultInitialValueNote);
+  };
+
+  const onNoteUpdateHandler = (id, desc) => {
+    const noteData = {
+      idNote: id,
+      description: desc,
+    };
+    setUpdateAction(true);
+    setUpdateNoteInitialValue(noteData);
+    setNewNoteVisible(true);
+    setNotes(notes.filter((n) => n.idNote !== id));
+  };
+
   const onNoteCloseHandler = (id) => {
     setDeleteNoteDialogOptions({
       ...deleteNoteDialogOptions,
@@ -105,7 +170,6 @@ const StudentDashboard = () => {
     if (confirmed) {
       await Api.deletePost(idPost);
 
-      // setPosts(posts.filter((p) => p.idPost !== idPost));
       const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
       const refreshedPosts = await postType;
 
@@ -142,7 +206,6 @@ const StudentDashboard = () => {
         tags,
       },
       user: userPost,
-
     });
   };
 
@@ -158,31 +221,13 @@ const StudentDashboard = () => {
       .then((response) => response.data);
     const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
     const refreshedPosts = await postType;
-
     setPosts(refreshedPosts.data.data);
-
     setNewPost(defaultInitialValuePost);
-
     setEditPostDialogOptions({
       ...editPostDialogOptions,
       open: false,
     });
   };
-
-  const loadData = async () => {
-    const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
-    const res = await Promise.all([Api.getNotes(pageNote), postType, Api.getUserProject(), Api.getUserAvaAndName()]);
-    setNotes(res[0].data.data);
-    setCountNote(res[0].data.totalPages);
-    setPosts(res[1].data.data);
-    setCount(res[1].data.totalPages);
-    setProjects(res[2].data.data);
-    setUser(res[3].data.data);
-  };
-
-  useEffect(() => {
-    loadData();
-  }, [page, projects]);
 
   const handleSubmit = async (e) => {
     const newPostDTO = {
@@ -196,67 +241,11 @@ const StudentDashboard = () => {
 
     const postedPost = await Api.postNewPost(newPostDTO)
       .then((response) => response.data);
-
     const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
     const refreshedPosts = await postType;
-
     setPosts(refreshedPosts.data.data);
     setNewPost(e);
     setNewPost(defaultInitialValuePost);
-  };
-
-  const handleNotePostSubmit = async (e) => {
-    const noteData = {
-      Description: e.note,
-      User: Api.getUserId(),
-      CreatedOn: moment(),
-      LastModified: moment(),
-
-    };
-    const newNote = await Api.postNote(noteData)
-      .then((response) => response.data);
-
-    const getNotes = await Api.getNotes(pageNote)
-      .then((response) => response.data);
-    setNotes(getNotes.data);
-
-    setNewNoteVisible(false);
-  };
-
-  const handleNoteUpdateSubmit = async (e) => {
-    const noteData = {
-      idNote: updateNoteInitialValue.idNote,
-      Description: e.note,
-      User: Api.getUserId(),
-      LastModified: moment(),
-
-    };
-    const newNote = await Api.updateNote(noteData)
-      .then((response) => response.data);
-
-    const newNotes = [
-      {
-        description: newNote.description,
-        idNote: newNote.idNote,
-      },
-      ...notes,
-    ];
-
-    setNotes(newNotes);
-    setNewNoteVisible(false);
-    setUpdateAction(false);
-    setUpdateNoteInitialValue(defaultInitialValueNote);
-  };
-
-  const onNoteUpdateHandler = (id, desc) => {
-    const noteData = {
-      idNote: id,
-      description: desc,
-    };
-    setUpdateAction(true);
-    setUpdateNoteInitialValue(noteData);
-    setNewNoteVisible(true);
-    setNotes(notes.filter((n) => n.idNote !== id));
   };
 
   const handlePageChange = (e, value) => {
