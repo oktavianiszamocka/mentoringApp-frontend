@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Button, Grid } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
+import { styled } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Pagination from '@material-ui/lab/Pagination';
 import moment from 'moment';
-import Title from '../shared/components/Title';
-import Header from '../shared/components/Header';
-import NoteForm from '../shared/components/NoteForm';
-import { Note, defaultInitialValueNote } from '../shared/components/Note';
-import Api from '../../api/index';
-import ConfirmDialog from '../shared/components/ConfirmDialog';
-import MyProfile from './MyProfile';
+import Pagination from '@material-ui/lab/Pagination';
+import Api from '../../../api/index';
+import { Note, defaultInitialValueNote } from './Note';
+import Title from './Title';
+import NoteForm from './NoteForm/index';
 
 const StyledBox = styled(Box)({
   padding: '1.5rem',
   marginTop: '2rem',
-  marginRight: '3rem',
+  marginRight: '2rem',
   width: '12rem',
   boxShadow: '1px 1px 2px grey',
 });
 
-const MyProfileDashboard = () => {
+const AllNotes = () => {
   const [deleteNoteDialogOptions, setDeleteNoteDialogOptions] = useState({
     title: 'Delete note',
     mainText: 'Are you sure you want to delete this note?',
@@ -30,24 +28,20 @@ const MyProfileDashboard = () => {
 
   const [notes, setNotes] = useState([]);
   const [newNoteVisible, setNewNoteVisible] = useState(false);
-  const [user, setUser] = useState();
-  const [userProfile, setProfile] = useState();
-  const [pageNote, setPageNote] = useState(1);
-  const [countNote, setCountNote] = useState(0);
   const [onUpdateAction, setUpdateAction] = useState(false);
   const [updateNoteInitialValue, setUpdateNoteInitialValue] = useState(defaultInitialValueNote);
+  const [pageNote, setPageNote] = useState(1);
+  const [countNote, setCountNote] = useState(0);
 
   const loadData = async () => {
-    const res = await Promise.all([Api.getNotes(pageNote), Api.getUserAvaAndName(), Api.getUserProfile()]);
+    const res = await Promise.all([Api.getNotes(pageNote), Api.getUserProject(), Api.getUserAvaAndName()]);
     setNotes(res[0].data.data);
     setCountNote(res[0].data.totalPages);
-    setUser(res[1].data.data);
-    setProfile(res[2].data.data);
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     loadData();
-  }, []);
+  });
 
   const handleNotePostSubmit = async (e) => {
     const noteData = {
@@ -55,15 +49,12 @@ const MyProfileDashboard = () => {
       User: Api.getUserId(),
       CreatedOn: moment(),
       LastModified: moment(),
-
     };
     const newNote = await Api.postNote(noteData)
       .then((response) => response.data);
-
     const getNotes = await Api.getNotes(pageNote)
       .then((response) => response.data);
     setNotes(getNotes.data);
-
     setNewNoteVisible(false);
   };
 
@@ -73,11 +64,9 @@ const MyProfileDashboard = () => {
       Description: e.note,
       User: Api.getUserId(),
       LastModified: moment(),
-
     };
     const newNote = await Api.updateNote(noteData)
       .then((response) => response.data);
-
     const newNotes = [
       {
         description: newNote.description,
@@ -103,13 +92,6 @@ const MyProfileDashboard = () => {
     setNotes(notes.filter((n) => n.idNote !== id));
   };
 
-  const handlePageNoteChange = async (e, value) => {
-    setPageNote(value);
-    const getNotes = await Api.getNotes(pageNote)
-      .then((response) => response.data);
-    setNotes(getNotes.data);
-  };
-
   const onNoteCloseHandler = (id) => {
     setDeleteNoteDialogOptions({
       ...deleteNoteDialogOptions,
@@ -117,6 +99,7 @@ const MyProfileDashboard = () => {
       id,
     });
   };
+
   const onNoteDeleteDialogClosed = async (confirmed, idNote) => {
     if (confirmed) {
       await Api.deleteNote(idNote);
@@ -130,21 +113,26 @@ const MyProfileDashboard = () => {
     });
   };
 
+  const handlePageNoteChange = async (e, value) => {
+    setPageNote(value);
+    const getNotes = await Api.getNotes(pageNote)
+      .then((response) => response.data);
+    setNotes(getNotes.data);
+  };
+
   return (
-    <div style={{ marginTop: '6rem' }}>
-      <Grid container>
-        <ConfirmDialog {...deleteNoteDialogOptions} onDialogClosed={onNoteDeleteDialogClosed} />
-        <Header />
-        <Grid item xs={3}>
-          <StyledBox>
-            <Title text="Notes" />
-            {newNoteVisible && (
-            <NoteForm
-              onSubmit={onUpdateAction ? handleNoteUpdateSubmit : handleNotePostSubmit}
-              initialValue={updateNoteInitialValue.description}
-            />
-            )}
-            {notes
+    <div>
+      <ConfirmDialog {...deleteNoteDialogOptions} onDialogClosed={onNoteDeleteDialogClosed} />
+      <StyledBox>
+        <Title text="Notes" />
+        {newNoteVisible && (
+        <NoteForm
+          onSubmit={onUpdateAction ? handleNoteUpdateSubmit : handleNotePostSubmit}
+          initialValue={updateNoteInitialValue.description}
+        />
+        )}
+
+        {notes
               && notes.map((item) => (
                 <Note
                   idNote={item.idNote}
@@ -152,32 +140,30 @@ const MyProfileDashboard = () => {
                   onCloseHandler={() => onNoteCloseHandler(item.idNote)}
                   onUpdateHandler={() => onNoteUpdateHandler(item.idNote, item.description)}
                 />
+
               ))}
-            <Button
-              size="small"
-              variant="contained"
-              color="primary"
-              onClick={() => setNewNoteVisible(true)}
-              style={{ marginTop: 10, marginLeft: 100 }}
-            >
-              Add Note
-            </Button>
-            <Pagination
-              color="primary"
-              count={countNote}
-              page={pageNote}
-              siblingCount={1}
-              boundaryCount={1}
-              onChange={handlePageNoteChange}
-            />
-          </StyledBox>
-        </Grid>
-        <Grid item xs={7}>
-          {user && userProfile && <MyProfile user={user} profileInfo={userProfile} />}
-        </Grid>
-      </Grid>
+
+        <Button
+          size="small"
+          variant="contained"
+          color="primary"
+          onClick={() => setNewNoteVisible(true)}
+          style={{ marginTop: 10, marginLeft: 100 }}
+        >
+          Add Note
+        </Button>
+        <Pagination
+          color="primary"
+          count={countNote}
+          page={pageNote}
+          siblingCount={1}
+          boundaryCount={1}
+          onChange={handlePageNoteChange}
+        />
+      </StyledBox>
     </div>
+
   );
 };
 
-export default MyProfileDashboard;
+export default AllNotes;
