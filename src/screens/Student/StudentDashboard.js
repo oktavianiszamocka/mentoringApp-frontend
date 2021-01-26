@@ -35,24 +35,21 @@ const StudentDashboard = () => {
     EditPost: null,
   });
 
-  const [notes, setNotes] = useState([]);
-
   const [user, setUser] = useState({ });
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
-  const [pageNote, setPageNote] = useState(1);
   const [project, setProject] = useState('');
   const [projects, setProjects] = useState([]);
   const [newPost, setNewPost] = useState(defaultInitialValuePost);
 
   const loadData = async () => {
     const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
-    const res = await Promise.all([Api.getNotes(pageNote), postType, Api.getUserProject(), Api.getUserAvaAndName()]);
-    setPosts(res[1].data.data);
-    setCount(res[1].data.totalPages);
-    setProjects(res[2].data.data);
-    setUser(res[3].data.data);
+    const res = await Promise.all([postType, Api.getUserProject(), Api.getUserAvaAndName()]);
+    setPosts(res[0].data.data);
+    setCount(res[0].data.totalPages);
+    setProjects(res[1].data.data);
+    setUser(res[2].data.data);
   };
 
   useEffect(() => {

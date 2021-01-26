@@ -34,7 +34,7 @@ const AllNotes = () => {
   const [countNote, setCountNote] = useState(0);
 
   const loadData = async () => {
-    const res = await Promise.all([Api.getNotes(pageNote), Api.getUserProject(), Api.getUserAvaAndName()]);
+    const res = await Promise.all([Api.getNotes(pageNote)]);
     setNotes(res[0].data.data);
     setCountNote(res[0].data.totalPages);
   };
