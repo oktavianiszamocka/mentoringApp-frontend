@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import EditIcon from '@material-ui/icons/Edit';
 import { styled as mStyled } from '@material-ui/core/styles';
@@ -38,6 +38,11 @@ const PaperNote = mStyled(Paper)({
   position: 'relative',
 });
 
+const defaultInitialValueNote = {
+  idNote: '',
+  description: '',
+};
+
 const Note = ({
   idNote, desc, onCloseHandler, onUpdateHandler,
 }) => (
@@ -55,4 +60,6 @@ Note.propTypes = {
   onUpdateHandler: PropTypes.func.isRequired,
 };
 
-export default Note;
+export {
+  Note, defaultInitialValueNote,
+};

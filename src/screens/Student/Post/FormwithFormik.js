@@ -7,8 +7,10 @@ import styled from 'styled-components';
 import { Grid, Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
+import Alert from '@material-ui/lab/Alert';
 
 import { EditorState, ContentState, convertToRaw } from 'draft-js';
+import { black } from 'material-ui/styles/colors';
 import { RichTextEditorDraftjs } from './RichTextEditorDraftJS';
 
 const StyledSection = styled.section`
@@ -149,7 +151,14 @@ const PostForm = (props) => {
                     />
                   ))
                 ) : (
-                  <div>There are no tags...</div>
+                  <Alert
+                    severity="warning"
+                    style={{
+                      backgroundColor: 'rgba(255,165,0,0.2)', color: 'black', width: '170px',
+                    }}
+                  >
+                    There are no tags!
+                  </Alert>
                 )}
               </>
             )}
