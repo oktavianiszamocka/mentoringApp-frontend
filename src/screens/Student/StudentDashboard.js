@@ -14,7 +14,6 @@ import Post from './Post';
 import Note from '../shared/components/Note';
 import Title from '../shared/components/Title';
 import NoteForm from './NoteForm';
-import UpsertPostForm from './Post/Form';
 import CreatePostForm from './Post/FormwithFormik';
 import EditPostDialog from './Post/EditPostDialog';
 

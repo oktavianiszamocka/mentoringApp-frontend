@@ -60,7 +60,7 @@ export  class  RichTextEditorDraftjs extends React.Component {
             handleKeyCommand={this.handleKeyCommand}
             onChange={this.onChange}
             onTab={this.onTab}
-            placeholder="Enter here the post message..."
+            placeholder="Enter post message..."
             ref="editor"
             spellCheck={true}
           />
