@@ -1,13 +1,25 @@
 import React from 'react';
+import { styled, makeStyles } from '@material-ui/core/styles';
+
 import TextField from '@material-ui/core/TextField';
 
+const useStyles = makeStyles({
+  root: {
+    width: 500,
+
+  },
+
+});
+
 function SearchBar() {
+  const classes = useStyles();
+
   return (
     <TextField
       id="outlined-basic"
       label="Search"
       variant="outlined"
-      style={{ width: '300px', margin: '25px', input: { margin: 5 } }}
+      className={classes.root}
       size="small"
     />
   );
