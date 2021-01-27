@@ -11,7 +11,7 @@ const useStyles = makeStyles({
 
 });
 
-function SearchBar() {
+const SearchBar = ({ onEnterAction }) => {
   const classes = useStyles();
 
   return (
@@ -21,8 +21,10 @@ function SearchBar() {
       variant="outlined"
       className={classes.root}
       size="small"
+      onKeyPress={(e) => onEnterAction(e)}
+
     />
   );
-}
+};
 
 export default SearchBar;
