@@ -24,6 +24,15 @@ const StyledInfoSection = styled.section`
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
 
+const StyledP = styled.p`
+  fontFamily: 'sans-serif',
+  fontWeight: 100,
+  letterSpacing: '0.3rem',
+  textTransform: 'uppercase',
+  fontSize: '35px',
+
+`;
+
 const MyProfile = ({ user, profileInfo }) => {
   const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('LL');
 
@@ -80,10 +89,10 @@ const MyProfile = ({ user, profileInfo }) => {
             </Grid>
             <EditIcon />
           </Grid>
-          <p>
+          <StyledP>
             Name :
             {user.firstName}
-          </p>
+          </StyledP>
           <p>
             Surname :
             {user.lastName}
