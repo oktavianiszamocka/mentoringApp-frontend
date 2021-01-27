@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Grid } from '@material-ui/core';
 import AvatarImage from '../../assets/images/avatar.jpg';
 import UserAvailability from './UserAvailability';
-import SearchBar from './SearchBar';
+import SearchBar from '../shared/components/SearchBar';
 import Header from '../shared/components/Header';
 // import MessageForm from '../shared/components/MessageForm'
 
