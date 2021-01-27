@@ -125,7 +125,7 @@ const EditForm = ({ user, profileInfo }) => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                id="surname-edit"
+                id="phone-edit"
                 defaultValue={profileInfo.phone}
                 label="Phone"
                 type="search"
