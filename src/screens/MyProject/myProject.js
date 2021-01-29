@@ -3,7 +3,6 @@ import { Grid, Button } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 import { makeStyles } from '@material-ui/core/styles';
 import Header from '../shared/components/Header';
-
 import Api from '../../api/index';
 import ProjectInfo from './projectInfo';
 import SearchBar from '../shared/components/SearchBar';

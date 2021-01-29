@@ -28,6 +28,8 @@ const deletePost = (idPost) => axios.delete(`${apiUrl}/posts/${idPost}`);
 const updatePost = (postData) => axios.patch(`${apiUrl}/posts`, postData);
 const getMyProject = (pageNumber) => axios.get(`${apiUrl}/projects/userProjects/${getUserId()}?pageNumber=${pageNumber}&pageSize=5`);
 const getMyProjectBySearch = (searchString, pageNumber) => axios.get(`${apiUrl}/projects/userProjects/${getUserId()}/search?projectName=${searchString}&pageNumber=${pageNumber}&pageSize=5`);
+const getProjectMembers = (idProject) => axios.get(`${apiUrl}/projects/members/${idProject}`);
+const getOtherUserProfile = (idUser) => axios.get(`${apiUrl}/profiles/${idUser}`);
 
 export default {
   getUserId,
@@ -47,4 +49,6 @@ export default {
   updatePost,
   getMyProject,
   getMyProjectBySearch,
+  getProjectMembers,
+  getOtherUserProfile,
 };

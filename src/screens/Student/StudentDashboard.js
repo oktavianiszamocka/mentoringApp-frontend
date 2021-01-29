@@ -162,7 +162,7 @@ const StudentDashboard = () => {
         <Grid item xs={2}>
           <AllNotes />
         </Grid>
-        <Grid item lg={8}>
+        <Grid item xs={8}>
 
           <CreatePostForm
             initialValues={newPost}
