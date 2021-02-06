@@ -1,3 +1,6 @@
+/* eslint-disable max-len */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Button, Grid } from '@material-ui/core';
