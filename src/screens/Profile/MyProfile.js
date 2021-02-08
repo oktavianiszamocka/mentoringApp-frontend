@@ -78,7 +78,7 @@ const MyProfile = ({ user, profileInfo }) => {
                 fontColor="black"
               />
             </Grid>
-            <EditIcon />
+
           </Grid>
           <p>
             Name :
