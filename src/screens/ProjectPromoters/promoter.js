@@ -18,33 +18,26 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const ProjectMember = ({ member }) => {
+const ProjectPromoter = ({ promoter }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
 
       <IconButton href="../profile">
-        <Avatar alt={member.firstName} src={member.avatar} className={classes.large} />
+        <Avatar alt={promoter.firstName} src={promoter.imageUrl} className={classes.large} />
       </IconButton>
 
       <Typography variant="h6" gutterBottom>
-        {member.firstName}
+        {promoter.firstName}
         {' '}
 
         {' '}
-        {member.lastName}
-      </Typography>
-      <Typography variant="body1" gutterBottom>{member.projectRole}</Typography>
-      <Typography align="center" variant="body1" gutterBottom>{member.major}</Typography>
-      <Typography variant="body1" gutterBottom>
-        Semester
-        {' '}
-        {member.semester}
+        {promoter.lastName}
       </Typography>
 
     </div>
 
   );
 };
-export default ProjectMember;
+export default ProjectPromoter;
