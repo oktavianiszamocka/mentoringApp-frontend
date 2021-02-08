@@ -60,7 +60,8 @@ const Post = ({
   const [showAllComments, setShowAllComments] = useState(false);
 
   return (
-    <Grid container>
+    <Grid style={{ maxWidth: '1100px' }}>
+
       <>
         {postData && (
           <StyledSection>
@@ -68,7 +69,7 @@ const Post = ({
               <div style={{ display: 'flex' }}>
                 <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
                 <EditIcon
-                  style={{ marginLeft: '56rem' }}
+                  style={{ marginLeft: '50rem' }}
                   onClick={() => onEditHandler(postData.idPost, postData.title, postData.content, postData.tags, user)}
                 />
                 <DeleteIcon
@@ -77,40 +78,40 @@ const Post = ({
                 />
               </div>
               {postData && (
-              <div>
-                {' '}
-                {postData.title}
-                {' '}
-              </div>
+                <div>
+                  {' '}
+                  {postData.title}
+                  {' '}
+                </div>
               )}
             </StyledHeader>
             {postData && (
-            <StyledP>
-              {' '}
-              {postData.content}
-              {' '}
-            </StyledP>
+              <StyledP>
+                {' '}
+                {postData.content}
+                {' '}
+              </StyledP>
             )}
             <StyledC>
               {postData && <TagsComponent tags={postData.tags} />}
               <hr />
               {!showAllComments && (
-              <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
+                <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
 
-                {postData.hasMoreThanOneComment && (
-                <Button style={{ fontSize: 10 }} variant="default" onClick={() => setShowAllComments(true)}>
-                  All comments
-                </Button>
-                )}
+                  {postData.hasMoreThanOneComment && (
+                    <Button style={{ fontSize: 10 }} variant="default" onClick={() => setShowAllComments(true)}>
+                      All comments
+                    </Button>
+                  )}
 
-                { postData.newestComment
-                && <Comment comment={postData.newestComment} />}
+                  { postData.newestComment
+                    && <Comment comment={postData.newestComment} />}
 
-              </div>
-              ) }
+                </div>
+              )}
               <hr />
               <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
-                {showAllComments && <AllComments idPost={postData.idPost} /> }
+                {showAllComments && <AllComments idPost={postData.idPost} />}
               </div>
               <hr />
               <StyledDiv>

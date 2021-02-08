@@ -87,7 +87,7 @@ const PostForm = (props) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div style={{ maxWidth: '900px' }}>
+      <div style={{ maxWidth: '1100px' }}>
         <StyledSection>
           <div style={{ display: 'flex' }}>
             <StyledImg src={user && user.imageUrl} width="75px" />
@@ -151,15 +151,15 @@ const PostForm = (props) => {
                     />
                   ))
                 ) : (
-                  <Alert
-                    severity="warning"
-                    style={{
-                      backgroundColor: 'rgba(255,165,0,0.2)', color: 'black', width: '170px',
-                    }}
-                  >
-                    There are no tags!
-                  </Alert>
-                )}
+                    <Alert
+                      severity="warning"
+                      style={{
+                        backgroundColor: 'rgba(255,165,0,0.2)', color: 'black', width: '170px',
+                      }}
+                    >
+                      There are no tags!
+                    </Alert>
+                  )}
               </>
             )}
           />
@@ -187,8 +187,8 @@ const CreatePostForm = withFormik({
   mapPropsToValues: (props) => ({
     title: props.initialValues && props.initialValues.title || '',
     content: props.initialValues
-        && EditorState.createWithContent(ContentState.createFromText(props.initialValues.content))
-        || EditorState.createEmpty(),
+      && EditorState.createWithContent(ContentState.createFromText(props.initialValues.content))
+      || EditorState.createEmpty(),
     tags: props.initialValues && props.initialValues.tags || [],
     user: props.user,
   }),
