@@ -6,7 +6,9 @@ import Divider from '@material-ui/core/Divider';
 import EditIcon from '@material-ui/icons/Edit';
 import moment from 'moment';
 import Chip from '@material-ui/core/Chip';
+import { Link } from 'react-router-dom';
 import Title from '../shared/components/Title';
+import EditForm from './EditForm';
 
 const StyledSection = styled.section`
   margin: 2rem;
@@ -44,7 +46,7 @@ margin-left: 10px;
 
 const MyProfile = ({ user, profileInfo }) => {
   const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('LL');
-  const allSkills = ['HTML', 'Java', 'React'];
+  const allSkills = profileInfo.skills.split(',');
 
   return (
     <div>
@@ -146,7 +148,7 @@ const MyProfile = ({ user, profileInfo }) => {
             </Grid>
             <Grid item xs={9}>
               <StyledData>
-                09/09/1997
+                {dateOfBirthFormat}
               </StyledData>
             </Grid>
             <Grid item xs={1.5}>
@@ -210,7 +212,7 @@ const MyProfile = ({ user, profileInfo }) => {
             </Grid>
             <Grid item xs={9}>
               <StyledData>
-                Some exp
+                {profileInfo.experiences}
               </StyledData>
             </Grid>
           </Grid>

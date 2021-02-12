@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, Grid } from '@material-ui/core';
 import MaterialAvatar from '@material-ui/core/Avatar';
@@ -12,6 +12,7 @@ import {
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import Title from '../shared/components/Title';
+import Api from '../../api/index';
 
 const StyledSection = styled.section`
   margin: 2rem;
@@ -34,10 +35,40 @@ const EditForm = ({ user, profileInfo }) => {
   const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('LL');
 
   // The first commit of Material-UI
-  const [selectedDate, setSelectedDate] = React.useState(dateOfBirthFormat);
+  const [selectedDate, setSelectedDate] = useState(dateOfBirthFormat);
+  const [onUpdateAction, setUpdateAction] = useState(false);
+  const [updateProfileInitialValue, setUpdateProfileInitialValue] = useState(profileInfo);
+  const [newFirstName, setFirstName] = useState(user.firstname);
+  const [newLastName, setLastName] = useState(user.lastName);
+  const [newPhone, setPhone] = useState(profileInfo.phone);
+  const [newCountry, setCountry] = useState(profileInfo.country);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
+  };
+
+  const onProfileUpdateHandler = async () => {
+    const profileData = {
+      idUser: user.idUser,
+      idProfile: profileInfo.idProfile,
+      firstName: newFirstName,
+      lastName: newLastName,
+      email: 'oktardo@gmail.com',
+      phone: '1891', // problem
+      dateOfBirth: '1996-01-06T00:00:00',
+      country: 'Poland', // problem
+      major: 'Computer Science',
+      semester: 8,
+      skills: 'Computer Science',
+      experiences: 'Junior',
+    };
+    console.log(profileData);
+
+    const newPost = await Api.updateProfileData(profileData)
+      .then((response) => console.log(response.data));
+    setUpdateAction(true);
+    setUpdateProfileInitialValue(profileData);
+    console.log();
   };
 
   return (
@@ -102,6 +133,7 @@ const EditForm = ({ user, profileInfo }) => {
                 type="search"
                 variant="outlined"
                 style={{ width: '30em' }}
+                onChange={(e) => { setFirstName(e.target.value); }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -112,6 +144,7 @@ const EditForm = ({ user, profileInfo }) => {
                 type="search"
                 variant="outlined"
                 style={{ width: '30em' }}
+                onChange={(e) => { setLastName(e.target.value); }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -131,6 +164,7 @@ const EditForm = ({ user, profileInfo }) => {
                 type="search"
                 variant="outlined"
                 style={{ width: '30em' }}
+                onChange={(e) => { setPhone(e.target.value); }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -159,6 +193,7 @@ const EditForm = ({ user, profileInfo }) => {
                 type="search"
                 variant="outlined"
                 style={{ width: '30em' }}
+                onChange={(e) => { setCountry(e.target.value); }}
               />
             </Grid>
             <Grid
@@ -170,6 +205,7 @@ const EditForm = ({ user, profileInfo }) => {
                 variant="contained"
                 justify="center"
                 color="secondary"
+                onClick={() => onProfileUpdateHandler()}
               >
                 Save changes
               </Button>

@@ -26,6 +26,7 @@ const getUserProject = () => axios.get(`${apiUrl}/projects/${getUserId()}`);
 const postNewPost = (postData) => axios.post(`${apiUrl}/posts`, postData);
 const deletePost = (idPost) => axios.delete(`${apiUrl}/posts/${idPost}`);
 const updatePost = (postData) => axios.patch(`${apiUrl}/posts`, postData);
+const updateProfileData = (profileData) => axios.patch(`${apiUrl}/profiles`, profileData);
 
 export default {
   getUserId,
@@ -43,4 +44,5 @@ export default {
   postNewPost,
   deletePost,
   updatePost,
+  updateProfileData,
 };

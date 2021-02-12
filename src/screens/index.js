@@ -5,6 +5,7 @@ import {
 import StudentDashboard from './Student/StudentDashboard';
 import MyProfileDashboard from './Profile/MyProfileDashboard';
 import Message from './MessagePage/MessagePage';
+import EditForm from './Profile/EditForm';
 
 // import Admin from './Admin/routes';
 import Login from './Auth/Login';
@@ -21,6 +22,7 @@ const App = () => (
       <Route path="/mainpage" component={StudentDashboard} />
       <Route path="/profile" component={MyProfileDashboard} />
       <Route path="/message" component={Message} />
+      <Route path="/editProfile" component={EditForm} />
     </Switch>
   </BrowserRouter>
 );

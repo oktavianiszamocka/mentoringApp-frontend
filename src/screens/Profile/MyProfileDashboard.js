@@ -30,7 +30,7 @@ const MyProfileDashboard = () => {
           <AllNotes />
         </Grid>
         <Grid item xs={8}>
-          {user && userProfile && <MyProfile user={user} profileInfo={userProfile} />}
+          {user && userProfile && <EditForm user={user} profileInfo={userProfile} />}
         </Grid>
       </Grid>
     </div>
