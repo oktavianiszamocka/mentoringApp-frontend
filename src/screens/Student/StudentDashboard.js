@@ -157,12 +157,21 @@ const StudentDashboard = () => {
     <div style={{ marginTop: '6rem' }}>
       <ConfirmDialog {...deletePostDialogOptions} onDialogClosed={onPostDeleteDialogClosed} />
       <EditPostDialog {...editPostDialogOptions} onDialogClosed={onPostEditDialogClosed} handleSubmit={onPostEditSubmit} />
-      <Grid container>
+      <Grid
+        container
+        spacing={2}
+        justify="center"
+      >
         {Header()}
-        <Grid item xs={2}>
+        <Grid
+          item
+          lg={2}
+          md={3}
+          s={12}
+        >
           <AllNotes />
         </Grid>
-        <Grid item lg={8}>
+        <Grid item lg={10} md={10} s={12} xs={12}>
 
           <CreatePostForm
             initialValues={newPost}
@@ -189,14 +198,15 @@ const StudentDashboard = () => {
 
           {posts
             && posts.map((post) => (
-              <Post
-                postData={post}
-                user={post.writer}
-                onDeleteHandler={() => onPostDeleteHandler(post.idPost)}
-                onEditHandler={() => onPostEditHandler(post.idPost, post.title, post.content, post.tags, post.writer)}
-                currentUser={user}
-
-              />
+              <Grid item lg={12} m={12} s={12} xs={12}>
+                <Post
+                  postData={post}
+                  user={post.writer}
+                  onDeleteHandler={() => onPostDeleteHandler(post.idPost)}
+                  onEditHandler={() => onPostEditHandler(post.idPost, post.title, post.content, post.tags, post.writer)}
+                  currentUser={user}
+                />
+              </Grid>
             ))}
           <Pagination
             color="primary"

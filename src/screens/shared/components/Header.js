@@ -74,7 +74,7 @@ const menuOptions = [
   },
   {
     title: 'My projects',
-    url: '',
+    url: '../myproject',
   },
   {
     title: 'Notifications',
