@@ -2,8 +2,6 @@ import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import { makeStyles } from '@material-ui/core/styles';
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -11,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     '& > *': {
       margin: theme.spacing(0.5),
-      padding: theme.spacing(0.2)
+      padding: theme.spacing(0.2),
     },
   },
 }));
@@ -22,7 +20,7 @@ const TagsComponent = ({ tags }) => {
   return (
     <div className={classes.root}>
       {tags.map((tag) => (
-        <Chip label={tag} ></Chip>
+        <Chip label={tag} />
       ))}
     </div>
   );

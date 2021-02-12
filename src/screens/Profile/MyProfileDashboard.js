@@ -5,6 +5,7 @@ import Box from '@material-ui/core/Box';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import MyProfile from './MyProfile';
+import EditForm from './EditForm';
 import AllNotes from '../shared/components/AllNotes';
 
 const MyProfileDashboard = () => {
@@ -29,7 +30,7 @@ const MyProfileDashboard = () => {
           <AllNotes />
         </Grid>
         <Grid item xs={8}>
-          {user && userProfile && <MyProfile user={user} profileInfo={userProfile} />}
+          {user && userProfile && <EditForm user={user} profileInfo={userProfile} />}
         </Grid>
       </Grid>
     </div>
