@@ -10,7 +10,7 @@ import Message from './MessagePage/MessagePage';
 import Login from './Auth/Login';
 import UpsertPassword from './Auth/UpsertPassword';
 import MyProject from './MyProject/myProject';
-import ProjectDetails from './MyProject/projectDetails';
+import ProjectDetailsDashboard from './MyProject/ProjectDetailsDashboard';
 import ProjectMembersBoard from './ProjectMembers/projectMembers';
 
 // const renderRoute = (route) => <Route key={route.path} {...route} />;
@@ -26,7 +26,7 @@ const App = () => (
       <Route path="/message" component={Message} />
       <Route path="/myproject" component={MyProject} />
       <Route path="/projectmembers/:IdProject" component={ProjectMembersBoard} />
-      <Route path="/projectDetails" component={ProjectDetails} />
+      <Route path="/projectDetails" component={ProjectDetailsDashboard} />
     </Switch>
   </BrowserRouter>
 );

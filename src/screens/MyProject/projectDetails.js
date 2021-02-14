@@ -28,16 +28,12 @@ const projectDetails = ({ projectInfo }) => (
     <div style={{ marginTop: '6rem' }}>
         <Grid container>
 
-            <Header />
-            <Grid item xs={3}>
-                <AllNotes />
-            </Grid>
-
             <Grid item xs={7}>
                 <StyledSection>
                     <Grid container spacing={1}>
                         <Grid item xs={2}>
                             <Avatar
+                                src={projectInfo.icon}
                                 style={{
                                     width: '150px',
                                     height: '150px',
@@ -55,44 +51,46 @@ const projectDetails = ({ projectInfo }) => (
                                     marginLeft: '80px',
                                 }}
                             >
-                                ... Project Name .....
-              </h1>
+                                {`${projectInfo.name} `}
+                            </h1>
                         </Grid>
 
                     </Grid>
                     <StyledInfoSection>
                         <Grid container justify="center">
                             <Grid item xs={11}>
-                                <h1>Description</h1>
+                                <h1>Description :  {`${projectInfo.description} `}
+                                </h1>
                             </Grid>
 
                         </Grid>
 
                         <Divider />
                         <p>
-                            Start Date :
+                            Start Date :  {`${projectInfo.startDate} `}
 
-            </p>
+                        </p>
                         <p>
                             Approximate End Date :
+                            {`${projectInfo.endDate} `}
 
-            </p>
-                        <p>Status : </p>
+                        </p>
+                        <p>Status :
+                        {`${projectInfo.statusName} `}
+                        </p>
                         <p>
                             Mentor :
+                            {`${projectInfo.superviserFirstName} ${projectInfo.superviserLastName}`}
 
-            </p>
-                        <p>
-                            Project Leader :
+                        </p>
 
-            </p>
 
                         <Button
                             variant="contained"
                             color="primary"
                             style={{
                                 marginTop: '5px',
-                                marginLeft: '700px',
+                                marginLeft: '1200px',
                                 position: 'relative',
                                 height: '20px',
                                 width: '10px',
