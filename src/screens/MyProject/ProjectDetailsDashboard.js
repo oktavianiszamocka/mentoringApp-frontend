@@ -24,7 +24,7 @@ const ProjectDetailsDashboard = () => {
                 <Grid item xs={2}>
                     <AllNotes />
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={10}>
                     {projectDetail && <ProjectDetails projectInfo={projectDetail} />}
                 </Grid>
             </Grid>

@@ -25,7 +25,7 @@ const StyledInfoSection = styled.section`
 `;
 
 const projectDetails = ({ projectInfo }) => (
-    <div style={{ marginTop: '6rem' }}>
+    <div>
         <Grid container>
 
             <Grid item xs={7}>
@@ -84,14 +84,11 @@ const projectDetails = ({ projectInfo }) => (
 
                         </p>
 
-
                         <Button
                             variant="contained"
                             color="primary"
                             style={{
                                 marginTop: '5px',
-                                marginLeft: '1200px',
-                                position: 'relative',
                                 height: '20px',
                                 width: '10px',
                             }}
@@ -105,7 +102,7 @@ const projectDetails = ({ projectInfo }) => (
 
                             height: '50px',
                             width: '50px',
-                        }}
+                        }} onClick={event => window.location.href = projectInfo.githubURL}
                         />
                     </Grid>
                 </StyledSection>
