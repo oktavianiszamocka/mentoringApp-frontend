@@ -59,7 +59,9 @@ const projectDetails = ({ projectInfo }) => (
                     <StyledInfoSection>
                         <Grid container justify="center">
                             <Grid item xs={11}>
-                                <h1>Description :  {`${projectInfo.description} `}
+                                <h1>
+                                    Description :
+                  {`${projectInfo.description} `}
                                 </h1>
                             </Grid>
 
@@ -67,20 +69,28 @@ const projectDetails = ({ projectInfo }) => (
 
                         <Divider />
                         <p>
-                            Start Date :  {`${projectInfo.startDate} `}
+                            Start Date :
+              {' '}
+                            {`${projectInfo.startDate} `}
 
                         </p>
                         <p>
                             Approximate End Date :
-                            {`${projectInfo.endDate} `}
+              {`${projectInfo.endDate} `}
 
                         </p>
-                        <p>Status :
-                        {`${projectInfo.statusName} `}
+                        <p>
+                            Status :
+              {`${projectInfo.statusName} `}
                         </p>
                         <p>
                             Mentor :
-                            {`${projectInfo.superviserFirstName} ${projectInfo.superviserLastName}`}
+              {`${projectInfo.superviserFirstName} ${projectInfo.superviserLastName}`}
+
+                        </p>
+                        <p>
+                            Project Leader :
+              {`${projectInfo.projectLeaderFirstName} ${projectInfo.projectLeaderLastName}`}
 
                         </p>
 
@@ -98,11 +108,13 @@ const projectDetails = ({ projectInfo }) => (
 
                     </StyledInfoSection>
                     <Grid container justify="center">
-                        <GitHubIcon style={{
+                        <GitHubIcon
+                            style={{
 
-                            height: '50px',
-                            width: '50px',
-                        }} onClick={event => window.location.href = projectInfo.githubURL}
+                                height: '50px',
+                                width: '50px',
+                            }}
+                            onClick={(event) => window.location.href = projectInfo.urlLinks[1]}
                         />
                     </Grid>
                 </StyledSection>
