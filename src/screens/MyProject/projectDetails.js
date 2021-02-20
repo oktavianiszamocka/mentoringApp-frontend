@@ -25,102 +25,98 @@ const StyledInfoSection = styled.section`
 `;
 
 const projectDetails = ({ projectInfo }) => (
-    <div>
-        <Grid container>
 
-            <Grid item xs={7}>
-                <StyledSection>
-                    <Grid container spacing={1}>
-                        <Grid item xs={2}>
-                            <Avatar
-                                src={projectInfo.icon}
-                                style={{
-                                    width: '150px',
-                                    height: '150px',
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={9}>
-                            <h1
-                                style={{
-                                    fontFamily: 'sans-serif',
-                                    fontWeight: 100,
-                                    letterSpacing: '0.3rem',
-                                    textTransform: 'uppercase',
-                                    fontSize: '35px',
-                                    marginLeft: '80px',
-                                }}
-                            >
-                                {`${projectInfo.name} `}
-                            </h1>
-                        </Grid>
+  <div>
+    <StyledSection>
 
-                    </Grid>
-                    <StyledInfoSection>
-                        <Grid container justify="center">
-                            <Grid item xs={11}>
-                                <h1>
-                                    Description :
-                  {`${projectInfo.description} `}
-                                </h1>
-                            </Grid>
+      <Grid container spacing={1}>
+        <Grid item xs={2}>
+          <Avatar
+            src={projectInfo.icon}
+            style={{
+              width: '150px',
+              height: '150px',
+            }}
+          />
+        </Grid>
+        <Grid container item xs={8} justify="center">
+          <h1
+            style={{
+              fontFamily: 'sans-serif',
+              fontWeight: 100,
+              letterSpacing: '0.3rem',
+              textTransform: 'uppercase',
+              fontSize: '35px',
+              marginTop: '50px',
+            }}
+          >
+            {`${projectInfo.name} `}
+          </h1>
+        </Grid>
 
-                        </Grid>
-
-                        <Divider />
-                        <p>
-                            Start Date :
-              {' '}
-                            {`${projectInfo.startDate} `}
-
-                        </p>
-                        <p>
-                            Approximate End Date :
-              {`${projectInfo.endDate} `}
-
-                        </p>
-                        <p>
-                            Status :
-              {`${projectInfo.statusName} `}
-                        </p>
-                        <p>
-                            Mentor :
-              {`${projectInfo.superviserFirstName} ${projectInfo.superviserLastName}`}
-
-                        </p>
-                        <p>
-                            Project Leader :
-              {`${projectInfo.projectLeaderFirstName} ${projectInfo.projectLeaderLastName}`}
-
-                        </p>
-
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            style={{
-                                marginTop: '5px',
-                                height: '20px',
-                                width: '10px',
-                            }}
-                        >
-                            Edit
-            </Button>
-
-                    </StyledInfoSection>
-                    <Grid container justify="center">
-                        <GitHubIcon
-                            style={{
-
-                                height: '50px',
-                                width: '50px',
-                            }}
-                            onClick={(event) => window.location.href = projectInfo.urlLinks[1]}
-                        />
-                    </Grid>
-                </StyledSection>
-            </Grid>
+      </Grid>
+      <StyledInfoSection>
+        <Grid container justify="center">
+          <h1>
+            {`${projectInfo.description} `}
+          </h1>
 
         </Grid>
-    </div>
+
+        <Divider />
+        <p>
+          Start Date :
+          {' '}
+          {`${projectInfo.startDate} `}
+
+        </p>
+        <p>
+          Approximate End Date :
+          {`${projectInfo.endDate} `}
+
+        </p>
+        <p>
+          Status :
+          {`${projectInfo.statusName} `}
+        </p>
+        <p>
+          Mentor :
+          {`${projectInfo.superviserFirstName} ${projectInfo.superviserLastName}`}
+
+        </p>
+        <p>
+          Project Leader :
+          {`${projectInfo.projectLeaderFirstName} ${projectInfo.projectLeaderLastName}`}
+
+        </p>
+
+        <Button
+          variant="contained"
+          color="primary"
+          style={{
+            marginTop: '5px',
+            height: '20px',
+            width: '10px',
+          }}
+        >
+          Edit
+        </Button>
+
+      </StyledInfoSection>
+      <Grid container justify="center">
+        <GitHubIcon
+          style={{
+
+            height: '50px',
+            width: '50px',
+          }}
+          onClick={(event) => window.location.href = projectInfo.urlLinks[1]}
+        />
+      </Grid>
+
+    </StyledSection>
+  </div>
+
 );
+
 export default projectDetails;

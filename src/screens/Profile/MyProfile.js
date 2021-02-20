@@ -116,7 +116,6 @@ const MyProfile = ({ user, profileInfo }) => {
             <Grid item xs={11}>
               <Title text="Technical" textAlign="center" fontSize="10px" fontColor="black" />
             </Grid>
-            <EditIcon />
           </Grid>
           <p>
             Skill :
