@@ -28,10 +28,12 @@ const getUserProject = () => axios.get(`${apiUrl}/projects/${getUserId()}`);
 const postNewPost = (postData) => axios.post(`${apiUrl}/posts`, postData);
 const deletePost = (idPost) => axios.delete(`${apiUrl}/posts/${idPost}`);
 const updatePost = (postData) => axios.patch(`${apiUrl}/posts`, postData);
+const updateProfileData = (profileData) => axios.patch(`${apiUrl}/profiles`, profileData);
 const getMyProject = (pageNumber) => axios.get(`${apiUrl}/projects/userProjects/${getUserId()}?pageNumber=${pageNumber}&pageSize=5`);
 const getMyProjectBySearch = (searchString, pageNumber) => axios.get(`${apiUrl}/projects/userProjects/${getUserId()}/search?projectName=${searchString}&pageNumber=${pageNumber}&pageSize=5`);
-const getProjectMembers = (idProject) => axios.get(`${apiUrl}/projects/members/${idProject}`);
+const getProjectMembers = (idProject) => axios.get(`${apiUrl}/projectMembers/${idProject}`);
 const getOtherUserProfile = (idUser) => axios.get(`${apiUrl}/profiles/${idUser}`);
+const getProjectPromoters = (idProject) => axios.get(`${apiUrl}/projectpromoters/${idProject}`);
 
 export default {
   getUserId,
@@ -49,9 +51,11 @@ export default {
   postNewPost,
   deletePost,
   updatePost,
+  updateProfileData,
   getMyProject,
   getMyProjectBySearch,
   getProjectMembers,
   getOtherUserProfile,
   getProjectDetails,
+  getProjectPromoters,
 };
