@@ -17,6 +17,7 @@ import ProjectPromotersBoard from './ProjectPromoters/promotersPage';
 // const renderRoute = (route) => <Route key={route.path} {...route} />;
 
 const App = () => (
+
   <BrowserRouter>
     <Switch>
       <Route path="/" exact render={() => <Redirect to="/mainpage" />} />
@@ -31,6 +32,7 @@ const App = () => (
       <Route path="/projectpromoters/:IdProject" component={ProjectPromotersBoard} />
     </Switch>
   </BrowserRouter>
+
 );
 
 export default App;
