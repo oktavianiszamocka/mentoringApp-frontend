@@ -5,7 +5,7 @@ import {
 import StudentDashboard from './Student/StudentDashboard';
 import MyProfileDashboard from './Profile/MyProfileDashboard';
 import Message from './MessagePage/MessagePage';
-import EditForm from './Profile/EditForm';
+import EditForm from './Profile/EditFormDashboard';
 
 // import Admin from './Admin/routes';
 import Login from './Auth/Login';
@@ -23,9 +23,9 @@ const App = () => (
       <Route path="/login" component={Login} />
       <Route path={['/reset-password', '/register']} component={UpsertPassword} />
       <Route path="/mainpage" component={StudentDashboard} />
-      <Route path="/profile" component={MyProfileDashboard} />
+      <Route path="/profile/:IdUser" component={MyProfileDashboard} />
       <Route path="/message" component={Message} />
-      <Route path="/editProfile" component={EditForm} />
+      <Route path="/editProfile/:IdUser" component={EditForm} />
       <Route path="/myproject" component={MyProject} />
       <Route path="/projectmembers/:IdProject" component={ProjectMembersBoard} />
       <Route path="/projectpromoters/:IdProject" component={ProjectPromotersBoard} />
