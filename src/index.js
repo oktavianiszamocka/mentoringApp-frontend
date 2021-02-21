@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import App from './screens';
+// import App from './screens';
 
 import * as serviceWorker from './serviceWorker';
 import App from './screens/index';
