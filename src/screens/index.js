@@ -14,6 +14,7 @@ import MyProject from './MyProject/myProject';
 import ProjectDetailsDashboard from './MyProject/ProjectDetailsDashboard';
 import ProjectMembersBoard from './ProjectMembers/projectMembers';
 import ProjectPromotersBoard from './ProjectPromoters/promotersPage';
+import ProjectBar from './shared/components/ProjectBar';
 
 // const renderRoute = (route) => <Route key={route.path} {...route} />;
 
@@ -27,6 +28,7 @@ const App = () => (
       <Route path="/mainpage" component={StudentDashboard} />
       <Route path="/profile/:IdUser" component={MyProfileDashboard} />
       <Route path="/message" component={Message} />
+      <Route path="/profilebartest" component={ProjectBar} />
       <Route path="/editProfile/:IdUser" component={EditForm} />
       <Route path="/myproject" component={MyProject} />
       <Route path="/projectmembers/:IdProject" component={ProjectMembersBoard} />

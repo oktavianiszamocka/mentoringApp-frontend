@@ -12,7 +12,6 @@
     "@material-ui/lab": "^4.0.0-alpha.49",
     "@material-ui/pickers": "^3.2.10",
     "axios": "^0.20.0",
-    "bootstrap": "^4.5.2",
     "clsx": "^1.1.1",
     "date-fns": "^2.14.0",
     "dayjs": "^1.8.27",
