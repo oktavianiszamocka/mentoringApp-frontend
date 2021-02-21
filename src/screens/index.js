@@ -28,7 +28,6 @@ const App = () => (
       <Route path="/mainpage" component={StudentDashboard} />
       <Route path="/profile/:IdUser" component={MyProfileDashboard} />
       <Route path="/message" component={Message} />
-      <Route path="/profilebartest" component={ProjectBar} />
       <Route path="/editProfile/:IdUser" component={EditForm} />
       <Route path="/myproject" component={MyProject} />
       <Route path="/projectmembers/:IdProject" component={ProjectMembersBoard} />
