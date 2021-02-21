@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import MemberAvatar from './member';
+import ProjectBar from '../shared/components/ProjectBar';
 
 const useStyles = makeStyles({
   membersDiv: {
@@ -47,7 +48,7 @@ const ProjectMembersBoard = () => {
       <Grid container>
         <Header />
         <Grid item xs={2}>
-          <Paper className={classes.paperLeft}>LEFT</Paper>
+          <ProjectBar />
         </Grid>
 
         <div className={classes.membersDiv}>
