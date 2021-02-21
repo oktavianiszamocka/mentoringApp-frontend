@@ -1,25 +1,49 @@
 import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Grid } from '@material-ui/core';
 import Api from '../../api/index';
+import MilestoneInfo from './MilestoneInfo';
+import Header from '../shared/components/Header';
+import AllNotes from '../shared/components/AllNotes';
 
-const milestone = ({ milestones }) => (
+const useStyles = makeStyles({
+    paging: {
+        marginTop: 10,
+    },
+    search: {
+        width: 500,
+    },
 
-  const [milestone, setMilestone] = useState();
+});
 
-const loadData = async () => {
-    const res = await Promise.all([Api.getMilestone()]);
-    setMilestone(res[0].data.data);
+const Milestone = () => {
+    const classes = useStyles();
+    const [milestone, setMilestone] = useState();
+
+    const loadData = async () => {
+        const res = await Promise.all([Api.getMilestone()]);
+        setMilestone(res[0].data.data);
+    };
+
+    useEffect(async () => {
+        loadData();
+    }, []);
+
+    return (
+        <div style={{ marginTop: '10rem' }}>
+            <Grid container>
+                <Header />
+                <Grid item xs={3}>
+                    <AllNotes />
+                </Grid>
+                <Grid item xs={7}>
+                    {milestone && milestone.map((mile) => (
+                        <MilestoneInfo milestone={mile} />
+                    ))}
+                </Grid>
+            </Grid>
+        </div>
+    );
 };
 
-useEffect(async () => {
-    loadData();
-}, []);
-
-
-return (
-
-    <div>
-
-    </div>
-);
- };
-export default milestone;
+export default Milestone;
