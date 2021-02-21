@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Button, Grid, IconButton, Tooltip,
+  Button, Grid,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import BorderColorIcon from '@material-ui/icons/BorderColor';
+
 import EditIcon from '@material-ui/icons/Edit';
 import Comment from '../../shared/components/Comment';
 import TagsComponent from '../../shared/components/TagsComponent';
@@ -69,7 +69,6 @@ const Post = ({
     display: flex;
   `;
   const [showAllComments, setShowAllComments] = useState(false);
-  const classes = useStyles();
 
   return (
     <Grid style={{ maxWidth: '1100px' }}>
@@ -80,10 +79,7 @@ const Post = ({
             <StyledHeader>
               <div style={{ display: 'flex' }}>
 
-                <IconButton className={classes.iconButtonStyle} href={`/profile/${user.idUser}`}>
-
-                  <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
-                </IconButton>
+                <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
 
                 <EditIcon
                   style={{ marginLeft: '50rem' }}

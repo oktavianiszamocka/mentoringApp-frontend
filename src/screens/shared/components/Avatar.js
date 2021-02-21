@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import Font from '../../../globals/font';
 import MaterialAvatar from '@material-ui/core/Avatar';
-
+import IconButton from '@material-ui/core/IconButton';
+import Font from '../../../globals/font';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -17,14 +17,23 @@ const StyledSpan = styled.span`
   margin-top: 1rem;
 `;
 
-const Avatar = ({ firstName, lastName, imageUrl, width }) => {
-  return (
-    <StyledDiv>
-      <MaterialAvatar src={imageUrl} style={{width: width, height: width, boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)', borderRadius: '1.5rem' }}></MaterialAvatar>
-      <StyledSpan>{`${firstName} ${lastName}`}</StyledSpan>
-    </StyledDiv>
-  );
-};
+const Avatar = ({
+  idUser, firstName, lastName, imageUrl, width,
+}) => (
+  <StyledDiv>
+    <IconButton href={`/profile/${idUser}`}>
+
+      <MaterialAvatar
+        src={imageUrl}
+        style={{
+          width, height: width, boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)', borderRadius: '1.5rem',
+        }}
+      />
+
+    </IconButton>
+    <StyledSpan>{`${firstName} ${lastName}`}</StyledSpan>
+  </StyledDiv>
+);
 
 Avatar.defaultProps = {
   imageUrl: '',

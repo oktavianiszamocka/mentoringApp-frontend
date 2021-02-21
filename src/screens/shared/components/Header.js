@@ -53,11 +53,6 @@ const useStyles = makeStyles(() => ({
     fontFamily: Font.fontFamily,
     flexGrow: 1,
   },
-  iconButtonStyle: {
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-  },
 }));
 
 // TODO update the URLS
@@ -127,18 +122,11 @@ const Header = () => {
         </div>
         <div style={{ display: 'flex' }}>
           {user && (
-          <IconButton
-            className={classes.iconButtonStyle}
-            href={`/profile/${user.idUser}`}
-          >
             <Avatar
-              firstName={user.firstName}
-              lastName={user.lastName}
-              imageUrl={user.imageUrl}
-              imgTheme={imgTheme}
+              {...user}
               width="50px"
             />
-          </IconButton>
+
           )}
 
           <IconButton onClick={handleMenu}>
