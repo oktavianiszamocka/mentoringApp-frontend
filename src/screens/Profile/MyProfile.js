@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid, IconButton } from '@material-ui/core';
 import MaterialAvatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import EditIcon from '@material-ui/icons/Edit';
@@ -8,7 +8,6 @@ import moment from 'moment';
 import Chip from '@material-ui/core/Chip';
 import { Link } from 'react-router-dom';
 import Title from '../shared/components/Title';
-import EditForm from './EditForm';
 
 const StyledSection = styled.section`
   margin: 2rem;
@@ -44,7 +43,7 @@ font-size: 1em;
 margin-left: 10px;
 `;
 
-const MyProfile = ({ user, profileInfo }) => {
+const MyProfile = ({ profileInfo, showEditButton }) => {
   const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('LL');
   const allSkills = profileInfo.skills.split(',');
 
@@ -54,7 +53,7 @@ const MyProfile = ({ user, profileInfo }) => {
         <Grid container spacing={1}>
           <Grid item xs={2}>
             <MaterialAvatar
-              src={user.imageUrl}
+              src={profileInfo.avatar}
               style={{
                 width: '100px',
                 height: '100px',
@@ -73,25 +72,32 @@ const MyProfile = ({ user, profileInfo }) => {
                 fontSize: '35px',
               }}
             >
-              {`${user.firstName} ${user.lastName}`}
+              {`${profileInfo.firstName} ${profileInfo.lastName}`}
             </h1>
           </Grid>
-          <Button
-            variant="contained"
-            color="secondary"
-            style={{
-              marginTop: '5px',
-              marginLeft: '20px',
-              height: '20px',
-              width: '10px',
-            }}
-          >
-            Edit
-          </Button>
+          {showEditButton && (
+            <IconButton disableFocusRipple="true" disableRipple="true" href={`/editProfile/${profileInfo.user}`}>
+              <Button
+                variant="contained"
+                color="secondary"
+                style={{
+
+                  marginTop: '5px',
+                  marginLeft: '20px',
+                  height: '20px',
+                  width: '10px',
+                }}
+              >
+                Edit
+              </Button>
+
+            </IconButton>
+
+          ) }
         </Grid>
         <StyledInfoSection>
           <Grid container>
-            <Grid item xs={11}>
+            <Grid item xs={12}>
               <Title
                 text="Personal Information"
                 textAlign="center"
@@ -99,7 +105,7 @@ const MyProfile = ({ user, profileInfo }) => {
                 fontColor="black"
               />
             </Grid>
-            <EditIcon />
+
             {' '}
             <Grid item xs={1}>
               <StyledLabels>
@@ -108,7 +114,7 @@ const MyProfile = ({ user, profileInfo }) => {
             </Grid>
             <Grid item xs={11}>
               <StyledData>
-                {user.firstName}
+                {profileInfo.firstName}
               </StyledData>
             </Grid>
             <Grid item xs={1.5}>
@@ -118,7 +124,7 @@ const MyProfile = ({ user, profileInfo }) => {
             </Grid>
             <Grid item xs={10}>
               <StyledData>
-                {user.lastName}
+                {profileInfo.lastName}
               </StyledData>
             </Grid>
             <Grid item xs={1.5}>
@@ -128,7 +134,7 @@ const MyProfile = ({ user, profileInfo }) => {
             </Grid>
             <Grid item xs={10}>
               <StyledData>
-                taylor.swift@gmail.com
+                {profileInfo.email}
               </StyledData>
             </Grid>
             <Grid item xs={1.5}>
@@ -192,7 +198,7 @@ const MyProfile = ({ user, profileInfo }) => {
             <Grid item xs={11}>
               <Title text="Technical" textAlign="center" fontSize="10px" fontColor="black" />
             </Grid>
-            <EditIcon />
+
             <Grid item xs={12}>
               <StyledLabels>
                 Skills:

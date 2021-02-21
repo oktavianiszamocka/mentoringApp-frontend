@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, Grid } from '@material-ui/core';
 import MaterialAvatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
 import EditIcon from '@material-ui/icons/Edit';
 import moment from 'moment';
 import TextField from '@material-ui/core/TextField';
@@ -11,6 +10,7 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import { Redirect } from 'react-router';
 import Title from '../shared/components/Title';
 import Api from '../../api/index';
 
@@ -31,17 +31,22 @@ const StyledInfoSection = styled.section`
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
 
-const EditForm = ({ user, profileInfo }) => {
+const EditForm = ({ profileInfo }) => {
   const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('LL');
 
   // The first commit of Material-UI
   const [selectedDate, setSelectedDate] = useState(dateOfBirthFormat);
   const [onUpdateAction, setUpdateAction] = useState(false);
   const [updateProfileInitialValue, setUpdateProfileInitialValue] = useState(profileInfo);
-  const [newFirstName, setFirstName] = useState(user.firstname);
-  const [newLastName, setLastName] = useState(user.lastName);
+  const [newFirstName, setFirstName] = useState(profileInfo.firstName);
+  const [newLastName, setLastName] = useState(profileInfo.lastName);
   const [newPhone, setPhone] = useState(profileInfo.phone);
   const [newCountry, setCountry] = useState(profileInfo.country);
+  const [newEmail, setEmail] = useState(profileInfo.email);
+  const [newMajor, setMajor] = useState(profileInfo.major);
+  const [newSemester, setSemester] = useState(profileInfo.semester);
+  const [newSkills, setSkills] = useState(profileInfo.skills);
+  const [newExperience, setExperience] = useState(profileInfo.experiences);
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -49,26 +54,26 @@ const EditForm = ({ user, profileInfo }) => {
 
   const onProfileUpdateHandler = async () => {
     const profileData = {
-      idUser: user.idUser,
+      idUser: profileInfo.user,
       idProfile: profileInfo.idProfile,
-      firstName: newFirstName,
       lastName: newLastName,
-      email: 'oktardo@gmail.com',
-      phone: '1891', // problem
-      dateOfBirth: '1996-01-06T00:00:00',
-      country: 'Poland', // problem
-      major: 'Computer Science',
-      semester: 8,
-      skills: 'Computer Science',
-      experiences: 'Junior',
+      firstName: newFirstName,
+      email: newEmail,
+      phone: newPhone,
+      dateOfBirth: selectedDate,
+      country: newCountry,
+      major: newMajor,
+      semester: newSemester,
+      skills: newSkills,
+      experiences: newExperience,
     };
-    console.log(profileData);
 
-    const newPost = await Api.updateProfileData(profileData)
-      .then((response) => console.log(response.data));
-    setUpdateAction(true);
-    setUpdateProfileInitialValue(profileData);
-    console.log();
+    await Api.updateProfileData(profileData)
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = `/profile/${profileInfo.user}`;
+        }
+      });
   };
 
   return (
@@ -77,7 +82,7 @@ const EditForm = ({ user, profileInfo }) => {
         <Grid container spacing={1}>
           <Grid item xs={2}>
             <MaterialAvatar
-              src={user.imageUrl}
+              src={profileInfo.avatar}
               style={{
                 width: '100px',
                 height: '100px',
@@ -96,40 +101,27 @@ const EditForm = ({ user, profileInfo }) => {
                 fontSize: '35px',
               }}
             >
-              {`${user.firstName} ${user.lastName}`}
+              {`${profileInfo.firstName} ${profileInfo.lastName}`}
             </h1>
           </Grid>
         </Grid>
-        <Button
-          variant="contained"
-          color="secondary"
-          style={{
-            marginTop: '5px',
-            marginLeft: '20px',
-            height: '20px',
-            width: '10px',
-          }}
-        >
-          Edit
-        </Button>
         <StyledInfoSection>
           <Grid container justify="center">
             <Grid item xs={11}>
               <Title
-                text="Personal Information"
+                text="Edit Profile"
                 textAlign="center"
                 fontSize="10px"
                 fontColor="black"
               />
             </Grid>
-            <EditIcon />
           </Grid>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
                 id="name-edit"
-                defaultValue={user.firstName}
-                label="Name"
+                defaultValue={profileInfo.firstName}
+                label="First Name"
                 type="search"
                 variant="outlined"
                 style={{ width: '30em' }}
@@ -139,7 +131,7 @@ const EditForm = ({ user, profileInfo }) => {
             <Grid item xs={12}>
               <TextField
                 id="surname-edit"
-                defaultValue={user.lastName}
+                defaultValue={profileInfo.lastName}
                 label="Surname"
                 type="search"
                 variant="outlined"
@@ -150,10 +142,12 @@ const EditForm = ({ user, profileInfo }) => {
             <Grid item xs={12}>
               <TextField
                 id="email-edit"
+                defaultValue={profileInfo.email}
                 label="E-mail"
                 type="search"
                 variant="outlined"
                 style={{ width: '30em' }}
+                onChange={(e) => { setEmail(e.target.value); }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -196,6 +190,50 @@ const EditForm = ({ user, profileInfo }) => {
                 onChange={(e) => { setCountry(e.target.value); }}
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="major-edit"
+                defaultValue={profileInfo.major}
+                label="Major"
+                type="search"
+                variant="outlined"
+                style={{ width: '30em' }}
+                onChange={(e) => { setMajor(e.target.value); }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="semester-edit"
+                defaultValue={profileInfo.semester}
+                label="Semester"
+                type="search"
+                variant="outlined"
+                style={{ width: '30em' }}
+                onChange={(e) => { setSemester(e.target.value); }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="skill-edit"
+                defaultValue={profileInfo.skills}
+                label="Skill"
+                type="search"
+                variant="outlined"
+                style={{ width: '30em' }}
+                onChange={(e) => { setSkills(e.target.value); }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="experience-edit"
+                defaultValue={profileInfo.experiences}
+                label="Experience"
+                type="search"
+                variant="outlined"
+                style={{ width: '30em' }}
+                onChange={(e) => { setExperience(e.target.value); }}
+              />
+            </Grid>
             <Grid
               container
               direction="row"
@@ -210,40 +248,7 @@ const EditForm = ({ user, profileInfo }) => {
                 Save changes
               </Button>
             </Grid>
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                id="major-edit"
-                defaultValue={profileInfo.major}
-                label="Major"
-                type="search"
-                variant="outlined"
-                style={{ width: '30em' }}
-              />
-            </Grid>
-            <p>
-              Semester :
-              {profileInfo.semester}
-            </p>
           </Grid>
-        </StyledInfoSection>
-        <StyledInfoSection>
-          <Grid container justify="center">
-            <Grid item xs={11}>
-              <Title text="Technical" textAlign="center" fontSize="10px" fontColor="black" />
-            </Grid>
-            <EditIcon />
-          </Grid>
-          <p>
-            Skill :
-            {profileInfo.skills}
-          </p>
-          <p>
-            Experience :
-            {profileInfo.experiences}
-          </p>
         </StyledInfoSection>
       </StyledSection>
     </div>
