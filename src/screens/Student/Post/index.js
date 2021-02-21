@@ -3,9 +3,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Button, Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import {
+  Button, Grid,
+} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import BorderColorIcon from '@material-ui/icons/BorderColor';
+
 import EditIcon from '@material-ui/icons/Edit';
 import Comment from '../../shared/components/Comment';
 import TagsComponent from '../../shared/components/TagsComponent';
@@ -54,6 +57,14 @@ const inputStyle = {
   marginLeft: '20px',
 };
 
+const useStyles = makeStyles((theme) => ({
+  iconButtonStyle: {
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
+}));
+
 const Post = ({
   user, postData, onDeleteHandler, onEditHandler, currentUser,
 }) => {
@@ -70,7 +81,9 @@ const Post = ({
           <StyledSection>
             <StyledHeader>
               <div style={{ display: 'flex' }}>
+
                 <Avatar {...user} imgTheme={imgTheme} spanTheme={spanTheme} />
+
                 <EditIcon
                   style={{ marginLeft: '50rem' }}
                   onClick={() => onEditHandler(postData.idPost, postData.title, postData.content, postData.tags, user)}

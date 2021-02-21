@@ -19,9 +19,12 @@ const StyledDiv = styled.div`
 
 const Comment = ({ comment }) => {
   const momentTime = moment(JSON.stringify(comment.createdOn), 'YYYY-MM-DD hh:mm:ss').fromNow();
+
   return (
     <StyledDiv>
+
       <Avatar {...comment.createdBy} imgTheme={imgTheme} spanTheme={spanTheme} />
+
       <div className="media-body p-2 shadow-sm rounded bg-light border">
         <small className="float-right text-muted">{momentTime}</small>
         <h6 className="mt-2 mb-4 text-muted">{comment.comment}</h6>
