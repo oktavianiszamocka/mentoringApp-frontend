@@ -24,7 +24,7 @@ const ProjectMember = ({ member }) => {
   return (
     <div className={classes.root}>
 
-      <IconButton href="../profile">
+      <IconButton href={`/profile/${member.idUser}`}>
         <Avatar alt={member.firstName} src={member.avatar} className={classes.large} />
       </IconButton>
 

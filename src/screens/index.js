@@ -5,12 +5,13 @@ import {
 import StudentDashboard from './Student/StudentDashboard';
 import MyProfileDashboard from './Profile/MyProfileDashboard';
 import Message from './MessagePage/MessagePage';
-import EditForm from './Profile/EditForm';
+import EditForm from './Profile/EditFormDashboard';
 
 // import Admin from './Admin/routes';
 import Login from './Auth/Login';
 import UpsertPassword from './Auth/UpsertPassword';
 import MyProject from './MyProject/myProject';
+import ProjectDetailsDashboard from './MyProject/ProjectDetailsDashboard';
 import ProjectMembersBoard from './ProjectMembers/projectMembers';
 import ProjectPromotersBoard from './ProjectPromoters/promotersPage';
 import ProjectBar from './shared/components/ProjectBar';
@@ -18,21 +19,25 @@ import ProjectBar from './shared/components/ProjectBar';
 // const renderRoute = (route) => <Route key={route.path} {...route} />;
 
 const App = () => (
+
   <BrowserRouter>
     <Switch>
       <Route path="/" exact render={() => <Redirect to="/mainpage" />} />
       <Route path="/login" component={Login} />
       <Route path={['/reset-password', '/register']} component={UpsertPassword} />
       <Route path="/mainpage" component={StudentDashboard} />
-      <Route path="/profile" component={MyProfileDashboard} />
+      <Route path="/profile/:IdUser" component={MyProfileDashboard} />
       <Route path="/message" component={Message} />
       <Route path="/profilebartest" component={ProjectBar} />
-      <Route path="/editProfile" component={EditForm} />
+      <Route path="/editProfile/:IdUser" component={EditForm} />
       <Route path="/myproject" component={MyProject} />
       <Route path="/projectmembers/:IdProject" component={ProjectMembersBoard} />
+      <Route path="/projectDetails/:IdProject" component={ProjectDetailsDashboard} />
       <Route path="/projectpromoters/:IdProject" component={ProjectPromotersBoard} />
+
     </Switch>
   </BrowserRouter>
+
 );
 
 export default App;
