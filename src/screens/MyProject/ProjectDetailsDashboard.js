@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import ProjectDetails from './projectDetails';
 import AllNotes from '../shared/components/AllNotes';
 
 const ProjectDetailsDashboard = () => {
+  const { IdProject } = useParams();
   const [projectDetail, setprojectDetail] = useState();
 
   const loadData = async () => {
-    const res = await Promise.all([Api.getProjectDetails()]);
+    const res = await Promise.all([Api.getProjectDetails(IdProject)]);
     setprojectDetail(res[0].data.data);
   };
 
