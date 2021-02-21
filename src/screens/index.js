@@ -11,6 +11,7 @@ import EditForm from './Profile/EditFormDashboard';
 import Login from './Auth/Login';
 import UpsertPassword from './Auth/UpsertPassword';
 import MyProject from './MyProject/myProject';
+import ProjectDetailsDashboard from './MyProject/ProjectDetailsDashboard';
 import ProjectMembersBoard from './ProjectMembers/projectMembers';
 import ProjectPromotersBoard from './ProjectPromoters/promotersPage';
 
@@ -29,7 +30,9 @@ const App = () => (
       <Route path="/editProfile/:IdUser" component={EditForm} />
       <Route path="/myproject" component={MyProject} />
       <Route path="/projectmembers/:IdProject" component={ProjectMembersBoard} />
+      <Route path="/projectDetails/:IdProject" component={ProjectDetailsDashboard} />
       <Route path="/projectpromoters/:IdProject" component={ProjectPromotersBoard} />
+
     </Switch>
   </BrowserRouter>
 
