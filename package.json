@@ -24,6 +24,7 @@
     "luxon": "^1.24.1",
     "material-ui": "^0.20.2",
     "material-ui-dropzone": "^3.0.0",
+    "material-ui-formik-components": "^0.7.3",
     "moment": "^2.26.0",
     "mui-rte": "^1.26.2",
     "prop-types": "^15.7.2",
@@ -36,6 +37,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
+    "react-swipeable-views": "^0.13.9",
     "styled-components": "^5.1.1",
     "typeface-roboto": "0.0.75",
     "yup": "^0.29.3"
