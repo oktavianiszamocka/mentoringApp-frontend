@@ -3,20 +3,25 @@ import styled from 'styled-components';
 import moment from 'moment';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
-import Avatar from './Avatar';
+import MaterialAvatar from '@material-ui/core/Avatar';
 
-const imgTheme = {
-  width: '50px',
-  borderRadius: '50%',
-};
+const StyledTitle = styled.p`
+  font-family: 'Roboto', arial;
+  font-weight: bold;
+  font-size: 15px;
+  margin: 0px;
+  padding: 0px; 
+`;
 
-const spanTheme = {
-  fontSize: '1.2rem',
-  marginLeft: '1.1rem',
-  marginTop: '0.9rem',
-};
 const StyledDiv = styled.div`
   display: flex;
+  margin: 8px 5px;
+`;
+
+const StyledP = styled.p`
+  font-family: 'Roboto', arial;
+  font-size: 12px;
+  margin: 5px;
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -33,13 +38,21 @@ const Comment = ({ comment }) => {
   return (
     <StyledDiv>
       <IconButton className={classes.iconButtonStyle} href={`/profile/${comment.createdBy.idUser}`}>
-        <Avatar {...comment.createdBy} imgTheme={imgTheme} spanTheme={spanTheme} />
+        <MaterialAvatar
+          src={comment.createdBy.imageUrl}
+          style={{
+            width: '50px', height: '50px', boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)', borderRadius: '1.5rem',
+          }}
+        />
       </IconButton>
-
-      <div className="media-body p-2 shadow-sm rounded bg-light border">
-        <small className="float-right text-muted">{momentTime}</small>
-        <h6 className="mt-2 mb-4 text-muted">{comment.comment}</h6>
-      </div>
+      <StyledDiv style={{
+        backgroundColor: '#d9dbde', borderRadius: '1.5rem', padding: '10px', flexDirection: 'column',
+      }}
+      >
+        <StyledTitle>{comment.createdBy.firstName}</StyledTitle>
+        <StyledP style={{ color: 'rgba(1,1,1,0.5)' }}>{momentTime}</StyledP>
+        <StyledP>{comment.comment}</StyledP>
+      </StyledDiv>
     </StyledDiv>
   );
 };
