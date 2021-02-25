@@ -16,6 +16,7 @@ const getGeneralPosts = (pageNumber) => axios.get(`${apiUrl}/posts/general?pageN
 const getProjectPosts = (pageNumber, idProject) => axios.get(`${apiUrl}/posts/project/${idProject}?pageNumber=${pageNumber}&pageSize=10`);
 // http://localhost:57864/api/posts?pageNumber=2&pageSize=3
 const getUserAvaAndName = () => axios.get(`${apiUrl}/profiles/user/${getUserId()}`);
+const getProjectDetails = (idProject) => axios.get(`${apiUrl}/projects/projectinfo/${idProject}`);
 const getUserProfile = (idUser) => axios.get(`${apiUrl}/profiles/${idUser}`);
 const postNote = (noteData) => axios.post(`${apiUrl}/personal-notes`, noteData);
 const getPostComment = (idPost) => axios.get(`${apiUrl}/posts/${idPost}/comment`);
@@ -29,7 +30,6 @@ const updateProfileData = (profileData) => axios.patch(`${apiUrl}/profiles`, pro
 const getMyProject = (pageNumber) => axios.get(`${apiUrl}/projects/userProjects/${getUserId()}?pageNumber=${pageNumber}&pageSize=5`);
 const getMyProjectBySearch = (searchString, pageNumber) => axios.get(`${apiUrl}/projects/userProjects/${getUserId()}/search?projectName=${searchString}&pageNumber=${pageNumber}&pageSize=5`);
 const getProjectMembers = (idProject) => axios.get(`${apiUrl}/projectMembers/${idProject}`);
-const getOtherUserProfile = (idUser) => axios.get(`${apiUrl}/profiles/${idUser}`);
 const getProjectPromoters = (idProject) => axios.get(`${apiUrl}/projectpromoters/${idProject}`);
 
 export default {
@@ -52,6 +52,6 @@ export default {
   getMyProject,
   getMyProjectBySearch,
   getProjectMembers,
-  getOtherUserProfile,
+  getProjectDetails,
   getProjectPromoters,
 };

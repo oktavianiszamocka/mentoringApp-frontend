@@ -148,7 +148,7 @@ const Header = () => {
             onClose={handleClose}
           >
             {user
-                && (
+              && (
                 <Avatar
                   firstName={user.firstName}
                   lastName={user.lastName}
@@ -156,7 +156,7 @@ const Header = () => {
                   imgTheme={imgTheme}
                   width="50px"
                 />
-                )}
+              )}
 
             <Divider />
             <MenuItem onClick={handleClose}>Settings</MenuItem>

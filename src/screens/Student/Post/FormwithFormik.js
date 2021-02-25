@@ -1,3 +1,8 @@
+/* eslint-disable max-len */
+/* eslint-disable no-mixed-operators */
+/* eslint-disable react/jsx-closing-bracket-location */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { ErrorMessage, FieldArray, withFormik } from 'formik';
 
@@ -11,6 +16,7 @@ import Alert from '@material-ui/lab/Alert';
 
 import { EditorState, ContentState, convertToRaw } from 'draft-js';
 import { black } from 'material-ui/styles/colors';
+// eslint-disable-next-line import/named
 import { RichTextEditorDraftjs } from './RichTextEditorDraftJS';
 
 const StyledSection = styled.section`
@@ -60,7 +66,6 @@ const PostForm = (props) => {
     errors,
     handleChange,
     handleBlur,
-    handleReset,
     handleSubmit,
     setFieldValue,
     isSubmitting,
@@ -68,6 +73,7 @@ const PostForm = (props) => {
 
   } = props;
 
+  // eslint-disable-next-line no-unused-vars
   const classes = useStyles();
   const [tag, setTag] = useState('');
   const [tags, setTags] = useState([]);
