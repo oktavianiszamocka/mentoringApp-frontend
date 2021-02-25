@@ -6,10 +6,18 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import SwipeableViews from 'react-swipeable-views';
 import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
+import styled from 'styled-components';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import ProjectInfoForm from './projectInfoForm';
 
+const StyledSection = styled.section`
+  margin: 1rem;
+  padding : 1rem;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
+`;
 function TabPanel(props) {
   const {
     children, value, index, ...other
@@ -19,8 +27,8 @@ function TabPanel(props) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
       {value === index && (
@@ -40,21 +48,26 @@ TabPanel.propTypes = {
 
 function a11yProps(index) {
   return {
-    id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   };
 }
 
 const useStyles = makeStyles((theme) => ({
   membersDiv: {
-    flexGrow: 1,
+    marginLeft: '1rem',
+    flexGrow: '1',
+    padding: theme.spacing(1),
 
   },
 
   paperLeft: {
-    height: '25rem',
+    height: '35rem',
     width: '15rem',
 
+  },
+  tabPanel: {
+    padding: '1rem',
   },
 
 }));
@@ -98,9 +111,7 @@ const ProjectFormBoard = () => {
           <Grid item xs={8}>
             <Typography variant="h4" gutterBottom>Project Form</Typography>
 
-          </Grid>
-          <Grid item xs={10}>
-            <Paper square>
+            <StyledSection>
               <AppBar position="static" color="default">
                 <Tabs
                   value={value}
@@ -117,13 +128,16 @@ const ProjectFormBoard = () => {
                 </Tabs>
 
               </AppBar>
+
               <SwipeableViews
                 axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                 index={value}
                 onChangeIndex={handleChangeIndex}
               >
                 <TabPanel value={value} index={0} dir={theme.direction}>
+
                   <ProjectInfoForm onSubmit={handleProjectInfoSubmit} />
+
                 </TabPanel>
                 <TabPanel value={value} index={1} dir={theme.direction}>
                   Item Two
@@ -133,7 +147,7 @@ const ProjectFormBoard = () => {
                 </TabPanel>
               </SwipeableViews>
 
-            </Paper>
+            </StyledSection>
 
           </Grid>
 

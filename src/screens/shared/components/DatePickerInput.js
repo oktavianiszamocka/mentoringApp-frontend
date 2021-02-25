@@ -19,6 +19,7 @@ const DatePickerInput = ({
     autoOk
     label={labelField}
     format="dd/MM/yyyy"
+    inputVariant="outlined"
     placeholder="10/10/2018"
       // handle clearing outside => pass plain array if you are not controlling value outside
     mask={(value) => (value

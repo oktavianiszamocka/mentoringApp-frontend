@@ -10,9 +10,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
-  KeyboardDatePicker,
+
 } from '@material-ui/pickers';
-import { Select } from 'material-ui-formik-components/Select';
+import { Select, KeyboardDatePicker } from 'material-ui-formik-components';
 import DatePickerInput from '../shared/components/DatePickerInput';
 
 const selectOptions = [
@@ -28,19 +28,24 @@ const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       margin: theme.spacing(1),
-      width: '300',
+
     },
+    flexShrink: '1',
 
   },
 
   formRow: {
+    // width: '100%',
+  },
+  fieldStyle: {
     width: '100%',
   },
 
 }));
-const StyledSection = styled.section`
-  margin: 2rem;
-  background-color: #f5f5f5;
+const StyledInfoSection = styled.section`
+  margin: 1rem;
+  padding: 1rem;
+  background-color: #d9d9d9;
   border-radius: 5px;
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
@@ -51,11 +56,21 @@ const ProjectInfoSchema = Yup.object().shape({
     .required('Project Description is required'),
   startDate: Yup.date()
     .required('Project Start Date is required'),
+  endDate: Yup.date().min(
+    Yup.ref('startDate'),
+    "End date can't be before start date",
+  ),
+  status: Yup.string()
+    .required('Project Status is required. Please set the project status'),
+  superviserEmail: Yup.string().email('Invalid email')
+    .required('Project must has superviser. Please enter the superviser email'),
 
 });
+
 const ProjectInfoForm = (props) => {
   const classes = useStyles();
   const [startDate, setStartDate] = useState('');
+
   return (
     <Formik
       onSubmit={props.onSubmit}
@@ -68,97 +83,113 @@ const ProjectInfoForm = (props) => {
         } = formik;
         return (
           <div className={classes.root}>
-            <Form className={classes.root}>
-              <Grid container justify="center" spacing={3}>
-                <Grid item xs={11}>
-                  <div className="form-row">
-                    <Field
-                      as={TextField}
-                      name="name"
-                      fullWidth
-                      required
-                      label="Project Name"
-                      variant="outlined"
-                      className={errors.name && touched.name
-                        ? ' input-error' : null}
-                    />
-                    <ErrorMessage name="name" component="span" className="error" />
-                  </div>
-                </Grid>
-                <Grid item xs={11}>
-                  <div className="formRow">
-                    <Field
-                      as={TextField}
-                      name="description"
-                      multiline
-                      fullWidth
-                      required
-                      label="Description"
-                      rows={4}
-                      variant="outlined"
-                      className={errors.description && touched.description
-                        ? 'input-error' : null}
-                    />
-                    <ErrorMessage name="description" component="span" className="error" />
-                  </div>
+            <StyledInfoSection>
 
-                </Grid>
-                <Grid item xs={11}>
-                  <div className="formRow">
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <Form>
+                <Grid container justify="center" spacing={2}>
+
+                  <Grid item xs={12}>
+                    <div className="form-row">
                       <Field
-                        as="date"
+                        as={TextField}
+                        name="name"
                         required
-                        component={DatePickerInput}
-                        name="startDate"
-                        fieldSet="startDate"
-                        labelField="Start Date"
+                        label="Project Name"
+                        variant="outlined"
+                        className={classes.fieldStyle}
                       />
-
-                    </MuiPickersUtilsProvider>
-                    <ErrorMessage name="startDate" component="span" className="error" />
-                  </div>
-
-                </Grid>
-                <Grid item xs={11}>
-                  <div className="formRow">
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <ErrorMessage name="name" component="span" className="error" />
+                    </div>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <div className="formRow">
                       <Field
-                        as="date"
-                        component={DatePickerInput}
-                        name="endDate"
-                        fieldSet="endDate"
-                        labelField="End Date"
+                        as={TextField}
+                        name="description"
+                        multiline
+                        fullWidth
+                        required
+                        label="Description"
+                        rows={4}
+                        variant="outlined"
+                        className={classes.fieldStyle}
                       />
-                      <ErrorMessage name="endDate" component="span" className="error" />
+                      <ErrorMessage name="description" component="span" className="error" />
+                    </div>
 
-                    </MuiPickersUtilsProvider>
-                  </div>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <div className="formRow">
+                      <Field
+                        required
+                        name="status"
+                        label="Status"
+                        options={selectOptions}
+                        component={Select}
+                        className={classes.fieldStyle}
+                      />
+                      <ErrorMessage name="status" component="span" className="error" />
+                    </div>
+
+                  </Grid>
+                  <Grid item xs={12}>
+                    <div className="formRow">
+                      <Field
+                        as={TextField}
+                        required
+                        fullWidth
+                        name="superviserEmail"
+                        label="Superviser Email"
+                        className={classes.fieldStyle}
+                      />
+                      <ErrorMessage name="superviserEmail" component="span" className="error" />
+                    </div>
+
+                  </Grid>
+                  <Grid item xs={12}>
+                    <div className="formRow">
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Field
+                          as="date"
+                          component={DatePickerInput}
+                          name="startDate"
+                          fieldSet="startDate"
+                          labelField="Start Date"
+                        />
+
+                      </MuiPickersUtilsProvider>
+                      <ErrorMessage name="startDate" component="span" className="error" />
+                    </div>
+
+                  </Grid>
+                  <Grid item xs={12}>
+                    <div className="formRow">
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Field
+                          as="date"
+                          component={DatePickerInput}
+                          name="endDate"
+                          fieldSet="endDate"
+                          labelField="End Date"
+                        />
+                        <ErrorMessage name="endDate" component="span" className="error" />
+
+                      </MuiPickersUtilsProvider>
+                    </div>
+
+                  </Grid>
+
+                  <button
+                    type="submit"
+                    className={dirty && isValid ? '' : 'disabled-btn'}
+                  >
+                    Submit
+                  </button>
 
                 </Grid>
-                <Grid item xs={11}>
-                  <div className="formRow">
-                    <Field
-                      required
-                      name="status"
-                      label="Status"
-                      options={selectOptions}
-                      component={Select}
-                    />
-                  </div>
 
-                </Grid>
-
-              </Grid>
-              <button
-                type="submit"
-                className={dirty && isValid ? '' : 'disabled-btn'}
-                disabled={!(dirty && isValid)}
-              >
-                Submit
-              </button>
-
-            </Form>
+              </Form>
+            </StyledInfoSection>
 
           </div>
 
@@ -180,7 +211,7 @@ ProjectInfoForm.defaultProps = {
     description: '',
     startDate: new Date(),
     endDate: new Date(),
-    superviser: '',
+    superviserEmail: '',
     status: '',
   },
 };
