@@ -2,17 +2,15 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Button, Grid, IconButton, Tooltip,
+  Button, Grid,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import BorderColorIcon from '@material-ui/icons/BorderColor';
 import EditIcon from '@material-ui/icons/Edit';
 import MaterialAvatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
 import Comment from '../../shared/components/Comment';
 import TagsComponent from '../../shared/components/TagsComponent';
-import Avatar from '../../shared/components/Avatar';
-import AllComments from './AllComments';
+import Api from '../../../api/index';
 
 const StyledSection = styled.section`
   margin: 2rem;
@@ -29,8 +27,7 @@ const StyledHeader = styled.header`
 `;
 const StyledP = styled.p`
   font-family: 'Roboto', arial;
-  padding: 2rem;
-  margin: 5px;
+  padding: 1rem 2rem;
 `;
 
 const StyledTitle = styled.p`
@@ -75,7 +72,30 @@ const Post = ({
   user, postData, onDeleteHandler, onEditHandler, currentUser,
 }) => {
   const [showAllComments, setShowAllComments] = useState(false);
-  const classes = useStyles();
+  const [postComments, setPostComments] = useState([]);
+
+  const loadComments = async () => {
+    const response = await Promise.all([Api.getPostComment(postData.idPost)]);
+    setPostComments(response[0].data.data);
+  };
+
+  const sendComment = async (comm) => {
+    const timeElapsed = Date.now();
+    const date = new Date(timeElapsed);
+    const commentData = {
+      createdBy: currentUser,
+      comment: comm,
+      createdOn: `${date}`,
+    };
+    console.log(commentData);
+    const commentResult = await Promise.all([Api.sendPostComment(postData.idPost, commentData)]);
+  //  setPostComments(commentResult[1].data.data);
+  };
+
+  const handleAllComments = () => {
+    setShowAllComments(true);
+    loadComments();
+  };
 
   return (
     <Grid style={{ maxWidth: '1100px' }}>
@@ -116,7 +136,7 @@ const Post = ({
             </StyledHeader>
             {postData && (
               <div style={{ margin: '20px' }}>
-                <StyledTitle>
+                <StyledTitle style={{ marginLeft: '2rem' }}>
                   {' '}
                   {postData.title}
                   {' '}
@@ -136,19 +156,22 @@ const Post = ({
                 <div style={{ display: 'inline', justifyContent: 'center' }}>
 
                   {postData.hasMoreThanOneComment && (
-                    <Button style={{ fontSize: 10 }} variant="default" onClick={() => setShowAllComments(true)}>
+                    <Button style={{ fontSize: 10 }} variant="default" onClick={() => handleAllComments()}>
                       All comments
                     </Button>
                   )}
 
                   { postData.newestComment
-                    && <Comment comment={postData.newestComment} />}
+                    && <Comment comment={postData.newestComment} loggedUser={currentUser} />}
 
                 </div>
               )}
               <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
-                {showAllComments && <AllComments idPost={postData.idPost} />}
+                {showAllComments && (postComments.map((comment) => (
+                  <Comment comment={comment} loggedUser={currentUser} />
+                )))}
               </div>
+
               <hr />
               <StyledDiv>
                 <MaterialAvatar
@@ -158,10 +181,16 @@ const Post = ({
                   }}
                 />
                 <TextField
+                  onKeyPress={(ev) => {
+                    if (ev.key === 'Enter') {
+                      ev.preventDefault();
+                      sendComment(ev.target.value);
+                    }
+                  }}
                   size="small"
+                  multiline
                   label="Write a comment..."
                   variant="outlined"
-                  multiline
                   style={{
                     width: '800px',
                     marginLeft: '10px',
