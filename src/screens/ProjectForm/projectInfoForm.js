@@ -4,7 +4,7 @@ import {
 } from 'formik';
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { TextField, Grid } from '@material-ui/core';
+import { TextField, Grid, Button } from '@material-ui/core';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
@@ -32,10 +32,6 @@ const useStyles = makeStyles((theme) => ({
     },
     flexShrink: '1',
 
-  },
-
-  formRow: {
-    // width: '100%',
   },
   fieldStyle: {
     width: '100%',
@@ -69,7 +65,6 @@ const ProjectInfoSchema = Yup.object().shape({
 
 const ProjectInfoForm = (props) => {
   const classes = useStyles();
-  const [startDate, setStartDate] = useState('');
 
   return (
     <Formik
@@ -83,113 +78,132 @@ const ProjectInfoForm = (props) => {
         } = formik;
         return (
           <div className={classes.root}>
-            <StyledInfoSection>
 
-              <Form>
-                <Grid container justify="center" spacing={2}>
+            <Form>
+              <Grid container item justify="center" spacing={2}>
 
-                  <Grid item xs={12}>
-                    <div className="form-row">
-                      <Field
-                        as={TextField}
-                        name="name"
-                        required
-                        label="Project Name"
-                        variant="outlined"
-                        className={classes.fieldStyle}
-                      />
-                      <ErrorMessage name="name" component="span" className="error" />
-                    </div>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <div className="formRow">
-                      <Field
-                        as={TextField}
-                        name="description"
-                        multiline
-                        fullWidth
-                        required
-                        label="Description"
-                        rows={4}
-                        variant="outlined"
-                        className={classes.fieldStyle}
-                      />
-                      <ErrorMessage name="description" component="span" className="error" />
-                    </div>
+                <Grid item xs={12}>
 
-                  </Grid>
-                  <Grid item xs={12}>
-                    <div className="formRow">
-                      <Field
-                        required
-                        name="status"
-                        label="Status"
-                        options={selectOptions}
-                        component={Select}
-                        className={classes.fieldStyle}
-                      />
-                      <ErrorMessage name="status" component="span" className="error" />
-                    </div>
+                  <Field
+                    as={TextField}
+                    name="name"
+                    required
+                    label="Project Name"
+                    variant="outlined"
+                    className={classes.fieldStyle}
+                    error={!!(errors.name && touched.name)}
+                    helperText={errors.name && touched.name ? errors.name : null}
+                  />
 
-                  </Grid>
-                  <Grid item xs={12}>
-                    <div className="formRow">
-                      <Field
-                        as={TextField}
-                        required
-                        fullWidth
-                        name="superviserEmail"
-                        label="Superviser Email"
-                        className={classes.fieldStyle}
-                      />
-                      <ErrorMessage name="superviserEmail" component="span" className="error" />
-                    </div>
+                </Grid>
+                <Grid item xs={12}>
 
-                  </Grid>
-                  <Grid item xs={12}>
-                    <div className="formRow">
-                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <Field
-                          as="date"
-                          component={DatePickerInput}
-                          name="startDate"
-                          fieldSet="startDate"
-                          labelField="Start Date"
-                        />
+                  <Field
+                    as={TextField}
+                    name="description"
+                    multiline
+                    fullWidth
+                    required
+                    label="Description"
+                    rows={4}
+                    variant="outlined"
+                    className={classes.fieldStyle}
+                    error={!!(errors.description && touched.description)}
+                    helperText={errors.description && touched.description ? errors.description : null}
+                  />
 
-                      </MuiPickersUtilsProvider>
-                      <ErrorMessage name="startDate" component="span" className="error" />
-                    </div>
+                </Grid>
+                <Grid item xs={12}>
 
-                  </Grid>
-                  <Grid item xs={12}>
-                    <div className="formRow">
-                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <Field
-                          as="date"
-                          component={DatePickerInput}
-                          name="endDate"
-                          fieldSet="endDate"
-                          labelField="End Date"
-                        />
-                        <ErrorMessage name="endDate" component="span" className="error" />
+                  <Field
+                    required
+                    name="status"
+                    label="Status"
+                    variant="outlined"
+                    options={selectOptions}
+                    component={Select}
+                    className={classes.fieldStyle}
+                    error={!!(errors.status && touched.status)}
+                    helperText={errors.status && touched.status ? errors.status : null}
+                  />
 
-                      </MuiPickersUtilsProvider>
-                    </div>
+                </Grid>
+                <Grid item xs={12}>
 
-                  </Grid>
+                  <Field
+                    as={TextField}
+                    required
+                    fullWidth
+                    variant="outlined"
+                    name="superviserEmail"
+                    label="Superviser Email"
+                    className={classes.fieldStyle}
+                    error={!!(errors.superviserEmail && touched.superviserEmail)}
+                    helperText={errors.superviserEmail ? errors.superviserEmail : null}
+                  />
 
-                  <button
+                </Grid>
+                <Grid item xs={6}>
+
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Field
+                      className={classes.fieldStyle}
+                      component={KeyboardDatePicker}
+                      name="startDate"
+                      label="Start Date"
+                      format="dd/MM/yyyy"
+                      clearable
+                      autoOk
+                      fullWidth
+                      inputVariant="outlined"
+                      error={!!(errors.startDate && touched.startDate)}
+                      helperText={errors.startDate && touched.startDate ? errors.startDate : null}
+                    />
+
+                  </MuiPickersUtilsProvider>
+
+                </Grid>
+                <Grid item xs={6}>
+
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Field
+                      className={classes.fieldStyle}
+                      component={KeyboardDatePicker}
+                      name="endDate"
+                      label="End Date"
+                      format="dd/MM/yyyy"
+                      clearable
+                      autoOk
+                      fullWidth
+                      inputVariant="outlined"
+                      error={!!(errors.endDate && touched.endDate)}
+                      helperText={errors.endDate && touched.endDate ? errors.endDate : null}
+                    />
+
+                  </MuiPickersUtilsProvider>
+
+                </Grid>
+                <Grid
+                  item
+                  container
+                  direction="row"
+                  justify="flex-start"
+                  alignItems="flex-start"
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
                     type="submit"
                     className={dirty && isValid ? '' : 'disabled-btn'}
                   >
                     Submit
-                  </button>
+                  </Button>
 
                 </Grid>
 
-              </Form>
-            </StyledInfoSection>
+              </Grid>
+
+            </Form>
 
           </div>
 

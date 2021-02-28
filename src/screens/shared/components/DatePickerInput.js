@@ -17,6 +17,7 @@ const DatePickerInput = ({
     keyboard
     clearable
     autoOk
+    fullWidth
     label={labelField}
     format="dd/MM/yyyy"
     inputVariant="outlined"
