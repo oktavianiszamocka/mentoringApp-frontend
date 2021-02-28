@@ -61,7 +61,6 @@ const Comment = ({ comment, loggedUser }) => {
           <StyledTitle>{`${comment.createdBy.firstName} ${comment.createdBy.lastName}`}</StyledTitle>
           {(comment.createdBy.idUser === loggedUser.idUser) && (
             <div>
-              {console.log(loggedUser)}
               <EditIcon style={{ marginLeft: '6em', fontSize: 'small' }} />
               <DeleteIcon style={{ marginLeft: '2px', fontSize: 'small' }} />
             </div>
@@ -75,3 +74,4 @@ const Comment = ({ comment, loggedUser }) => {
 };
 
 export default Comment;
+

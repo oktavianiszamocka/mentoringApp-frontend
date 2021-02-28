@@ -190,6 +190,7 @@ const MyProfile = ({ profileInfo, showEditButton }) => {
                 {profileInfo.semester}
               </StyledData>
             </Grid>
+
           </Grid>
 
         </StyledInfoSection>
@@ -221,6 +222,7 @@ const MyProfile = ({ profileInfo, showEditButton }) => {
                 {profileInfo.experiences}
               </StyledData>
             </Grid>
+
           </Grid>
         </StyledInfoSection>
       </StyledSection>
