@@ -10,7 +10,6 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import { Redirect } from 'react-router';
 import Title from '../shared/components/Title';
 import Api from '../../api/index';
 
