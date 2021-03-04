@@ -20,6 +20,7 @@ const getProjectDetails = (idProject) => axios.get(`${apiUrl}/projects/projectin
 const getUserProfile = (idUser) => axios.get(`${apiUrl}/profiles/${idUser}`);
 const postNote = (noteData) => axios.post(`${apiUrl}/personal-notes`, noteData);
 const getPostComment = (idPost) => axios.get(`${apiUrl}/posts/${idPost}/comment`);
+const sendPostComment = (idPost, commentData) => axios.post(`${apiUrl}/posts/comment`, commentData);
 const deleteNote = (idNote) => axios.delete(`${apiUrl}/personal-notes/${idNote}`);
 const updateNote = (noteData) => axios.patch(`${apiUrl}/personal-notes`, noteData);
 const getUserProject = () => axios.get(`${apiUrl}/projects/${getUserId()}`);
@@ -41,6 +42,7 @@ export default {
   getUserAvaAndName,
   postNote,
   getPostComment,
+  sendPostComment,
   deleteNote,
   updateNote,
   getUserProject,
