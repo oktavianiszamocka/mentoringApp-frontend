@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import MaterialAvatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -17,15 +18,18 @@ const StyledSpan = styled.span`
 `;
 
 const Avatar = ({
-  firstName, lastName, imageUrl, width,
+  idUser, firstName, lastName, imageUrl, width,
 }) => (
   <StyledDiv>
-    <MaterialAvatar
-      src={imageUrl}
-      style={{
-        width, height: width, boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)', borderRadius: '1.5rem',
-      }}
-    />
+    <IconButton href={`/profile/${idUser}`}>
+
+      <MaterialAvatar
+        src={imageUrl}
+        style={{
+          width, height: width, boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)', borderRadius: '1.5rem',
+        }}
+      />
+    </IconButton>
     <StyledSpan>{`${firstName} ${lastName}`}</StyledSpan>
   </StyledDiv>
 );
