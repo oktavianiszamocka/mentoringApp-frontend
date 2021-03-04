@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Formik, Form, Field, ErrorMessage,
+  Formik, Form, Field,
 } from 'formik';
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
@@ -13,16 +13,7 @@ import {
 
 } from '@material-ui/pickers';
 import { Select, KeyboardDatePicker } from 'material-ui-formik-components';
-import DatePickerInput from '../shared/components/DatePickerInput';
-
-const selectOptions = [
-
-  { value: 'Discovery', label: 'Discovery' },
-  { value: 'In Progress', label: 'In Progress' },
-  { value: 'Complete', label: 'Complete' },
-  { value: 'Incomplete', label: 'Incomplete' },
-
-];
+import Api from '../../api/index';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,7 +46,7 @@ const ProjectInfoSchema = Yup.object().shape({
   endDate: Yup.date().min(
     Yup.ref('startDate'),
     "End date can't be before start date",
-  ),
+  ).nullable().default(null),
   status: Yup.string()
     .required('Project Status is required. Please set the project status'),
   superviserEmail: Yup.string().email('Invalid email')
@@ -71,6 +62,7 @@ const ProjectInfoForm = (props) => {
       onSubmit={props.onSubmit}
       initialValues={props.initialValues}
       validationSchema={ProjectInfoSchema}
+
     >
       {(formik) => {
         const {
@@ -120,7 +112,7 @@ const ProjectInfoForm = (props) => {
                     name="status"
                     label="Status"
                     variant="outlined"
-                    options={selectOptions}
+                    options={props.statusOptions}
                     component={Select}
                     className={classes.fieldStyle}
                     error={!!(errors.status && touched.status)}
@@ -216,6 +208,7 @@ const ProjectInfoForm = (props) => {
 ProjectInfoForm.prototype = {
   onSubmit: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
+  statusOptions: PropTypes.object,
 
 };
 
@@ -224,7 +217,7 @@ ProjectInfoForm.defaultProps = {
     name: '',
     description: '',
     startDate: new Date(),
-    endDate: new Date(),
+    endDate: null,
     superviserEmail: '',
     status: '',
   },

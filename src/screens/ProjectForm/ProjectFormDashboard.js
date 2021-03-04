@@ -74,19 +74,19 @@ const ProjectFormBoard = () => {
   const classes = useStyles();
   const theme = useTheme();
 
-  const [projectInfoInitialValues, setProjectInfoInitialValue] = useState();
   const [value, setValue] = useState(0);
+  const [statusList, setStatusOptions] = useState([]);
+
+  const loadData = async () => {
+    const response = await Promise.all([Api.getProjectStatus()]);
+    setStatusOptions(response[0].data.data);
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   const handleChangeIndex = (index) => {
     setValue(index);
-  };
-
-  const loadData = async () => {
-    // const response = await Promise.all([Api.getProjectMembers(IdProject)]);
-    // setMembers(response[0].data.data);
   };
 
   useEffect(async () => {
@@ -138,16 +138,16 @@ const ProjectFormBoard = () => {
               index={value}
               onChangeIndex={handleChangeIndex}
             >
-              <TabPanel value={value} index={0} dir={theme.direction} className={classes.tabPanel}>
+              <TabPanel value={value} index={0} dir={theme.direction}>
 
-                <ProjectInfoForm onSubmit={handleProjectInfoSubmit} />
+                <ProjectInfoForm onSubmit={handleProjectInfoSubmit} statusOptions={statusList} />
 
               </TabPanel>
               <TabPanel value={value} index={1} dir={theme.direction}>
                 <ProjectSupervisorsForm onSubmit={handleProjectSupervisorsSubmit} />
               </TabPanel>
               <TabPanel value={value} index={2} dir={theme.direction}>
-                <ProjectMembersForm onSubmit={handleProjectMembersSubmit} />
+                <ProjectMembersForm onSubmit={handleProjectSupervisorsSubmit} />
               </TabPanel>
             </SwipeableViews>
 
