@@ -13,7 +13,7 @@ import UpsertPassword from './Auth/UpsertPassword';
 import MyProject from './MyProject/myProject';
 import ProjectMembersBoard from './ProjectMembers/projectMembers';
 import ProjectPromotersBoard from './ProjectPromoters/promotersPage';
-import Milestone from './Milestone/Milestone';
+import Milestone from './Milestone/milestone';
 
 // const renderRoute = (route) => <Route key={route.path} {...route} />;
 

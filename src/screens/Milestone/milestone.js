@@ -7,6 +7,10 @@ import Header from '../shared/components/Header';
 import AllNotes from '../shared/components/AllNotes';
 
 const useStyles = makeStyles({
+    root: {
+        flexGrow: 1,
+        marginTop: '6rem',
+    },
     paging: {
         marginTop: 10,
     },
@@ -30,17 +34,24 @@ const Milestone = () => {
     }, []);
 
     return (
-        <div style={{ marginTop: '10rem' }}>
-            <Grid container>
+        <div className={classes.root}>
+            <Grid container spacing={3}>
                 <Header />
+
                 <Grid item xs={3}>
                     <AllNotes />
                 </Grid>
-                <Grid item xs={7}>
+                <Grid
+                    item
+                    xs={3}
+                    justify="center"
+                    alignItems="center"
+                >
                     {milestone && milestone.map((mile) => (
                         <MilestoneInfo milestone={mile} />
                     ))}
                 </Grid>
+
             </Grid>
         </div>
     );

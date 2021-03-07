@@ -9,6 +9,10 @@ import SearchBar from '../shared/components/SearchBar';
 import AllNotes from '../shared/components/AllNotes';
 
 const useStyles = makeStyles({
+  root: {
+    flexGrow: 1,
+    marginTop: '6rem',
+  },
   paging: {
     marginTop: 10,
   },
@@ -47,7 +51,7 @@ const MyProject = () => {
   };
 
   return (
-    <div style={{ marginTop: '6rem' }}>
+    <div className={classes.root}>
       <Grid container>
 
         <Header />
