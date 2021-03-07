@@ -13,6 +13,7 @@ import ProjectInfoForm from './projectInfoForm';
 import ProjectBar from '../shared/components/ProjectBar';
 import ProjectSupervisorsForm from './ProjectSupervisorsForm';
 import ProjectMembersForm from './ProjectMembersForm';
+import ProjectMilestoneForm from './ProjectMilestoneForm';
 
 const StyledSection = styled.section`
   margin: 1rem;
@@ -104,6 +105,10 @@ const ProjectFormBoard = () => {
   const handleProjectMembersSubmit = async (e) => {
     console.log(e);
   };
+  const handleProjectMilestoneSubmit = async (e) => {
+    console.log(e);
+  };
+
   return (
     <div style={{ marginTop: '6rem' }}>
       <Grid container>
@@ -143,11 +148,17 @@ const ProjectFormBoard = () => {
                 <ProjectInfoForm onSubmit={handleProjectInfoSubmit} statusOptions={statusList} />
 
               </TabPanel>
+
               <TabPanel value={value} index={1} dir={theme.direction}>
                 <ProjectSupervisorsForm onSubmit={handleProjectSupervisorsSubmit} />
               </TabPanel>
+
               <TabPanel value={value} index={2} dir={theme.direction}>
-                <ProjectMembersForm onSubmit={handleProjectSupervisorsSubmit} />
+                <ProjectMembersForm onSubmit={handleProjectMembersSubmit} />
+              </TabPanel>
+
+              <TabPanel value={value} index={3} dir={theme.direction}>
+                <ProjectMilestoneForm onSubmit={handleProjectMilestoneSubmit} />
               </TabPanel>
             </SwipeableViews>
 
