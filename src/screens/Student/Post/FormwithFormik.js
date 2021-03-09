@@ -157,15 +157,15 @@ const PostForm = (props) => {
                     />
                   ))
                 ) : (
-                    <Alert
-                      severity="warning"
-                      style={{
-                        backgroundColor: 'rgba(255,165,0,0.2)', color: 'black', width: '170px',
-                      }}
+                  <Alert
+                    severity="warning"
+                    style={{
+                      backgroundColor: 'rgba(255,165,0,0.2)', color: 'black', width: '170px',
+                    }}
                     >
-                      There are no tags!
-                    </Alert>
-                  )}
+                    There are no tags!
+                  </Alert>
+                )}
               </>
             )}
           />
