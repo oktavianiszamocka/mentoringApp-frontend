@@ -27,12 +27,12 @@ const App = () => (
       <Route path="/mainpage" component={StudentDashboard} />
       <Route path="/profile/:IdUser" component={MyProfileDashboard} />
       <Route path="/message" component={Message} />
-      <Route path="/editProfile/:IdUser" component={EditForm} />
+      <Route path="/edit-profile/:IdUser" component={EditForm} />
       <Route path="/myproject" component={MyProject} />
-      <Route path="/projectmembers/:IdProject" component={ProjectMembersBoard} />
-      <Route path="/projectDetails/:IdProject" component={ProjectDetailsDashboard} />
-      <Route path="/projectpromoters/:IdProject" component={ProjectPromotersBoard} />
-      <Route path="/projectForm" component={ProjectFormBoard} />
+      <Route path="/project-members/:IdProject" component={ProjectMembersBoard} />
+      <Route path="/project-detail/:IdProject" component={ProjectDetailsDashboard} />
+      <Route path="/project-promoters/:IdProject" component={ProjectPromotersBoard} />
+      <Route path="/project-form" component={ProjectFormBoard} />
     </Switch>
   </BrowserRouter>
 
