@@ -8,6 +8,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import MaterialAvatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
+import moment from 'moment';
 import Comment from '../../shared/components/Comment';
 import TagsComponent from '../../shared/components/TagsComponent';
 import Api from '../../../api/index';
@@ -83,13 +84,20 @@ const Post = ({
     const timeElapsed = Date.now();
     const date = new Date(timeElapsed);
     const commentData = {
-      createdBy: currentUser,
-      comment: comm,
-      createdOn: `${date}`,
+      post: postData.idPost,
+      createdOn: moment().toJSON(),
+      createdBy: currentUser.idUser,
+      comment1: comm,
     };
-    console.log(commentData);
-    const commentResult = await Promise.all([Api.sendPostComment(postData.idPost, commentData)]);
-  //  setPostComments(commentResult[1].data.data);
+    const commentResult = await Promise.all([Api.sendPostComment(commentData)]);
+    const response = await Promise.all([Api.getPostComment(postData.idPost)]);
+    setPostComments(response[0].data.data);
+  };
+
+  const onDeleteComment = async (idComment) => {
+    await Api.deletePostComment(idComment);
+    const response = await Promise.all([Api.getPostComment(postData.idPost)]);
+    setPostComments(response[0].data.data);
   };
 
   const handleAllComments = () => {
@@ -162,13 +170,13 @@ const Post = ({
                   )}
 
                   { postData.newestComment
-                    && <Comment comment={postData.newestComment} loggedUser={currentUser} />}
+                    && <Comment comment={postData.newestComment} loggedUser={currentUser} onDeleteHandler={onDeleteComment} />}
 
                 </div>
               )}
               <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
                 {showAllComments && (postComments.map((comment) => (
-                  <Comment comment={comment} loggedUser={currentUser} />
+                  <Comment comment={comment} loggedUser={currentUser} onDeleteHandler={onDeleteComment} />
                 )))}
               </div>
 
@@ -207,4 +215,3 @@ const Post = ({
 };
 
 export default Post;
-

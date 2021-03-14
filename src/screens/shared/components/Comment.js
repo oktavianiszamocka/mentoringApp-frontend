@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const Comment = ({ comment, loggedUser }) => {
+const Comment = ({ comment, loggedUser, onDeleteHandler }) => {
   const momentTime = moment(JSON.stringify(comment.createdOn), 'YYYY-MM-DD hh:mm:ss').fromNow();
   const classes = useStyles();
 
@@ -62,7 +62,7 @@ const Comment = ({ comment, loggedUser }) => {
           {(comment.createdBy.idUser === loggedUser.idUser) && (
             <div>
               <EditIcon style={{ marginLeft: '6em', fontSize: 'small' }} />
-              <DeleteIcon style={{ marginLeft: '2px', fontSize: 'small' }} />
+              <DeleteIcon style={{ marginLeft: '2px', fontSize: 'small' }} onClick={() => onDeleteHandler(comment.idComment)} />
             </div>
           )}
         </div>
@@ -74,4 +74,3 @@ const Comment = ({ comment, loggedUser }) => {
 };
 
 export default Comment;
-
