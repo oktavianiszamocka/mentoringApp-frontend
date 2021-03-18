@@ -74,6 +74,8 @@ const Post = ({
 }) => {
   const [showAllComments, setShowAllComments] = useState(false);
   const [postComments, setPostComments] = useState([]);
+  const userData = `${user.major}, semester ${user.semester}`;
+  const createdTime = moment(JSON.stringify(postData.dateOfPublication), 'YYYY-MM-DD hh:mm:ss').fromNow();
 
   const loadComments = async () => {
     const response = await Promise.all([Api.getPostComment(postData.idPost)]);
@@ -124,8 +126,12 @@ const Post = ({
                 <Grid item xs={10} m={8}>
                   <div style={{ marginLeft: '10px' }}>
                     <StyledTitle>{`${user.firstName} ${user.lastName}`}</StyledTitle>
-                    <StyledData>Computer Science, semester 4</StyledData>
-                    <StyledData>Posted 1w ago</StyledData>
+                    <StyledData>{userData}</StyledData>
+                    <StyledData>
+                      Posted
+                      {' '}
+                      {createdTime}
+                    </StyledData>
                   </div>
                 </Grid>
                 <Grid item xs={0.5}>
