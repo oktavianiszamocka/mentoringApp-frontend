@@ -5,14 +5,14 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { ErrorMessage, FieldArray, withFormik } from 'formik';
-
+import MaterialAvatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
 import { Grid, Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import Alert from '@material-ui/lab/Alert';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import { EditorState, ContentState, convertToRaw } from 'draft-js';
 import { black } from 'material-ui/styles/colors';
@@ -96,9 +96,12 @@ const PostForm = (props) => {
       <div style={{ maxWidth: '1100px' }}>
         <StyledSection>
           <div style={{ display: 'flex' }}>
-            <StyledImg src={user && user.imageUrl} width="75px" />
-
-            {touched.title && errors.title && <p>{errors.title}</p>}
+            <MaterialAvatar
+              src={user && user.imageUrl}
+              style={{
+                width: '70px', height: '70px', boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)', borderRadius: '50%',
+              }}
+            />
             <TextField
               id="title"
               label="Enter title here"
@@ -106,10 +109,16 @@ const PostForm = (props) => {
               value={values.title}
               onChange={handleChange}
               variant="outlined"
-              style={{ marginTop: '20px', width: '100%' }}
+              style={{ marginTop: '10px', marginLeft: '8px', width: '100%' }}
             />
-            <ErrorMessage name="title" />
           </div>
+          <ErrorMessage
+            name="title"
+            component="div"
+            style={{
+              color: 'rgb(255,0,0,0.6)', marginTop: '2px', marginLeft: '100px', marginBottom: '10px', fontFamily: 'Roboto', fontSize: '13px',
+            }} />
+
           <div style={messageStyle}>
 
             <RichTextEditorDraftjs

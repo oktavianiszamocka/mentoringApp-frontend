@@ -6,6 +6,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Alert from '@material-ui/lab/Alert';
 import Api from '../../api/index';
 import Header from '../shared/components/Header';
 import Post from './Post';
@@ -196,8 +197,8 @@ const StudentDashboard = () => {
 
           </Select>
 
-          {posts
-            && posts.map((post) => (
+          {posts.length > 0 ? (
+            posts.map((post) => (
               <Grid item lg={12} m={12} s={12} xs={12}>
                 <Post
                   postData={post}
@@ -207,15 +208,31 @@ const StudentDashboard = () => {
                   currentUser={user}
                 />
               </Grid>
-            ))}
-          <Pagination
-            color="primary"
-            count={count}
-            page={page}
-            siblingCount={1}
-            boundaryCount={1}
-            onChange={handlePageChange}
-          />
+            ))) : (
+              <div>
+                <Alert
+                  severity="warning"
+                  style={{
+                    backgroundColor: 'rgba(255,165,0,0.2)', color: 'black', width: '280px', margin: '20px 30%',
+                  }}
+                >
+                  There are no posts available
+                </Alert>
+              </div>
+
+          )}
+
+          {posts.length > 0 ? (
+            <Pagination
+              color="primary"
+              count={count}
+              page={page}
+              siblingCount={1}
+              boundaryCount={1}
+              onChange={handlePageChange}
+            />
+          ) : (<div />)}
+
         </Grid>
 
       </Grid>
