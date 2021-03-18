@@ -11,7 +11,7 @@ import Title from '../shared/components/Title';
 
 const StyledSection = styled.section`
   margin: 2rem;
-  padding: 1rem;
+  padding: 2rem;
   background-color: #f5f5f5;
   width: '50rem';
   border-radius: 5px;
@@ -20,27 +20,46 @@ const StyledSection = styled.section`
 
 const StyledInfoSection = styled.section`
   margin: 2rem;
-  padding: 1rem;
+  padding: 2rem;
   background-color: #d9d9d9;
   border-radius: 5px;
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
 
 const StyledLabels = styled.p`
-font-family: sans-serif;
+font-family: 'Roboto', sans-serif;
 text-transform: uppercase;
 color: rgba(0,0,0,0.5);
 letter-spacing: 0.2rem;
 font-size: 1em;
-margin-left: 10px;
+margin: 0px;
+padding: 1px;
+`;
 
+const StyledUnderData = styled.p`
+  font-family: 'Roboto', arial;
+  font-size: 1rem;
+  margin: 0px;
+  padding: 1px;
+  color: rgba(1,1,1,0.5);
 `;
 
 const StyledData = styled.p`
-font-family: sans-serif;
-color: rgba(0,0,0);
-font-size: 1em;
-margin-left: 10px;
+  font-family: 'Roboto', arial;
+  font-size: 1rem;
+  margin: 0px;
+  padding: 1px;
+  color: #4c4d4d;
+`;
+
+const StyledTitle = styled.p`
+  font-family: 'Roboto', arial;
+  font-weight: 100;
+  font-size: 25px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 10px;
+  color: #4c4d4d;
 `;
 
 const MyProfile = ({ profileInfo, showEditButton }) => {
@@ -50,60 +69,49 @@ const MyProfile = ({ profileInfo, showEditButton }) => {
   return (
     <div>
       <StyledSection>
-        <Grid container spacing={1}>
-          <Grid item xs={2}>
+        <Grid
+          container
+          spacing={3}
+          alignItems="center"
+        >
+          <Grid item style={{ marginLeft: '2rem' }}>
             <MaterialAvatar
               src={profileInfo.avatar}
               style={{
-                width: '100px',
-                height: '100px',
+                width: '120px',
+                height: '120px',
                 boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)',
                 borderRadius: '1.5rem',
               }}
             />
           </Grid>
-          <Grid item xs={9}>
-            <h1
-              style={{
-                fontFamily: 'sans-serif',
-                fontWeight: 100,
-                letterSpacing: '0.3rem',
-                textTransform: 'uppercase',
-                fontSize: '35px',
-              }}
-            >
-              {`${profileInfo.firstName} ${profileInfo.lastName}`}
-            </h1>
+          <Grid item xs={8}>
+            <div>
+              <StyledTitle style={{ margin: '0' }}>
+                {`${profileInfo.firstName} ${profileInfo.lastName}`}
+              </StyledTitle>
+              <StyledUnderData>{`${profileInfo.major}`}</StyledUnderData>
+              <StyledUnderData>{`Semester ${profileInfo.semester}`}</StyledUnderData>
+            </div>
           </Grid>
-          {showEditButton && (
+          <Grid item>
+            {showEditButton && (
             <IconButton disableFocusRipple="true" disableRipple="true" href={`/editProfile/${profileInfo.user}`}>
               <Button
                 variant="contained"
                 color="secondary"
-                style={{
-
-                  marginTop: '5px',
-                  marginLeft: '20px',
-                  height: '20px',
-                  width: '10px',
-                }}
               >
-                Edit
+                Edit data
               </Button>
-
             </IconButton>
-
-          ) }
+            ) }
+          </Grid>
         </Grid>
+
         <StyledInfoSection>
-          <Grid container>
+          <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Title
-                text="Personal Information"
-                textAlign="center"
-                fontSize="10px"
-                fontColor="black"
-              />
+              <StyledTitle style={{ textAlign: 'center' }}>Personal Information</StyledTitle>
             </Grid>
 
             {' '}
@@ -195,11 +203,10 @@ const MyProfile = ({ profileInfo, showEditButton }) => {
 
         </StyledInfoSection>
         <StyledInfoSection>
-          <Grid container>
-            <Grid item xs={11}>
-              <Title text="Technical" textAlign="center" fontSize="10px" fontColor="black" />
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <StyledTitle style={{ textAlign: 'center' }}>Technical Information</StyledTitle>
             </Grid>
-
             <Grid item xs={12}>
               <StyledLabels>
                 Skills:

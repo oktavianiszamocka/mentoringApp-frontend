@@ -78,7 +78,11 @@ const EditForm = ({ profileInfo }) => {
   return (
     <div>
       <StyledSection>
-        <Grid container spacing={1}>
+        <Grid
+          container
+          spacing={3}
+          alignItems="center"
+        >
           <Grid item xs={2}>
             <MaterialAvatar
               src={profileInfo.avatar}
