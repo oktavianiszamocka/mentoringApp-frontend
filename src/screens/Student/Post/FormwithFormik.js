@@ -122,6 +122,7 @@ const PostForm = (props) => {
           <div style={messageStyle}>
 
             <RichTextEditorDraftjs
+              error={touched.content && typeof errors.content !== 'undefined'}
               editorState={values.content}
               onChange={setFieldValue}
               onBlur={handleBlur}
@@ -211,7 +212,7 @@ const CreatePostForm = withFormik({
   validationSchema: Yup.object().shape({
     title: Yup.string()
       .max(255, 'Title should not be longer than 255 characters!')
-      .required('title is required'),
+      .required('Title is required'),
     content: Yup.object()
       .required('Post Content is required'),
 

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Button } from '@material-ui/core';
+import {
+  Grid, Button, InputLabel, Select, MenuItem, FormControl, FormHelperText,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
 import moment from 'moment';
 import Pagination from '@material-ui/lab/Pagination';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import Alert from '@material-ui/lab/Alert';
 import Api from '../../api/index';
 import Header from '../shared/components/Header';
@@ -14,7 +14,25 @@ import CreatePostForm from './Post/FormwithFormik';
 import EditPostDialog from './Post/EditPostDialog';
 import AllNotes from '../shared/components/AllNotes';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: '6rem',
+  },
+
+  selectProject: {
+    width: '300',
+  },
+  formControl: {
+    display: 'block',
+    marginLeft: '15rem',
+    minWidth: 120,
+    width: '50%',
+  },
+
+}));
+
 const StudentDashboard = () => {
+  const classes = useStyles();
   const defaultInitialValuePost = {
     idPost: '',
     title: '',
@@ -45,7 +63,7 @@ const StudentDashboard = () => {
   const [newPost, setNewPost] = useState(defaultInitialValuePost);
 
   const loadData = async () => {
-    const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
+    const postType = project === 'General' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
     const res = await Promise.all([postType, Api.getUserProject(), Api.getUserAvaAndName()]);
     setPosts(res[0].data.data);
     setCount(res[0].data.totalPages);
@@ -69,7 +87,7 @@ const StudentDashboard = () => {
     if (confirmed) {
       await Api.deletePost(idPost);
 
-      const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
+      const postType = project === 'General' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
       const refreshedPosts = await postType;
 
       setPosts(refreshedPosts.data.data);
@@ -118,7 +136,7 @@ const StudentDashboard = () => {
 
     const updatedPost = await Api.updatePost(editPostDTO)
       .then((response) => response.data);
-    const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
+    const postType = project === 'General' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
     const refreshedPosts = await postType;
     setPosts(refreshedPosts.data.data);
     setNewPost(defaultInitialValuePost);
@@ -140,7 +158,7 @@ const StudentDashboard = () => {
 
     const postedPost = await Api.postNewPost(newPostDTO)
       .then((response) => response.data);
-    const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
+    const postType = project === 'General' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
     const refreshedPosts = await postType;
     setPosts(refreshedPosts.data.data);
     setNewPost(e);
@@ -155,7 +173,7 @@ const StudentDashboard = () => {
     setProject(event.target.value);
   };
   return (
-    <div style={{ marginTop: '6rem' }}>
+    <div className={classes.root}>
       <ConfirmDialog {...deletePostDialogOptions} onDialogClosed={onPostDeleteDialogClosed} />
       <EditPostDialog {...editPostDialogOptions} onDialogClosed={onPostEditDialogClosed} handleSubmit={onPostEditSubmit} />
       <Grid
@@ -174,28 +192,35 @@ const StudentDashboard = () => {
         </Grid>
         <Grid item lg={10} md={10} s={12} xs={12}>
 
+          <FormControl className={classes.formControl}>
+            <InputLabel id="project-label" className={classes.selectProject}>Project</InputLabel>
+            <Select
+              fullWidth
+              labelId="project-label"
+              id="project-select"
+              value={project}
+              onChange={handleChange}
+              className={classes.selectProject}
+            >
+              <MenuItem value="General">General </MenuItem>
+              {projects && projects.map((pro) => (
+                <MenuItem value={pro.idProject}>
+                  {pro.name}
+                  {' '}
+                </MenuItem>
+              ))}
+
+            </Select>
+            <FormHelperText>Choose Posts from General topic or Posts from Specific Project</FormHelperText>
+
+          </FormControl>
+
           <CreatePostForm
             initialValues={newPost}
             formSumbitCallback={handleSubmit}
             user={user}
 
           />
-          <InputLabel id="demo-simple-select-label">Project</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={project}
-            onChange={handleChange}
-          >
-            <MenuItem value="">General </MenuItem>
-            {projects && projects.map((pro) => (
-              <MenuItem value={pro.idProject}>
-                {pro.name}
-                {' '}
-              </MenuItem>
-            ))}
-
-          </Select>
 
           {posts.length > 0 ? (
             posts.map((post) => (
