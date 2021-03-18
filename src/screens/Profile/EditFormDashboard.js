@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import EditForm from './EditForm';
-import FormikEditForm from './FormikEditForm';
 import NewFormikEditForm from './NewFormikEditForm';
 import AllNotes from '../shared/components/AllNotes';
 
