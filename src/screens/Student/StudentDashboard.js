@@ -58,7 +58,7 @@ const StudentDashboard = () => {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
-  const [project, setProject] = useState('');
+  const [project, setProject] = useState('General');
   const [projects, setProjects] = useState([]);
   const [newPost, setNewPost] = useState(defaultInitialValuePost);
 
@@ -152,7 +152,7 @@ const StudentDashboard = () => {
       content: e.content,
       DateOfPublication: moment().toJSON(),
       Writer: Api.getUserId(),
-      Project: project === '' ? null : project,
+      Project: project === 'General' ? null : project,
       Tags: e.tags,
     };
 
