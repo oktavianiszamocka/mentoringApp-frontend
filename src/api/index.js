@@ -33,6 +33,7 @@ const getMyProjectBySearch = (searchString, pageNumber) => axios.get(`${apiUrl}/
 const getProjectMembers = (idProject) => axios.get(`${apiUrl}/project-members/${idProject}`);
 const getProjectPromoters = (idProject) => axios.get(`${apiUrl}/project-promoters/${idProject}`);
 const getProjectStatus = () => axios.get(`${apiUrl}/projects/status`);
+const postNewProject = (newProject) => axios.post(`${apiUrl}/projects`, newProject);
 
 export default {
   getUserId,
@@ -58,4 +59,5 @@ export default {
   getProjectDetails,
   getProjectPromoters,
   getProjectStatus,
+  postNewProject,
 };
