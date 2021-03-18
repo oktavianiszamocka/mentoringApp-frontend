@@ -70,7 +70,7 @@ const menuOptions = [
     url: '../myproject',
   },
   {
-    title: 'Notifications',
+    title: 'Invitations',
     url: '',
   },
 ];
