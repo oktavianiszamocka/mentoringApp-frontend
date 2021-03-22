@@ -15,6 +15,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import * as Yup from 'yup';
 import Alert from '@material-ui/lab/Alert';
 import AddIcon from '@material-ui/icons/Add';
+import { makeStyles } from '@material-ui/core/styles';
 import Api from '../../api/index';
 
 const StyledSection = styled.section`
@@ -41,7 +42,7 @@ const StyledUnderData = styled.p`
   color: rgba(1,1,1,0.5);
 `;
 
-const StyledTitle = styled.p`
+const StyledTitleName = styled.p`
   font-family: 'Roboto', arial;
   font-weight: 100;
   font-size: 25px;
@@ -49,6 +50,19 @@ const StyledTitle = styled.p`
   text-transform: uppercase;
   margin: 10px;
   color: #4c4d4d;
+  margin: 0;
+`;
+const StyledTitleEditProfile = styled.p`
+  font-family: 'Roboto', arial;
+  font-weight: 100;
+  font-size: 25px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 10px;
+  color: #4c4d4d;
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: 20px;
 `;
 
 const StyledLabel = styled.p`
@@ -60,10 +74,54 @@ margin-top: 2px;
 margin-left: 8px;
 margin-bottom: 10px;
 `;
+const useStyles = makeStyles({
+  avatarGrid: {
+    marginLeft: '2rem',
+  },
+  avatar: {
+    width: '120px',
+    height: '120px',
+    boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)',
+    borderRadius: '1.5rem',
+  },
+  inputStyle: {
+    width: '30em',
+  },
+  error: {
+    color: 'rgb(255,0,0,0.6)',
+    marginTop: '5px',
+    marginLeft: '12px',
+    fontFamily: 'Roboto',
+    fontSize: '13px',
+  },
+  datePickerStyle: {
+    marginLeft: '4px',
+    width: '20em',
+  },
+  divFieldArrayStyle: {
+    margin: '12px',
+    marginLeft: '8px',
+  },
+  fieldChip: {
+    marginRight: '4px',
+    marginLeft: '15px',
+    marginBottom: '1px',
+  },
+  skillFieldStyle: {
+    width: '150px',
+    verticalAlign: 'pointer',
+    marginTop: '8px',
+  },
+  addIconStyle: {
+    paddingTop: '15px',
+    paddingLeft: '2px',
+  },
 
+});
 const NewFormikEditForm = ({ profileInfo }) => {
   const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('LL');
 
+  const classes = useStyles();
   const [selectedDate, setSelectedDate] = useState(dateOfBirthFormat);
   const [onUpdateAction, setUpdateAction] = useState(false);
   const [key, setKey] = useState(0);
@@ -128,22 +186,17 @@ const NewFormikEditForm = ({ profileInfo }) => {
           spacing={3}
           alignItems="center"
         >
-          <Grid item style={{ marginLeft: '2rem' }}>
+          <Grid item className={classes.avatarGrid}>
             <MaterialAvatar
               src={profileInfo.avatar}
-              style={{
-                width: '120px',
-                height: '120px',
-                boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)',
-                borderRadius: '1.5rem',
-              }}
+              className={classes.avatar}
             />
           </Grid>
           <Grid item xs={8}>
             <div>
-              <StyledTitle style={{ margin: '0' }}>
+              <StyledTitleName>
                 {`${profileInfo.firstName} ${profileInfo.lastName}`}
-              </StyledTitle>
+              </StyledTitleName>
               <StyledUnderData>{`${profileInfo.major}`}</StyledUnderData>
               <StyledUnderData>{`Semester ${profileInfo.semester}`}</StyledUnderData>
             </div>
@@ -152,7 +205,7 @@ const NewFormikEditForm = ({ profileInfo }) => {
         <StyledInfoSection>
           <Grid container spacing={3} justify="center">
             <Grid item xs={12}>
-              <StyledTitle style={{ textAlign: 'center', marginTop: '15px', marginBottom: '20px' }}>Edit Profile</StyledTitle>
+              <StyledTitleEditProfile>Edit Profile</StyledTitleEditProfile>
             </Grid>
           </Grid>
           <Form>
@@ -165,14 +218,12 @@ const NewFormikEditForm = ({ profileInfo }) => {
                   label="First Name"
                   type="search"
                   variant="outlined"
-                  style={{ width: '30em' }}
+                  className={classes.inputStyle}
                 />
                 <ErrorMessage
                   name="firstName"
                   component="div"
-                  style={{
-                    color: 'rgb(255,0,0,0.6)', marginTop: '5px', marginLeft: '12px', fontFamily: 'Roboto', fontSize: '13px',
-                  }}
+                  className={classes.error}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -183,14 +234,12 @@ const NewFormikEditForm = ({ profileInfo }) => {
                   label="Last Name"
                   type="search"
                   variant="outlined"
-                  style={{ width: '30em' }}
+                  className={classes.inputStyle}
                 />
                 <ErrorMessage
                   name="lastName"
                   component="div"
-                  style={{
-                    color: 'rgb(255,0,0,0.6)', marginTop: '5px', marginLeft: '12px', fontFamily: 'Roboto', fontSize: '13px',
-                  }}
+                  className={classes.error}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -201,14 +250,12 @@ const NewFormikEditForm = ({ profileInfo }) => {
                   label="E-mail"
                   type="search"
                   variant="outlined"
-                  style={{ width: '30em' }}
+                  className={classes.inputStyle}
                 />
                 <ErrorMessage
                   name="email"
                   component="div"
-                  style={{
-                    color: 'rgb(255,0,0,0.6)', marginTop: '5px', marginLeft: '12px', fontFamily: 'Roboto', fontSize: '13px',
-                  }}
+                  className={classes.error}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -219,18 +266,17 @@ const NewFormikEditForm = ({ profileInfo }) => {
                   label="Phone Number"
                   type="search"
                   variant="outlined"
-                  style={{ width: '30em' }}
+                  className={classes.inputStyle}
                 />
                 <ErrorMessage
                   name="phone"
                   component="div"
-                  style={{
-                    color: 'rgb(255,0,0,0.6)', marginTop: '5px', marginLeft: '12px', fontFamily: 'Roboto', fontSize: '13px',
-                  }}
+                  className={classes.error}
                 />
               </Grid>
               <Grid item xs={12}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
+
                   <KeyboardDatePicker
                     disableToolbar
                     variant="inline"
@@ -238,7 +284,7 @@ const NewFormikEditForm = ({ profileInfo }) => {
                     margin="normal"
                     id="date-picker-inline"
                     label="Date of birth"
-                    style={{ marginLeft: '4px', width: '20em' }}
+                    className={classes.datePickerStyle}
                     value={selectedDate}
                     onChange={handleDateChange}
                     KeyboardButtonProps={{
@@ -255,14 +301,12 @@ const NewFormikEditForm = ({ profileInfo }) => {
                   label="Country"
                   type="search"
                   variant="outlined"
-                  style={{ width: '30em' }}
+                  className={classes.inputStyle}
                 />
                 <ErrorMessage
                   name="country"
                   component="div"
-                  style={{
-                    color: 'rgb(255,0,0,0.6)', marginTop: '5px', marginLeft: '12px', fontFamily: 'Roboto', fontSize: '13px',
-                  }}
+                  className={classes.error}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -273,14 +317,12 @@ const NewFormikEditForm = ({ profileInfo }) => {
                   label="Major"
                   type="search"
                   variant="outlined"
-                  style={{ width: '30em' }}
+                  className={classes.inputStyle}
                 />
                 <ErrorMessage
                   name="major"
                   component="div"
-                  style={{
-                    color: 'rgb(255,0,0,0.6)', marginTop: '5px', marginLeft: '12px', fontFamily: 'Roboto', fontSize: '13px',
-                  }}
+                  className={classes.error}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -291,14 +333,12 @@ const NewFormikEditForm = ({ profileInfo }) => {
                   label="Semester"
                   type="search"
                   variant="outlined"
-                  style={{ width: '30em' }}
+                  className={classes.inputStyle}
                 />
                 <ErrorMessage
                   name="semester"
                   component="div"
-                  style={{
-                    color: 'rgb(255,0,0,0.6)', marginTop: '5px', marginLeft: '12px', fontFamily: 'Roboto', fontSize: '13px',
-                  }}
+                  className={classes.error}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -310,7 +350,7 @@ const NewFormikEditForm = ({ profileInfo }) => {
                           const { values } = form;
                           const { skills } = values;
                           return (
-                            <div style={{ margin: '12px', marginLeft: '8px' }}>
+                            <div className={classes.divFieldArrayStyle}>
                               {
                                   skills.map((skill, index) => (
                                     <Field
@@ -322,20 +362,20 @@ const NewFormikEditForm = ({ profileInfo }) => {
                                         remove(index);
                                       }}
                                       label={skill}
-                                      style={{ marginRight: '4px', marginLeft: '15px', marginBottom: '1px' }}
+                                      className={classes.fieldChip}
                                     />
                                   ))
                               }
                               <div>
                                 <TextField
                                   size="small"
-                                  style={{ width: '150px', verticalAlign: 'pointer', marginTop: '8px' }}
+                                  className={classes.skillFieldStyle}
                                   label="Add skill"
                                   onChange={(e) => setNewSkill(e.target.value)}
                                   variant="outlined"
                                 />
                                 <AddIcon
-                                  style={{ paddingTop: '15px', paddingLeft: '2px' }}
+                                  className={classes.addIconStyle}
                                   onClick={() => push(newSkill)}
                                 />
                               </div>
@@ -354,7 +394,7 @@ const NewFormikEditForm = ({ profileInfo }) => {
                   label="Experiences"
                   type="search"
                   variant="outlined"
-                  style={{ width: '30em' }}
+                  className={classes.inputStyle}
                 />
               </Grid>
               <Grid

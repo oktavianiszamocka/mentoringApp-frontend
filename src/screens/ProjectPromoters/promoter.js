@@ -24,7 +24,7 @@ const ProjectPromoter = ({ promoter }) => {
   return (
     <div className={classes.root}>
 
-      <IconButton href="../profile">
+      <IconButton href={`/profile/${promoter.idUser}`}>
         <Avatar alt={promoter.firstName} src={promoter.imageUrl} className={classes.large} />
       </IconButton>
 

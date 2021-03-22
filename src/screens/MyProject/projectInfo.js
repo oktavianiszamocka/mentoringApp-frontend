@@ -63,7 +63,7 @@ const ProjectCard = ({ project }) => {
 
         </Typography>
         <CardActions>
-          <Button size="medium">See Detail</Button>
+          <Button variant="contained" color="primary" size="medium" href={`/project-detail/${project.idProject}`}>See Detail</Button>
         </CardActions>
 
       </CardContent>

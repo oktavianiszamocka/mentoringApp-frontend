@@ -7,8 +7,12 @@ import { useParams } from 'react-router-dom';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import PromoterAvatar from './promoter';
+import ProjectBar from '../shared/components/ProjectBar';
 
 const useStyles = makeStyles({
+  root: {
+    marginTop: '6rem',
+  },
   membersDiv: {
     flexGrow: 1,
 
@@ -46,11 +50,11 @@ const ProjectPromotersBoard = () => {
   }, []);
 
   return (
-    <div style={{ marginTop: '6rem' }}>
+    <div className={classes.root}>
       <Grid container>
         <Header />
         <Grid item xs={2}>
-          <Paper className={classes.paperLeft}>LEFT</Paper>
+          <ProjectBar />
         </Grid>
 
         <div className={classes.membersDiv}>

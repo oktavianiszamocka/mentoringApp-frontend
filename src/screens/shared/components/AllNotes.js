@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@material-ui/core';
 import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
-import { styled } from '@material-ui/core/styles';
+import { styled, makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import moment from 'moment';
 import Pagination from '@material-ui/lab/Pagination';
@@ -18,8 +18,22 @@ const StyledBox = styled(Box)({
   width: '12rem',
   boxShadow: '1px 1px 2px grey',
 });
+const useStyles = makeStyles({
+  alert: {
+    backgroundColor: 'rgba(255,165,0,0.2)',
+    color: 'black',
+    width: '150px',
+    margin: '10px auto',
+
+  },
+  buttonAdd: {
+    marginTop: 10,
+    marginLeft: 100,
+  },
+});
 
 const AllNotes = () => {
+  const classes = useStyles();
   const [deleteNoteDialogOptions, setDeleteNoteDialogOptions] = useState({
     title: 'Delete note',
     mainText: 'Are you sure you want to delete this note?',
@@ -146,9 +160,7 @@ const AllNotes = () => {
             <div>
               <Alert
                 severity="warning"
-                style={{
-                  backgroundColor: 'rgba(255,165,0,0.2)', color: 'black', width: '150px', margin: '10px auto',
-                }}
+                className={classes.alert}
               >
                 There are no notes available
               </Alert>
@@ -160,7 +172,7 @@ const AllNotes = () => {
           variant="contained"
           color="primary"
           onClick={() => setNewNoteVisible(true)}
-          style={{ marginTop: 10, marginLeft: 100 }}
+          className={classes.buttonAdd}
         >
           Add Note
         </Button>

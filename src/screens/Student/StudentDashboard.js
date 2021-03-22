@@ -28,6 +28,13 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 120,
     width: '50%',
   },
+  alert: {
+    backgroundColor: 'rgba(255,165,0,0.2)',
+    color: 'black',
+    width: '280px',
+    margin: '20px 30%',
+
+  },
 
 }));
 
@@ -237,9 +244,7 @@ const StudentDashboard = () => {
               <div>
                 <Alert
                   severity="warning"
-                  style={{
-                    backgroundColor: 'rgba(255,165,0,0.2)', color: 'black', width: '280px', margin: '20px 30%',
-                  }}
+                  className={classes.alert}
                 >
                   There are no posts available
                 </Alert>

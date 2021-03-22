@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import ProjectDetails from './projectDetails';
-import AllNotes from '../shared/components/AllNotes';
+import ProjectBar from '../shared/components/ProjectBar';
 
 const ProjectDetailsDashboard = () => {
   const { IdProject } = useParams();
@@ -24,7 +24,7 @@ const ProjectDetailsDashboard = () => {
       <Grid container>
         <Header />
         <Grid item xs={2}>
-          <AllNotes />
+          <ProjectBar />
         </Grid>
         <Grid item xs={8}>
           {projectDetail && <ProjectDetails projectInfo={projectDetail} />}
