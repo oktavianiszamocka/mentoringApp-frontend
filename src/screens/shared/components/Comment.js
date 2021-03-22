@@ -19,17 +19,28 @@ const StyledDiv = styled.div`
   display: flex;
   margin: 6px 1px;
 `;
-
+const StyledCommentDiv = styled.div`
+  display: flex;
+  margin: 6px 1px;
+  background-color: #d9dbde;
+  border-radius: 1.5rem;
+  padding: 10px;
+  flex-direction: column;
+`;
 const StyledP = styled.p`
   font-family: 'Roboto', arial;
   font-size: 12px;
   margin: 5px;
+  color: rgba(1,1,1,0.5);
+  margin-top: -2px;
+
 `;
 
 const StyledComment = styled.p`
   font-family: 'Roboto', arial;
   font-size: 14px;
   margin: 5px;
+  
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -38,6 +49,24 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'transparent',
     },
   },
+  avatar: {
+    width: '50px',
+    height: '50px',
+    boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)',
+    borderRadius: '1.5rem',
+  },
+  divComment: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  editIcon: {
+    marginLeft: '6em', fontSize: 'small',
+  },
+  deleteIcon: {
+    marginLeft: '2px',
+    fontSize: 'small',
+  },
+
 }));
 const Comment = ({ comment, loggedUser, onDeleteHandler }) => {
   const momentTime = moment(JSON.stringify(comment.createdOn), 'YYYY-MM-DD hh:mm:ss').fromNow();
@@ -48,27 +77,22 @@ const Comment = ({ comment, loggedUser, onDeleteHandler }) => {
       <IconButton className={classes.iconButtonStyle} href={`/profile/${comment.createdBy.idUser}`}>
         <MaterialAvatar
           src={comment.createdBy.imageUrl}
-          style={{
-            width: '50px', height: '50px', boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)', borderRadius: '1.5rem',
-          }}
+          className={classes.avatar}
         />
       </IconButton>
-      <StyledDiv style={{
-        backgroundColor: '#d9dbde', borderRadius: '1.5rem', padding: '10px', flexDirection: 'column',
-      }}
-      >
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <StyledCommentDiv>
+        <div className={classes.divComment}>
           <StyledTitle>{`${comment.createdBy.firstName} ${comment.createdBy.lastName}`}</StyledTitle>
           {(comment.createdBy.idUser === loggedUser.idUser) && (
             <div>
-              <EditIcon style={{ marginLeft: '6em', fontSize: 'small' }} />
-              <DeleteIcon style={{ marginLeft: '2px', fontSize: 'small' }} onClick={() => onDeleteHandler(comment.idComment)} />
+              <EditIcon className={classes.editIcon} />
+              <DeleteIcon className={classes.deleteIcon} onClick={() => onDeleteHandler(comment.idComment)} />
             </div>
           )}
         </div>
-        <StyledP style={{ color: 'rgba(1,1,1,0.5)', marginTop: '-2px' }}>{momentTime}</StyledP>
+        <StyledP>{momentTime}</StyledP>
         <StyledComment>{comment.comment}</StyledComment>
-      </StyledDiv>
+      </StyledCommentDiv>
     </StyledDiv>
   );
 };

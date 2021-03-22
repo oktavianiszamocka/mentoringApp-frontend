@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Button, Grid,
+  Button, Grid, IconButton, TextField,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import MaterialAvatar from '@material-ui/core/Avatar';
-import TextField from '@material-ui/core/TextField';
 import moment from 'moment';
 import Comment from '../../shared/components/Comment';
 import TagsComponent from '../../shared/components/TagsComponent';
@@ -56,11 +55,55 @@ const StyledC = styled.p`
 `;
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    maxWidth: '1100px',
+  },
   iconButtonStyle: {
     '&:hover': {
       backgroundColor: 'transparent',
     },
   },
+  avatar: {
+    width: '50px',
+    height: '50px',
+    boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)',
+    borderRadius: '1.5rem',
+
+  },
+  divUser: {
+    marginLeft: '10px',
+  },
+  iconStyle: {
+    margin: '8px',
+
+  },
+  avatarComment: {
+    width: '40px',
+    height: '40px',
+    boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)',
+    borderRadius: '1.5rem',
+
+  },
+  commentInput: {
+    width: '800px',
+    marginLeft: '10px',
+  },
+  divAllComment: {
+    display: 'inline',
+    justifyContent: 'center',
+  },
+  divComment: {
+    display: 'inline',
+    justifyContent: 'center',
+    margin: '1060',
+  },
+  buttonAllComment: {
+    fontSize: 10,
+  },
+  divPostData: {
+    margin: '20px',
+  },
+
 }));
 
 const StyledDiv = styled.div`
@@ -72,9 +115,10 @@ const StyledDiv = styled.div`
 const Post = ({
   user, postData, onDeleteHandler, onEditHandler, currentUser,
 }) => {
+  const classes = useStyles();
   const [showAllComments, setShowAllComments] = useState(false);
   const [postComments, setPostComments] = useState([]);
-  const userData = `${user.major}, semester ${user.semester}`;
+
   const createdTime = moment(JSON.stringify(postData.dateOfPublication), 'YYYY-MM-DD hh:mm:ss').fromNow();
 
   const loadComments = async () => {
@@ -108,7 +152,7 @@ const Post = ({
   };
 
   return (
-    <Grid style={{ maxWidth: '1100px' }}>
+    <Grid className={classes.root}>
 
       <>
         {postData && (
@@ -116,17 +160,17 @@ const Post = ({
             <StyledHeader>
               <Grid container spacing={0.5}>
                 <Grid item xs={0.5}>
-                  <MaterialAvatar
-                    src={user.imageUrl}
-                    style={{
-                      width: '50px', height: '50px', boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)', borderRadius: '1.5rem',
-                    }}
-                  />
+                  <IconButton href={`/profile/${user.idUser}`}>
+                    <MaterialAvatar
+                      src={user.imageUrl}
+                      className={classes.avatar}
+                    />
+                  </IconButton>
                 </Grid>
                 <Grid item xs={10} m={8}>
-                  <div style={{ marginLeft: '10px' }}>
+                  <div className={classes.divUser}>
                     <StyledTitle>{`${user.firstName} ${user.lastName}`}</StyledTitle>
-                    <StyledData>{userData}</StyledData>
+                    <StyledData>{user.description}</StyledData>
                     <StyledData>
                       Posted
                       {' '}
@@ -136,20 +180,20 @@ const Post = ({
                 </Grid>
                 <Grid item xs={0.5}>
                   <EditIcon
-                    style={{ margin: '8px' }}
+                    className={classes.iconStyle}
                     onClick={() => onEditHandler(postData.idPost, postData.title, postData.content, postData.tags, user)}
                   />
                 </Grid>
                 <Grid item xs={0.5}>
                   <DeleteIcon
-                    style={{ margin: '8px' }}
+                    className={classes.iconStyle}
                     onClick={() => onDeleteHandler(postData.idPost)}
                   />
                 </Grid>
               </Grid>
             </StyledHeader>
             {postData && (
-              <div style={{ margin: '20px' }}>
+              <div className={classes.divPostData}>
                 <StyledTitle style={{ marginLeft: '2rem' }}>
                   {' '}
                   {postData.title}
@@ -167,10 +211,10 @@ const Post = ({
               {postData && <TagsComponent tags={postData.tags} />}
               <hr />
               {!showAllComments && (
-                <div style={{ display: 'inline', justifyContent: 'center' }}>
+                <div className={classes.divAllComment}>
 
                   {postData.hasMoreThanOneComment && (
-                    <Button style={{ fontSize: 10 }} variant="default" onClick={() => handleAllComments()}>
+                    <Button size="small" variant="default" onClick={() => handleAllComments()} className={classes.buttonAllComment}>
                       All comments
                     </Button>
                   )}
@@ -180,7 +224,7 @@ const Post = ({
 
                 </div>
               )}
-              <div style={{ display: 'inline', justifyContent: 'center', margin: 1060 }}>
+              <div className={classes.divComment}>
                 {showAllComments && (postComments.map((comment) => (
                   <Comment comment={comment} loggedUser={currentUser} onDeleteHandler={onDeleteComment} />
                 )))}
@@ -190,25 +234,21 @@ const Post = ({
               <StyledDiv>
                 <MaterialAvatar
                   src={user.imageUrl}
-                  style={{
-                    width: '40px', height: '40px', boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)', borderRadius: '1.5rem',
-                  }}
+                  className={classes.avatarComment}
                 />
                 <TextField
                   onKeyPress={(ev) => {
                     if (ev.key === 'Enter') {
                       ev.preventDefault();
                       sendComment(ev.target.value);
+                      ev.target.value = '';
                     }
                   }}
                   size="small"
                   multiline
                   label="Write a comment..."
                   variant="outlined"
-                  style={{
-                    width: '800px',
-                    marginLeft: '10px',
-                  }}
+                  className={classes.commentInput}
                 />
               </StyledDiv>
 

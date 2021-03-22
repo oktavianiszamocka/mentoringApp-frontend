@@ -10,6 +10,9 @@ import MemberAvatar from './member';
 import ProjectBar from '../shared/components/ProjectBar';
 
 const useStyles = makeStyles({
+  root: {
+    marginTop: '6rem',
+  },
   membersDiv: {
     flexGrow: 1,
 
@@ -44,7 +47,7 @@ const ProjectMembersBoard = () => {
   }, []);
 
   return (
-    <div style={{ marginTop: '6rem' }}>
+    <div className={classes.root}>
       <Grid container>
         <Header />
         <Grid item xs={2}>

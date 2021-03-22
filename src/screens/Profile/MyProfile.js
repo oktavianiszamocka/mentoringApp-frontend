@@ -7,6 +7,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import moment from 'moment';
 import Chip from '@material-ui/core/Chip';
 import { Link } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 import Title from '../shared/components/Title';
 
 const StyledSection = styled.section`
@@ -60,11 +61,38 @@ const StyledTitle = styled.p`
   text-transform: uppercase;
   margin: 10px;
   color: #4c4d4d;
+  text-align : center;
 `;
 
+const StyledTitleName = styled.p`
+  font-family: 'Roboto', arial;
+  font-weight: 100;
+  font-size: 25px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #4c4d4d;
+  margin: 0;
+
+`;
+const useStyles = makeStyles({
+  avatar: {
+    width: '120px',
+    height: '120px',
+    boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)',
+    borderRadius: '1.5rem',
+  },
+  buttonEdit: {
+    marginLeft: '2rem',
+  },
+  chipStyle: {
+    margin: '0 5px',
+  },
+
+});
 const MyProfile = ({ profileInfo, showEditButton }) => {
   const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('LL');
   const allSkills = profileInfo.skills.split(',');
+  const classes = useStyles();
 
   return (
     <div>
@@ -77,33 +105,30 @@ const MyProfile = ({ profileInfo, showEditButton }) => {
           <Grid item style={{ marginLeft: '2rem' }}>
             <MaterialAvatar
               src={profileInfo.avatar}
-              style={{
-                width: '120px',
-                height: '120px',
-                boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)',
-                borderRadius: '1.5rem',
-              }}
+              className={classes.avatar}
             />
           </Grid>
           <Grid item xs={8}>
             <div>
-              <StyledTitle style={{ margin: '0' }}>
+              <StyledTitleName>
                 {`${profileInfo.firstName} ${profileInfo.lastName}`}
-              </StyledTitle>
+              </StyledTitleName>
               <StyledUnderData>{`${profileInfo.major}`}</StyledUnderData>
               <StyledUnderData>{`Semester ${profileInfo.semester}`}</StyledUnderData>
             </div>
           </Grid>
           <Grid item>
             {showEditButton && (
-            <IconButton disableFocusRipple="true" disableRipple="true" href={`/editProfile/${profileInfo.user}`}>
+
               <Button
                 variant="contained"
                 color="secondary"
+                className={classes.buttonEdit}
+                href={`/edit-profile/${profileInfo.user}`}
               >
                 Edit data
               </Button>
-            </IconButton>
+
             ) }
           </Grid>
         </Grid>
@@ -111,7 +136,7 @@ const MyProfile = ({ profileInfo, showEditButton }) => {
         <StyledInfoSection>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <StyledTitle style={{ textAlign: 'center' }}>Personal Information</StyledTitle>
+              <StyledTitle>Personal Information</StyledTitle>
             </Grid>
 
             {' '}
@@ -205,7 +230,7 @@ const MyProfile = ({ profileInfo, showEditButton }) => {
         <StyledInfoSection>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <StyledTitle style={{ textAlign: 'center' }}>Technical Information</StyledTitle>
+              <StyledTitle>Technical Information</StyledTitle>
             </Grid>
             <Grid item xs={12}>
               <StyledLabels>
@@ -215,7 +240,7 @@ const MyProfile = ({ profileInfo, showEditButton }) => {
             <Grid item xs={12}>
               <div>
                 {allSkills.map((tag) => (
-                  <Chip label={tag} color="primary" style={{ margin: '0 5px' }} />
+                  <Chip label={tag} color="primary" className={classes.chipStyle} />
                 ))}
               </div>
             </Grid>
