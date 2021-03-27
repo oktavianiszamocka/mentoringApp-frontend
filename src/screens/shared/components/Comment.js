@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
+import {
+  TextField,
+} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import MaterialAvatar from '@material-ui/core/Avatar';
@@ -49,6 +52,14 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: 'transparent',
     },
   },
+  underline: {
+    '&&&:before': {
+      borderBottom: 'none',
+    },
+    '&&:after': {
+      borderBottom: 'none',
+    },
+  },
   avatar: {
     width: '50px',
     height: '50px',
@@ -68,9 +79,16 @@ const useStyles = makeStyles((theme) => ({
   },
 
 }));
-const Comment = ({ comment, loggedUser, onDeleteHandler }) => {
+const Comment = ({
+  comment, loggedUser, onDeleteHandler, sendComment,
+}) => {
   const momentTime = moment(JSON.stringify(comment.createdOn), 'YYYY-MM-DD hh:mm:ss').fromNow();
   const classes = useStyles();
+  const [showEdit, setShowEdit] = useState(false);
+
+  const onEditComment = async (idComment) => {
+    setShowEdit(true);
+  };
 
   return (
     <StyledDiv>
@@ -85,13 +103,32 @@ const Comment = ({ comment, loggedUser, onDeleteHandler }) => {
           <StyledTitle>{`${comment.createdBy.firstName} ${comment.createdBy.lastName}`}</StyledTitle>
           {(comment.createdBy.idUser === loggedUser.idUser) && (
             <div>
-              <EditIcon className={classes.editIcon} />
+              <EditIcon className={classes.editIcon} onClick={() => onEditComment(comment.idComment)} />
               <DeleteIcon className={classes.deleteIcon} onClick={() => onDeleteHandler(comment.idComment)} />
             </div>
           )}
         </div>
         <StyledP>{momentTime}</StyledP>
-        <StyledComment>{comment.comment}</StyledComment>
+        {showEdit === true
+          ? (
+            <TextField
+              onKeyPress={(ev) => {
+                if (ev.key === 'Enter') {
+                  ev.preventDefault();
+                  console.log(ev.target.value);
+                  sendComment(ev.target.value);
+                  setShowEdit(false);
+                }
+              }}
+              size="small"
+              InputProps={{ classes }}
+              multiline
+              defaultValue={comment.comment}
+              label="Edit your comment"
+              className={classes.commentInput}
+            />
+          )
+          : <StyledComment>{comment.comment}</StyledComment>}
       </StyledCommentDiv>
     </StyledDiv>
   );
