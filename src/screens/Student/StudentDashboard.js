@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Button } from '@material-ui/core';
+import {
+  Grid, Button, InputLabel, Select, MenuItem, FormControl, FormHelperText,
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
 import moment from 'moment';
 import Pagination from '@material-ui/lab/Pagination';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import Alert from '@material-ui/lab/Alert';
 import Api from '../../api/index';
 import Header from '../shared/components/Header';
 import Post from './Post';
@@ -13,7 +14,32 @@ import CreatePostForm from './Post/FormwithFormik';
 import EditPostDialog from './Post/EditPostDialog';
 import AllNotes from '../shared/components/AllNotes';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    marginTop: '6rem',
+  },
+
+  selectProject: {
+    width: '300',
+  },
+  formControl: {
+    display: 'block',
+    marginLeft: '15rem',
+    minWidth: 120,
+    width: '50%',
+  },
+  alert: {
+    backgroundColor: 'rgba(255,165,0,0.2)',
+    color: 'black',
+    width: '280px',
+    margin: '20px 30%',
+
+  },
+
+}));
+
 const StudentDashboard = () => {
+  const classes = useStyles();
   const defaultInitialValuePost = {
     idPost: '',
     title: '',
@@ -39,12 +65,12 @@ const StudentDashboard = () => {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
-  const [project, setProject] = useState('');
+  const [project, setProject] = useState('General');
   const [projects, setProjects] = useState([]);
   const [newPost, setNewPost] = useState(defaultInitialValuePost);
 
   const loadData = async () => {
-    const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
+    const postType = project === 'General' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
     const res = await Promise.all([postType, Api.getUserProject(), Api.getUserAvaAndName()]);
     setPosts(res[0].data.data);
     setCount(res[0].data.totalPages);
@@ -68,7 +94,7 @@ const StudentDashboard = () => {
     if (confirmed) {
       await Api.deletePost(idPost);
 
-      const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
+      const postType = project === 'General' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
       const refreshedPosts = await postType;
 
       setPosts(refreshedPosts.data.data);
@@ -117,7 +143,7 @@ const StudentDashboard = () => {
 
     const updatedPost = await Api.updatePost(editPostDTO)
       .then((response) => response.data);
-    const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
+    const postType = project === 'General' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
     const refreshedPosts = await postType;
     setPosts(refreshedPosts.data.data);
     setNewPost(defaultInitialValuePost);
@@ -133,13 +159,13 @@ const StudentDashboard = () => {
       content: e.content,
       DateOfPublication: moment().toJSON(),
       Writer: Api.getUserId(),
-      Project: project === '' ? null : project,
+      Project: project === 'General' ? null : project,
       Tags: e.tags,
     };
 
     const postedPost = await Api.postNewPost(newPostDTO)
       .then((response) => response.data);
-    const postType = project === '' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
+    const postType = project === 'General' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
     const refreshedPosts = await postType;
     setPosts(refreshedPosts.data.data);
     setNewPost(e);
@@ -154,7 +180,7 @@ const StudentDashboard = () => {
     setProject(event.target.value);
   };
   return (
-    <div style={{ marginTop: '6rem' }}>
+    <div className={classes.root}>
       <ConfirmDialog {...deletePostDialogOptions} onDialogClosed={onPostDeleteDialogClosed} />
       <EditPostDialog {...editPostDialogOptions} onDialogClosed={onPostEditDialogClosed} handleSubmit={onPostEditSubmit} />
       <Grid
@@ -173,31 +199,38 @@ const StudentDashboard = () => {
         </Grid>
         <Grid item lg={10} md={10} s={12} xs={12}>
 
+          <FormControl className={classes.formControl}>
+            <InputLabel id="project-label" className={classes.selectProject}>Project</InputLabel>
+            <Select
+              fullWidth
+              labelId="project-label"
+              id="project-select"
+              value={project}
+              onChange={handleChange}
+              className={classes.selectProject}
+            >
+              <MenuItem value="General">General </MenuItem>
+              {projects && projects.map((pro) => (
+                <MenuItem value={pro.idProject}>
+                  {pro.name}
+                  {' '}
+                </MenuItem>
+              ))}
+
+            </Select>
+            <FormHelperText>Choose Posts from General topic or Posts from Specific Project</FormHelperText>
+
+          </FormControl>
+
           <CreatePostForm
             initialValues={newPost}
             formSumbitCallback={handleSubmit}
             user={user}
 
           />
-          <InputLabel id="demo-simple-select-label">Project</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={project}
-            onChange={handleChange}
-          >
-            <MenuItem value="">General </MenuItem>
-            {projects && projects.map((pro) => (
-              <MenuItem value={pro.idProject}>
-                {pro.name}
-                {' '}
-              </MenuItem>
-            ))}
 
-          </Select>
-
-          {posts
-            && posts.map((post) => (
+          {posts.length > 0 ? (
+            posts.map((post) => (
               <Grid item lg={12} m={12} s={12} xs={12}>
                 <Post
                   postData={post}
@@ -207,15 +240,29 @@ const StudentDashboard = () => {
                   currentUser={user}
                 />
               </Grid>
-            ))}
-          <Pagination
-            color="primary"
-            count={count}
-            page={page}
-            siblingCount={1}
-            boundaryCount={1}
-            onChange={handlePageChange}
-          />
+            ))) : (
+              <div>
+                <Alert
+                  severity="warning"
+                  className={classes.alert}
+                >
+                  There are no posts available
+                </Alert>
+              </div>
+
+          )}
+
+          {posts.length > 0 ? (
+            <Pagination
+              color="primary"
+              count={count}
+              page={page}
+              siblingCount={1}
+              boundaryCount={1}
+              onChange={handlePageChange}
+            />
+          ) : (<div />)}
+
         </Grid>
 
       </Grid>

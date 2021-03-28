@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Grid, Button } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 import { makeStyles } from '@material-ui/core/styles';
+import Alert from '@material-ui/lab/Alert';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import ProjectInfo from './projectInfo';
@@ -13,7 +14,15 @@ const useStyles = makeStyles({
     marginTop: 10,
   },
   search: {
-    width: 500,
+    width: '100%',
+    margin: 'auto',
+  },
+  alert: {
+
+  },
+  projects: {
+    marginTop: '2rem',
+
   },
 
 });
@@ -56,24 +65,42 @@ const MyProject = () => {
 
         </Grid>
         <Grid item xs={7}>
-          <SearchBar onEnterAction={(e) => searchProject(e)} />
+          <SearchBar styleSearch={classes.search} onEnterAction={(e) => searchProject(e)} />
 
-          {projects && projects.map((pro) => (
-            <ProjectInfo project={pro} />
+          <div className={classes.projects}>
+            {projects.length > 0 ? (projects.map((pro) => (
+              <ProjectInfo project={pro} />
 
-          ))}
-          <Pagination
-            className={classes.paging}
-            color="primary"
-            count={count}
-            page={page}
-            siblingCount={1}
-            boundaryCount={1}
-            onChange={handlePageChange}
-          />
+            ))) : (
+              <div>
+                <Alert
+                  severity="warning"
+                  style={{
+                    backgroundColor: 'rgba(255,165,0,0.2)', color: 'black', width: '280px', margin: '20px 30%',
+                  }}
+                >
+                  Sorry! You have no projects assigned to you
+                </Alert>
+              </div>
+            )}
+
+          </div>
+          {projects.length > 0 ? (
+            <Pagination
+              className={classes.paging}
+              color="primary"
+              count={count}
+              page={page}
+              siblingCount={1}
+              boundaryCount={1}
+              onChange={handlePageChange}
+            />
+          ) : (<span />)}
+
         </Grid>
 
       </Grid>
+
     </div>
   );
 };

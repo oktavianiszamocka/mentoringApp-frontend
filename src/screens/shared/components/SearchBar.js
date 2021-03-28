@@ -6,12 +6,13 @@ import TextField from '@material-ui/core/TextField';
 const useStyles = makeStyles({
   root: {
     width: 500,
+    margin: 'auto',
 
   },
 
 });
 
-const SearchBar = ({ onEnterAction }) => {
+const SearchBar = ({ onEnterAction, styleSearch }) => {
   const classes = useStyles();
 
   return (
@@ -19,7 +20,7 @@ const SearchBar = ({ onEnterAction }) => {
       id="outlined-basic"
       label="Search"
       variant="outlined"
-      className={classes.root}
+      className={styleSearch}
       size="small"
       onKeyPress={(e) => onEnterAction(e)}
 

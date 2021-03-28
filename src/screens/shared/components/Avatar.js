@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import MaterialAvatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
 
 const StyledDiv = styled.div`
   display: flex;

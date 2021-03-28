@@ -5,14 +5,14 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { ErrorMessage, FieldArray, withFormik } from 'formik';
-
+import MaterialAvatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
 import { Grid, Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import Alert from '@material-ui/lab/Alert';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import { EditorState, ContentState, convertToRaw } from 'draft-js';
 import { black } from 'material-ui/styles/colors';
@@ -46,6 +46,10 @@ const messageStyle = {
 };
 
 const useStyles = makeStyles({
+  root: {
+    maxWidth: '1100px',
+
+  },
   underline: {
     '&&&:before': {
       borderBottom: 'none',
@@ -53,6 +57,50 @@ const useStyles = makeStyles({
     '&&:after': {
       borderBottom: 'none',
     },
+  },
+  avatar: {
+    width: '70px',
+    height: '70px',
+    boxShadow: '1px 1px 2px 0px rgba(135, 135, 135, 1)',
+    borderRadius: '50%',
+  },
+  error: {
+    color: 'rgb(255,0,0,0.6)',
+    marginTop: '2px',
+    marginLeft: '100px',
+    marginBottom: '10px',
+    fontFamily: 'Roboto',
+    fontSize: '13px',
+  },
+  titleStyle: {
+    marginTop: '10px',
+    marginLeft: '8px',
+    width: '100%',
+  },
+  tagInput: {
+    width: '150px',
+    verticalAlign: 'pointer',
+
+  },
+  chipStyle: {
+    marginRight: '4px',
+    marginLeft: '15px',
+    marginBottom: '1px',
+  },
+  alert: {
+    backgroundColor: 'rgba(255,165,0,0.2)',
+    color: 'black',
+    width: '170px',
+  },
+  addIconStyle: {
+    padding: '10px',
+    cursor: 'pointer',
+  },
+  postButton: {
+    margin: '15px',
+  },
+  divButtonPost: {
+    textAlignLast: 'right',
   },
 });
 
@@ -93,12 +141,13 @@ const PostForm = (props) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div style={{ maxWidth: '1100px' }}>
+      <div className={classes.root}>
         <StyledSection>
           <div style={{ display: 'flex' }}>
-            <StyledImg src={user && user.imageUrl} width="75px" />
-
-            {touched.title && errors.title && <p>{errors.title}</p>}
+            <MaterialAvatar
+              src={user && user.imageUrl}
+              className={classes.avatar}
+            />
             <TextField
               id="title"
               label="Enter title here"
@@ -106,13 +155,18 @@ const PostForm = (props) => {
               value={values.title}
               onChange={handleChange}
               variant="outlined"
-              style={{ marginTop: '20px', width: '100%' }}
+              className={classes.titleStyle}
             />
-            <ErrorMessage name="title" />
           </div>
+          <ErrorMessage
+            name="title"
+            component="div"
+            className={classes.error} />
+
           <div style={messageStyle}>
 
             <RichTextEditorDraftjs
+              error={touched.content && typeof errors.content !== 'undefined'}
               editorState={values.content}
               onChange={setFieldValue}
               onBlur={handleBlur}
@@ -135,12 +189,12 @@ const PostForm = (props) => {
                     size="small"
                     value={tag}
                     onChange={(e) => setTag(e.target.value)}
-                    style={{ width: '150px', verticalAlign: 'pointer' }}
+                    className={classes.tagInput}
                     label="Add tag"
                     variant="outlined"
                   />
                   <AddIcon
-                    style={{ padding: '10px', cursor: 'pointer' }}
+                    className={classes.addIconStyle}
                     onClick={() => {
                       if (tag && tag.trim().length > 0) ah.push(tag);
                       setTag('');
@@ -153,15 +207,13 @@ const PostForm = (props) => {
                       color="primary"
                       onDelete={() => handleTagDelete(ah, item)}
                       label={item}
-                      style={{ marginRight: '4px', marginLeft: '15px', marginBottom: '1px' }}
+                      className={classes.chipStyle}
                     />
                   ))
                 ) : (
                   <Alert
                     severity="warning"
-                    style={{
-                      backgroundColor: 'rgba(255,165,0,0.2)', color: 'black', width: '170px',
-                    }}
+                    className={classes.alert}
                     >
                     There are no tags!
                   </Alert>
@@ -170,9 +222,9 @@ const PostForm = (props) => {
             )}
           />
 
-          <div style={{ textAlignLast: 'right' }}>
+          <div className={classes.divButtonPost}>
             <Button
-              style={{ margin: '15px' }}
+              className={classes.postButton}
               type="submit"
               color="primary"
               variant="contained"
@@ -202,8 +254,8 @@ const CreatePostForm = withFormik({
   validationSchema: Yup.object().shape({
     title: Yup.string()
       .max(255, 'Title should not be longer than 255 characters!')
-      .required('title is required'),
-    content: Yup.object()
+      .required('Title is required'),
+    content: Yup.string()
       .required('Post Content is required'),
 
   }),

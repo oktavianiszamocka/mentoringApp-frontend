@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@material-ui/core';
 import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
-import { styled } from '@material-ui/core/styles';
+import { styled, makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import moment from 'moment';
 import Pagination from '@material-ui/lab/Pagination';
+import Alert from '@material-ui/lab/Alert';
 import Api from '../../../api/index';
 import { Note, defaultInitialValueNote } from './Note';
 import Title from './Title';
@@ -17,8 +18,22 @@ const StyledBox = styled(Box)({
   width: '12rem',
   boxShadow: '1px 1px 2px grey',
 });
+const useStyles = makeStyles({
+  alert: {
+    backgroundColor: 'rgba(255,165,0,0.2)',
+    color: 'black',
+    width: '150px',
+    margin: '10px auto',
+
+  },
+  buttonAdd: {
+    marginTop: 10,
+    marginLeft: 100,
+  },
+});
 
 const AllNotes = () => {
+  const classes = useStyles();
   const [deleteNoteDialogOptions, setDeleteNoteDialogOptions] = useState({
     title: 'Delete note',
     mainText: 'Are you sure you want to delete this note?',
@@ -132,34 +147,46 @@ const AllNotes = () => {
         />
         )}
 
-        {notes
-              && notes.map((item) => (
-                <Note
-                  idNote={item.idNote}
-                  desc={item.description}
-                  onCloseHandler={() => onNoteCloseHandler(item.idNote)}
-                  onUpdateHandler={() => onNoteUpdateHandler(item.idNote, item.description)}
-                />
+        {notes.length > 0 ? (
+          notes.map((item) => (
+            <Note
+              idNote={item.idNote}
+              desc={item.description}
+              onCloseHandler={() => onNoteCloseHandler(item.idNote)}
+              onUpdateHandler={() => onNoteUpdateHandler(item.idNote, item.description)}
+            />
 
-              ))}
+          ))) : (
+            <div>
+              <Alert
+                severity="warning"
+                className={classes.alert}
+              >
+                There are no notes available
+              </Alert>
+            </div>
+        )}
 
         <Button
           size="small"
           variant="contained"
           color="primary"
           onClick={() => setNewNoteVisible(true)}
-          style={{ marginTop: 10, marginLeft: 100 }}
+          className={classes.buttonAdd}
         >
           Add Note
         </Button>
-        <Pagination
-          color="primary"
-          count={countNote}
-          page={pageNote}
-          siblingCount={1}
-          boundaryCount={1}
-          onChange={handlePageNoteChange}
-        />
+        {notes.length > 0 ? (
+          <Pagination
+            color="primary"
+            count={countNote}
+            page={pageNote}
+            siblingCount={1}
+            boundaryCount={1}
+            onChange={handlePageNoteChange}
+          />
+        ) : (<div />)}
+
       </StyledBox>
     </div>
 

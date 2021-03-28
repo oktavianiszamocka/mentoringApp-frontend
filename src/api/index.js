@@ -16,11 +16,12 @@ const getGeneralPosts = (pageNumber) => axios.get(`${apiUrl}/posts/general?pageN
 const getProjectPosts = (pageNumber, idProject) => axios.get(`${apiUrl}/posts/project/${idProject}?pageNumber=${pageNumber}&pageSize=10`);
 // http://localhost:57864/api/posts?pageNumber=2&pageSize=3
 const getUserAvaAndName = () => axios.get(`${apiUrl}/profiles/user/${getUserId()}`);
-const getProjectDetails = (idProject) => axios.get(`${apiUrl}/projects/projectinfo/${idProject}`);
+const getProjectDetails = (idProject) => axios.get(`${apiUrl}/projects/project-info/${idProject}`);
 const getUserProfile = (idUser) => axios.get(`${apiUrl}/profiles/${idUser}`);
 const postNote = (noteData) => axios.post(`${apiUrl}/personal-notes`, noteData);
 const getPostComment = (idPost) => axios.get(`${apiUrl}/posts/${idPost}/comment`);
-const sendPostComment = (idPost, commentData) => axios.post(`${apiUrl}/posts/comment`, commentData);
+const sendPostComment = (commentData) => axios.post(`${apiUrl}/posts/comment`, commentData);
+const deletePostComment = (idComment) => axios.delete(`${apiUrl}/posts/comment/${idComment}`);
 const deleteNote = (idNote) => axios.delete(`${apiUrl}/personal-notes/${idNote}`);
 const updateNote = (noteData) => axios.patch(`${apiUrl}/personal-notes`, noteData);
 const getUserProject = () => axios.get(`${apiUrl}/projects/${getUserId()}`);
@@ -44,6 +45,7 @@ export default {
   postNote,
   getPostComment,
   sendPostComment,
+  deletePostComment,
   deleteNote,
   updateNote,
   getUserProject,
