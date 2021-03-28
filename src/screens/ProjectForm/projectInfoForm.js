@@ -13,6 +13,7 @@ import {
 
 } from '@material-ui/pickers';
 import { Select, KeyboardDatePicker } from 'material-ui-formik-components';
+import { LeakRemoveTwoTone } from '@material-ui/icons';
 import Api from '../../api/index';
 
 const useStyles = makeStyles((theme) => ({
@@ -57,21 +58,39 @@ const ProjectInfoSchema = Yup.object().shape({
 const ProjectInfoForm = (props) => {
   const classes = useStyles();
 
+  const handleSubmit = async (values, { resetForm, setSubmitting }) => {
+    let successCallout = false;
+
+    await props.onSubmit(values)
+      .then((res) => {
+        if (res === true) {
+          successCallout = true;
+        }
+      });
+
+    if (successCallout) {
+      setTimeout(() => {
+        setSubmitting(false);
+        resetForm();
+      }, 1000);
+    }
+  };
+
   return (
     <Formik
-      onSubmit={props.onSubmit}
+      onSubmit={handleSubmit}
       initialValues={props.initialValues}
       validationSchema={ProjectInfoSchema}
 
     >
       {(formik) => {
         const {
-          errors, touched, isValid, dirty, isSubmitting, values, setFieldValue,
+          errors, touched, isValid, dirty, isSubmitting, values, setFieldValue, handleReset,
         } = formik;
         return (
           <div className={classes.root}>
 
-            <Form>
+            <Form onReset={handleReset}>
               <Grid container item justify="center" spacing={2}>
 
                 <Grid item xs={12}>
@@ -186,7 +205,9 @@ const ProjectInfoForm = (props) => {
                     variant="contained"
                     color="primary"
                     type="submit"
-                    className={dirty && isValid ? '' : 'disabled-btn'}
+                    // className={dirty && isValid ? '' : 'disabled-btn'}
+                    disabled={!dirty || isSubmitting}
+
                   >
                     Submit
                   </Button>
@@ -205,6 +226,7 @@ const ProjectInfoForm = (props) => {
     </Formik>
   );
 };
+
 ProjectInfoForm.prototype = {
   onSubmit: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
@@ -220,7 +242,9 @@ ProjectInfoForm.defaultProps = {
     endDate: null,
     superviserEmail: '',
     status: '',
+
   },
+
 };
 
 export default ProjectInfoForm;
