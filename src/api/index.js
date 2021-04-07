@@ -21,6 +21,7 @@ const getUserProfile = (idUser) => axios.get(`${apiUrl}/profiles/${idUser}`);
 const postNote = (noteData) => axios.post(`${apiUrl}/personal-notes`, noteData);
 const getPostComment = (idPost) => axios.get(`${apiUrl}/posts/${idPost}/comment`);
 const sendPostComment = (commentData) => axios.post(`${apiUrl}/posts/comment`, commentData);
+const editPostComment = (commentData) => axios.patch(`${apiUrl}/posts/comment`, commentData);
 const deletePostComment = (idComment) => axios.delete(`${apiUrl}/posts/comment/${idComment}`);
 const deleteNote = (idNote) => axios.delete(`${apiUrl}/personal-notes/${idNote}`);
 const updateNote = (noteData) => axios.patch(`${apiUrl}/personal-notes`, noteData);
@@ -45,6 +46,7 @@ export default {
   postNote,
   getPostComment,
   sendPostComment,
+  editPostComment,
   deletePostComment,
   deleteNote,
   updateNote,
