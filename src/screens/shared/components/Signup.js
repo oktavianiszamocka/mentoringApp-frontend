@@ -21,8 +21,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import { countries } from 'countries-list';
 
 const StyledOuterDiv = styled.div`
   display: flex;
@@ -35,6 +34,13 @@ const StyledOuterDiv = styled.div`
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
+  margin: 10px;
+`;
+
+const StyledDivTerms = styled.div`
+  display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   margin: 10px;
 `;
@@ -65,6 +71,15 @@ const StyledLabel = styled.p`
   color: rgba(0,0,0,0.5);
   margin-top: 8px;
   margin-left: 15px;
+`;
+
+const StyledTermsLabel = styled.p`
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;  
+  color: rgba(0,0,0,0.5);
+  margin-top: 0px;
+  margin-bottom: 0px;
+
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -98,26 +113,30 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Roboto',
     fontSize: '13px',
   },
+  checkbox: {
+    marginRight: '4px',
+    marginTop: '2px',
+  },
 }));
 
 const Signup = () => {
   const classes = useStyles();
+
+  const allCountries = [];
+  for (const country in countries) {
+    allCountries.push(countries[country].name);
+  }
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [role, setRole] = React.useState('');
   const [confirmPass, setconfirmPass] = React.useState('');
   const [country, setCountry] = React.useState('');
-  const [state, setState] = React.useState({
-    checked: true,
-  });
+  const [checked, setChecked] = React.useState(false);
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-  };
-
-  const handleConfirmPassChange = (pass) => {
-    setconfirmPass(pass);
   };
 
   const handleChange = (event) => {
@@ -129,7 +148,7 @@ const Signup = () => {
   };
 
   const handleCheckChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+    setChecked(event.target.checked);
   };
 
   const initialValues = {
@@ -144,10 +163,11 @@ const Signup = () => {
     email: '',
     password: '',
     confirmPassword: '',
+    acceptTerms: false,
   };
 
   const onSubmit = (values) => {
-    console.log('aaaaa');
+    console.log(allCountries);
     const loginData = {
       ...values,
     };
@@ -165,6 +185,7 @@ const Signup = () => {
     email: Yup.string().matches(emailRegExp, 'Enter a valid email').required('Required'),
     password: Yup.string().required('Required'),
     confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required'),
+    acceptTerms: Yup.bool().oneOf([true], 'Accept Terms & Conditions is required'),
   });
 
   return (
@@ -172,7 +193,7 @@ const Signup = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={() => { console.log('submit!'); }}
+        onSubmit={onSubmit}
       >
         <StyledSection>
           <StyledDiv>
@@ -265,8 +286,13 @@ const Signup = () => {
                     onChange={handleCountryChange}
                     label="Country"
                   >
-                    <MenuItem value="Student">Poland</MenuItem>
-                    <MenuItem value="Teacher">Ukraine</MenuItem>
+                    {' '}
+
+                    {
+                      allCountries.map((countryy, index) => (
+                        <MenuItem value={countryy}>{countryy}</MenuItem>
+                      ))
+                    }
                   </Select>
                 </FormControl>
               </Grid>
@@ -348,17 +374,15 @@ const Signup = () => {
                 <Divider className={classes.divider} />
               </Grid>
               <Grid item xs={11}>
-                <FormControlLabel
-                  className={classes.check}
-                  control={(
-                    <Checkbox
-                      checked={state.checked}
-                      onChange={handleCheckChange}
-                      name="checked"
-                      color="primary"
-                    />
-        )}
-                  label="I accept the terms of use and privacy policy"
+                <StyledDivTerms>
+                  <Field type="checkbox" name="acceptTerms" className={classes.checkbox} />
+                  <StyledTermsLabel>Accept Terms & Conditions</StyledTermsLabel>
+
+                </StyledDivTerms>
+                <ErrorMessage
+                  name="acceptTerms"
+                  component="div"
+                  className={classes.error}
                 />
               </Grid>
               <Grid item xs={11}>
@@ -375,7 +399,7 @@ const Signup = () => {
                 <StyledLabel style={{ marginRight: '30px' }}>
                   Already have account? Log in
                   {' '}
-                  <u>here</u>
+                  <u><a href="http://localhost:3000/signup">here</a></u>
                 </StyledLabel>
               </Grid>
             </Grid>
