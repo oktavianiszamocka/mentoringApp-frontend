@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { FastField } from 'formik';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
-import ProjectInfoForm from './ProjectInfoForm';
+import ProjectInfoForm from './projectInfoForm';
 import ProjectBar from '../shared/components/ProjectBar';
 import ProjectSupervisorsForm from './ProjectSupervisorsForm';
 import ProjectMembersForm from './ProjectMembersForm';
