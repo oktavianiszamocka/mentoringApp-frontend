@@ -13,7 +13,6 @@ import {
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import * as Yup from 'yup';
-import Alert from '@material-ui/lab/Alert';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import Api from '../../api/index';
@@ -74,6 +73,7 @@ margin-top: 2px;
 margin-left: 8px;
 margin-bottom: 10px;
 `;
+
 const useStyles = makeStyles({
   avatarGrid: {
     marginLeft: '2rem',
