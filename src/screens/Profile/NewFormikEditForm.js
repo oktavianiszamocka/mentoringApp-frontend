@@ -156,6 +156,7 @@ const NewFormikEditForm = ({ profileInfo }) => {
   };
 
   const onSubmit = (values) => {
+    console.log(values);
     const profileData = {
       idUser: profileInfo.user,
       idProfile: profileInfo.idProfile,
@@ -276,8 +277,8 @@ const NewFormikEditForm = ({ profileInfo }) => {
               </Grid>
               <Grid item xs={12}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-
-                  <KeyboardDatePicker
+                  <Field
+                    as={KeyboardDatePicker}
                     disableToolbar
                     variant="inline"
                     format="MM/dd/yyyy"

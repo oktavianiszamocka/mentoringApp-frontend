@@ -22,13 +22,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { countries } from 'countries-list';
+import logo from '../../../assets/images/pja.png';
 
 const StyledOuterDiv = styled.div`
   display: flex;
-  margin: 5px;
+  margin: 5px auto;
   width: 731px;
   min-height: 860px;
-  background-color: #4A9FCE;
 `;
 
 const StyledDiv = styled.div`
@@ -53,14 +53,14 @@ const StyledSection = styled.section`
   background-color: #f5f5f5;
   border-radius: 5px;
   margin: 60px auto;
-  box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
+  box-shadow: 1px 1px 2px 1px rgba(135, 135, 135, 1);
 `;
 
 const StyledTitle = styled.p`
   font-family: 'Roboto', sans-serif;
   font-size: 32px;
   font-weight: bold;
-  margin-top: 20px;
+  margin-top: -60px;
   margin-bottom: 0px;
   margin-left: 15px;
 `;
@@ -80,6 +80,13 @@ const StyledTermsLabel = styled.p`
   margin-top: 0px;
   margin-bottom: 0px;
 
+`;
+
+const StyledImg = styled.img`
+  width: 210px;
+  height: 120px;
+  margin-left: 260px;
+  margin-top: -10px;
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -197,6 +204,8 @@ const Signup = () => {
       >
         <StyledSection>
           <StyledDiv>
+            {' '}
+            <StyledImg src={logo} alt="Logo" />
             <StyledTitle>Sign up</StyledTitle>
             <StyledLabel>Please fill this form to create account</StyledLabel>
             <Divider />

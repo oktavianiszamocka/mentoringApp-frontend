@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import MyProfile from './MyProfile';
-import EditForm from './EditForm';
 import AllNotes from '../shared/components/AllNotes';
 
 const MyProfileDashboard = () => {
