@@ -408,7 +408,7 @@ const Signup = () => {
                 <StyledLabel style={{ marginRight: '30px' }}>
                   Already have account? Log in
                   {' '}
-                  <u><a href="http://localhost:3000/signup">here</a></u>
+                  <u><a href="http://localhost:3000/login">here</a></u>
                 </StyledLabel>
               </Grid>
             </Grid>
