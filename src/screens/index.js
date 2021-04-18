@@ -13,8 +13,8 @@ import MyProject from './MyProject/myProject';
 import ProjectDetailsDashboard from './MyProject/ProjectDetailsDashboard';
 import ProjectMembersBoard from './ProjectMembers/projectMembers';
 import ProjectPromotersBoard from './ProjectPromoters/promotersPage';
-
 import ProjectFormBoard from './ProjectForm/ProjectFormDashboard';
+import InvitationPage from './Invitations/InvitationPageFull';
 // const renderRoute = (route) => <Route key={route.path} {...route} />;
 
 const App = () => (
@@ -33,6 +33,8 @@ const App = () => (
       <Route path="/project-detail/:IdProject" component={ProjectDetailsDashboard} />
       <Route path="/project-promoters/:IdProject" component={ProjectPromotersBoard} />
       <Route path="/project-form" component={ProjectFormBoard} />
+      <Route path="/invitations" component={InvitationPage} />
+
     </Switch>
   </BrowserRouter>
 
