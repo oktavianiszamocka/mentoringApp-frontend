@@ -119,7 +119,7 @@ const useStyles = makeStyles({
 
 });
 const NewFormikEditForm = ({ profileInfo }) => {
-  const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('LL');
+  const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('DD/MM/YYYY');
 
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = useState(dateOfBirthFormat);
@@ -130,7 +130,8 @@ const NewFormikEditForm = ({ profileInfo }) => {
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
+    const dateNew = moment(date).format('DD.MM.YYYY');
+    setSelectedDate(dateNew);
   };
 
   const onProfileUpdateHandler = async (profileData) => {
@@ -147,11 +148,11 @@ const NewFormikEditForm = ({ profileInfo }) => {
     firstName: profileInfo.firstName,
     email: profileInfo.email,
     phone: profileInfo.phone,
-    dateOfBirth: new Date(selectedDate),
+    dateOfBirth: selectedDate,
     country: profileInfo.country,
     major: profileInfo.major,
     semester: profileInfo.semester,
-    skills: profileInfo.skills.split(','),
+    skills: profileInfo.skills,
     experiences: profileInfo.experiences,
   };
 
@@ -281,7 +282,7 @@ const NewFormikEditForm = ({ profileInfo }) => {
                     as={KeyboardDatePicker}
                     disableToolbar
                     variant="inline"
-                    format="MM/dd/yyyy"
+                    format="dd.MM.yyyy"
                     margin="normal"
                     id="date-picker-inline"
                     label="Date of birth"
