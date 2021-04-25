@@ -10,6 +10,8 @@ const apiToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54b
 
 axios.defaults.headers.common.Authorization = apiToken;
 const getUserId = () => 9;
+const getProjectId = () => 5;
+const getMilestone = () => axios.get(`${apiUrl}/milestone/${getProjectId()}`);
 const getNotes = (pageNumber) => axios.get(`${apiUrl}/personal-notes/${getUserId()}?pageNumber=${pageNumber}&pageSize=3`);
 const getPosts = (pageNumber) => axios.get(`${apiUrl}/posts?pageNumber=${pageNumber}&pageSize=10`);
 const getGeneralPosts = (pageNumber) => axios.get(`${apiUrl}/posts/general?pageNumber=${pageNumber}&pageSize=10`);
@@ -58,4 +60,5 @@ export default {
   getProjectDetails,
   getProjectPromoters,
   getProjectStatus,
+  getMilestone,
 };

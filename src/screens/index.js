@@ -13,6 +13,8 @@ import MyProject from './MyProject/myProject';
 import ProjectDetailsDashboard from './MyProject/ProjectDetailsDashboard';
 import ProjectMembersBoard from './ProjectMembers/projectMembers';
 import ProjectPromotersBoard from './ProjectPromoters/promotersPage';
+import MilestoneDashboard from './Milestone/MilestoneDashboard';
+
 
 import ProjectFormBoard from './ProjectForm/ProjectFormDashboard';
 // const renderRoute = (route) => <Route key={route.path} {...route} />;
@@ -33,6 +35,7 @@ const App = () => (
       <Route path="/projectDetails/:IdProject" component={ProjectDetailsDashboard} />
       <Route path="/projectpromoters/:IdProject" component={ProjectPromotersBoard} />
       <Route path="/projectForm" component={ProjectFormBoard} />
+      <Route path="/milestone" component={MilestoneDashboard} />
     </Switch>
   </BrowserRouter>
 
