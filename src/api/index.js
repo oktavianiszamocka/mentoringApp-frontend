@@ -36,6 +36,7 @@ const getProjectMembers = (idProject) => axios.get(`${apiUrl}/project-members/${
 const getProjectPromoters = (idProject) => axios.get(`${apiUrl}/project-promoters/${idProject}`);
 const getProjectStatus = () => axios.get(`${apiUrl}/projects/status`);
 const postNewProject = (newProject) => axios.post(`${apiUrl}/projects`, newProject);
+const getProjectTasks = (idProject) => axios.get(`${apiUrl}/tasks/5`);
 
 export default {
   getUserId,
@@ -64,4 +65,5 @@ export default {
   getProjectPromoters,
   getProjectStatus,
   postNewProject,
+  getProjectTasks,
 };
