@@ -16,6 +16,7 @@ import ProjectPromotersBoard from './ProjectPromoters/promotersPage';
 import Signup from './shared/components/Signup';
 import ProjectFormBoard from './ProjectForm/ProjectFormDashboard';
 import TaskDashboard from './ProjectForm/TaskPage/TaskDashborad';
+import TaskDetail from './ProjectForm/TaskPage/TaskDetail';
 // const renderRoute = (route) => <Route key={route.path} {...route} />;
 
 const App = () => (
@@ -36,6 +37,7 @@ const App = () => (
       <Route path="/project-form" component={ProjectFormBoard} />
       <Route path="/signup" component={Signup} />
       <Route path="/task" component={TaskDashboard} />
+      <Route path="/task-detail" component={TaskDetail} />
     </Switch>
   </BrowserRouter>
 

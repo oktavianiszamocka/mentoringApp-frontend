@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -7,6 +7,7 @@ import moment from 'moment';
 import MaterialAvatar from '@material-ui/core/Avatar';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import TaskDetail from './TaskDetail';
 
 const StyledDiv = styled.div`
   padding: 15px 25px;
@@ -97,6 +98,12 @@ function Card(props) {
   const { priority } = props;
   const deadlineFormat = moment(deadline).format('LL');
 
+  const [showDetail, setShowDetail] = useState(false);
+
+  const handleClose = () => {
+    setShowDetail(false);
+  };
+
   const dragStart = (e) => {
     const { target } = e;
 
@@ -111,6 +118,10 @@ function Card(props) {
     e.stopPropagation();
   };
 
+  const showCom = (e) => {
+    setShowDetail(true);
+  };
+
   return (
     <StyledDiv
       id={props.id}
@@ -118,7 +129,15 @@ function Card(props) {
       onDragStart={dragStart}
       onDragOver={dragOver}
     >
-      <StyledDiv2>
+
+      <StyledDiv2 onClick={showCom}>
+        {(() => {
+          if (showDetail) {
+            return (
+              <TaskDetail handleClose={handleClose} />
+            );
+          }
+        })()}
         <StyledDiv3>
           <StyledDiv5>
             {(() => {
