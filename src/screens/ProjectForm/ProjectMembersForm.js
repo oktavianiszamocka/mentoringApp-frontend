@@ -17,15 +17,6 @@ import {
 import { Select, KeyboardDatePicker } from 'material-ui-formik-components';
 import DatePickerInput from '../shared/components/DatePickerInput';
 
-const selectOptions = [
-
-  { value: 'ProjectLead', label: 'Project Lead' },
-  { value: 'BackendDeveloper', label: 'Backend Developer' },
-  { value: 'FrontendDeveloper', label: 'Frontend Developer' },
-  { value: 'FullstackDeveloper', label: 'Fullstack Developer' },
-
-];
-
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -50,20 +41,6 @@ const StyledInfoSection = styled.section`
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
 
-Yup.addMethod(Yup.string, 'isRoleEmpty', function (projectMemberLength) {
-  return this.test('isRoleEmpty', 'Please fill the role',
-    (value) => (value && value.toString().isEmpty()) && projectMemberLength > 0);
-});
-/*
-    console.log(`${value.toString()}   ${value.toString().length}`);
-    console.log(`projectMemberLength ${projectMemberLength}`);
-    return !!(((value && value.toString().length == 0) && projectMemberLength > 0));
-
-  });
-});
-*/
-// (value) => (value && value.toString().length === 0) && projectMemberLength > 0);
-// });
 const ProjectMemberSchema = Yup.object().shape({
   projectMember1: Yup.string().email('Invalid email')
     .required('Project should at least have 1 member'),
@@ -137,7 +114,7 @@ const ProjectMembersForm = (props) => {
                       name="Role1"
                       label="Role Project Member 1"
                       variant="outlined"
-                      options={selectOptions}
+                      options={props.roleOption}
                       component={Select}
                       className={classes.fieldStyle}
                       error={!!(errors.Role1 && touched.Role1)}
@@ -164,7 +141,7 @@ const ProjectMembersForm = (props) => {
                       name="Role2"
                       label="Role Project Member 2"
                       variant="outlined"
-                      options={selectOptions}
+                      options={props.roleOption}
                       component={Select}
                       className={classes.fieldStyle}
                       error={!!(errors.Role2 && touched.Role2)}
@@ -191,7 +168,7 @@ const ProjectMembersForm = (props) => {
                       name="Role3"
                       label="Role Project Member 3"
                       variant="outlined"
-                      options={selectOptions}
+                      options={props.roleOption}
                       component={Select}
                       className={classes.fieldStyle}
                       error={!!(errors.Role3 && touched.Role3)}
@@ -218,7 +195,7 @@ const ProjectMembersForm = (props) => {
                       name="Role4"
                       label="Role Project Member 4"
                       variant="outlined"
-                      options={selectOptions}
+                      options={props.roleOption}
                       component={Select}
                       className={classes.fieldStyle}
                       error={!!(errors.Role4 && touched.Role4)}
@@ -245,7 +222,7 @@ const ProjectMembersForm = (props) => {
                       name="Role5"
                       label="Role Project Member 5"
                       variant="outlined"
-                      options={selectOptions}
+                      options={props.roleOption}
                       component={Select}
                       className={classes.fieldStyle}
                       error={!!(errors.Role5 && touched.Role5)}
@@ -288,6 +265,7 @@ const ProjectMembersForm = (props) => {
 ProjectMembersForm.prototype = {
   onSubmit: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
+  roleOption: PropTypes.object.isRequired,
 
 };
 
@@ -303,7 +281,6 @@ ProjectMembersForm.defaultProps = {
     Role4: '',
     projectMember5: '',
     Role5: '',
-
   },
 };
 
