@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Button, Grid, IconButton, TextField,
+  Divider,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -118,6 +119,7 @@ const Post = ({
   const classes = useStyles();
   const [showAllComments, setShowAllComments] = useState(false);
   const [postComments, setPostComments] = useState([]);
+  const [showEdit, setShowEdit] = useState(false);
 
   const createdTime = moment(JSON.stringify(postData.dateOfPublication), 'YYYY-MM-DD hh:mm:ss').fromNow();
 
@@ -136,6 +138,20 @@ const Post = ({
       comment1: comm,
     };
     const commentResult = await Promise.all([Api.sendPostComment(commentData)]);
+    const response = await Promise.all([Api.getPostComment(postData.idPost)]);
+    setPostComments(response[0].data.data);
+  };
+
+  const sendEditComment = async (comm) => {
+    const timeElapsed = Date.now();
+    const date = new Date(timeElapsed);
+    const commentData = {
+      post: postData.idPost,
+      createdOn: moment().toJSON(),
+      createdBy: currentUser.idUser,
+      comment1: comm,
+    };
+    const commentResult = await Promise.all([Api.editPostComment(commentData)]);
     const response = await Promise.all([Api.getPostComment(postData.idPost)]);
     setPostComments(response[0].data.data);
   };
@@ -220,13 +236,13 @@ const Post = ({
                   )}
 
                   { postData.newestComment
-                    && <Comment comment={postData.newestComment} loggedUser={currentUser} onDeleteHandler={onDeleteComment} />}
+                    && <Comment comment={postData.newestComment} loggedUser={currentUser} onDeleteHandler={onDeleteComment} sendComment={sendEditComment} />}
 
                 </div>
               )}
               <div className={classes.divComment}>
                 {showAllComments && (postComments.map((comment) => (
-                  <Comment comment={comment} loggedUser={currentUser} onDeleteHandler={onDeleteComment} />
+                  <Comment comment={comment} loggedUser={currentUser} onDeleteHandler={onDeleteComment} sendComment={sendComment} />
                 )))}
               </div>
 

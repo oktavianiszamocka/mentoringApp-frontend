@@ -21,6 +21,7 @@ const getUserProfile = (idUser) => axios.get(`${apiUrl}/profiles/${idUser}`);
 const postNote = (noteData) => axios.post(`${apiUrl}/personal-notes`, noteData);
 const getPostComment = (idPost) => axios.get(`${apiUrl}/posts/${idPost}/comment`);
 const sendPostComment = (commentData) => axios.post(`${apiUrl}/posts/comment`, commentData);
+const editPostComment = (commentData) => axios.patch(`${apiUrl}/posts/comment`, commentData);
 const deletePostComment = (idComment) => axios.delete(`${apiUrl}/posts/comment/${idComment}`);
 const deleteNote = (idNote) => axios.delete(`${apiUrl}/personal-notes/${idNote}`);
 const updateNote = (noteData) => axios.patch(`${apiUrl}/personal-notes`, noteData);
@@ -41,6 +42,8 @@ const getFullInvitationOfUser = (pageNumber) => axios.get(`${apiUrl}/invitations
 const postNewSupervisors = (newSupervisors) => axios.post(`${apiUrl}/project-promoters`, newSupervisors);
 const postNewMembers = (newMembers) => axios.post(`${apiUrl}/project-members`, newMembers);
 const getRoleMembers = () => axios.get(`${apiUrl}/project-members/roles`);
+const getProjectTasks = (idProject) => axios.get(`${apiUrl}/tasks/5`);
+
 
 export default {
   getUserId,
@@ -51,6 +54,7 @@ export default {
   postNote,
   getPostComment,
   sendPostComment,
+  editPostComment,
   deletePostComment,
   deleteNote,
   updateNote,
@@ -74,4 +78,5 @@ export default {
   postNewSupervisors,
   postNewMembers,
   getRoleMembers,
+  getProjectTasks,
 };

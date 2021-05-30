@@ -13,7 +13,6 @@ import {
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import * as Yup from 'yup';
-import Alert from '@material-ui/lab/Alert';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import Api from '../../api/index';
@@ -74,6 +73,7 @@ margin-top: 2px;
 margin-left: 8px;
 margin-bottom: 10px;
 `;
+
 const useStyles = makeStyles({
   avatarGrid: {
     marginLeft: '2rem',
@@ -119,7 +119,7 @@ const useStyles = makeStyles({
 
 });
 const NewFormikEditForm = ({ profileInfo }) => {
-  const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('LL');
+  const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('DD/MM/YYYY');
 
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = useState(dateOfBirthFormat);
@@ -130,7 +130,8 @@ const NewFormikEditForm = ({ profileInfo }) => {
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
+    const dateNew = moment(date).format('DD.MM.YYYY');
+    setSelectedDate(dateNew);
   };
 
   const onProfileUpdateHandler = async (profileData) => {
@@ -147,15 +148,16 @@ const NewFormikEditForm = ({ profileInfo }) => {
     firstName: profileInfo.firstName,
     email: profileInfo.email,
     phone: profileInfo.phone,
-    dateOfBirth: new Date(selectedDate),
+    dateOfBirth: selectedDate,
     country: profileInfo.country,
     major: profileInfo.major,
     semester: profileInfo.semester,
-    skills: profileInfo.skills.split(','),
+    skills: profileInfo.skills,
     experiences: profileInfo.experiences,
   };
 
   const onSubmit = (values) => {
+    console.log(values);
     const profileData = {
       idUser: profileInfo.user,
       idProfile: profileInfo.idProfile,
@@ -276,11 +278,11 @@ const NewFormikEditForm = ({ profileInfo }) => {
               </Grid>
               <Grid item xs={12}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-
-                  <KeyboardDatePicker
+                  <Field
+                    as={KeyboardDatePicker}
                     disableToolbar
                     variant="inline"
-                    format="MM/dd/yyyy"
+                    format="dd.MM.yyyy"
                     margin="normal"
                     id="date-picker-inline"
                     label="Date of birth"

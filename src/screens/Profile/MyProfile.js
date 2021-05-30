@@ -91,7 +91,7 @@ const useStyles = makeStyles({
 });
 const MyProfile = ({ profileInfo, showEditButton }) => {
   const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('LL');
-  const allSkills = profileInfo.skills.split(',');
+  const allSkills = profileInfo.skills;
   const classes = useStyles();
 
   return (

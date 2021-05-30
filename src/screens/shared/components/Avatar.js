@@ -14,8 +14,9 @@ const StyledSpan = styled.span`
   font-family: 'Roboto', arial;
   color: black;
   font-size: 1rem;
-  margin-left: 1rem;
-  margin-top: 1rem;
+  font-weight: bold;
+  margin-left: 0.4rem;
+  margin-top: 1.7rem;
 `;
 
 const Avatar = ({

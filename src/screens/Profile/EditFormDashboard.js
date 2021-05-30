@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
-import EditForm from './EditForm';
 import NewFormikEditForm from './NewFormikEditForm';
 import AllNotes from '../shared/components/AllNotes';
 // import classes from '*.module.css';
