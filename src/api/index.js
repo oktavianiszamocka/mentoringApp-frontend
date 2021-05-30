@@ -38,6 +38,9 @@ const postNewProject = (newProject) => axios.post(`${apiUrl}/projects`, newProje
 const getInvitationOfUser = () => axios.get(`${apiUrl}/invitations/${getUserId()}`);
 const updateInvitation = (updatedInvitation) => axios.patch(`${apiUrl}/invitations`, updatedInvitation);
 const getFullInvitationOfUser = (pageNumber) => axios.get(`${apiUrl}/invitations/${getUserId()}?pageNumber=${pageNumber}&pageSize=5`);
+const postNewSupervisors = (newSupervisors) => axios.post(`${apiUrl}/project-promoters`, newSupervisors);
+const postNewMembers = (newMembers) => axios.post(`${apiUrl}/project-members`, newMembers);
+const getRoleMembers = () => axios.get(`${apiUrl}/project-members/roles`);
 
 export default {
   getUserId,
@@ -68,4 +71,7 @@ export default {
   getInvitationOfUser,
   updateInvitation,
   getFullInvitationOfUser,
+  postNewSupervisors,
+  postNewMembers,
+  getRoleMembers,
 };
