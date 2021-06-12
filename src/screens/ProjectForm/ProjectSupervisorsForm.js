@@ -15,15 +15,6 @@ import {
 import { Select, KeyboardDatePicker } from 'material-ui-formik-components';
 import DatePickerInput from '../shared/components/DatePickerInput';
 
-const selectOptions = [
-
-  { value: 'Discovery', label: 'Discovery' },
-  { value: 'In Progress', label: 'In Progress' },
-  { value: 'Complete', label: 'Complete' },
-  { value: 'Incomplete', label: 'Incomplete' },
-
-];
-
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -60,6 +51,7 @@ const ProjectSupervisorsForm = (props) => {
       onSubmit={props.onSubmit}
       initialValues={props.initialValues}
       validationSchema={ProjectSupervisorSchema}
+
     >
       {(formik) => {
         const {
@@ -69,81 +61,84 @@ const ProjectSupervisorsForm = (props) => {
           <div className={classes.root}>
 
             <Form>
-              <Grid container item justify="center" spacing={2}>
+              <fieldset disabled={props.isReadOnly}>
+                <Grid container item justify="center" spacing={2}>
 
-                <Grid item xs={12}>
+                  <Grid item xs={12}>
 
-                  <Field
-                    as={TextField}
-                    name="superviser2Email"
-                    required
-                    label="Superviser 2 Email"
-                    variant="outlined"
-                    className={classes.fieldStyle}
-                    error={!!(errors.superviser2Email && touched.superviser2Email)}
-                    helperText={errors.superviser2Email && touched.superviser2Email ? errors.superviser2Email : null}
-                  />
+                    <Field
+                      as={TextField}
+                      name="superviser2Email"
+                      required
+                      label="Superviser 2 Email"
+                      variant="outlined"
+                      className={classes.fieldStyle}
+                      error={!!(errors.superviser2Email && touched.superviser2Email)}
+                      helperText={errors.superviser2Email && touched.superviser2Email ? errors.superviser2Email : null}
+                    />
 
-                </Grid>
-                <Grid item xs={12}>
+                  </Grid>
+                  <Grid item xs={12}>
 
-                  <Field
-                    as={TextField}
-                    name="superviser3Email"
-                    label="Superviser 3 Email"
-                    variant="outlined"
-                    className={classes.fieldStyle}
-                    error={!!(errors.superviser3Email && touched.superviser3Email)}
-                    helperText={errors.superviser3Email && touched.superviser3Email ? errors.superviser2Email : null}
-                  />
+                    <Field
+                      as={TextField}
+                      name="superviser3Email"
+                      label="Superviser 3 Email"
+                      variant="outlined"
+                      className={classes.fieldStyle}
+                      error={!!(errors.superviser3Email && touched.superviser3Email)}
+                      helperText={errors.superviser3Email && touched.superviser3Email ? errors.superviser2Email : null}
+                    />
 
-                </Grid>
-                <Grid item xs={12}>
+                  </Grid>
+                  <Grid item xs={12}>
 
-                  <Field
-                    as={TextField}
-                    name="superviser4Email"
-                    label="Superviser 4 Email"
-                    variant="outlined"
-                    className={classes.fieldStyle}
-                    error={!!(errors.superviser4Email && touched.superviser4Email)}
-                    helperText={errors.superviser4Email && touched.superviser4Email ? errors.superviser2Email : null}
-                  />
+                    <Field
+                      as={TextField}
+                      name="superviser4Email"
+                      label="Superviser 4 Email"
+                      variant="outlined"
+                      className={classes.fieldStyle}
+                      error={!!(errors.superviser4Email && touched.superviser4Email)}
+                      helperText={errors.superviser4Email && touched.superviser4Email ? errors.superviser2Email : null}
+                    />
 
-                </Grid>
-                <Grid item xs={12}>
+                  </Grid>
+                  <Grid item xs={12}>
 
-                  <Field
-                    as={TextField}
-                    name="superviser5Email"
-                    label="Superviser 5 Email"
-                    variant="outlined"
-                    className={classes.fieldStyle}
-                    error={!!(errors.superviser5Email && touched.superviser5Email)}
-                    helperText={errors.superviser5Email && touched.superviser5Email ? errors.superviser2Email : null}
-                  />
+                    <Field
+                      as={TextField}
+                      name="superviser5Email"
+                      label="Superviser 5 Email"
+                      variant="outlined"
+                      className={classes.fieldStyle}
+                      error={!!(errors.superviser5Email && touched.superviser5Email)}
+                      helperText={errors.superviser5Email && touched.superviser5Email ? errors.superviser2Email : null}
+                    />
 
-                </Grid>
+                  </Grid>
 
-                <Grid
-                  item
-                  container
-                  direction="row"
-                  justify="flex-start"
-                  alignItems="flex-start"
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    className={dirty && isValid ? '' : 'disabled-btn'}
+                  <Grid
+                    item
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="flex-start"
                   >
-                    Submit
-                  </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      disabled={!dirty || isSubmitting}
+                      className={dirty && isValid ? '' : 'disabled-btn'}
+                    >
+                      Submit
+                    </Button>
+
+                  </Grid>
 
                 </Grid>
-
-              </Grid>
+              </fieldset>
 
             </Form>
 
@@ -158,6 +153,7 @@ const ProjectSupervisorsForm = (props) => {
 ProjectSupervisorsForm.prototype = {
   onSubmit: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
+  isReadOnly: PropTypes.bool,
 
 };
 

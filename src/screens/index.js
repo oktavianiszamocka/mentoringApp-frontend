@@ -13,6 +13,8 @@ import MyProject from './MyProject/myProject';
 import ProjectDetailsDashboard from './MyProject/ProjectDetailsDashboard';
 import ProjectMembersBoard from './ProjectMembers/projectMembers';
 import ProjectPromotersBoard from './ProjectPromoters/promotersPage';
+import ProjectFormBoard from './ProjectForm/ProjectFormDashboard';
+import InvitationPage from './Invitations/InvitationPageFull';
 import Signup from './shared/components/Signup';
 import ProjectFormBoard from './ProjectForm/ProjectFormDashboard';
 import TaskDashboard from './ProjectForm/TaskPage/TaskDashborad';
@@ -36,6 +38,7 @@ const App = () => (
       <Route path="/project-detail/:IdProject" component={ProjectDetailsDashboard} />
       <Route path="/project-promoters/:IdProject" component={ProjectPromotersBoard} />
       <Route path="/project-form" component={ProjectFormBoard} />
+      <Route path="/invitations" component={InvitationPage} />
       <Route path="/signup" component={Signup} />
       <Route path="/task" component={TaskDashboard} />
       <Route path="/task-detail" component={TaskDetail} />

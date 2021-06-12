@@ -58,13 +58,15 @@ const ProjectInfoSchema = Yup.object().shape({
 const ProjectInfoForm = (props) => {
   const classes = useStyles();
 
+  /*
   const handleSubmit = async (values, { resetForm, setSubmitting }) => {
-    let successCallout = false;
+    const successCallout = false;
 
     await props.onSubmit(values)
       .then((res) => {
         if (res === true) {
-          successCallout = true;
+          // successCallout = true;
+          // setReadOnly(true);
         }
       });
 
@@ -75,10 +77,11 @@ const ProjectInfoForm = (props) => {
       }, 1000);
     }
   };
+  */
 
   return (
     <Formik
-      onSubmit={handleSubmit}
+      onSubmit={props.onSubmit}
       initialValues={props.initialValues}
       validationSchema={ProjectInfoSchema}
 
@@ -90,131 +93,132 @@ const ProjectInfoForm = (props) => {
         return (
           <div className={classes.root}>
 
-            <Form onReset={handleReset}>
-              <Grid container item justify="center" spacing={2}>
+            <Form>
+              <fieldset disabled={props.isReadOnly}>
+                <Grid container item justify="center" spacing={2}>
 
-                <Grid item xs={12}>
+                  <Grid item xs={12}>
 
-                  <Field
-                    as={TextField}
-                    name="name"
-                    required
-                    label="Project Name"
-                    variant="outlined"
-                    className={classes.fieldStyle}
-                    error={!!(errors.name && touched.name)}
-                    helperText={errors.name && touched.name ? errors.name : null}
-                  />
-
-                </Grid>
-                <Grid item xs={12}>
-
-                  <Field
-                    as={TextField}
-                    name="description"
-                    multiline
-                    fullWidth
-                    required
-                    label="Description"
-                    rows={4}
-                    variant="outlined"
-                    className={classes.fieldStyle}
-                    error={!!(errors.description && touched.description)}
-                    helperText={errors.description && touched.description ? errors.description : null}
-                  />
-
-                </Grid>
-                <Grid item xs={12}>
-
-                  <Field
-                    required
-                    name="status"
-                    label="Status"
-                    variant="outlined"
-                    options={props.statusOptions}
-                    component={Select}
-                    className={classes.fieldStyle}
-                    error={!!(errors.status && touched.status)}
-                    helperText={errors.status && touched.status ? errors.status : null}
-                  />
-
-                </Grid>
-                <Grid item xs={12}>
-
-                  <Field
-                    as={TextField}
-                    required
-                    fullWidth
-                    variant="outlined"
-                    name="superviserEmail"
-                    label="Superviser Email"
-                    className={classes.fieldStyle}
-                    error={!!(errors.superviserEmail && touched.superviserEmail)}
-                    helperText={errors.superviserEmail ? errors.superviserEmail : null}
-                  />
-
-                </Grid>
-                <Grid item xs={6}>
-
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <Field
+                      as={TextField}
+                      name="name"
+                      required
+                      label="Project Name"
+                      variant="outlined"
                       className={classes.fieldStyle}
-                      component={KeyboardDatePicker}
-                      name="startDate"
-                      label="Start Date"
-                      format="dd/MM/yyyy"
-                      clearable
-                      autoOk
-                      fullWidth
-                      inputVariant="outlined"
-                      error={!!(errors.startDate && touched.startDate)}
-                      helperText={errors.startDate && touched.startDate ? errors.startDate : null}
+                      error={!!(errors.name && touched.name)}
+                      helperText={errors.name && touched.name ? errors.name : null}
                     />
 
-                  </MuiPickersUtilsProvider>
+                  </Grid>
+                  <Grid item xs={12}>
 
-                </Grid>
-                <Grid item xs={6}>
-
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <Field
-                      className={classes.fieldStyle}
-                      component={KeyboardDatePicker}
-                      name="endDate"
-                      label="End Date"
-                      format="dd/MM/yyyy"
-                      clearable
-                      autoOk
+                      as={TextField}
+                      name="description"
+                      multiline
                       fullWidth
-                      inputVariant="outlined"
-                      error={!!(errors.endDate && touched.endDate)}
-                      helperText={errors.endDate && touched.endDate ? errors.endDate : null}
+                      required
+                      label="Description"
+                      rows={4}
+                      variant="outlined"
+                      className={classes.fieldStyle}
+                      error={!!(errors.description && touched.description)}
+                      helperText={errors.description && touched.description ? errors.description : null}
                     />
 
-                  </MuiPickersUtilsProvider>
+                  </Grid>
+                  <Grid item xs={12}>
 
-                </Grid>
-                <Grid
-                  item
-                  container
-                  direction="row"
-                  justify="flex-start"
-                  alignItems="flex-start"
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    // className={dirty && isValid ? '' : 'disabled-btn'}
-                    disabled={!dirty || isSubmitting}
+                    <Field
+                      required
+                      name="status"
+                      label="Status"
+                      variant="outlined"
+                      options={props.statusOptions}
+                      component={Select}
+                      className={classes.fieldStyle}
+                      error={!!(errors.status && touched.status)}
+                      helperText={errors.status && touched.status ? errors.status : null}
+                    />
 
+                  </Grid>
+                  <Grid item xs={12}>
+
+                    <Field
+                      as={TextField}
+                      required
+                      fullWidth
+                      variant="outlined"
+                      name="superviserEmail"
+                      label="Superviser Email"
+                      className={classes.fieldStyle}
+                      error={!!(errors.superviserEmail && touched.superviserEmail)}
+                      helperText={errors.superviserEmail ? errors.superviserEmail : null}
+                    />
+
+                  </Grid>
+                  <Grid item xs={6}>
+
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <Field
+                        className={classes.fieldStyle}
+                        component={KeyboardDatePicker}
+                        name="startDate"
+                        label="Start Date"
+                        format="dd/MM/yyyy"
+                        clearable
+                        autoOk
+                        fullWidth
+                        inputVariant="outlined"
+                        error={!!(errors.startDate && touched.startDate)}
+                        helperText={errors.startDate && touched.startDate ? errors.startDate : null}
+                      />
+
+                    </MuiPickersUtilsProvider>
+
+                  </Grid>
+                  <Grid item xs={6}>
+
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <Field
+                        className={classes.fieldStyle}
+                        component={KeyboardDatePicker}
+                        name="endDate"
+                        label="End Date"
+                        format="dd/MM/yyyy"
+                        clearable
+                        autoOk
+                        fullWidth
+                        inputVariant="outlined"
+                        error={!!(errors.endDate && touched.endDate)}
+                        helperText={errors.endDate && touched.endDate ? errors.endDate : null}
+                      />
+
+                    </MuiPickersUtilsProvider>
+
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    direction="row"
+                    justify="flex-start"
+                    alignItems="flex-start"
                   >
-                    Submit
-                  </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                    // className={dirty && isValid ? '' : 'disabled-btn'}
+                      disabled={!dirty || isSubmitting}
+                    >
+                      Submit
+                    </Button>
+
+                  </Grid>
 
                 </Grid>
-
-              </Grid>
+              </fieldset>
 
             </Form>
 
@@ -231,6 +235,7 @@ ProjectInfoForm.prototype = {
   onSubmit: PropTypes.func.isRequired,
   initialValues: PropTypes.object,
   statusOptions: PropTypes.object,
+  isReadOnly: PropTypes.bool,
 
 };
 

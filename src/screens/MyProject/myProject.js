@@ -18,6 +18,10 @@ const useStyles = makeStyles({
     margin: 'auto',
   },
   alert: {
+    backgroundColor: 'rgba(255,165,0,0.2)',
+    color: 'black',
+    width: '280px',
+    margin: '20px 30%',
 
   },
   projects: {
@@ -75,9 +79,7 @@ const MyProject = () => {
               <div>
                 <Alert
                   severity="warning"
-                  style={{
-                    backgroundColor: 'rgba(255,165,0,0.2)', color: 'black', width: '280px', margin: '20px 30%',
-                  }}
+                  className={classes.alert}
                 >
                   Sorry! You have no projects assigned to you
                 </Alert>

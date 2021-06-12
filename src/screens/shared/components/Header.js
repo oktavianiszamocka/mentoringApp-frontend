@@ -2,7 +2,9 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { AppBar, Toolbar } from '@material-ui/core';
+import {
+  AppBar, Toolbar, Popover, Grid,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,6 +16,7 @@ import Divider from '@material-ui/core/Divider';
 import Font from '../../../globals/font';
 import Avatar from './Avatar';
 import Api from '../../../api/index';
+import InvitationPopOver from '../../Invitations/InvitationsPopOver';
 
 const imgTheme = {
   width: '60px',
@@ -25,7 +28,7 @@ const StyledImg = styled.img`
   height: 5rem;
 `;
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   logo: {},
   home: {
     fontFamily: 'sans-serif',
@@ -53,6 +56,16 @@ const useStyles = makeStyles(() => ({
     fontFamily: Font.fontFamily,
     flexGrow: 1,
   },
+  typography: {
+    padding: theme.spacing(2),
+  },
+  popOverDiv: {
+    width: '30rem',
+    height: 'auto',
+    maxHeight: '35rem',
+    minHeight: '15rem',
+  },
+
 }));
 
 // TODO update the URLS
@@ -69,16 +82,25 @@ const menuOptions = [
     title: 'My projects',
     url: '../myproject',
   },
-  {
-    title: 'Invitations',
-    url: '',
-  },
 ];
 
 const Header = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
+  const [anchorEl2, setAnchorEl2] = React.useState(null);
+
+  const handleOpenInvitationPopOver = (event) => {
+    setAnchorEl2(event.currentTarget);
+  };
+
+  const handleCloseInvitationPopOver = () => {
+    setAnchorEl2(null);
+  };
+
+  const open2 = Boolean(anchorEl2);
+  const id = open2 ? 'simple-popover' : undefined;
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -119,6 +141,40 @@ const Header = () => {
               </Link>
             </Typography>
           ))}
+          <Typography variant="h5" className={classes.home} underlineNone>
+            <Link
+              variant="h5"
+              component="button"
+              className={classes.home2, classes.home}
+              color="inherit"
+              style={{ textDecoration: 'none' }}
+              onClick={handleOpenInvitationPopOver}
+            >
+              Invitations
+            </Link>
+          </Typography>
+          <Popover
+            id={id}
+            open={open2}
+            anchorEl={anchorEl2}
+            onClose={handleCloseInvitationPopOver}
+            keepMounted
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+          >
+            <div className={classes.popOverDiv}>
+              <InvitationPopOver />
+
+            </div>
+
+          </Popover>
+
         </div>
         <div style={{ display: 'flex' }}>
           {user && (
