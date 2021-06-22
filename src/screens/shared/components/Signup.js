@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Formik, Form, Field, ErrorMessage,
 } from 'formik';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
   Grid,
@@ -9,18 +10,18 @@ import {
   Divider,
   Button,
 } from '@material-ui/core';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
 import * as Yup from 'yup';
 import DateFnsUtils from '@date-io/date-fns';
 import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
+import {
+  MuiPickersUtilsProvider,
+
+} from '@material-ui/pickers';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import { Select, KeyboardDatePicker } from 'material-ui-formik-components';
 import { countries } from 'countries-list';
 import logo from '../../../assets/images/pja.png';
 
@@ -96,6 +97,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl2: {
     margin: theme.spacing(0),
+
     minWidth: 193,
   },
   email: {
@@ -126,13 +128,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Signup = () => {
+const Signup = (props) => {
   const classes = useStyles();
 
   const allCountries = [];
   for (const country in countries) {
-    allCountries.push(countries[country].name);
+    allCountries.push({ value: countries[country].name, label: countries[country].name });
   }
+  const roleOptions = [
+    { value: 2, label: 'Student' },
+    { value: 3, label: 'Mentor' },
+  ];
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [role, setRole] = React.useState('');
@@ -161,10 +167,10 @@ const Signup = () => {
   const initialValues = {
     firstName: '',
     lastName: '',
-    dateOfBirth: new Date(selectedDate),
-    role: 'Student',
+    dateOfBirth: new Date(),
+    role: '',
     phoneNumber: '',
-    country: 'Poland',
+    country: '',
     major: '',
     semester: '',
     email: '',
@@ -173,8 +179,8 @@ const Signup = () => {
     acceptTerms: false,
   };
 
-  const onSubmit = (values) => {
-    console.log(allCountries);
+  const onSubmit = async (values) => {
+    // console.log(allCountries);
     const loginData = {
       ...values,
     };
@@ -202,219 +208,232 @@ const Signup = () => {
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        <StyledSection>
-          <StyledDiv>
-            {' '}
-            <StyledImg src={logo} alt="Logo" />
-            <StyledTitle>Sign up</StyledTitle>
-            <StyledLabel>Please fill this form to create account</StyledLabel>
-            <Divider />
-          </StyledDiv>
-          <Form>
-            <Grid container justify="center" spacing={2} style={{ maxWidth: '500px' }}>
-              <Grid item xs={5}>
-                <Field
-                  as={TextField}
-                  id="firstName"
-                  name="firstName"
-                  label="First name"
-                  variant="outlined"
-                />
-                <ErrorMessage
-                  name="firstName"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={5}>
-                <Field
-                  as={TextField}
-                  id="lastName"
-                  name="lastName"
-                  label="Last name"
-                  variant="outlined"
-                />
-                <ErrorMessage
-                  name="lastName"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={5}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils} className={classes.formControl}>
-                  <KeyboardDatePicker
-                    disableToolbar
-                    variant="inline"
-                    format="MM/dd/yyyy"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="Date of birth"
-                    onChange={handleDateChange}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change date',
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
-              </Grid>
-              <Grid item xs={5}>
-                <FormControl variant="outlined" className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-outlined-label">Role</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    value={role}
-                    onChange={handleChange}
-                    label="Role"
-                  >
-                    <MenuItem value="Student">Student</MenuItem>
-                    <MenuItem value="Teacher">Teacher</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={5}>
-                <Field
-                  as={TextField}
-                  id="phone"
-                  name="phone"
-                  label="Phone number"
-                  variant="outlined"
-                />
-                <ErrorMessage
-                  name="phone"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={5}>
-                <FormControl variant="outlined" className={classes.formControl2}>
-                  <InputLabel id="demo-simple-select-outlined-label">Country</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    value={country}
-                    onChange={handleCountryChange}
-                    label="Country"
-                  >
-                    {' '}
 
-                    {
-                      allCountries.map((countryy, index) => (
-                        <MenuItem value={countryy}>{countryy}</MenuItem>
-                      ))
-                    }
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={5}>
-                <Field
-                  as={TextField}
-                  id="major"
-                  name="major"
-                  label="Major"
-                  variant="outlined"
-                />
-                <ErrorMessage
-                  name="major"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={5}>
-                <Field
-                  as={TextField}
-                  id="semester"
-                  name="semester"
-                  label="Semester"
-                  variant="outlined"
-                />
-                <ErrorMessage
-                  name="semester"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
+        {(formik) => {
+          const {
+            errors, touched, isValid, dirty, isSubmitting, values, setFieldValue, handleReset,
+          } = formik;
+          return (
+            <StyledSection>
+              <StyledDiv>
+                {' '}
+                <StyledImg src={logo} alt="Logo" />
+                <StyledTitle>Sign up</StyledTitle>
+                <StyledLabel>Please fill this form to create account</StyledLabel>
+                <Divider />
+              </StyledDiv>
+              <Form>
+                <Grid container justify="center" spacing={2} style={{ maxWidth: '500px' }}>
+                  <Grid item xs={5}>
+                    <Field
+                      as={TextField}
+                      id="firstName"
+                      name="firstName"
+                      label="First name"
+                      variant="outlined"
+                    />
+                    <ErrorMessage
+                      name="firstName"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={5}>
+                    <Field
+                      as={TextField}
+                      id="lastName"
+                      name="lastName"
+                      label="Last name"
+                      variant="outlined"
+                    />
+                    <ErrorMessage
+                      name="lastName"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={5}>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils} className={classes.formControl}>
+                      <Field
+                        component={KeyboardDatePicker}
+                        name="dateOfBirth"
+                        label="Date of birth"
+                        format="dd/MM/yyyy"
+                        clearable
+                        autoOk
+                        fullWidth
+                        inputVariant="outlined"
+                        error={!!(errors.dateOfBirth && touched.dateOfBirth)}
+                        helperText={errors.dateOfBirth && touched.dateOfBirth ? errors.dateOfBirth : null}
+                      />
+                    </MuiPickersUtilsProvider>
 
-              <Grid item xs={10}>
-                <Field
-                  as={TextField}
-                  className={classes.email}
-                  id="email"
-                  name="email"
-                  label="Email"
-                  variant="outlined"
-                />
-                <ErrorMessage
-                  name="email"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={5}>
-                <Field
-                  as={TextField}
-                  id="password"
-                  name="password"
-                  label="Password"
-                  type="password"
-                  variant="outlined"
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={5}>
-                <Field
-                  as={TextField}
-                  id="confirmPassword"
-                  label="Confirm Password"
-                  name="confirmPassword"
-                  type="password"
-                  variant="outlined"
-                />
-                <ErrorMessage
-                  name="confirmPassword"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={11}>
-                <Divider className={classes.divider} />
-              </Grid>
-              <Grid item xs={11}>
-                <StyledDivTerms>
-                  <Field type="checkbox" name="acceptTerms" className={classes.checkbox} />
-                  <StyledTermsLabel>Accept Terms & Conditions</StyledTermsLabel>
+                  </Grid>
 
-                </StyledDivTerms>
-                <ErrorMessage
-                  name="acceptTerms"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={11}>
-                <Button
-                  className={classes.signupbot}
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                >
-                  Sign up
-                </Button>
-              </Grid>
-              <Grid item>
-                <StyledLabel style={{ marginRight: '30px' }}>
-                  Already have account? Log in
-                  {' '}
-                  <u><a href="http://localhost:3000/login">here</a></u>
-                </StyledLabel>
-              </Grid>
-            </Grid>
-          </Form>
-        </StyledSection>
+                  <Grid item xs={5}>
+                    <FormControl variant="outlined" className={classes.formControl2}>
+                      <Field
+                        required
+                        label="Role"
+                        size="medium"
+                        name="role"
+                        variant="outlined"
+                        options={roleOptions}
+                        component={Select}
+                        error={!!(errors.role && touched.role)}
+                        helperText={errors.role && touched.role ? errors.role : null}
+                      />
+
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={5}>
+                    <Field
+                      as={TextField}
+                      id="phone"
+                      name="phone"
+                      label="Phone number"
+                      variant="outlined"
+                    />
+                    <ErrorMessage
+                      name="phone"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+
+                  <Grid item xs={5}>
+                    <FormControl variant="outlined" className={classes.formControl2}>
+                      <Field
+                        required
+                        label="Country"
+                        size="medium"
+                        name="country"
+                        variant="outlined"
+                        options={allCountries}
+                        component={Select}
+                        error={!!(errors.country && touched.country)}
+                        helperText={errors.country && touched.country ? errors.country : null}
+                      />
+
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={5}>
+                    <Field
+                      as={TextField}
+                      id="major"
+                      name="major"
+                      label="Major"
+                      variant="outlined"
+                    />
+                    <ErrorMessage
+                      name="major"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={5}>
+                    <Field
+                      as={TextField}
+                      id="semester"
+                      name="semester"
+                      label="Semester"
+                      variant="outlined"
+                    />
+                    <ErrorMessage
+                      name="semester"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+
+                  <Grid item xs={10}>
+                    <Field
+                      as={TextField}
+                      className={classes.email}
+                      id="email"
+                      name="email"
+                      label="Email"
+                      variant="outlined"
+                    />
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={5}>
+                    <Field
+                      as={TextField}
+                      id="password"
+                      name="password"
+                      label="Password"
+                      type="password"
+                      variant="outlined"
+                    />
+                    <ErrorMessage
+                      name="password"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={5}>
+                    <Field
+                      as={TextField}
+                      id="confirmPassword"
+                      label="Confirm Password"
+                      name="confirmPassword"
+                      type="password"
+                      variant="outlined"
+                    />
+                    <ErrorMessage
+                      name="confirmPassword"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={11}>
+                    <Divider className={classes.divider} />
+                  </Grid>
+                  <Grid item xs={11}>
+                    <StyledDivTerms>
+                      <Field type="checkbox" name="acceptTerms" className={classes.checkbox} />
+                      <StyledTermsLabel>Accept Terms & Conditions</StyledTermsLabel>
+
+                    </StyledDivTerms>
+                    <ErrorMessage
+                      name="acceptTerms"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={11}>
+                    <Button
+                      className={classes.signupbot}
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                    >
+                      Sign up
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <StyledLabel style={{ marginRight: '30px' }}>
+                      Already have account? Log in
+                      {' '}
+                      <u><a href="/login">here</a></u>
+                    </StyledLabel>
+                  </Grid>
+                </Grid>
+
+              </Form>
+            </StyledSection>
+          );
+        }}
+
       </Formik>
+
     </StyledOuterDiv>
   );
 };
