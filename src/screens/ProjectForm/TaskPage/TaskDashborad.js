@@ -39,8 +39,6 @@ const TaskDashboard = () => {
     loadData();
   }, []);
 
-  console.log(tasksToDo);
-
   return (
     <div>
       <Grid container direction="column">
@@ -52,7 +50,7 @@ const TaskDashboard = () => {
             <Board id="board-1" title="To do">
               {tasksToDo.length > 0 ? (
                 tasksToDo.map((item) => (
-                  <Card id={item.idTask} content={item.title} deadline={item.expectedEndDate} avatars={item.assignedUserAvatars} priority={item.priority} />
+                  <Card id={item.idTask} content={item.title} deadline={item.expectedEndDate} avatars={item.assignedUserAvatars} priority={item.priority} taskId={item.idTask} />
                 ))) : (
                   <div />
               )}

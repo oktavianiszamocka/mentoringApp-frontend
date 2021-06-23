@@ -16,7 +16,6 @@ import ProjectPromotersBoard from './ProjectPromoters/promotersPage';
 import ProjectFormBoard from './ProjectForm/ProjectFormDashboard';
 import InvitationPage from './Invitations/InvitationPageFull';
 import Signup from './shared/components/Signup';
-import ProjectFormBoard from './ProjectForm/ProjectFormDashboard';
 import TaskDashboard from './ProjectForm/TaskPage/TaskDashborad';
 import TaskDetail from './ProjectForm/TaskPage/TaskDetail';
 import CalendarMain from './shared/Calendar/CalendarMain';
