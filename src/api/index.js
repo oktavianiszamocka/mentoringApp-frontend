@@ -44,6 +44,7 @@ const postNewMembers = (newMembers) => axios.post(`${apiUrl}/project-members`, n
 const getRoleMembers = () => axios.get(`${apiUrl}/project-members/roles`);
 const getProjectTasks = (idProject) => axios.get(`${apiUrl}/tasks/5`);
 const getTaskDetails = (idTask) => axios.get(`${apiUrl}/tasks/detail/${idTask}`);
+const deleteTask = (idTask) => axios.delete(`${apiUrl}/tasks/${idTask}`);
 
 export default {
   getUserId,
@@ -80,4 +81,5 @@ export default {
   getRoleMembers,
   getProjectTasks,
   getTaskDetails,
+  deleteTask,
 };

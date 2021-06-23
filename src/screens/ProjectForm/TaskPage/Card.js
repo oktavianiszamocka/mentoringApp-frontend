@@ -8,6 +8,7 @@ import MaterialAvatar from '@material-ui/core/Avatar';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import TaskDetail from './TaskDetail';
+import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
   padding: 15px 25px;
@@ -145,8 +146,14 @@ function Card(props) {
     setShowDetail(false);
   };
 
-  const showDelete = (e) => {
+  const showDelete = async () => {
     console.log('deleteee!');
+    await Api.deleteTask(idOfCard);
+
+    const tasks = Api.getProjectTasks(5);
+    const refreshedTasks = await tasks;
+
+    // setPosts(refreshedPosts.data.data);
   };
 
   return (
