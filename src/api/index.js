@@ -44,6 +44,11 @@ const postNewMembers = (newMembers) => axios.post(`${apiUrl}/project-members`, n
 const getRoleMembers = () => axios.get(`${apiUrl}/project-members/roles`);
 const getProjectTasks = (idProject) => axios.get(`${apiUrl}/tasks/5`);
 const getTaskDetails = (idTask) => axios.get(`${apiUrl}/tasks/detail/${idTask}`);
+const deleteTask = (idTask) => axios.delete(`${apiUrl}/tasks/${idTask}`);
+const updateTaskStatus = (tasksData) => axios.patch(`${apiUrl}/tasks/update-status`, tasksData);
+const getTasksStatuses = () => axios.get(`${apiUrl}/tasks/status`);
+const getTasksAsignees = () => axios.get(`${apiUrl}/project-members/5`);
+const createTask = (taskData) => axios.post(`${apiUrl}/tasks/`, taskData);
 
 export default {
   getUserId,
@@ -80,4 +85,9 @@ export default {
   getRoleMembers,
   getProjectTasks,
   getTaskDetails,
+  deleteTask,
+  updateTaskStatus,
+  getTasksStatuses,
+  getTasksAsignees,
+  createTask,
 };
