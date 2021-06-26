@@ -109,7 +109,7 @@ function Card(props) {
   const deadlineFormat = moment(deadline).format('LL');
   const idOfCard = props.id;
   const [showDetail, setShowDetail] = useState(false);
-
+  const reload = props.reloadTasks;
   const handleClose = () => {
     setShowDetail(false);
   };
@@ -120,6 +120,15 @@ function Card(props) {
     const { x } = rect;
     const { y } = rect;
     return [x, y];
+  };
+
+  const updateTaskStatus = async (idOfCard, newstatus) => {
+    const taskData = {
+      IdTask: idOfCard,
+      Status: newstatus,
+    };
+
+    await Api.updateTaskStatus(taskData);
   };
 
   const dragStart = (e) => {
@@ -146,14 +155,9 @@ function Card(props) {
     setShowDetail(false);
   };
 
-  const showDelete = async () => {
-    console.log('deleteee!');
-    await Api.deleteTask(idOfCard);
-
-    const tasks = Api.getProjectTasks(5);
-    const refreshedTasks = await tasks;
-
-    // setPosts(refreshedPosts.data.data);
+  const delCom = () => {
+    console.log(reload);
+    reload(idOfCard);
   };
 
   return (
@@ -185,7 +189,7 @@ function Card(props) {
             <StyledP style={{ width: '220px' }}>{props.content}</StyledP>
             <StyledDivIcons>
               <EditIcon fontSize="small" className={classes.edit} />
-              <DeleteIcon fontSize="small" className={classes.delete} onClick={showDelete} />
+              <DeleteIcon fontSize="small" className={classes.delete} onClick={delCom} />
             </StyledDivIcons>
           </StyledDiv5>
           <StyledDiv2>

@@ -18,7 +18,7 @@ import InvitationPage from './Invitations/InvitationPageFull';
 import Signup from './shared/components/Signup';
 import TaskDashboard from './ProjectForm/TaskPage/TaskDashborad';
 import TaskDetail from './ProjectForm/TaskPage/TaskDetail';
-import TaskEdit from './ProjectForm/TaskPage/TaskEdit';
+import TaskAdd from './ProjectForm/TaskPage/TaskAdd';
 
 import CalendarMain from './shared/Calendar/CalendarMain';
 // const renderRoute = (route) => <Route key={route.path} {...route} />;
@@ -43,7 +43,7 @@ const App = () => (
       <Route path="/signup" component={Signup} />
       <Route path="/task" component={TaskDashboard} />
       <Route path="/task-detail" component={TaskDetail} />
-      <Route path="/task-edit" component={TaskEdit} />
+      <Route path="/task-add" component={TaskAdd} />
       <Route path="/calendar" component={CalendarMain} />
     </Switch>
   </BrowserRouter>
