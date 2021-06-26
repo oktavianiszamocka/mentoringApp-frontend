@@ -19,6 +19,8 @@ import Signup from './shared/components/Signup';
 import TaskDashboard from './ProjectForm/TaskPage/TaskDashborad';
 import TaskDetail from './ProjectForm/TaskPage/TaskDetail';
 import CalendarMain from './shared/Calendar/CalendarMain';
+import Milestone from './Milestone/MilestoneDashboard';
+
 // const renderRoute = (route) => <Route key={route.path} {...route} />;
 
 const App = () => (
@@ -42,6 +44,7 @@ const App = () => (
       <Route path="/task" component={TaskDashboard} />
       <Route path="/task-detail" component={TaskDetail} />
       <Route path="/calendar" component={CalendarMain} />
+      <Route path="/milestones/:IdProject" component={Milestone} />
     </Switch>
   </BrowserRouter>
 

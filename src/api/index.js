@@ -44,6 +44,7 @@ const postNewMembers = (newMembers) => axios.post(`${apiUrl}/project-members`, n
 const getRoleMembers = () => axios.get(`${apiUrl}/project-members/roles`);
 const getProjectTasks = (idProject) => axios.get(`${apiUrl}/tasks/5`);
 const getTaskDetails = (idTask) => axios.get(`${apiUrl}/tasks/detail/${idTask}`);
+const getProjectMilestones = (idProject) => axios.get(`${apiUrl}/milestones/5`);
 
 export default {
   getUserId,
@@ -80,4 +81,5 @@ export default {
   getRoleMembers,
   getProjectTasks,
   getTaskDetails,
+  getProjectMilestones,
 };
