@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
+import { Redirect, withRouter } from 'react-router-dom';
 import {
   Formik, Form, Field, ErrorMessage,
 } from 'formik';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {
-  Grid,
-  TextField,
-  Divider,
-  Button,
+  Grid, TextField, Divider, Button, Snackbar,
 } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import * as Yup from 'yup';
 import DateFnsUtils from '@date-io/date-fns';
 import moment from 'moment';
@@ -24,6 +23,7 @@ import FormControl from '@material-ui/core/FormControl';
 import { Select, KeyboardDatePicker } from 'material-ui-formik-components';
 import { countries } from 'countries-list';
 import logo from '../../../assets/images/pja.png';
+import Api from '../../../api/index';
 
 const StyledOuterDiv = styled.div`
   display: flex;
@@ -90,6 +90,10 @@ const StyledImg = styled.img`
   margin-top: -10px;
 `;
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -145,6 +149,12 @@ const Signup = (props) => {
   const [confirmPass, setconfirmPass] = React.useState('');
   const [country, setCountry] = React.useState('');
   const [checked, setChecked] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [successText, setSuccessText] = useState('Congratulations! Your account is successfully created. Please log in with the email and password!');
+  const [ErrorAccount, setErrorAccount] = useState('');
+  const [redirect, setRedirect] = useState(false);
+
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -164,6 +174,19 @@ const Signup = (props) => {
     setChecked(event.target.checked);
   };
 
+  const openPopOver = Boolean(anchorEl);
+  const id = openPopOver ? 'simple-popover' : undefined;
+  const handleCloseSnackBar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const initialValues = {
     firstName: '',
     lastName: '',
@@ -180,12 +203,29 @@ const Signup = (props) => {
   };
 
   const onSubmit = async (values) => {
-    // console.log(allCountries);
     const loginData = {
       ...values,
     };
     console.log(loginData);
+    const response = await Api.register(loginData)
+      .then((data) => {
+        console.log('success');
+        setOpen(true);
+        setTimeout(() => {
+          setOpen(false);
+          setRedirect(true);
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err);
+        setErrorAccount(err);
+      });
   };
+
+  if (redirect) {
+    console.log('rediretc');
+    return <Redirect to="/login" />;
+  }
 
   const validationSchema = Yup.object({
     firstName: Yup.string().required('Required'),
@@ -215,12 +255,23 @@ const Signup = (props) => {
           } = formik;
           return (
             <StyledSection>
+              <Snackbar
+                anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+                open={open}
+                autoHideDuration={1000}
+                onClose={handleCloseSnackBar}
+              >
+                <Alert onClose={handleCloseSnackBar} severity="success">
+                  {successText}
+                </Alert>
+              </Snackbar>
               <StyledDiv>
                 {' '}
                 <StyledImg src={logo} alt="Logo" />
                 <StyledTitle>Sign up</StyledTitle>
                 <StyledLabel>Please fill this form to create account</StyledLabel>
                 <Divider />
+                {ErrorAccount && <Alert severity="error">{ErrorAccount}</Alert>}
               </StyledDiv>
               <Form>
                 <Grid container justify="center" spacing={2} style={{ maxWidth: '500px' }}>

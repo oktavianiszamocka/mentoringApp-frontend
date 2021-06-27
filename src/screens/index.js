@@ -19,24 +19,10 @@ import Signup from './shared/components/Signup';
 import TaskDashboard from './ProjectForm/TaskPage/TaskDashborad';
 import TaskDetail from './ProjectForm/TaskPage/TaskDetail';
 import CalendarMain from './shared/Calendar/CalendarMain';
-// const renderRoute = (route) => <Route key={route.path} {...route} />;
 import UseToken from './UseToken';
-/*
-function setToken(userToken) {
-  localStorage.setItem('token', userToken);
-}
-
-function getToken() {
-  const tokenString = localStorage.getItem('token');
-  const userToken = tokenString;
-  return userToken;
-}
-*/
 
 const App = () => {
   const { token, setToken } = UseToken();
-  // const token = getToken();
-
   if (!token) {
     return <Login setToken={setToken} />;
   }

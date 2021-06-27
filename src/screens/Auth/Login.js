@@ -105,7 +105,8 @@ export default function Login({ setToken }) {
     </Container>
   );
 }
-
+/*
 Login.propTypes = {
   setToken: PropTypes.func.isRequired,
 };
+*/
