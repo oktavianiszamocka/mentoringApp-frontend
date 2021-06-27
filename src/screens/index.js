@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BrowserRouter, Route, Redirect, Switch,
 } from 'react-router-dom';
@@ -21,9 +21,13 @@ import TaskDetail from './ProjectForm/TaskPage/TaskDetail';
 import TaskAdd from './ProjectForm/TaskPage/TaskAdd';
 
 import CalendarMain from './shared/Calendar/CalendarMain';
-// const renderRoute = (route) => <Route key={route.path} {...route} />;
+import UseToken from './UseToken';
 
-const App = () => (
+const App = () => {
+  const { token, setToken } = UseToken();
+  if (!token) {
+    return <Login setToken={setToken} />;
+  }
 
   <BrowserRouter>
     <Switch>
@@ -47,7 +51,8 @@ const App = () => (
       <Route path="/calendar" component={CalendarMain} />
     </Switch>
   </BrowserRouter>
-
-);
+  
+  );
+};
 
 export default App;

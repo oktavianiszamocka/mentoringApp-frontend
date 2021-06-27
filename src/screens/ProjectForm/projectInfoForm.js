@@ -13,8 +13,6 @@ import {
 
 } from '@material-ui/pickers';
 import { Select, KeyboardDatePicker } from 'material-ui-formik-components';
-import { LeakRemoveTwoTone } from '@material-ui/icons';
-import Api from '../../api/index';
 
 const useStyles = makeStyles((theme) => ({
   root: {
