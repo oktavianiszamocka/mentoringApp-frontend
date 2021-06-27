@@ -42,12 +42,12 @@ const MilestoneDashboard = () => {
   
     return (
       <div className={classes.root}>
-        <Grid container spacing={3}>
+        <Grid container >
         <Header />
         <Grid item xs={3}>
           <AllNotes />
         </Grid>
-          <Grid item xs={3} justify="center" alignItems="center">
+          <Grid item justify="center" alignItems="center">
                                    
               {milestones &&
                 milestones.map((mile) => (

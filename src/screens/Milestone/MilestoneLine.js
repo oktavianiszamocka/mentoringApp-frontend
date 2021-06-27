@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import moment from 'moment';
 import Timeline from '@material-ui/lab/Timeline';
 import TimelineItem from '@material-ui/lab/TimelineItem';
 import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
@@ -12,17 +13,13 @@ import TimelineDot from '@material-ui/lab/TimelineDot';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-
-import FormatAlignLeftIcon from '@material-ui/icons/FormatAlignLeft';
-import FormatAlignCenterIcon from '@material-ui/icons/FormatAlignCenter';
-import FormatAlignRightIcon from '@material-ui/icons/FormatAlignRight';
-import FormatAlignJustifyIcon from '@material-ui/icons/FormatAlignJustify';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import Api from '../../api/index';
 
 const useStyles = makeStyles((theme) => ({
     button: {
-        padding: '16px 20px ',
+        padding: '2px 4px ',
+        margin: '5px',
+             
     },
     secondaryTail: {
         backgroundColor: theme.palette.secondary.main,
@@ -31,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     paper: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(4),
+        margin: '10px 0px',
         textAlign: 'center',
         color: theme.palette.text.primary,
     },
@@ -39,8 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const MilestoneLine = ({ milestone }) => {
-    const classes = useStyles();
-    const [flag, setFlag] = React.useState(true);
+    const classes = useStyles();  
 
     const changeDateFormat = (dat) => {
         if (dat == null) {
@@ -56,9 +53,21 @@ const MilestoneLine = ({ milestone }) => {
         return d;
       };
 
-    const handleClick = () => {
-        setFlag(!flag);
-    };
+    const handleUpdateToPassed = async (e) => {
+        let now = new Date();
+        const milestoneData = {
+          idMilestone: e.idMilestone,  
+          description: e.description,
+          date: now.getDate(),
+          project: e.project,
+          sequence: e.sequence,
+          isDone: true,        
+            
+        };
+        const updateMile = await Api.updateMilestoneToPassed(milestoneData)
+          .then((response) => response.data);
+        
+      };
 
 if( milestone.isDone){
 
@@ -123,7 +132,8 @@ return (
                         {milestone.description}
                     </Typography>
 
-                    <Button variant= "contained" size="small" color="secondary">
+                    <Button  className={classes.button} variant= "contained" size="small" color='secondary' 
+                    onClick={() => handleUpdateToPassed(milestone)} >
           Complete
         </Button>
           </Paper>

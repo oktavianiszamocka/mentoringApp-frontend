@@ -45,6 +45,8 @@ const getRoleMembers = () => axios.get(`${apiUrl}/project-members/roles`);
 const getProjectTasks = (idProject) => axios.get(`${apiUrl}/tasks/5`);
 const getTaskDetails = (idTask) => axios.get(`${apiUrl}/tasks/detail/${idTask}`);
 const getProjectMilestones = (idProject) => axios.get(`${apiUrl}/milestones/5`);
+const updateMilestoneToPassed = (milestoneData) => axios.patch(`${apiUrl}/milestones/`, milestoneData);
+
 
 export default {
   getUserId,
@@ -82,4 +84,5 @@ export default {
   getProjectTasks,
   getTaskDetails,
   getProjectMilestones,
+  updateMilestoneToPassed,
 };
