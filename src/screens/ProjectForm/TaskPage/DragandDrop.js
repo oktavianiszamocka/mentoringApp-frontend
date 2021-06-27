@@ -7,6 +7,8 @@ import {
   Grid,
 } from '@material-ui/core';
 import NewTaskForm from './NewTaskForm';
+import Api from '../../../api/index';
+import TaskAdd from './TaskAdd';
 
 const StyledDiv = styled.div`
   margin: 10px;
@@ -34,6 +36,15 @@ function DragandDrop(props) {
   const classes = useStyles();
   const [newNoteVisible, setNewNoteVisible] = useState(false);
 
+  const updateTaskStatus = async (idOfCard, newstatus) => {
+    const taskData = {
+      IdTask: idOfCard,
+      Status: newstatus,
+    };
+
+    await Api.updateTaskStatus(taskData);
+  };
+
   const drop = (e) => {
     e.preventDefault();
     const card_id = e.dataTransfer.getData('card_id');
@@ -42,6 +53,10 @@ function DragandDrop(props) {
     card.style.display = 'block';
 
     e.target.appendChild(card);
+    const id_of_parent = document.getElementById(card_id).parentNode.id;
+    const status = id_of_parent.slice(-1);
+
+    updateTaskStatus(card_id, status);
   };
 
   const dragOver = (e) => {
@@ -63,7 +78,7 @@ function DragandDrop(props) {
           <MoreHorizIcon fontSize="small" />
         </Grid>
         {newNoteVisible && (
-        <NewTaskForm setVisible={setNewNoteVisible} />
+        <TaskAdd close={setNewNoteVisible} />
         )}
       </Grid>
 

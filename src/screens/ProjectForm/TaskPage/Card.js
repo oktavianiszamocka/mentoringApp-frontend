@@ -8,6 +8,7 @@ import MaterialAvatar from '@material-ui/core/Avatar';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import TaskDetail from './TaskDetail';
+import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
   padding: 15px 25px;
@@ -22,7 +23,15 @@ const StyledDiv2 = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  width: 250px;
 `;
+
+const StyledDivIcons = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  `;
+
 const StyledDiv3 = styled.div`
   display: flex;
   flex-direction: column;
@@ -73,6 +82,7 @@ const useStyles = makeStyles({
     height: '32px',
     marginLeft: '-10px',
     border: 'solid 1px #a6a6a6',
+    zIndex: 1,
   },
   arrowhigh: {
     color: '#ff4d4d',
@@ -97,11 +107,28 @@ function Card(props) {
   const { deadline } = props;
   const { priority } = props;
   const deadlineFormat = moment(deadline).format('LL');
-
+  const idOfCard = props.id;
   const [showDetail, setShowDetail] = useState(false);
-
+  const reload = props.reloadTasks;
   const handleClose = () => {
     setShowDetail(false);
+  };
+
+  const getPositionXY = () => {
+    const element = document.getElementById(props.id);
+    const rect = element.getBoundingClientRect();
+    const { x } = rect;
+    const { y } = rect;
+    return [x, y];
+  };
+
+  const updateTaskStatus = async (idOfCard, newstatus) => {
+    const taskData = {
+      IdTask: idOfCard,
+      Status: newstatus,
+    };
+
+    await Api.updateTaskStatus(taskData);
   };
 
   const dragStart = (e) => {
@@ -120,6 +147,17 @@ function Card(props) {
 
   const showCom = (e) => {
     setShowDetail(true);
+    getPositionXY();
+  };
+
+  const hideCom = () => {
+    console.log('hidding...');
+    setShowDetail(false);
+  };
+
+  const delCom = () => {
+    console.log(reload);
+    reload(idOfCard);
   };
 
   return (
@@ -130,14 +168,8 @@ function Card(props) {
       onDragOver={dragOver}
     >
 
-      <StyledDiv2 onClick={showCom}>
-        {(() => {
-          if (showDetail) {
-            return (
-              <TaskDetail handleClose={handleClose} />
-            );
-          }
-        })()}
+      <StyledDiv2 id="card">
+
         <StyledDiv3>
           <StyledDiv5>
             {(() => {
@@ -154,7 +186,11 @@ function Card(props) {
                 <ArrowDownwardIcon className={classes.arrowlow} />
               );
             })()}
-            <StyledP>{props.content}</StyledP>
+            <StyledP style={{ width: '220px' }}>{props.content}</StyledP>
+            <StyledDivIcons>
+              <EditIcon fontSize="small" className={classes.edit} />
+              <DeleteIcon fontSize="small" className={classes.delete} onClick={delCom} />
+            </StyledDivIcons>
           </StyledDiv5>
           <StyledDiv2>
             <StyledP2>
@@ -174,16 +210,26 @@ function Card(props) {
                   <div />
               )}
             </StyledDiv4>
-
           </StyledDiv2>
+          <div>
+            <StyledP2 onClick={showCom} style={{ color: 'grey' }}>
+              See details
+
+            </StyledP2>
+          </div>
+
         </StyledDiv3>
-        <StyledDiv2>
-          <EditIcon fontSize="small" className={classes.edit} />
-          <DeleteIcon fontSize="small" className={classes.delete} />
-        </StyledDiv2>
       </StyledDiv2>
+      {(() => {
+        if (showDetail) {
+          return (
+            <TaskDetail cardPosition={getPositionXY()} idT={idOfCard} showDet={hideCom} />
+          );
+        }
+      })()}
       {props.children}
     </StyledDiv>
+
   );
 }
 
