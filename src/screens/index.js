@@ -29,29 +29,30 @@ const App = () => {
     return <Login setToken={setToken} />;
   }
 
-  <BrowserRouter>
-    <Switch>
-      <Route path="/" exact render={() => <Redirect to="/mainpage" />} />
-      <Route path="/login" component={Login} />
-      <Route path={['/reset-password', '/register']} component={UpsertPassword} />
-      <Route path="/mainpage" component={StudentDashboard} />
-      <Route path="/profile/:IdUser" component={MyProfileDashboard} />
-      <Route path="/message" component={Message} />
-      <Route path="/edit-profile/:IdUser" component={EditForm} />
-      <Route path="/myproject" component={MyProject} />
-      <Route path="/project-members/:IdProject" component={ProjectMembersBoard} />
-      <Route path="/project-detail/:IdProject" component={ProjectDetailsDashboard} />
-      <Route path="/project-promoters/:IdProject" component={ProjectPromotersBoard} />
-      <Route path="/project-form" component={ProjectFormBoard} />
-      <Route path="/invitations" component={InvitationPage} />
-      <Route path="/signup" component={Signup} />
-      <Route path="/task" component={TaskDashboard} />
-      <Route path="/task-detail" component={TaskDetail} />
-      <Route path="/task-add" component={TaskAdd} />
-      <Route path="/calendar" component={CalendarMain} />
-    </Switch>
-  </BrowserRouter>
-  
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" exact render={() => <Redirect to="/mainpage" />} />
+        <Route path="/login" component={Login} />
+        <Route path={['/reset-password', '/register']} component={UpsertPassword} />
+        <Route path="/mainpage" component={StudentDashboard} />
+        <Route path="/profile/:IdUser" component={MyProfileDashboard} />
+        <Route path="/message" component={Message} />
+        <Route path="/edit-profile/:IdUser" component={EditForm} />
+        <Route path="/myproject" component={MyProject} />
+        <Route path="/project-members/:IdProject" component={ProjectMembersBoard} />
+        <Route path="/project-detail/:IdProject" component={ProjectDetailsDashboard} />
+        <Route path="/project-promoters/:IdProject" component={ProjectPromotersBoard} />
+        <Route path="/project-form" component={ProjectFormBoard} />
+        <Route path="/invitations" component={InvitationPage} />
+        <Route path="/signup" component={Signup} />
+        <Route path="/task" component={TaskDashboard} />
+        <Route path="/task-detail" component={TaskDetail} />
+        <Route path="/task-add" component={TaskAdd} />
+        <Route path="/calendar" component={CalendarMain} />
+      </Switch>
+    </BrowserRouter>
+
   );
 };
 
