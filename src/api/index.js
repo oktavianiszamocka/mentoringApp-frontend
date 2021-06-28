@@ -43,6 +43,8 @@ const postNewSupervisors = (newSupervisors) => axios.post(`${apiUrl}/project-pro
 const postNewMembers = (newMembers) => axios.post(`${apiUrl}/project-members`, newMembers);
 const getRoleMembers = () => axios.get(`${apiUrl}/project-members/roles`);
 const getProjectTasks = (idProject) => axios.get(`${apiUrl}/tasks/5`);
+const login = (logininfo) => axios.post(`${apiUrl}/account/login`, logininfo);
+const register = (registerinfo) => axios.post(`${apiUrl}/account/register`, registerinfo);
 const getTaskDetails = (idTask) => axios.get(`${apiUrl}/tasks/detail/${idTask}`);
 const deleteTask = (idTask) => axios.delete(`${apiUrl}/tasks/${idTask}`);
 const updateTaskStatus = (tasksData) => axios.patch(`${apiUrl}/tasks/update-status`, tasksData);
@@ -84,6 +86,8 @@ export default {
   postNewMembers,
   getRoleMembers,
   getProjectTasks,
+  login,
+  register,
   getTaskDetails,
   deleteTask,
   updateTaskStatus,
