@@ -8,6 +8,7 @@ import MaterialAvatar from '@material-ui/core/Avatar';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import TaskDetail from './TaskDetail';
+import TaskEdit from './TaskEdit';
 import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
@@ -109,10 +110,39 @@ function Card(props) {
   const deadlineFormat = moment(deadline).format('LL');
   const idOfCard = props.id;
   const [showDetail, setShowDetail] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+
   const reload = props.reloadTasks;
   const handleClose = () => {
     setShowDetail(false);
   };
+
+  const [taskTitle, setTaskTitle] = useState('');
+  const [taskDeadline, settaskDeadline] = React.useState(new Date('2021-06-10T21:11:54'));
+  const [taskDescription, setTaskDescription] = useState('');
+  const [taskCreator, setTaskCreator] = useState('');
+  const [taskCreatedOn, setTaskCreatedOn] = useState('');
+  const [taskPriority, setTaskPriority] = useState('');
+  const [assignedUsers, setAssignedUsers] = useState([]);
+  const [taskStatus, setTaskStatus] = useState();
+  const [taskEnd, setTaskEnd] = useState();
+  const [taskStart, setTaskStart] = useState();
+
+  useEffect(() => {
+    const loadData = async () => {
+      const res = await Promise.all([Api.getTaskDetails(idOfCard)]);
+      setTaskTitle(res[0].data.data.title);
+      setTaskDescription(res[0].data.data.description);
+      setTaskCreator(res[0].data.data.creatorUser);
+      setTaskCreatedOn(res[0].data.data.createdOn);
+      setTaskPriority(res[0].data.data.priority);
+      setAssignedUsers(res[0].data.data.assignedUser);
+      setTaskStatus(res[0].data.data.statusName);
+      setTaskEnd(res[0].data.data.expectedEndDate);
+      setTaskStart(res[0].data.data.startDate);
+    };
+    loadData();
+  }, []);
 
   const getPositionXY = () => {
     const element = document.getElementById(props.id);
@@ -155,9 +185,32 @@ function Card(props) {
     setShowDetail(false);
   };
 
+  const hideEdit = () => {
+    console.log('hidding...');
+    setShowEdit(false);
+  };
+
   const delCom = () => {
     console.log(reload);
     reload(idOfCard);
+  };
+
+  const showEditting = () => {
+    setShowEdit(true);
+  };
+
+  const taskData = {
+    idTask: idOfCard,
+    title: props.content,
+    status: props.status,
+    description: props.description,
+    startDate: props.start,
+    expectedEndDate: deadlineFormat,
+    project: 5,
+    creator: 9,
+    createdOn: props.created,
+    priority,
+    assignedUsers: props.users,
   };
 
   return (
@@ -169,7 +222,6 @@ function Card(props) {
     >
 
       <StyledDiv2 id="card">
-
         <StyledDiv3>
           <StyledDiv5>
             {(() => {
@@ -188,7 +240,7 @@ function Card(props) {
             })()}
             <StyledP style={{ width: '220px' }}>{props.content}</StyledP>
             <StyledDivIcons>
-              <EditIcon fontSize="small" className={classes.edit} />
+              <EditIcon fontSize="small" className={classes.edit} onClick={showEditting} />
               <DeleteIcon fontSize="small" className={classes.delete} onClick={delCom} />
             </StyledDivIcons>
           </StyledDiv5>
@@ -224,6 +276,13 @@ function Card(props) {
         if (showDetail) {
           return (
             <TaskDetail cardPosition={getPositionXY()} idT={idOfCard} showDet={hideCom} />
+          );
+        }
+      })()}
+      {(() => {
+        if (showEdit) {
+          return (
+            <TaskEdit description={taskDescription} taskInfo={taskData} cardPosition={getPositionXY()} idT={idOfCard} showEdit={hideEdit} />
           );
         }
       })()}

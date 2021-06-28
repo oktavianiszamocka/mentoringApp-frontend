@@ -4,7 +4,7 @@ import {
   Grid, Button,
 } from '@material-ui/core';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
@@ -12,9 +12,6 @@ import MaterialAvatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -26,26 +23,45 @@ import {
   Formik, Form, Field, ErrorMessage, FieldArray,
 } from 'formik';
 import * as Yup from 'yup';
-import Chip from '@material-ui/core/Chip';
 import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
   background-color: #F5F5F5;
   position: absolute;
   max-width: 250px;
-  min-height: 250px;
-  max-height: 750px;
+  max-height: 450px;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #9e9e99;
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
 
+const StyledTitle = styled.p`
+   font-family: 'Roboto', sans-serif;
+   font-size: 15px;
+   font-weight: bold;
+   width: 160px;
+`;
 const StyledUnderTitle = styled.p`
    font-family: 'Roboto', sans-serif;
    font-size: 12px;
    font-weight: bold;
    color: #616366;
+`;
+
+const StyledP = styled.p`
+  font-family: 'Roboto', sans-serif;
+  word-break: break-word;
+  font-size: 12px;
+  color: #616366;
+  margin: 0px;
+`;
+
+const StyledDescription = styled.p`
+  font-family: 'Roboto', sans-serif;
+  word-break: break-word;
+  font-size: 12px;
+  color: black;
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -109,58 +125,17 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '85px',
     marginTop: '8px',
   },
-  formControl: {
-    marginTop: '10px',
-    marginBottom: '5px',
-    minWidth: 190,
-    maxWidth: 300,
-  },
-  chips: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  chip: {
-    margin: 2,
-  },
 }));
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 350,
-    },
-  },
-};
-
-const TaskAdd = (props) => {
-  const theme = useTheme();
+const TaskEdit = (props) => {
   const classes = useStyles();
 
   const [statuses, setStatuses] = useState([]);
   const [asignees, setAsignees] = useState([]);
   const [taskDeadline, settaskDeadline] = React.useState(new Date('2021-06-10T21:11:54'));
   const [taskStart, settaskStart] = React.useState(new Date('2021-06-10T21:11:54'));
-  const [asigneeIds, setAsigneeIds] = React.useState([]);
 
-  const handleChange = (event) => {
-    console.log(event.target.value);
-    setAsigneeIds(event.target.value);
-  };
-
-  const handleChangeMultiple = (event) => {
-    const { options } = event.target;
-    const value = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        value.push(options[i].value);
-      }
-    }
-    setAsigneeIds(value);
-  };
+  const { taskInfo } = props;
 
   const getCurrentDate = () => {
     const today = new Date();
@@ -188,21 +163,7 @@ const TaskAdd = (props) => {
 
   const getTaskAsignees = async () => {
     const res = await Promise.all([Api.getTasksAsignees()]);
-
     setAsignees(res[0].data.data);
-  };
-
-  const getNameIdPair = () => {
-    const name_id = {};
-    for (const asignee in asignees) {
-      const name = asignees[asignee].firstName;
-      const surname = asignees[asignee].lastName;
-      const fullName = `${name} ${surname}`;
-      const id = asignees[asignee].idUser;
-      name_id[id] = fullName;
-    }
-
-    return name_id;
   };
 
   const changeDateFormat = (dat) => {
@@ -225,7 +186,7 @@ const TaskAdd = (props) => {
   };
 
   const closeAdd = () => {
-    props.close(false);
+    props.close(true);
   };
 
   useEffect(() => {
@@ -246,20 +207,19 @@ const TaskAdd = (props) => {
   };
 
   const initialValues = {
-    title: '',
-    status: 1,
-    description: '',
-    startDate: '2021-06-01',
-    expectedEndDate: '2021-06-01',
+    title: taskInfo.title,
+    status: taskInfo.status,
+    description: props.description,
+    startDate: taskInfo.startDate,
+    expectedEndDate: taskInfo.expectedEndDate,
     project: 5,
     creator: 9,
-    createdOn: getCurrentDate(),
-    priority: 'Low',
-    assignedUsers: [],
+    createdOn: taskInfo.createdOn,
+    priority: taskInfo.priority,
+    assignedUsers: taskInfo.assignedUsers,
   };
 
   const onSubmit = (values) => {
-    console.log(values);
     const assgined = [];
     assgined.push(values.assignedUsers);
     const taskData = {
@@ -272,7 +232,7 @@ const TaskAdd = (props) => {
       creator: 9,
       createdOn: '2021-06-11',
       priority: values.priority,
-      assignedUsers: asigneeIds,
+      assignedUsers: assgined,
     };
     onTaskAddHandler(taskData);
   };
@@ -287,8 +247,9 @@ const TaskAdd = (props) => {
       <StyledDiv style={styles}>
         <Form>
           <Grid container direction="row" className={classes.grid}>
-
+            {console.log(props.description)}
             <Grid item>
+
               <Field
                 as={TextField}
                 id="title"
@@ -303,7 +264,7 @@ const TaskAdd = (props) => {
                 className={classes.title}
               />
             </Grid>
-            <CloseIcon className={classes.close} onClick={closeAdd} />
+            <CloseIcon className={classes.close} onClick={() => props.showEdit()} />
             <Grid item />
           </Grid>
           <Field
@@ -362,31 +323,27 @@ const TaskAdd = (props) => {
               <StyledUnderTitle>ASIGNEES</StyledUnderTitle>
             </Grid>
             <Grid item>
-              <FormControl className={classes.formControl}>
-                <InputLabel id="demo-mutiple-chip-label">Asignees</InputLabel>
-                <Field
-                  as={Select}
-                  type="text"
-                  name="assignedUsers"
-                  multiple
-                  value={asigneeIds}
-                  onChange={handleChange}
-                  renderValue={(selected) => (
-                    <div className={classes.chips}>
-                      {selected.map((value) => (
-                        <Chip key={value} label={getNameIdPair()[value]} className={classes.chip} />
-                      ))}
-                    </div>
-                  )}
-                  MenuProps={MenuProps}
-                >
-                  {asignees.map((user) => (
-                    <MenuItem key={user.idUser} value={user.idUser}>
-                      {`${user.firstName} ${user.lastName}`}
+              <Field
+                as={Select}
+                type="text"
+                name="assignedUsers"
+                className={classes.prioritySelect}
+              >
+                {asignees ? (
+                  asignees.map((asignee) => (
+                    <MenuItem
+                      className={classes.resize}
+                      value={asignee.idUser}
+                    >
+                      {asignee.firstName}
+                      {' '}
+                      {asignee.lastName}
                     </MenuItem>
-                  ))}
-                </Field>
-              </FormControl>
+                  ))) : (
+                    <div />
+
+                )}
+              </Field>
             </Grid>
           </Grid>
           <Divider />
@@ -493,4 +450,4 @@ const TaskAdd = (props) => {
   );
 };
 
-export default TaskAdd;
+export default TaskEdit;

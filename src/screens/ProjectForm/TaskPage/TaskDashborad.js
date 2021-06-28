@@ -23,6 +23,7 @@ const TaskDashboard = () => {
   useEffect(() => {
     const loadData = async () => {
       const res = await Promise.all([Api.getProjectTasks(5)]);
+
       for (const tasks in res[0].data.data) {
         if (res[0].data.data[tasks].status == 1) {
           setTasksToDo(res[0].data.data[tasks].tasks);
@@ -66,13 +67,14 @@ const TaskDashboard = () => {
       }
       if (res[0].data.data[tasks].status == 2) {
         setTasksInPr(res[0].data.data[tasks].tasks);
-        console.log(tasksInpr);
       }
       if (res[0].data.data[tasks].status == 3) {
         setTasksDone(res[0].data.data[tasks].tasks);
       }
     }
   };
+  console.log(tasksToDo);
+  console.log('ITEEEM');
 
   return (
     <div>
@@ -85,7 +87,20 @@ const TaskDashboard = () => {
             <Board id="board-1" title="To do">
               {tasksToDo.length > 0 ? (
                 tasksToDo.map((item) => (
-                  <Card id={item.idTask} content={item.title} deadline={item.expectedEndDate} avatars={item.assignedUserAvatars} priority={item.priority} taskId={item.idTask} reloadTasks={deleteTask} />
+                  <Card
+                    id={item.idTask}
+                    status={item.status}
+                    description={item.description}
+                    start={item.startDate}
+                    content={item.title}
+                    deadline={item.expectedEndDate}
+                    created={item.createdOn}
+                    users={item.assignedUsers}
+                    avatars={item.assignedUserAvatars}
+                    priority={item.priority}
+                    taskId={item.idTask}
+                    reloadTasks={deleteTask}
+                  />
                 ))) : (
                   <div />
               )}
@@ -95,7 +110,20 @@ const TaskDashboard = () => {
 
               {tasksInpr.length > 0 ? (
                 tasksInpr.map((item) => (
-                  <Card id={item.idTask} content={item.title} deadline={item.expectedEndDate} avatars={item.assignedUserAvatars} priority={item.priority} taskId={item.idTask} reloadTasks={deleteTask} />
+                  <Card
+                    id={item.idTask}
+                    status={item.status}
+                    description={item.description}
+                    start={item.startDate}
+                    content={item.title}
+                    deadline={item.expectedEndDate}
+                    created={item.createdOn}
+                    users={item.assignedUsers}
+                    avatars={item.assignedUserAvatars}
+                    priority={item.priority}
+                    taskId={item.idTask}
+                    reloadTasks={deleteTask}
+                  />
                 ))) : (
                   <div />
               )}
@@ -104,7 +132,20 @@ const TaskDashboard = () => {
             <Board id="board-3" title="Done">
               {tasksDone.length > 0 ? (
                 tasksDone.map((item) => (
-                  <Card id={item.idTask} content={item.title} deadline={item.expectedEndDate} avatars={item.assignedUserAvatars} priority={item.priority} taskId={item.idTask} reloadTasks={deleteTask} />
+                  <Card
+                    id={item.idTask}
+                    status={item.status}
+                    description={item.description}
+                    start={item.startDate}
+                    content={item.title}
+                    deadline={item.expectedEndDate}
+                    created={item.createdOn}
+                    users={item.assignedUsers}
+                    avatars={item.assignedUserAvatars}
+                    priority={item.priority}
+                    taskId={item.idTask}
+                    reloadTasks={deleteTask}
+                  />
                 ))) : (
                   <div />
               )}
