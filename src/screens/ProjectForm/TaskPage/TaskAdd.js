@@ -3,17 +3,14 @@ import styled from 'styled-components';
 import {
   Grid, Button,
 } from '@material-ui/core';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import moment from 'moment';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
-import MaterialAvatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import {
   MuiPickersUtilsProvider,
@@ -259,7 +256,6 @@ const TaskAdd = (props) => {
   };
 
   const onSubmit = (values) => {
-    console.log(values);
     const assgined = [];
     assgined.push(values.assignedUsers);
     const taskData = {

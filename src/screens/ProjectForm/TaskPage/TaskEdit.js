@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import {
   Grid, Button,
 } from '@material-ui/core';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
-import MaterialAvatar from '@material-ui/core/Avatar';
+import InputLabel from '@material-ui/core/InputLabel';
+import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -17,7 +18,7 @@ import {
   KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import 'date-fns';
+import { add } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   Formik, Form, Field, ErrorMessage, FieldArray,
@@ -29,19 +30,14 @@ const StyledDiv = styled.div`
   background-color: #F5F5F5;
   position: absolute;
   max-width: 250px;
-  max-height: 450px;
+  min-height: 250px;
+  max-height: 750px;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #9e9e99;
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
 
-const StyledTitle = styled.p`
-   font-family: 'Roboto', sans-serif;
-   font-size: 15px;
-   font-weight: bold;
-   width: 160px;
-`;
 const StyledUnderTitle = styled.p`
    font-family: 'Roboto', sans-serif;
    font-size: 12px;
@@ -125,25 +121,93 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '85px',
     marginTop: '8px',
   },
+  formControl: {
+    marginTop: '10px',
+    marginBottom: '5px',
+    minWidth: 190,
+    maxWidth: 300,
+  },
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  chip: {
+    margin: 2,
+  },
 }));
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 350,
+    },
+  },
+};
 
 const TaskEdit = (props) => {
   const classes = useStyles();
+  const { taskInfo } = props;
 
   const [statuses, setStatuses] = useState([]);
   const [asignees, setAsignees] = useState([]);
   const [taskDeadline, settaskDeadline] = React.useState(new Date('2021-06-10T21:11:54'));
   const [taskStart, settaskStart] = React.useState(new Date('2021-06-10T21:11:54'));
+  const [assignedIds, setAsignedIds] = React.useState(taskInfo.assignedUsers);
 
-  const { taskInfo } = props;
+  const [peopleToAdd, setPeopleToAdd] = useState([]);
+  const [peopleAdd, setPeopleAdd] = useState(false);
 
-  const getCurrentDate = () => {
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-    const yyyy = today.getFullYear();
+  const [peopleToRemove, setPeopleToRemove] = useState([]);
+  const [peopleRemove, setPeopleRemove] = useState(false);
 
-    return `${yyyy}-${mm}-${dd}`;
+  const initialIds = taskInfo.assignedUsers;
+
+  const handleChange = (event) => {
+    const newIds = event.target.value;
+    let addAssignee = false;
+    let removeAssignee = false;
+
+    const idsToRemove = [];
+    const checker = (arr, target) => target.every((v) => arr.includes(v));
+
+    if (checker(newIds, initialIds) === false) {
+      removeAssignee = true;
+    } else if (checker(newIds, initialIds) === true) {
+      removeAssignee = false;
+    }
+
+    const union = [];
+    newIds.map((id) => {
+      if (initialIds.includes(id)) {
+        union.push(id);
+      }
+    });
+
+    initialIds.map((id) => {
+      if (!union.includes(id)) {
+        idsToRemove.push(id);
+      }
+    });
+
+    const idsToAdd = [];
+    newIds.map((id) => {
+      if (!initialIds.includes(id)) {
+        addAssignee = true;
+        idsToAdd.push(id);
+      }
+    });
+
+    setPeopleToAdd(idsToAdd);
+    setPeopleAdd(addAssignee);
+
+    setPeopleRemove(removeAssignee);
+    setPeopleToRemove(idsToRemove);
+
+    setAsignedIds(event.target.value);
   };
 
   const handleDeadlineChange = (date) => {
@@ -164,6 +228,19 @@ const TaskEdit = (props) => {
   const getTaskAsignees = async () => {
     const res = await Promise.all([Api.getTasksAsignees()]);
     setAsignees(res[0].data.data);
+  };
+
+  const getNameIdPair = () => {
+    const name_id = {};
+    for (const asignee in asignees) {
+      const name = asignees[asignee].firstName;
+      const surname = asignees[asignee].lastName;
+      const fullName = `${name} ${surname}`;
+      const id = asignees[asignee].idUser;
+      name_id[id] = fullName;
+    }
+
+    return name_id;
   };
 
   const changeDateFormat = (dat) => {
@@ -198,18 +275,19 @@ const TaskEdit = (props) => {
     loadData();
   }, []);
 
-  const onTaskAddHandler = async (taskData) => {
-    await Api.createTask(taskData)
+  const onTaskEditHandler = async (taskData) => {
+    console.log(taskData);
+    await Api.updateTask(taskData)
       .then(async () => {
-        props.close(false);
+        props.showEdit(false);
         const res = await Promise.all([Api.getProjectTasks(5)]);
       });
   };
 
   const initialValues = {
     title: taskInfo.title,
-    status: taskInfo.status,
-    description: props.description,
+    status: 1,
+    description: taskInfo.description,
     startDate: taskInfo.startDate,
     expectedEndDate: taskInfo.expectedEndDate,
     project: 5,
@@ -220,21 +298,22 @@ const TaskEdit = (props) => {
   };
 
   const onSubmit = (values) => {
-    const assgined = [];
-    assgined.push(values.assignedUsers);
     const taskData = {
+      idTask: taskInfo.idTask,
       title: values.title,
       status: values.status,
       description: values.description,
-      startDate: taskStart,
-      expectedEndDate: taskDeadline,
+      startDate: '2021-01-01',
+      expectedEndDate: '2021-06-11',
       project: 5,
-      creator: 9,
-      createdOn: '2021-06-11',
       priority: values.priority,
-      assignedUsers: assgined,
+      assignedUsers: values.assignedUsers,
+      IsAddNewAssignee: peopleAdd,
+      AssignedUsersToAdd: peopleToAdd,
+      IsRemoveAssignee: peopleRemove,
+      AssignedUsersToRemove: peopleToRemove,
     };
-    onTaskAddHandler(taskData);
+    onTaskEditHandler(taskData);
   };
 
   return (
@@ -247,9 +326,7 @@ const TaskEdit = (props) => {
       <StyledDiv style={styles}>
         <Form>
           <Grid container direction="row" className={classes.grid}>
-            {console.log(props.description)}
             <Grid item>
-
               <Field
                 as={TextField}
                 id="title"
@@ -323,27 +400,31 @@ const TaskEdit = (props) => {
               <StyledUnderTitle>ASIGNEES</StyledUnderTitle>
             </Grid>
             <Grid item>
-              <Field
-                as={Select}
-                type="text"
-                name="assignedUsers"
-                className={classes.prioritySelect}
-              >
-                {asignees ? (
-                  asignees.map((asignee) => (
-                    <MenuItem
-                      className={classes.resize}
-                      value={asignee.idUser}
-                    >
-                      {asignee.firstName}
-                      {' '}
-                      {asignee.lastName}
+              <FormControl className={classes.formControl}>
+                <InputLabel id="demo-mutiple-chip-label">Asignees</InputLabel>
+                <Field
+                  as={Select}
+                  type="text"
+                  name="assignedUsers"
+                  multiple
+                  value={assignedIds}
+                  onChange={handleChange}
+                  renderValue={(selected) => (
+                    <div className={classes.chips}>
+                      {selected.map((value) => (
+                        <Chip key={value} label={getNameIdPair()[value]} className={classes.chip} />
+                      ))}
+                    </div>
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {asignees.map((user) => (
+                    <MenuItem key={user.idUser} value={user.idUser}>
+                      {`${user.firstName} ${user.lastName}`}
                     </MenuItem>
-                  ))) : (
-                    <div />
-
-                )}
-              </Field>
+                  ))}
+                </Field>
+              </FormControl>
             </Grid>
           </Grid>
           <Divider />

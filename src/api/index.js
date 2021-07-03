@@ -51,6 +51,7 @@ const updateTaskStatus = (tasksData) => axios.patch(`${apiUrl}/tasks/update-stat
 const getTasksStatuses = () => axios.get(`${apiUrl}/tasks/status`);
 const getTasksAsignees = () => axios.get(`${apiUrl}/project-members/5`);
 const createTask = (taskData) => axios.post(`${apiUrl}/tasks/`, taskData);
+const updateTask = (taskData) => axios.patch(`${apiUrl}/tasks/`, taskData);
 
 export default {
   getUserId,
@@ -94,4 +95,5 @@ export default {
   getTasksStatuses,
   getTasksAsignees,
   createTask,
+  updateTask,
 };
