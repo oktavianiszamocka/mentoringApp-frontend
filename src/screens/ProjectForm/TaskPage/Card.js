@@ -131,13 +131,18 @@ function Card(props) {
   useEffect(() => {
     const loadData = async () => {
       const res = await Promise.all([Api.getTaskDetails(idOfCard)]);
+      console.log(res[0].data.data);
+      const assignedIds = [];
+      res[0].data.data.assignedUser.map((user) => {
+        assignedIds.push(user.idUser);
+      });
       setTaskTitle(res[0].data.data.title);
       setTaskDescription(res[0].data.data.description);
       setTaskCreator(res[0].data.data.creatorUser);
       setTaskCreatedOn(res[0].data.data.createdOn);
       setTaskPriority(res[0].data.data.priority);
-      setAssignedUsers(res[0].data.data.assignedUser);
-      setTaskStatus(res[0].data.data.statusName);
+      setAssignedUsers(assignedIds);
+      setTaskStatus(res[0].data.data.status);
       setTaskEnd(res[0].data.data.expectedEndDate);
       setTaskStart(res[0].data.data.startDate);
     };
@@ -201,16 +206,16 @@ function Card(props) {
 
   const taskData = {
     idTask: idOfCard,
-    title: props.content,
-    status: props.status,
-    description: props.description,
-    startDate: props.start,
-    expectedEndDate: deadlineFormat,
+    title: taskTitle,
+    status: taskStatus,
+    description: taskDescription,
+    startDate: taskStart,
+    expectedEndDate: taskEnd,
     project: 5,
     creator: 9,
-    createdOn: props.created,
+    createdOn: taskCreatedOn,
     priority,
-    assignedUsers: props.users,
+    assignedUsers,
   };
 
   return (
@@ -220,7 +225,6 @@ function Card(props) {
       onDragStart={dragStart}
       onDragOver={dragOver}
     >
-
       <StyledDiv2 id="card">
         <StyledDiv3>
           <StyledDiv5>
