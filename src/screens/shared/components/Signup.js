@@ -203,22 +203,21 @@ const Signup = (props) => {
   };
 
   const onSubmit = async (values) => {
+    setErrorAccount(null);
     const loginData = {
       ...values,
     };
     console.log(loginData);
     const response = await Api.register(loginData)
       .then((data) => {
-        console.log('success');
         setOpen(true);
         setTimeout(() => {
           setOpen(false);
           setRedirect(true);
-        }, 2000);
+        }, 5000);
       })
       .catch((err) => {
-        console.log(err);
-        setErrorAccount(err);
+        setErrorAccount(err.response.data);
       });
   };
 
