@@ -25,8 +25,9 @@ import UseToken from './UseToken';
 
 const App = () => {
   const { token, setToken } = UseToken();
+  const { refreshToken, setRefreshToken } = UseToken();
   if (!token) {
-    return <Login setToken={setToken} />;
+    return <Login setToken={setToken} setRefreshToken={setRefreshToken} />;
   }
 
   return (

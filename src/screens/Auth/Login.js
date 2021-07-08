@@ -1,15 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Formik, Form, Field,
 } from 'formik';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
+import {
+  Button, CssBaseline, TextField, FormControlLabel, Checkbox, Grid, Container, Snackbar,
+} from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
 import logo from '../../assets/images/pja.png';
 import Api from '../../api/index';
@@ -34,19 +31,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login({ setToken }) {
-  const classes = useStyles();
-  const submitLogin = async (values) => {
-    console.log(values);
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
-    const response = await Api.login(values)
-      .then((data) => data.data)
+export default function Login({ setToken, setRefreshToken }) {
+  const classes = useStyles();
+  const [ErrorLogin, setErrorLogin] = useState('');
+
+  const submitLogin = async (values) => {
+    setErrorLogin('');
+    const responseToken = await Api.login(values)
+      .then((response) => {
+        setToken(response.data.token);
+        setRefreshToken(response.data.refreshToken);
+        localStorage.setItem('idUser', response.data.idUser);
+      })
       .catch((err) => {
-        console.log(err);
+        setErrorLogin(err.response.data);
       });
 
-    setToken(response.token);
-    console.log(response.token);
+    /// setToken(responseToken.token);
+    //  setRefreshToken(responseToken.refreshToken);
+    //  console.log(responseToken.token);
+
+    // console.log(responseToken.refreshToken);
   };
 
   return (
@@ -54,6 +63,7 @@ export default function Login({ setToken }) {
       <CssBaseline />
       <div className={classes.paper}>
         <img src={logo} alt="Logo" />
+        {ErrorLogin && <Alert severity="error">{ErrorLogin}</Alert>}
         <Formik
           onSubmit={submitLogin}
           initialValues={{ username: '', password: '' }}
@@ -105,8 +115,8 @@ export default function Login({ setToken }) {
     </Container>
   );
 }
-/*
+
 Login.propTypes = {
   setToken: PropTypes.func.isRequired,
+  setRefreshToken: PropTypes.func.isRequired,
 };
-*/
