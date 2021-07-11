@@ -144,10 +144,6 @@ const Signup = (props) => {
     { value: 3, label: 'Mentor' },
   ];
 
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [role, setRole] = React.useState('');
-  const [confirmPass, setconfirmPass] = React.useState('');
-  const [country, setCountry] = React.useState('');
   const [checked, setChecked] = React.useState(false);
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -157,18 +153,6 @@ const Signup = (props) => {
 
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-
-  const handleChange = (event) => {
-    setRole(event.target.value);
-  };
-
-  const handleCountryChange = (event) => {
-    setCountry(event.target.value);
-  };
 
   const handleCheckChange = (event) => {
     setChecked(event.target.checked);
@@ -257,7 +241,7 @@ const Signup = (props) => {
               <Snackbar
                 anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
                 open={open}
-                autoHideDuration={1000}
+                autoHideDuration={3000}
                 onClose={handleCloseSnackBar}
               >
                 <Alert onClose={handleCloseSnackBar} severity="success">
