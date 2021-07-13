@@ -135,7 +135,7 @@ const ProjectBar = () => {
           </Button>
         </Grid>
         <Grid item xs={12}>
-          <Button size="small" className={classes.buttonStyle} href={`/project-promoters/${IdProject}`}>
+          <Button size="small" className={classes.buttonStyle} href={`/milestones/5`}>
             <div className={classes.divItem}>
               <TimelapseOutlinedIcon className={classes.IconStyle} />
               <StyledP>Milestone</StyledP>

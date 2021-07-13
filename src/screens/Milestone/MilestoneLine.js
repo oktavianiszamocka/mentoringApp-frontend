@@ -58,12 +58,12 @@ const MilestoneLine = ({ milestone }) => {
         const milestoneData = {
           idMilestone: e.idMilestone,  
           description: e.description,
-          date: now.getDate(),
           project: e.project,
           sequence: e.sequence,
           isDone: true,        
             
         };
+        console.log(milestoneData);
         const updateMile = await Api.updateMilestoneToPassed(milestoneData)
           .then((response) => response.data);
         

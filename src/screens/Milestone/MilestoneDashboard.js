@@ -4,6 +4,8 @@ import Api from '../../api/index';
 import AllNotes from '../shared/components/AllNotes';
 import MilestoneLine from './MilestoneLine';
 import styled from 'styled-components';
+import ProjectBar from '../shared/components/ProjectBar';
+import NewMilestoneForm from './NewMilestoneForm'
 import { makeStyles } from '@material-ui/core/styles';
 import {
     Grid, Button, Paper, Typography,
@@ -44,10 +46,12 @@ const MilestoneDashboard = () => {
       <div className={classes.root}>
         <Grid container >
         <Header />
-        <Grid item xs={3}>
-          <AllNotes />
-        </Grid>
-          <Grid item justify="center" alignItems="center">
+        <Grid item xs={2}>
+          <ProjectBar />
+         
+        </Grid >
+        
+          <Grid item xs={3} justify="center" alignItems="center" >
                                    
               {milestones &&
                 milestones.map((mile) => (
@@ -56,7 +60,15 @@ const MilestoneDashboard = () => {
                 ))  }
     
           </Grid>
-  
+          <Grid item xs={4}>
+          
+        <NewMilestoneForm/>
+          </Grid>
+
+
+          <Grid item xs={3}>
+          <AllNotes />
+        </Grid>
         </Grid>
       </div>
     );
