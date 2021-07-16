@@ -5,6 +5,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import moment from 'moment';
+import { useParams } from 'react-router-dom';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@material-ui/core/TextField';
@@ -134,6 +135,8 @@ const MenuProps = {
 };
 
 const TaskAdd = (props) => {
+  const { IdProject } = useParams();
+  const IdUser = Api.getUserId().idUser;
   const theme = useTheme();
   const classes = useStyles();
 
@@ -264,9 +267,9 @@ const TaskAdd = (props) => {
       description: values.description,
       startDate: taskStart,
       expectedEndDate: taskDeadline,
-      project: 5,
-      creator: 9,
-      createdOn: '2021-06-11',
+      project: IdProject,
+      creator: IdUser,
+      createdOn: Date.now(),
       priority: values.priority,
       assignedUsers: asigneeIds,
     };

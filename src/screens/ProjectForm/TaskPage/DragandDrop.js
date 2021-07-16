@@ -13,7 +13,7 @@ import TaskAdd from './TaskAdd';
 const StyledDiv = styled.div`
   margin: 10px;
   background-color: #F5F5F5;
-  min-width: 300px;
+  min-width: 250px;
   max-width: 320px;
   padding: 15px;
   border-radius: 5px;

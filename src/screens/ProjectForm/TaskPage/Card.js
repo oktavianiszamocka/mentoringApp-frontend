@@ -24,13 +24,14 @@ const StyledDiv2 = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 250px;
+  width: 200px;
 `;
 
 const StyledDivIcons = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: right;
+  margin-right: 1rem;
   `;
 
 const StyledDiv3 = styled.div`
@@ -43,7 +44,8 @@ const StyledDiv4 = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: start;
-  margin-left: 40px;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
 `;
 const StyledDiv5 = styled.div`
   display: flex;
@@ -73,10 +75,11 @@ const StyledP2 = styled.p`
 const useStyles = makeStyles({
   edit: {
     fontSize: '15px',
-    marginRight: '5px',
+
   },
   delete: {
     fontSize: '15px',
+
   },
   avatar: {
     width: '32px',
@@ -242,7 +245,7 @@ function Card(props) {
                 <ArrowDownwardIcon className={classes.arrowlow} />
               );
             })()}
-            <StyledP style={{ width: '220px' }}>{props.content}</StyledP>
+            <StyledP style={{ width: '170px' }}>{props.content}</StyledP>
             <StyledDivIcons>
               <EditIcon fontSize="small" className={classes.edit} onClick={showEditting} />
               <DeleteIcon fontSize="small" className={classes.delete} onClick={delCom} />
@@ -255,19 +258,20 @@ function Card(props) {
               {deadlineFormat}
 
             </StyledP2>
-            <StyledDiv4>
-              {props.avatars ? (
-                props.avatars.map((item) => (
-                  <MaterialAvatar
-                    className={classes.avatar}
-                    src={item}
-                  />
-                ))) : (
-                  <div />
-              )}
-            </StyledDiv4>
+
           </StyledDiv2>
-          <div>
+          <StyledDiv4>
+            {props.avatars ? (
+              props.avatars.map((item) => (
+                <MaterialAvatar
+                  className={classes.avatar}
+                  src={item}
+                />
+              ))) : (
+                <div />
+            )}
+          </StyledDiv4>
+          <div style={{ marginTop: '0.5rem' }}>
             <StyledP2 onClick={showCom} style={{ color: 'grey' }}>
               See details
 

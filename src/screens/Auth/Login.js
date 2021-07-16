@@ -7,10 +7,18 @@ import {
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import logo from '../../assets/images/pja.png';
 import Api from '../../api/index';
 
+const StyledLabel = styled.p`
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;  
+  color: rgba(0,0,0,0.5);
+  margin-top: 8px;
+  margin-left: 4rem;
+`;
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -106,6 +114,11 @@ export default function Login({ setToken, setRefreshToken }) {
             >
               Login
             </Button>
+            <StyledLabel>
+              Dont have an account yet? Register
+              {' '}
+              <u><a href="/signup">here</a></u>
+            </StyledLabel>
             <Grid container />
           </Form>
 
