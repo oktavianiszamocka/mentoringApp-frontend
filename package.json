@@ -11,7 +11,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.49",
     "@material-ui/pickers": "^3.2.10",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "clsx": "^1.1.1",
     "countries-list": "^2.6.1",
     "date-fns": "^2.14.0",
