@@ -278,7 +278,6 @@ const TaskAdd = (props) => {
       initialValues={initialValues}
       onSubmit={onSubmit}
       validator={() => ({})}
-
     >
       <StyledDiv style={styles}>
         <Form>
