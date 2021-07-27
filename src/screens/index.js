@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  BrowserRouter, Route, Redirect, Switch,
+  BrowserRouter, Route, Redirect, Switch, withRouter, useLocation,
 } from 'react-router-dom';
 import StudentDashboard from './Student/StudentDashboard';
 import MyProfileDashboard from './Profile/MyProfileDashboard';
@@ -26,7 +26,9 @@ import UseToken from './UseToken';
 const App = () => {
   const { token, setToken } = UseToken();
   const { refreshToken, setRefreshToken } = UseToken();
-  if (!token) {
+  const { pathname } = window.location;
+
+  if (!token && pathname !== '/signup') {
     return <Login setToken={setToken} setRefreshToken={setRefreshToken} />;
   }
 
@@ -47,7 +49,7 @@ const App = () => {
         <Route path="/project-form" component={ProjectFormBoard} />
         <Route path="/invitations" component={InvitationPage} />
         <Route path="/signup" component={Signup} />
-        <Route path="/task" component={TaskDashboard} />
+        <Route path="/task/:IdProject" component={TaskDashboard} />
         <Route path="/task-detail" component={TaskDetail} />
         <Route path="/task-add" component={TaskAdd} />
         <Route path="/calendar" component={CalendarMain} />
