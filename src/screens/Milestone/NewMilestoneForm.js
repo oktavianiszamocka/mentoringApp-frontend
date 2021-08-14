@@ -1,14 +1,18 @@
 import React from 'react';
-
-import Button from '@material-ui/core/Button';
+import { Button, Paper, TextField } from '@material-ui/core';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
+import PropTypes from 'prop-types';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import logo from '../../assets/images/pja.png';
+import { blue500 } from 'material-ui/styles/colors';
+import { blue50 } from 'material-ui/styles/colors';
+import { StayPrimaryLandscape } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -16,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        background: blue50,
     },
     avatar: {
         margin: theme.spacing(1),
@@ -25,46 +32,58 @@ const useStyles = makeStyles((theme) => ({
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
     },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
+    submitButton: {
+        marginTop: '10px',
+      
     },
 }));
 
-export default function NewMilestoneForm() {
+const MilestoneSchema = Yup.object().shape({
+    note: Yup.string().min(1).max(300).required('Please enter the milestone description'),
+});
+
+
+const MilestoneForm = ({ onSubmit, initialValue }) => {
     const classes = useStyles();
 
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
-              
-            <h1> New Milestone Step </h1>
 
-                <form className={classes.form} noValidate>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="description"
-                        label="Description"
-                        name="description"
-                        autoComplete="description"
-                        autoFocus
-                    />
-                  
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Add
-          </Button>
-                    <Grid container />
-                </form>
+                <h1> New Milestone Step </h1>
+
+                <Formik onSubmit={onSubmit} initialValues={{ description: initialValue }} validationSchema={MilestoneSchema}>
+                    <Form>
+                        <Paper elevation={1} className={classes.paper}>
+                            <Field
+                                as={TextField}
+                                name="description"
+                                placeholder="Please write your description here"
+                                maxLength={300}
+                                multiline
+                            />
+                            <Button
+                                className={classes.submitButton}
+                                size="small"
+                                type="submit"
+                                color="primary"
+                                variant="contained"
+                                autoFocus
+                            >
+                                Submit
+                            </Button>
+                        </Paper>
+                    </Form>
+                </Formik>
+
             </div>
         </Container>
     );
-}
+};
+
+MilestoneForm.propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+  };
+  
+  export default MilestoneForm;

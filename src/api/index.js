@@ -10,6 +10,7 @@ const apiToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54b
 
 axios.defaults.headers.common.Authorization = apiToken;
 const getUserId = () => 9;
+const getProjectId = () => 5;
 const getNotes = (pageNumber) => axios.get(`${apiUrl}/personal-notes/${getUserId()}?pageNumber=${pageNumber}&pageSize=3`);
 const getPosts = (pageNumber) => axios.get(`${apiUrl}/posts?pageNumber=${pageNumber}&pageSize=10`);
 const getGeneralPosts = (pageNumber) => axios.get(`${apiUrl}/posts/general?pageNumber=${pageNumber}&pageSize=10`);
@@ -46,7 +47,7 @@ const getProjectTasks = (idProject) => axios.get(`${apiUrl}/tasks/5`);
 const getTaskDetails = (idTask) => axios.get(`${apiUrl}/tasks/detail/${idTask}`);
 const getProjectMilestones = (idProject) => axios.get(`${apiUrl}/milestones/5`);
 const updateMilestoneToPassed = (milestoneData) => axios.patch(`${apiUrl}/milestones/update-step`, milestoneData);
-
+const addNewMilestone = (milestoneData) => axios.post(`${apiUrl}/milestones`, milestoneData);
 
 export default {
   getUserId,
