@@ -8,6 +8,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
 import MaterialAvatar from '@material-ui/core/Avatar';
+import EditIcon from '@material-ui/icons/Edit';
+import MeetingEdit from './MeetingEdit';
 import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
@@ -70,6 +72,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '20px',
     marginLeft: '10px',
   },
+  edit: {
+    fontSize: '18px',
+    marginLeft: '10px',
+  },
   grid: {
     marginBottom: '-15px',
   },
@@ -81,6 +87,8 @@ const MeetingDetail = (props) => {
   const positionX = `${props.cardPosition[0]}`;
   const positionY = `${props.cardPosition[1]}`;
 
+  const [editMeetingVisible, setEditMeetingVisible] = useState(false);
+
   const styles = {
     top: '150px',
     left: '450px',
@@ -91,12 +99,21 @@ const MeetingDetail = (props) => {
   console.log(positionX);
   console.log(positionY);
 
+  const showEdit = () => {
+    console.log('eeeedit');
+    setEditMeetingVisible(true);
+  };
+
   return (
     <StyledDiv style={styles}>
       <Grid container direction="row" className={classes.grid}>
         <Grid item>
           <StyledTitle>Meeting 1</StyledTitle>
         </Grid>
+        <EditIcon
+          className={classes.edit}
+          onClick={showEdit}
+        />
         <CloseIcon className={classes.close} onClick={() => props.showDet()} />
         <Grid item />
       </Grid>
@@ -134,6 +151,9 @@ const MeetingDetail = (props) => {
             </div>
           </Grid>
         </Grid>
+        {editMeetingVisible && (
+        <MeetingEdit close={setEditMeetingVisible} />
+        )}
       </Grid>
     </StyledDiv>
   );
