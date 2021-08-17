@@ -13,6 +13,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Avatar from '@material-ui/core/Avatar';
 import MeetingDetail from './MeetingDetail';
 import MeetingAdd from './MeetingAdd';
+import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
   background-color: white;
@@ -55,16 +56,26 @@ const useStyles = makeStyles({
   },
   deleteIcon: {
     color: '#989a9e',
-    marginLeft: '15px',
+    paddingLeft: '15px',
     width: '20px',
     height: '20px',
   },
   title: {
     fontSize: '0.875rem',
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontWeight: '700',
+    lineHeight: '1.43',
+    letterSpacing: '0.01071em',
+  },
+  time: {
+    fontSize: '0.875rem',
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     fontWeight: '400',
     lineHeight: '1.43',
     letterSpacing: '0.01071em',
+  },
+  list: {
+    listStyleType: 'circle',
   },
 });
 
@@ -74,6 +85,23 @@ const MeetingsView = () => {
   const [showDetail, setShowDetail] = useState(false);
   const [cardPosition, setcardPosition] = useState([]);
   const [newMeetingVisible, setNewMeetingVisible] = useState(false);
+  const [userMeetings, setUserMeetings] = useState([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const res = await Promise.all([Api.getUserMeetings()]);
+      console.log(res[0].data.data);
+      setUserMeetings(res[0].data.data);
+    };
+
+    loadData();
+  }, []);
+
+  const delMeeting = async (id) => {
+    await Api.deleteMeeting(id);
+    const res = await Promise.all([Api.getUserMeetings()]);
+    setUserMeetings(res[0].data.data);
+  };
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -98,8 +126,13 @@ const MeetingsView = () => {
   };
 
   const showDetails = (e) => {
-    setShowDetail(true);
-    getPositionXY(e.target.id);
+    const className = e.target.getAttribute('class');
+    console.log(className);
+    if (className === 'MuiSvgIcon-root makeStyles-deleteIcon-8') {
+    } else {
+      setShowDetail(true);
+    }
+  // getPositionXY(e.target.id);
   };
 
   const hideDet = () => {
@@ -113,40 +146,51 @@ const MeetingsView = () => {
         <StyledDiv2>
           <StyledP>Meetings</StyledP>
         </StyledDiv2>
-        <List dense className={classes.root}>
-          {[0, 1, 2, 3].map((value) => {
-            const labelId = `list-item ${value}`;
-            return (
-              <ListItem
-                key={value}
-                button
-                onClick={showDetails}
-                id={`list-item ${value}`}
-              >
-                <ListItemAvatar>
-                  <Avatar
-                    alt={`Avatar n°${value + 1}`}
-                    src={`/static/images/avatar/${value + 1}.jpg`}
-                    id={`list-item ${value}`}
+        <List dense className={classes.list}>
+          {userMeetings.length > 0 ? (
+            userMeetings.map((item) => {
+              const labelId = `list-item ${item.idMeeting}`;
+              return (
+                <ListItem
+                  key={item.idMeeting}
+                  button
+                  onClick={showDetails}
+                  id={`list-item ${item.idMeeting}`}
+                >
+                  <ListItemText
+                    disableTypography
+                    primary={(
+                      <div>
+                        <Typography
+                          type="body2"
+                          id={`list-item ${item.idMeeting}`}
+                          className={classes.title}
+                        >
+                          {item.title}
+                        </Typography>
+                        <Typography
+                          type="body2"
+                          id={`list-item ${item.idMeeting}`}
+                          className={classes.time}
+                        >
+                          {' '}
+                          {item.startTime.slice(0, -3)}
+                          {' '}
+                          -
+                          {' '}
+                          {item.endTime.slice(0, -3)}
+                        </Typography>
+
+                      </div>
+                    )}
                   />
-                </ListItemAvatar>
-                <ListItemText
-                  disableTypography
-                  primary={(
-                    <Typography
-                      type="body2"
-                      id={`list-item ${value}`}
-                      className={classes.title}
-                    >
-                      My Meeting
-                      {value}
-                    </Typography>
-)}
-                />
-                <HighlightOffIcon className={classes.deleteIcon} />
-              </ListItem>
-            );
-          })}
+                  <HighlightOffIcon className={classes.deleteIcon} onClick={() => delMeeting(item.idMeeting)} />
+                </ListItem>
+              );
+            })
+          ) : (
+            <div />
+          )}
         </List>
         {(() => {
           if (showDetail) {
