@@ -79,23 +79,24 @@ const useStyles = makeStyles({
   },
 });
 
-const MeetingsView = () => {
+const MeetingsView = (props) => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([1]);
   const [showDetail, setShowDetail] = useState(false);
   const [cardPosition, setcardPosition] = useState([]);
   const [newMeetingVisible, setNewMeetingVisible] = useState(false);
   const [userMeetings, setUserMeetings] = useState([]);
+  const [clickedMeeting, setClickedMeeting] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
-      const res = await Promise.all([Api.getUserMeetings()]);
+      const res = await Promise.all([Api.getUserMeetings(props.date)]);
       console.log(res[0].data.data);
       setUserMeetings(res[0].data.data);
     };
 
     loadData();
-  }, []);
+  }, [props.date]);
 
   const delMeeting = async (id) => {
     await Api.deleteMeeting(id);
@@ -127,7 +128,12 @@ const MeetingsView = () => {
 
   const showDetails = (e) => {
     const className = e.target.getAttribute('class');
+    const id = e.target.getAttribute('id');
+    const meetingId = id.slice(id.indexOf('list-item ') + 'list-item '.length);
+    setClickedMeeting(meetingId);
     console.log(className);
+    console.log(meetingId);
+
     if (className === 'MuiSvgIcon-root makeStyles-deleteIcon-8') {
     } else {
       setShowDetail(true);
@@ -195,7 +201,7 @@ const MeetingsView = () => {
         {(() => {
           if (showDetail) {
             return (
-              <MeetingDetail cardPosition={cardPosition} showDet={hideDet} />
+              <MeetingDetail cardPosition={cardPosition} showDet={hideDet} meetingId={clickedMeeting} />
             );
           }
         })()}
@@ -208,7 +214,7 @@ const MeetingsView = () => {
           Add
         </Button>
         {newMeetingVisible && (
-        <MeetingAdd close={setNewMeetingVisible} />
+        <MeetingAdd close={setNewMeetingVisible} date={props.date} setMeetings={setUserMeetings} />
         )}
       </Grid>
     </StyledDiv>

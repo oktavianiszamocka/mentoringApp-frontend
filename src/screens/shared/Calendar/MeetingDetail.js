@@ -25,7 +25,7 @@ const StyledDiv = styled.div`
 
 const StyledTitle = styled.p`
    font-family: 'Roboto', sans-serif;
-   font-size: 15px;
+   font-size: 16px;
    font-weight: bold;
    width: 160px;
    color: #4f5052;
@@ -38,12 +38,27 @@ const StyledUnderTitle = styled.p`
    color: #4f5052;
 `;
 
+const StyledUnderTitleGoing = styled.p`
+   font-family: 'Roboto', sans-serif;
+   font-size: 12px;
+   font-weight: bold;
+   color: #4f5052;
+   margin-right: 20px;
+`;
+
 const StyledP = styled.p`
   font-family: 'Roboto', sans-serif;
   word-break: break-word;
   font-size: 12px;
   color: #4f5052;
   margin: 0px;
+`;
+
+const StyledTime = styled.p`
+  font-family: 'Roboto', sans-serif;
+  word-break: break-word;
+  font-size: 12px;
+  color: #4f5052;
 `;
 
 const StyledDescription = styled.p`
@@ -79,7 +94,12 @@ const useStyles = makeStyles((theme) => ({
   grid: {
     marginBottom: '-15px',
   },
-
+  buttons: {
+    padding: '2px',
+    fontSize: '10px',
+    marginTop: '10px',
+    marginLeft: '5px',
+  },
 }));
 
 const MeetingDetail = (props) => {
@@ -88,6 +108,12 @@ const MeetingDetail = (props) => {
   const positionY = `${props.cardPosition[1]}`;
 
   const [editMeetingVisible, setEditMeetingVisible] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [start, setStart] = useState('');
+  const [end, setEnd] = useState('');
+  const [location, setLocation] = useState('');
+  const [assignedUsers, setAssignedUsers] = useState([]);
 
   const styles = {
     top: '150px',
@@ -96,8 +122,20 @@ const MeetingDetail = (props) => {
     zIndex: 5,
   };
 
-  console.log(positionX);
-  console.log(positionY);
+  useEffect(() => {
+    const loadData = async () => {
+      const res = await Promise.all([Api.getMeetingDetail(props.meetingId)]);
+      console.log(res[0].data.data);
+      setTitle(res[0].data.data.title);
+      setDescription(res[0].data.data.description);
+      setStart(res[0].data.data.startTime);
+      setEnd(res[0].data.data.endTime);
+      setLocation(res[0].data.data.location);
+      setAssignedUsers(res[0].data.data.meetingAttendee);
+    };
+
+    loadData();
+  }, [props.meetingId]);
 
   const showEdit = () => {
     console.log('eeeedit');
@@ -108,52 +146,71 @@ const MeetingDetail = (props) => {
     <StyledDiv style={styles}>
       <Grid container direction="row" className={classes.grid}>
         <Grid item>
-          <StyledTitle>Meeting 1</StyledTitle>
+          <StyledTitle>{title}</StyledTitle>
         </Grid>
         <EditIcon
           className={classes.edit}
           onClick={showEdit}
         />
         <CloseIcon className={classes.close} onClick={() => props.showDet()} />
-        <Grid item />
       </Grid>
-      <StyledUnderTitle>Created by:</StyledUnderTitle>
-      <Grid container direction="row">
-        <Grid item>
-          <MaterialAvatar
-            className={classes.avatar1}
-          />
-        </Grid>
-        <Grid item>
-          <div>
-            <StyledP>
-              Jan Kowalski
-            </StyledP>
-            <StyledP>20.06.2020</StyledP>
-          </div>
-        </Grid>
-      </Grid>
-      <StyledDescription>We need to meet to discus frontend</StyledDescription>
+      <StyledUnderTitle>TIME</StyledUnderTitle>
+      <StyledTime>
+        {start}
+        {' '}
+        -
+        {' '}
+        {end}
+      </StyledTime>
+      <Divider />
+
+      <StyledUnderTitle>DESCRIPTION</StyledUnderTitle>
+      <StyledDescription>{description}</StyledDescription>
+      <Divider />
+      <StyledUnderTitle>LOCATION</StyledUnderTitle>
+      <StyledDescription>{location}</StyledDescription>
       <Divider />
       <Grid container direction="row">
-        <StyledUnderTitle>PEOPLE</StyledUnderTitle>
-        <Grid container direction="row">
-          <Grid item>
-            <MaterialAvatar
-              className={classes.avatar2}
-            />
-          </Grid>
-          <Grid item>
-            <div>
-              <StyledP style={{ marginTop: '2px' }}>
-                Maria Wilk
-              </StyledP>
-            </div>
-          </Grid>
-        </Grid>
+        <StyledUnderTitle>ASIGNEES</StyledUnderTitle>
+        {assignedUsers.length > 0 ? (
+          assignedUsers.map((item) => (
+            <Grid container direction="row">
+
+              <Grid item>
+                <MaterialAvatar
+                  className={classes.avatar2}
+                  src={item.imageUrl}
+                />
+              </Grid>
+              <Grid item>
+                <div>
+                  <StyledP style={{ marginTop: '2px' }}>
+                    {item.firstName}
+                    {' '}
+                    {item.lastName}
+                  </StyledP>
+                </div>
+              </Grid>
+            </Grid>
+          ))) : (
+            <div />
+        )}
         {editMeetingVisible && (
         <MeetingEdit close={setEditMeetingVisible} />
         )}
+      </Grid>
+      <Divider />
+      <Grid container direction="row">
+        <Grid item>
+          <StyledUnderTitleGoing>GOING?</StyledUnderTitleGoing>
+        </Grid>
+        <Grid item>
+          <Button size="small" variant="contained" color="primary" className={classes.buttons}>YES</Button>
+        </Grid>
+        <Grid item>
+          <Button size="small" variant="contained" color="primary" className={classes.buttons}>NO</Button>
+        </Grid>
+
       </Grid>
     </StyledDiv>
   );

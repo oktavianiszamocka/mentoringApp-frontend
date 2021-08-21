@@ -96,8 +96,10 @@ const getTasksStatuses = () => axios.get(`${apiUrl}/tasks/status`);
 const getTasksAsignees = () => axios.get(`${apiUrl}/project-members/5`);
 const createTask = (taskData) => axios.post(`${apiUrl}/tasks/`, taskData);
 const updateTask = (taskData) => axios.patch(`${apiUrl}/tasks/`, taskData);
-const getUserMeetings = () => axios.get(`${apiUrl}/meetings/user/9`);
+const getUserMeetings = (date) => axios.get(`${apiUrl}/meetings/user/9?date=${date}`);
 const deleteMeeting = (idMeeting) => axios.delete(`${apiUrl}/meetings/${idMeeting}`);
+const addMeeting = (meetingData) => axios.post(`${apiUrl}/meetings/`, meetingData);
+const getMeetingDetail = (meetingId) => axios.get(`${apiUrl}/meetings/${meetingId}`);
 
 export default {
   getUserId,
@@ -144,4 +146,6 @@ export default {
   updateTask,
   getUserMeetings,
   deleteMeeting,
+  addMeeting,
+  getMeetingDetail,
 };
