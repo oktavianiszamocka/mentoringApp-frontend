@@ -165,36 +165,105 @@ const MenuProps = {
 
 const MeetingEdit = (props) => {
   const theme = useTheme();
+
+  const styles = {
+    top: '-1px',
+    left: '-1px',
+    position: 'absolute',
+    minWidth: '251px',
+    zIndex: 6,
+  };
+
   const classes = useStyles();
   const [asignees, setAsignees] = useState([]);
-  const [asigneeIds, setAsigneeIds] = React.useState([]);
+  const [assignedIds, setAsignedIds] = React.useState([]);
 
-  const getTaskAsignees = async () => {
+  const [peopleToAdd, setPeopleToAdd] = useState([]);
+  const [peopleAdd, setPeopleAdd] = useState(false);
+
+  const [peopleToRemove, setPeopleToRemove] = useState([]);
+  const [peopleRemove, setPeopleRemove] = useState(false);
+
+  const [initialIds, setInitialIds] = useState([]);
+
+  const handleChange = (event) => {
+    const newIds = event.target.value;
+    let addAssignee = false;
+    let removeAssignee = false;
+
+    const idsToRemove = [];
+    const checker = (arr, target) => target.every((v) => arr.includes(v));
+
+    if (checker(newIds, initialIds) === false) {
+      removeAssignee = true;
+    } else if (checker(newIds, initialIds) === true) {
+      removeAssignee = false;
+    }
+
+    const union = [];
+    newIds.map((id) => {
+      if (initialIds.includes(id)) {
+        union.push(id);
+      }
+    });
+
+    initialIds.map((id) => {
+      if (!union.includes(id)) {
+        idsToRemove.push(id);
+      }
+    });
+
+    const idsToAdd = [];
+    newIds.map((id) => {
+      if (!initialIds.includes(id)) {
+        addAssignee = true;
+        idsToAdd.push(id);
+      }
+    });
+
+    setPeopleToAdd(idsToAdd);
+    setPeopleAdd(addAssignee);
+
+    setPeopleRemove(removeAssignee);
+    setPeopleToRemove(idsToRemove);
+
+    setAsignedIds(event.target.value);
+  };
+
+  const getProjectPeople = async () => {
     const res = await Promise.all([Api.getTasksAsignees()]);
-
     setAsignees(res[0].data.data);
   };
 
-  const handleChange = (event) => {
-    console.log(event.target.value);
-    setAsigneeIds(event.target.value);
+  const addIds = () => {
+    const ids = [];
+    for (const att in props.attendees) {
+      ids.push(props.attendees[att].idUser);
+    }
+    setAsignedIds(ids);
+    setInitialIds(ids);
   };
 
   useEffect(() => {
     const loadData = async () => {
-      getTaskAsignees();
+      getProjectPeople();
+      addIds();
     };
 
     loadData();
   }, []);
 
-  const onMeetingAddHandler = async (meetingData) => {
-    await Api.addMeeting(meetingData)
+  const closeAdd = () => {
+    props.close(false);
+    props.closeDetail();
+  };
+
+  const onMeetingEditHandler = async (meetingData) => {
+    console.log(meetingData);
+    await Api.updateMeeting(meetingData)
       .then(async () => {
-        console.log('sucess');
-        props.close(false);
-        const res = await Promise.all([Api.getUserMeetings(props.date)]);
-        props.setMeetings(res[0].data.data);
+        closeAdd();
+        // const res = await Promise.all([Api.getProjectTasks(5)]);
       });
   };
 
@@ -207,36 +276,25 @@ const MeetingEdit = (props) => {
       const id = asignees[asignee].idUser;
       name_id[id] = fullName;
     }
-
     return name_id;
   };
 
-  const styles = {
-    position: 'absolute',
-    zIndex: 5,
-    top: '150px',
-    left: '450px',
-  };
-
-  const closeAdd = () => {
-    props.close(false);
-  };
-
   const initialValues = {
-    title: '',
+    title: props.meetingTitle,
     date: props.date,
-    location: '',
-    description: '',
+    location: props.meetingLocation,
+    description: props.meetingDescription,
     project: 2,
-    start: '',
-    end: '',
-    attendeeUsers: [],
+    start: props.startTime.slice(0, -3),
+    end: props.endTime.slice(0, -3),
+    attendeeUsers: props.attendees,
   };
 
   const onSubmit = (values) => {
     const attendees = [];
     attendees.push(values.attendees);
     const meetingData = {
+      IdMeeting: props.meetingId,
       title: values.title,
       meetingDate: props.date,
       location: values.location,
@@ -244,9 +302,12 @@ const MeetingEdit = (props) => {
       project: 2,
       startTime: values.start,
       endTime: values.end,
-      attendeeUsers: asigneeIds,
+      IsRemoveAttendee: peopleRemove,
+      AttendeeToRemove: peopleToRemove,
+      IsAddNewAttendee: peopleAdd,
+      AttendeeToAdd: peopleToAdd,
     };
-    onMeetingAddHandler(meetingData);
+    onMeetingEditHandler(meetingData);
   };
 
   return (
@@ -264,7 +325,7 @@ const MeetingEdit = (props) => {
             <Form>
               <Grid container direction="row" className={classes.grid}>
                 <Grid item>
-                  <StyledTitle>Add Meeting</StyledTitle>
+                  <StyledTitle>Edit Meeting</StyledTitle>
                 </Grid>
                 <CloseIcon className={classes.close} onClick={closeAdd} />
                 <Grid item>
@@ -375,13 +436,13 @@ const MeetingEdit = (props) => {
 
               <Grid item>
                 <FormControl className={classes.formControl}>
-                  <InputLabel className={classes.attendees} id="demo-mutiple-chip-label">Attendees</InputLabel>
+                  <InputLabel id="demo-mutiple-chip-label">Attendees</InputLabel>
                   <Field
                     as={Select}
                     type="text"
-                    name="attendeeUsers"
+                    name="assignedUsers"
                     multiple
-                    value={asigneeIds}
+                    value={assignedIds}
                     onChange={handleChange}
                     renderValue={(selected) => (
                       <div className={classes.chips}>

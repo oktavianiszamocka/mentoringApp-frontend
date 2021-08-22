@@ -9,8 +9,11 @@ import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
 import MaterialAvatar from '@material-ui/core/Avatar';
 import EditIcon from '@material-ui/icons/Edit';
-import MeetingEdit from './MeetingEdit';
+import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Api from '../../../api/index';
+import MeetingEdit from './MeetingEdit';
 
 const StyledDiv = styled.div`
   background-color: white;
@@ -27,7 +30,7 @@ const StyledTitle = styled.p`
    font-family: 'Roboto', sans-serif;
    font-size: 16px;
    font-weight: bold;
-   width: 160px;
+   width: 170px;
    color: #4f5052;
 
 `;
@@ -89,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
   },
   edit: {
     fontSize: '18px',
-    marginLeft: '10px',
+    marginLeft: '30px',
   },
   grid: {
     marginBottom: '-15px',
@@ -99,6 +102,12 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '10px',
     marginTop: '10px',
     marginLeft: '5px',
+  },
+  assignee_grid: {
+    marginBottom: '4px',
+  },
+  attendIcons: {
+    fontSize: '18px',
   },
 }));
 
@@ -114,6 +123,7 @@ const MeetingDetail = (props) => {
   const [end, setEnd] = useState('');
   const [location, setLocation] = useState('');
   const [assignedUsers, setAssignedUsers] = useState([]);
+  const [assignedUsersForEdit, setAssignedUsersForEdit] = useState([]);
 
   const styles = {
     top: '150px',
@@ -125,7 +135,6 @@ const MeetingDetail = (props) => {
   useEffect(() => {
     const loadData = async () => {
       const res = await Promise.all([Api.getMeetingDetail(props.meetingId)]);
-      console.log(res[0].data.data);
       setTitle(res[0].data.data.title);
       setDescription(res[0].data.data.description);
       setStart(res[0].data.data.startTime);
@@ -138,7 +147,6 @@ const MeetingDetail = (props) => {
   }, [props.meetingId]);
 
   const showEdit = () => {
-    console.log('eeeedit');
     setEditMeetingVisible(true);
   };
 
@@ -174,8 +182,7 @@ const MeetingDetail = (props) => {
         <StyledUnderTitle>ASIGNEES</StyledUnderTitle>
         {assignedUsers.length > 0 ? (
           assignedUsers.map((item) => (
-            <Grid container direction="row">
-
+            <Grid container direction="row" className={classes.assignee_grid}>
               <Grid item>
                 <MaterialAvatar
                   className={classes.avatar2}
@@ -184,19 +191,39 @@ const MeetingDetail = (props) => {
               </Grid>
               <Grid item>
                 <div>
-                  <StyledP style={{ marginTop: '2px' }}>
+                  <StyledP style={{ marginTop: '2px', width: '170px' }}>
                     {item.firstName}
                     {' '}
                     {item.lastName}
                   </StyledP>
                 </div>
               </Grid>
+              <Grid item>
+                {item.isAttend === true ? (
+                  <CheckIcon color="primary" className={classes.attendIcons} />
+
+                ) : item.isAttend === false ? (
+                  <ClearIcon color="primary" className={classes.attendIcons} />
+                )
+                  : <HelpOutlineIcon color="primary" className={classes.attendIcons} />}
+              </Grid>
             </Grid>
           ))) : (
             <div />
         )}
         {editMeetingVisible && (
-        <MeetingEdit close={setEditMeetingVisible} />
+        <MeetingEdit
+          close={setEditMeetingVisible}
+          closeDetail={props.showDet}
+          meetingId={props.meetingId}
+          meetingTitle={title}
+          meetingDescription={description}
+          date={props.date}
+          startTime={start}
+          endTime={end}
+          meetingLocation={location}
+          attendees={assignedUsers}
+        />
         )}
       </Grid>
       <Divider />
@@ -210,7 +237,6 @@ const MeetingDetail = (props) => {
         <Grid item>
           <Button size="small" variant="contained" color="primary" className={classes.buttons}>NO</Button>
         </Grid>
-
       </Grid>
     </StyledDiv>
   );

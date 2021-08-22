@@ -6,11 +6,9 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import Avatar from '@material-ui/core/Avatar';
+import EditIcon from '@material-ui/icons/Edit';
 import MeetingDetail from './MeetingDetail';
 import MeetingAdd from './MeetingAdd';
 import Api from '../../../api/index';
@@ -60,6 +58,12 @@ const useStyles = makeStyles({
     width: '20px',
     height: '20px',
   },
+  editIcon: {
+    color: '#989a9e',
+    paddingLeft: '2px',
+    width: '20px',
+    height: '20px',
+  },
   title: {
     fontSize: '0.875rem',
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -88,10 +92,20 @@ const MeetingsView = (props) => {
   const [userMeetings, setUserMeetings] = useState([]);
   const [clickedMeeting, setClickedMeeting] = useState(0);
 
+  const compare = (a, b) => {
+    const time1 = parseFloat(a.startTime.slice(0, -3).replace(':', '.'));
+    const time2 = parseFloat(b.startTime.slice(0, -3).replace(':', '.'));
+    if (time1 < time2) return -1;
+    if (time1 > time2) return 1;
+    return 0;
+  };
+
   useEffect(() => {
     const loadData = async () => {
       const res = await Promise.all([Api.getUserMeetings(props.date)]);
       console.log(res[0].data.data);
+      res[0].data.data.sort(compare);
+
       setUserMeetings(res[0].data.data);
     };
 
@@ -201,7 +215,7 @@ const MeetingsView = (props) => {
         {(() => {
           if (showDetail) {
             return (
-              <MeetingDetail cardPosition={cardPosition} showDet={hideDet} meetingId={clickedMeeting} />
+              <MeetingDetail cardPosition={cardPosition} showDet={hideDet} meetingId={clickedMeeting} date={props.date} />
             );
           }
         })()}

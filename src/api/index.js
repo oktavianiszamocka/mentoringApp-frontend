@@ -100,6 +100,7 @@ const getUserMeetings = (date) => axios.get(`${apiUrl}/meetings/user/9?date=${da
 const deleteMeeting = (idMeeting) => axios.delete(`${apiUrl}/meetings/${idMeeting}`);
 const addMeeting = (meetingData) => axios.post(`${apiUrl}/meetings/`, meetingData);
 const getMeetingDetail = (meetingId) => axios.get(`${apiUrl}/meetings/${meetingId}`);
+const updateMeeting = (meetingData) => axios.patch(`${apiUrl}/meetings/`, meetingData);
 
 export default {
   getUserId,
@@ -148,4 +149,5 @@ export default {
   deleteMeeting,
   addMeeting,
   getMeetingDetail,
+  updateMeeting,
 };
