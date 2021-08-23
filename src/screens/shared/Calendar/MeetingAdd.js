@@ -169,6 +169,14 @@ const MeetingAdd = (props) => {
   const [asignees, setAsignees] = useState([]);
   const [asigneeIds, setAsigneeIds] = React.useState([]);
 
+  const compare = (a, b) => {
+    const time1 = parseFloat(a.startTime.slice(0, -3).replace(':', '.'));
+    const time2 = parseFloat(b.startTime.slice(0, -3).replace(':', '.'));
+    if (time1 < time2) return -1;
+    if (time1 > time2) return 1;
+    return 0;
+  };
+
   const getTaskAsignees = async () => {
     const res = await Promise.all([Api.getTasksAsignees()]);
 
@@ -194,6 +202,7 @@ const MeetingAdd = (props) => {
         console.log('sucess');
         props.close(false);
         const res = await Promise.all([Api.getUserMeetings(props.date)]);
+        res[0].data.data.sort(compare);
         props.setMeetings(res[0].data.data);
       });
   };

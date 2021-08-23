@@ -54,7 +54,6 @@ const useStyles = makeStyles({
   },
   deleteIcon: {
     color: '#989a9e',
-    paddingLeft: '15px',
     width: '20px',
     height: '20px',
   },
@@ -68,6 +67,7 @@ const useStyles = makeStyles({
     fontSize: '0.875rem',
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     fontWeight: '700',
+    width: '130px',
     lineHeight: '1.43',
     letterSpacing: '0.01071em',
   },
@@ -113,9 +113,12 @@ const MeetingsView = (props) => {
   }, [props.date]);
 
   const delMeeting = async (id) => {
-    await Api.deleteMeeting(id);
-    const res = await Promise.all([Api.getUserMeetings()]);
-    setUserMeetings(res[0].data.data);
+    await Api.deleteMeeting(id)
+      .then(async () => {
+        const res = await Promise.all([Api.getUserMeetings(props.date)]);
+        res[0].data.data.sort(compare);
+        setUserMeetings(res[0].data.data);
+      });
   };
 
   const handleToggle = (value) => () => {
@@ -143,14 +146,15 @@ const MeetingsView = (props) => {
   const showDetails = (e) => {
     const className = e.target.getAttribute('class');
     const id = e.target.getAttribute('id');
-    const meetingId = id.slice(id.indexOf('list-item ') + 'list-item '.length);
-    setClickedMeeting(meetingId);
+    if (id && id !== 'del_button') {
+      const meetingId = id.slice(id.indexOf('list-item ') + 'list-item '.length);
+      setClickedMeeting(meetingId);
+      setShowDetail(true);
+    }
     console.log(className);
-    console.log(meetingId);
 
     if (className === 'MuiSvgIcon-root makeStyles-deleteIcon-8') {
     } else {
-      setShowDetail(true);
     }
   // getPositionXY(e.target.id);
   };
@@ -204,7 +208,7 @@ const MeetingsView = (props) => {
                       </div>
                     )}
                   />
-                  <HighlightOffIcon className={classes.deleteIcon} onClick={() => delMeeting(item.idMeeting)} />
+                  <HighlightOffIcon id="del_button" className={classes.deleteIcon} onClick={() => delMeeting(item.idMeeting)} />
                 </ListItem>
               );
             })
@@ -215,7 +219,7 @@ const MeetingsView = (props) => {
         {(() => {
           if (showDetail) {
             return (
-              <MeetingDetail cardPosition={cardPosition} showDet={hideDet} meetingId={clickedMeeting} date={props.date} />
+              <MeetingDetail cardPosition={cardPosition} showDet={hideDet} meetingId={clickedMeeting} date={props.date} setMeetings={setUserMeetings} />
             );
           }
         })()}

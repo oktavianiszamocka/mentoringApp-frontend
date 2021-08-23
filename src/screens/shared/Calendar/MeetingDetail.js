@@ -97,11 +97,18 @@ const useStyles = makeStyles((theme) => ({
   grid: {
     marginBottom: '-15px',
   },
-  buttons: {
+  buttons_blue: {
     padding: '2px',
     fontSize: '10px',
     marginTop: '10px',
     marginLeft: '5px',
+  },
+  buttons_white: {
+    padding: '2px',
+    fontSize: '10px',
+    marginTop: '10px',
+    marginLeft: '5px',
+    backgroundColor: 'white',
   },
   assignee_grid: {
     marginBottom: '4px',
@@ -124,6 +131,7 @@ const MeetingDetail = (props) => {
   const [location, setLocation] = useState('');
   const [assignedUsers, setAssignedUsers] = useState([]);
   const [assignedUsersForEdit, setAssignedUsersForEdit] = useState([]);
+  let loggedUserAttend = false;
 
   const styles = {
     top: '150px',
@@ -149,6 +157,34 @@ const MeetingDetail = (props) => {
   const showEdit = () => {
     setEditMeetingVisible(true);
   };
+
+  const acceptMeeting = async () => {
+    const attendanceAccept = {
+      user: 9,
+      isAttend: 'true',
+    };
+    await Promise.all([Api.updateMeetingAttendance(attendanceAccept)]);
+  };
+
+  const declineMeeting = async () => {
+    const attendanceDecline = {
+      user: 9,
+      isAttend: 'false',
+    };
+    await Promise.all([Api.updateMeetingAttendance(attendanceDecline)]);
+  };
+
+  const setLogged = () => {
+    const logged = assignedUsers.filter((x) => x.idUser === 9);
+    if (logged) {
+      if (logged.length > 0) {
+        console.log(logged[0].isAttend);
+        loggedUserAttend = logged[0].isAttend;
+      }
+    }
+  };
+
+  setLogged();
 
   return (
     <StyledDiv style={styles}>
@@ -223,6 +259,7 @@ const MeetingDetail = (props) => {
           endTime={end}
           meetingLocation={location}
           attendees={assignedUsers}
+          setMeetings={props.setMeetings}
         />
         )}
       </Grid>
@@ -232,10 +269,34 @@ const MeetingDetail = (props) => {
           <StyledUnderTitleGoing>GOING?</StyledUnderTitleGoing>
         </Grid>
         <Grid item>
-          <Button size="small" variant="contained" color="primary" className={classes.buttons}>YES</Button>
-        </Grid>
-        <Grid item>
-          <Button size="small" variant="contained" color="primary" className={classes.buttons}>NO</Button>
+          { loggedUserAttend ? (
+            <Grid container direction="row">
+              <Grid item>
+                <Button size="small" variant="contained" color="primary" className={classes.buttons_blue} onClick={acceptMeeting}>YES</Button>
+              </Grid>
+              <Grid item>
+                <Button size="small" variant="contained" className={classes.buttons_white} onClick={declineMeeting}>NO</Button>
+              </Grid>
+            </Grid>
+          ) : loggedUserAttend === false ? (
+            <Grid container direction="row">
+              <Grid item>
+                <Button size="small" variant="contained" className={classes.buttons_white} onClick={acceptMeeting}>YES</Button>
+              </Grid>
+              <Grid item>
+                <Button size="small" variant="contained" color="primary" className={classes.buttons_blue} onClick={declineMeeting}>NO</Button>
+              </Grid>
+            </Grid>
+          ) : (
+            <Grid container direction="row">
+              <Grid item>
+                <Button size="small" variant="contained" className={classes.buttons_white} onClick={acceptMeeting}>YES</Button>
+              </Grid>
+              <Grid item>
+                <Button size="small" variant="contained" className={classes.buttons_white} onClick={declineMeeting}>NO</Button>
+              </Grid>
+            </Grid>
+          )}
         </Grid>
       </Grid>
     </StyledDiv>

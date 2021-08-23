@@ -186,6 +186,14 @@ const MeetingEdit = (props) => {
 
   const [initialIds, setInitialIds] = useState([]);
 
+  const compare = (a, b) => {
+    const time1 = parseFloat(a.startTime.slice(0, -3).replace(':', '.'));
+    const time2 = parseFloat(b.startTime.slice(0, -3).replace(':', '.'));
+    if (time1 < time2) return -1;
+    if (time1 > time2) return 1;
+    return 0;
+  };
+
   const handleChange = (event) => {
     const newIds = event.target.value;
     let addAssignee = false;
@@ -263,7 +271,9 @@ const MeetingEdit = (props) => {
     await Api.updateMeeting(meetingData)
       .then(async () => {
         closeAdd();
-        // const res = await Promise.all([Api.getProjectTasks(5)]);
+        const res = await Promise.all([Api.getUserMeetings(props.date)]);
+        res[0].data.data.sort(compare);
+        props.setMeetings(res[0].data.data);
       });
   };
 
