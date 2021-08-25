@@ -130,8 +130,10 @@ const MeetingDetail = (props) => {
   const [end, setEnd] = useState('');
   const [location, setLocation] = useState('');
   const [assignedUsers, setAssignedUsers] = useState([]);
+  const [attendanceId, setAttendanceId] = useState([]);
   const [assignedUsersForEdit, setAssignedUsersForEdit] = useState([]);
-  let loggedUserAttend = false;
+  const [loggedUserAttend, setloggedUserAttend] = useState(false);
+  // let loggedUserAttend = false;
 
   const styles = {
     top: '150px',
@@ -149,6 +151,8 @@ const MeetingDetail = (props) => {
       setEnd(res[0].data.data.endTime);
       setLocation(res[0].data.data.location);
       setAssignedUsers(res[0].data.data.meetingAttendee);
+      setAttendanceId(res[0].data.data.meetingAttendee.find((x) => x.idUser === 9).idAttendence);
+      setloggedUserAttend(res[0].data.data.meetingAttendee.find((x) => x.idUser === 9).isAttend);
     };
 
     loadData();
@@ -160,31 +164,43 @@ const MeetingDetail = (props) => {
 
   const acceptMeeting = async () => {
     const attendanceAccept = {
+      idAttendence: attendanceId,
       user: 9,
-      isAttend: 'true',
+      isAttend: true,
     };
-    await Promise.all([Api.updateMeetingAttendance(attendanceAccept)]);
+    await Promise.all([Api.updateMeetingAttendance(attendanceAccept)]).then(async () => {
+      const res = await Promise.all([Api.getMeetingDetail(props.meetingId)]);
+      setTitle(res[0].data.data.title);
+      setDescription(res[0].data.data.description);
+      setStart(res[0].data.data.startTime);
+      setEnd(res[0].data.data.endTime);
+      setLocation(res[0].data.data.location);
+      setAssignedUsers(res[0].data.data.meetingAttendee);
+      setAttendanceId(res[0].data.data.meetingAttendee.find((x) => x.idUser === 9).idAttendence);
+      setloggedUserAttend(true);
+    });
   };
 
   const declineMeeting = async () => {
     const attendanceDecline = {
+      idAttendence: attendanceId,
       user: 9,
-      isAttend: 'false',
+      isAttend: false,
     };
-    await Promise.all([Api.updateMeetingAttendance(attendanceDecline)]);
+    await Promise.all([Api.updateMeetingAttendance(attendanceDecline)]).then(async () => {
+      const res = await Promise.all([Api.getMeetingDetail(props.meetingId)]);
+      setTitle(res[0].data.data.title);
+      setDescription(res[0].data.data.description);
+      setStart(res[0].data.data.startTime);
+      setEnd(res[0].data.data.endTime);
+      setLocation(res[0].data.data.location);
+      setAssignedUsers(res[0].data.data.meetingAttendee);
+      setAttendanceId(res[0].data.data.meetingAttendee.find((x) => x.idUser === 9).idAttendence);
+      setloggedUserAttend(false);
+    });
   };
 
-  const setLogged = () => {
-    const logged = assignedUsers.filter((x) => x.idUser === 9);
-    if (logged) {
-      if (logged.length > 0) {
-        console.log(logged[0].isAttend);
-        loggedUserAttend = logged[0].isAttend;
-      }
-    }
-  };
-
-  setLogged();
+  // setLogged();
 
   return (
     <StyledDiv style={styles}>
