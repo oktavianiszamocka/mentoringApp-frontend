@@ -8,9 +8,9 @@ import Paper from '@material-ui/core/Paper';
 const StyledCloseIcon = mStyled(CloseIcon)({
   maxWidth: '20px',
   maxHeight: '20px',
-  backgroundColor: '#333',
+  // backgroundColor: '#333',
   borderRadius: '50%',
-  color: '#fff',
+  color: 'black',
   position: 'absolute',
   right: '5px',
   top: '5px',
@@ -19,9 +19,9 @@ const StyledCloseIcon = mStyled(CloseIcon)({
 const StyledEditIcon = mStyled(EditIcon)({
   maxWidth: '20px',
   maxHeight: '20px',
-  backgroundColor: '#333',
+  // backgroundColor: '#333',
   borderRadius: '50%',
-  color: '#fff',
+  color: 'black',
   position: 'absolute',
   right: '30px',
   top: '5px',
@@ -34,7 +34,8 @@ const PaperNote = mStyled(Paper)({
   padding: '0.5rem',
   minHeight: '50px',
   backgroundColor: '#ffff80',
-  fontSize: '0.8rem',
+  fontSize: '0.7rem',
+  fontFamily: 'Roboto',
   position: 'relative',
 });
 
