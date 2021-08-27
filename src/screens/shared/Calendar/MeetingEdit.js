@@ -149,6 +149,20 @@ const useStyles = makeStyles((theme) => ({
   attendees: {
     fontSize: '15px',
   },
+  error: {
+    color: 'rgb(255,0,0,0.6)',
+    marginTop: '-20px',
+    marginLeft: '5px',
+    marginBottom: '10px',
+    fontFamily: 'Roboto',
+    fontSize: '13px',
+  },
+  error2: {
+    color: 'rgb(255,0,0,0.6)',
+    marginLeft: '5px',
+    fontFamily: 'Roboto',
+    fontSize: '13px',
+  },
 }));
 
 const ITEM_HEIGHT = 48;
@@ -320,11 +334,19 @@ const MeetingEdit = (props) => {
     onMeetingEditHandler(meetingData);
   };
 
+  const validate = Yup.object({
+    title: Yup.string().max(20, 'Must be 20 characters or less').required('Required'),
+    location: Yup.string().required('Required'),
+    description: Yup.string().min(10, 'Must be at least 10 characters'),
+    start: Yup.string().matches(/^(?:\d|[01]\d|2[0-3]):[0-5]\d$/, 'Hour not valid').required('Required'),
+    end: Yup.string().matches(/^(?:\d|[01]\d|2[0-3]):[0-5]\d$/, 'Hour not valid').required('Required'),
+  });
+
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={onSubmit}
-      validator={() => ({})}
+      validationSchema={validate}
     >
       {(formik) => {
         const {
@@ -339,19 +361,26 @@ const MeetingEdit = (props) => {
                 </Grid>
                 <CloseIcon className={classes.close} onClick={closeAdd} />
                 <Grid item>
-                  <Field
-                    as={TextField}
-                    id="title"
-                    name="title"
-                    label="Enter title"
-                    type="search"
-                    InputProps={{
-                      classes: {
-                        input: classes.resize,
-                      },
-                    }}
-                    className={classes.title}
-                  />
+                  <div>
+                    <Field
+                      as={TextField}
+                      id="title"
+                      name="title"
+                      label="Enter title"
+                      type="search"
+                      InputProps={{
+                        classes: {
+                          input: classes.resize,
+                        },
+                      }}
+                      className={classes.title}
+                    />
+                    <ErrorMessage
+                      name="title"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </div>
                 </Grid>
               </Grid>
               <Grid
@@ -368,18 +397,25 @@ const MeetingEdit = (props) => {
                       <StyledUnderTitle>START TIME</StyledUnderTitle>
                     </Grid>
                     <Grid item>
-                      <Field
-                        as={TextField}
-                        id="start"
-                        name="start"
-                        className={classes.times}
-                        InputProps={{
-                          classes: {
-                            input: classes.resize_time,
-                          },
-                        }}
-                        variant="outlined"
-                      />
+                      <div>
+                        <Field
+                          as={TextField}
+                          id="start"
+                          name="start"
+                          className={classes.times}
+                          InputProps={{
+                            classes: {
+                              input: classes.resize_time,
+                            },
+                          }}
+                          variant="outlined"
+                        />
+                        <ErrorMessage
+                          name="start"
+                          component="div"
+                          className={classes.error2}
+                        />
+                      </div>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -389,18 +425,25 @@ const MeetingEdit = (props) => {
                       <StyledUnderTitle>END TIME</StyledUnderTitle>
                     </Grid>
                     <Grid item>
-                      <Field
-                        as={TextField}
-                        id="end"
-                        name="end"
-                        className={classes.times}
-                        InputProps={{
-                          classes: {
-                            input: classes.resize_time,
-                          },
-                        }}
-                        variant="outlined"
-                      />
+                      <div>
+                        <Field
+                          as={TextField}
+                          id="end"
+                          name="end"
+                          className={classes.times}
+                          InputProps={{
+                            classes: {
+                              input: classes.resize_time,
+                            },
+                          }}
+                          variant="outlined"
+                        />
+                        <ErrorMessage
+                          name="end"
+                          component="div"
+                          className={classes.error2}
+                        />
+                      </div>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -408,39 +451,53 @@ const MeetingEdit = (props) => {
               <Grid item>
                 <StyledUnderTitle>DESCRIPTION</StyledUnderTitle>
               </Grid>
-              <Field
-                as={TextField}
-                id="description"
-                name="description"
-                label="Enter description"
-                className={classes.description}
-                multiline
-                rows={3}
-                InputProps={{
-                  classes: {
-                    input: classes.resize,
-                  },
-                }}
-                variant="outlined"
-              />
+              <div>
+                <Field
+                  as={TextField}
+                  id="description"
+                  name="description"
+                  label="Enter description"
+                  className={classes.description}
+                  multiline
+                  rows={3}
+                  InputProps={{
+                    classes: {
+                      input: classes.resize,
+                    },
+                  }}
+                  variant="outlined"
+                />
+                <ErrorMessage
+                  name="description"
+                  component="div"
+                  className={classes.error2}
+                />
+              </div>
               <Grid container direction="column">
                 <Grid item>
                   <StyledUnderTitle>LOCATION</StyledUnderTitle>
                 </Grid>
                 <Grid item>
-                  <Field
-                    as={TextField}
-                    id="location"
-                    name="location"
-                    label="Enter location"
-                    className={classes.location}
-                    InputProps={{
-                      classes: {
-                        input: classes.resize,
-                      },
-                    }}
-                    variant="outlined"
-                  />
+                  <div>
+                    <Field
+                      as={TextField}
+                      id="location"
+                      name="location"
+                      label="Enter location"
+                      className={classes.location}
+                      InputProps={{
+                        classes: {
+                          input: classes.resize,
+                        },
+                      }}
+                      variant="outlined"
+                    />
+                    <ErrorMessage
+                      name="location"
+                      component="div"
+                      className={classes.error2}
+                    />
+                  </div>
                 </Grid>
               </Grid>
 
