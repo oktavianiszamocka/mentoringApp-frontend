@@ -9,13 +9,8 @@ import {
 } from '@material-ui/core';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
 
-} from '@material-ui/pickers';
-import { Select, KeyboardDatePicker } from 'material-ui-formik-components';
-import DatePickerInput from '../shared/components/DatePickerInput';
+import { Select } from 'material-ui-formik-components';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -244,7 +239,7 @@ const ProjectMembersForm = (props) => {
                       type="submit"
                       className={dirty && isValid ? '' : 'disabled-btn'}
                     >
-                      Submit
+                      Add Project Members
                     </Button>
 
                   </Grid>
