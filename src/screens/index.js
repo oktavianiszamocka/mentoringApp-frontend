@@ -19,9 +19,9 @@ import Signup from './shared/components/Signup';
 import TaskDashboard from './ProjectForm/TaskPage/TaskDashborad';
 import TaskDetail from './ProjectForm/TaskPage/TaskDetail';
 import TaskAdd from './ProjectForm/TaskPage/TaskAdd';
-
 import CalendarMain from './shared/Calendar/CalendarMain';
 import UseToken from './UseToken';
+import EditProjectFormDashboard from './ProjectForm/EditFormDashboard';
 
 const App = () => {
   const { token, setToken } = UseToken();
@@ -47,6 +47,7 @@ const App = () => {
         <Route path="/project-detail/:IdProject" component={ProjectDetailsDashboard} />
         <Route path="/project-promoters/:IdProject" component={ProjectPromotersBoard} />
         <Route path="/project-form" component={ProjectFormBoard} />
+        <Route path="/edit-project/:IdProject" component={EditProjectFormDashboard} />
         <Route path="/invitations" component={InvitationPage} />
         <Route path="/signup" component={Signup} />
         <Route path="/task/:IdProject" component={TaskDashboard} />

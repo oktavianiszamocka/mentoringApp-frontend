@@ -142,7 +142,8 @@ const ProjectInfoForm = (props) => {
 
                   </Grid>
                   <Grid item xs={12}>
-
+                    {props.isEdit !== true
+                    && (
                     <Field
                       as={TextField}
                       required
@@ -154,7 +155,7 @@ const ProjectInfoForm = (props) => {
                       error={!!(errors.superviserEmail && touched.superviserEmail)}
                       helperText={errors.superviserEmail ? errors.superviserEmail : null}
                     />
-
+                    )}
                   </Grid>
                   <Grid item xs={6}>
 
@@ -234,6 +235,7 @@ ProjectInfoForm.prototype = {
   initialValues: PropTypes.object,
   statusOptions: PropTypes.object,
   isReadOnly: PropTypes.bool,
+  isEdit: PropTypes.bool,
 
 };
 

@@ -96,6 +96,14 @@ const getTasksStatuses = () => axios.get(`${apiUrl}/tasks/status`);
 const getTasksAsignees = () => axios.get(`${apiUrl}/project-members/5`);
 const createTask = (taskData) => axios.post(`${apiUrl}/tasks/`, taskData);
 const updateTask = (taskData) => axios.patch(`${apiUrl}/tasks/`, taskData);
+const editProjectInfo = (projectInfo) => axios.patch(`${apiUrl}/projects/`, projectInfo);
+const getProjectPromoterEmails = (idProject) => axios.get(`${apiUrl}/project-promoters/${idProject}/email`);
+const updateProjectPromoter = (editProjectPromoter) => axios.patch(`${apiUrl}/project-promoters/`, editProjectPromoter);
+const deleteProjectMember = (idProjectMember) => axios.delete(`${apiUrl}/project-members/${idProjectMember}`);
+const updateProjectMember = (editProjectMember) => axios.patch(`${apiUrl}/project-members/`, editProjectMember);
+const getProjectMemberInvitation = (idProject) => axios.get(`${apiUrl}/invitations/member/${idProject}`);
+const getProjectPromotorInvitation = (idProject) => axios.get(`${apiUrl}/invitations/promotor/${idProject}`);
+const deleteProjectPromotor = (idProject, emailUser) => axios.delete(`${apiUrl}/project-promoters/${idProject}?email=${emailUser}`);
 
 export default {
   getUserId,
@@ -140,4 +148,13 @@ export default {
   getTasksAsignees,
   createTask,
   updateTask,
+  editProjectInfo,
+  getProjectPromoterEmails,
+  updateProjectPromoter,
+  deleteProjectMember,
+  updateProjectMember,
+  getProjectMemberInvitation,
+  getProjectPromotorInvitation,
+  deleteProjectPromotor,
+
 };

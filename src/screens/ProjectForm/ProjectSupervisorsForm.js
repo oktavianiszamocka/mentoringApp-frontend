@@ -13,6 +13,7 @@ import {
 
 } from '@material-ui/pickers';
 import { Select, KeyboardDatePicker } from 'material-ui-formik-components';
+import CloseIcon from '@material-ui/icons/Close';
 import DatePickerInput from '../shared/components/DatePickerInput';
 
 const useStyles = makeStyles((theme) => ({
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
   },
   fieldStyle: {
-    width: '100%',
+    width: '95%',
   },
 
 }));
@@ -67,9 +68,10 @@ const ProjectSupervisorsForm = (props) => {
                   <Grid item xs={12}>
 
                     <Field
+                      id="superviser-2"
                       as={TextField}
                       name="superviser2Email"
-                      required
+
                       label="Superviser 2 Email"
                       variant="outlined"
                       className={classes.fieldStyle}
@@ -77,10 +79,13 @@ const ProjectSupervisorsForm = (props) => {
                       helperText={errors.superviser2Email && touched.superviser2Email ? errors.superviser2Email : null}
                     />
 
+                    {props.isEdit && <CloseIcon id="2" onClick={props.closeIconAction} /> }
+
                   </Grid>
                   <Grid item xs={12}>
 
                     <Field
+                      id="superviser-3"
                       as={TextField}
                       name="superviser3Email"
                       label="Superviser 3 Email"
@@ -90,10 +95,12 @@ const ProjectSupervisorsForm = (props) => {
                       helperText={errors.superviser3Email && touched.superviser3Email ? errors.superviser2Email : null}
                     />
 
+                    {props.isEdit && <CloseIcon id="3" onClick={props.closeIconAction} /> }
                   </Grid>
                   <Grid item xs={12}>
 
                     <Field
+                      id="superviser-4"
                       as={TextField}
                       name="superviser4Email"
                       label="Superviser 4 Email"
@@ -103,10 +110,12 @@ const ProjectSupervisorsForm = (props) => {
                       helperText={errors.superviser4Email && touched.superviser4Email ? errors.superviser2Email : null}
                     />
 
+                    {props.isEdit && <CloseIcon id="4" onClick={props.closeIconAction} /> }
                   </Grid>
                   <Grid item xs={12}>
 
                     <Field
+                      id="superviser-5"
                       as={TextField}
                       name="superviser5Email"
                       label="Superviser 5 Email"
@@ -115,7 +124,7 @@ const ProjectSupervisorsForm = (props) => {
                       error={!!(errors.superviser5Email && touched.superviser5Email)}
                       helperText={errors.superviser5Email && touched.superviser5Email ? errors.superviser2Email : null}
                     />
-
+                    {props.isEdit && <CloseIcon id="5" onClick={props.closeIconAction} /> }
                   </Grid>
 
                   <Grid
@@ -125,15 +134,16 @@ const ProjectSupervisorsForm = (props) => {
                     justify="flex-start"
                     alignItems="flex-start"
                   >
+                    {!props.isReadOnly && (
                     <Button
                       variant="contained"
                       color="primary"
                       type="submit"
-                      disabled={!dirty || isSubmitting}
                       className={dirty && isValid ? '' : 'disabled-btn'}
                     >
                       Submit
                     </Button>
+                    )}
 
                   </Grid>
 
@@ -151,9 +161,11 @@ const ProjectSupervisorsForm = (props) => {
   );
 };
 ProjectSupervisorsForm.prototype = {
-  onSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func,
   initialValues: PropTypes.object,
   isReadOnly: PropTypes.bool,
+  isEdit: PropTypes.bool,
+  closeIconAction: PropTypes.func,
 
 };
 
