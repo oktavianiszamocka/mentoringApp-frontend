@@ -28,15 +28,17 @@ export default function UseToken() {
   };
 
   const clearToken = () => {
+    console.log('clear tokme');
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_token');
+    localStorage.removeItem('idUser');
   };
   return {
     setToken: saveToken,
     token,
     setRefreshToken: saveRefreshToken,
     refreshToken,
-    // clearToken,
+    clearToken,
 
   };
 }

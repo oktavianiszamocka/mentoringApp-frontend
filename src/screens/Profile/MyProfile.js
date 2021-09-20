@@ -8,6 +8,7 @@ import moment from 'moment';
 import Chip from '@material-ui/core/Chip';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Title from '../shared/components/Title';
 
 const StyledSection = styled.section`
@@ -87,9 +88,14 @@ const useStyles = makeStyles({
   chipStyle: {
     margin: '0 5px',
   },
+  input: {
+    display: 'none',
+  },
 
 });
-const MyProfile = ({ profileInfo, showEditButton }) => {
+const MyProfile = ({
+  profileInfo, showEditButton, onFileUpdate, isDoneUpload,
+}) => {
   const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('LL');
   const allSkills = profileInfo.skills;
   const classes = useStyles();
@@ -117,9 +123,18 @@ const MyProfile = ({ profileInfo, showEditButton }) => {
               <StyledUnderData>{`Semester ${profileInfo.semester}`}</StyledUnderData>
             </div>
           </Grid>
-          <Grid item>
-            {showEditButton && (
+        </Grid>
 
+        {showEditButton && (
+
+        <div>
+          <Grid
+            container
+            direction="column"
+            spacing={2}
+          >
+
+            <Grid item>
               <Button
                 variant="contained"
                 color="secondary"
@@ -128,10 +143,34 @@ const MyProfile = ({ profileInfo, showEditButton }) => {
               >
                 Edit data
               </Button>
+            </Grid>
 
-            ) }
+            <Grid item>
+              <input
+                accept="image/*"
+                className={classes.input}
+                id="contained-button-file"
+                type="file"
+                onChange={onFileUpdate}
+              />
+              <label htmlFor="contained-button-file">
+                <Button
+                  className={classes.buttonEdit}
+                  variant="contained"
+                  color="primary"
+                  component="span"
+                >
+                  Upload New Avatar
+                </Button>
+              </label>
+              <span />
+              {isDoneUpload && <CircularProgress />}
+            </Grid>
           </Grid>
-        </Grid>
+
+        </div>
+
+        ) }
 
         <StyledInfoSection>
           <Grid container spacing={2}>
