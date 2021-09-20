@@ -13,6 +13,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Link from '@material-ui/core/Link';
 import Divider from '@material-ui/core/Divider';
+import UseToken from 'screens/UseToken';
 import Font from '../../../globals/font';
 import Avatar from './Avatar';
 import Api from '../../../api/index';
@@ -109,6 +110,19 @@ const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const removeLocalStorage = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('idUser');
+  };
+
+  const handleLogout = async (e) => {
+    removeLocalStorage();
+
+    window.location.href = '/login';
+  };
+
   const [user, setUser] = useState();
 
   const loadData = async () => {
@@ -121,6 +135,7 @@ const Header = () => {
   }, []);
 
   return (
+
     <AppBar position="fixed" color="white" elevation="3">
       <Toolbar style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div className={classes.logo}>
@@ -217,7 +232,7 @@ const Header = () => {
             <Divider />
             <MenuItem onClick={handleClose}>Settings</MenuItem>
             <Divider />
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </div>
       </Toolbar>
