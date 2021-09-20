@@ -22,6 +22,7 @@ import TaskAdd from './ProjectForm/TaskPage/TaskAdd';
 import CalendarMain from './shared/Calendar/CalendarMain';
 import UseToken from './UseToken';
 import EditProjectFormDashboard from './ProjectForm/EditFormDashboard';
+import ChangePassword from './Auth/ChangePassword';
 
 const App = () => {
   const { token, setToken } = UseToken();
@@ -54,6 +55,7 @@ const App = () => {
         <Route path="/task-detail" component={TaskDetail} />
         <Route path="/task-add" component={TaskAdd} />
         <Route path="/calendar" component={CalendarMain} />
+        <Route path="/change-password" component={ChangePassword} />
       </Switch>
     </BrowserRouter>
 
