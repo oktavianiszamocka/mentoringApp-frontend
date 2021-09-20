@@ -1,6 +1,4 @@
 import axios from 'axios';
-import moment from 'moment';
-import UseToken from '../screens/UseToken';
 
 const apiUrl = 'http://localhost:57864/api';
 
@@ -104,7 +102,9 @@ const updateProjectMember = (editProjectMember) => axios.patch(`${apiUrl}/projec
 const getProjectMemberInvitation = (idProject) => axios.get(`${apiUrl}/invitations/member/${idProject}`);
 const getProjectPromotorInvitation = (idProject) => axios.get(`${apiUrl}/invitations/promotor/${idProject}`);
 const deleteProjectPromotor = (idProject, emailUser) => axios.delete(`${apiUrl}/project-promoters/${idProject}?email=${emailUser}`);
+const updateUserAvatar = (idUser, pictureUrl) => axios.patch(`${apiUrl}/account/avatar?user=${idUser}&url=${pictureUrl}`);
 const changePassword = (passwordData) => axios.post(`${apiUrl}/account/changePassword`, passwordData);
+
 
 export default {
   getUserId,
@@ -157,5 +157,7 @@ export default {
   getProjectMemberInvitation,
   getProjectPromotorInvitation,
   deleteProjectPromotor,
+  updateUserAvatar,
   changePassword,
+
 };
