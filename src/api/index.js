@@ -104,6 +104,7 @@ const updateProjectMember = (editProjectMember) => axios.patch(`${apiUrl}/projec
 const getProjectMemberInvitation = (idProject) => axios.get(`${apiUrl}/invitations/member/${idProject}`);
 const getProjectPromotorInvitation = (idProject) => axios.get(`${apiUrl}/invitations/promotor/${idProject}`);
 const deleteProjectPromotor = (idProject, emailUser) => axios.delete(`${apiUrl}/project-promoters/${idProject}?email=${emailUser}`);
+const changePassword = (passwordData) => axios.post(`${apiUrl}/account/changePassword`, passwordData);
 
 export default {
   getUserId,
@@ -156,5 +157,5 @@ export default {
   getProjectMemberInvitation,
   getProjectPromotorInvitation,
   deleteProjectPromotor,
-
+  changePassword,
 };

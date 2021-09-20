@@ -60,34 +60,37 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Roboto',
     fontSize: '13px',
   },
+  errorAlert: {
+    margin: '5px',
+    color: 'green',
+  },
 }));
 
 function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
+  return <MuiAlert style={{ marginTop: '5px' }} elevation={6} variant="filled" {...props} />;
 }
 
 export default function ChangePassword({ setToken, setRefreshToken }) {
   const classes = useStyles();
   const [ErrorLogin, setErrorLogin] = useState('');
   const emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const [projectError, setProjectError] = useState('');
+  const [projectSuccess, setProjectSuccess] = useState(false);
 
   const submitChangePassword = async (values) => {
-    // setErrorLogin('');
-    // const responseToken = await Api.login(values)
-    //   .then((response) => {
-    //     setToken(response.data.token);
-    //     setRefreshToken(response.data.refreshToken);
-    //     localStorage.setItem('idUser', response.data.idUser);
-    //   })
-    //   .catch((err) => {
-    //     setErrorLogin(err.response.data);
-    //   });
+    const passwordData = {
+      idUser: 31,
+      oldPassword: values.oldPassword, // test123
+      newPassword: values.newPassword,
+    };
 
-    /// setToken(responseToken.token);
-    //  setRefreshToken(responseToken.refreshToken);
-    //  console.log(responseToken.token);
-
-    // console.log(responseToken.refreshToken);
+    await Api.changePassword(passwordData)
+      .then(async (response) => {
+        console.log('success');
+        setProjectSuccess(true);
+      }).catch((err) => {
+        setProjectError(err.response.data);
+      });
   };
 
   const validationSchema = Yup.object({
@@ -101,7 +104,9 @@ export default function ChangePassword({ setToken, setRefreshToken }) {
       <CssBaseline />
       <div className={classes.paper}>
         <img src={logo} alt="Logo" />
-        {ErrorLogin && <Alert severity="error">{ErrorLogin}</Alert>}
+        {ErrorLogin && (
+          <Alert severity="error">{ErrorLogin}</Alert>
+        )}
         <Formik
           onSubmit={submitChangePassword}
           validationSchema={validationSchema}
@@ -127,6 +132,8 @@ export default function ChangePassword({ setToken, setRefreshToken }) {
                   component="div"
                   className={classes.error}
                 />
+                {projectError && <Alert severity="error">{projectError}</Alert>}
+
               </Grid>
               <Grid item>
                 <Field
@@ -170,6 +177,8 @@ export default function ChangePassword({ setToken, setRefreshToken }) {
                 >
                   Submit
                 </Button>
+                {projectSuccess && <MuiAlert style={{ marginTop: '5px' }}>Password successfuly changed</MuiAlert>}
+
               </Grid>
 
             </Grid>
