@@ -4,15 +4,9 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import PropTypes from 'prop-types';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import logo from '../../assets/images/pja.png';
-import { blue500 } from 'material-ui/styles/colors';
 import { blue50 } from 'material-ui/styles/colors';
-import { StayPrimaryLandscape } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -29,8 +23,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
+        width: '100%', 
     },
     submitButton: {
         marginTop: '10px',

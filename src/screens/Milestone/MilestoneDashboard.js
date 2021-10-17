@@ -26,12 +26,16 @@ const useStyles = makeStyles({
 
 });
 
-
+const defaultInitialMilestoneValue = {
+  idMilestone : '',
+  description: ''
+};
 
 const MilestoneDashboard = () => {
   const classes = useStyles();
   const [milestones, setMilestones] = useState([]);
   const [newMilestoneVisible, setNewMilestoneVisible] = useState(true);
+  const [updateMilestoneInitialValue, setUpdateMilestoneInitialValue] = useState(defaultInitialMilestoneValue);
 
 
   
@@ -84,7 +88,7 @@ const MilestoneDashboard = () => {
           {newMilestoneVisible && (
         <NewMilestoneForm
           onSubmit={handleNewMilestoneSubmit}
-          initialValue={"..."}
+          initialValue={updateMilestoneInitialValue.description}
         />
         )}
             
