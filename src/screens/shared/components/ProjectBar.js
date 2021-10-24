@@ -20,7 +20,7 @@ const StyledWrapper = styled.div`
   width: 13rem;
   height: 37rem;
   border-radius: 5px;
-  background-color: #1d1d1d;
+  background-color: #E0E0E0	;
 `;
 
 const StyledTitle = styled.h2`
@@ -29,7 +29,7 @@ const StyledTitle = styled.h2`
   letter-spacing: 1px;
   text-transform: uppercase;
   text-align: center;
-  color: #adadad;
+  color: #282828;
   font-family: 'Roboto', sans-serif;
   padding: 5px 10px;
 `;
@@ -39,7 +39,7 @@ const StyledP = styled.p`
   font-size: 0.9rem;
   margin-left: 10px;
 ]  text-align: center;
-  color: #adadad;
+  color: #282828;
 `;
 const useStyles = makeStyles({
   dividerStyle: {
@@ -159,7 +159,7 @@ const ProjectBar = () => {
           </Button>
         </Grid>
         <Grid item xs={12}>
-          <Button size="small" className={classes.buttonStyle} href={`/project-promoters/${IdProject}`}>
+          <Button size="small" className={classes.buttonStyle} href={`/task/${IdProject}`}>
             <div className={classes.divItem}>
               <FormatListBulletedIcon className={classes.IconStyle} />
               <StyledP>Tasks</StyledP>

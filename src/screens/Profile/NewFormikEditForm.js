@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import {
   Formik, Form, Field, ErrorMessage, FieldArray,
 } from 'formik';
-import { Button, Chip, Grid } from '@material-ui/core';
+import {
+  Button, Chip, Grid, Snackbar,
+} from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
 import MaterialAvatar from '@material-ui/core/Avatar';
 import moment from 'moment';
 import {
   MuiPickersUtilsProvider,
-  KeyboardDatePicker,
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import { Select, KeyboardDatePicker } from 'material-ui-formik-components';
 import * as Yup from 'yup';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
+import { countries } from 'countries-list';
+import MuiAlert from '@material-ui/lab/Alert';
 import Api from '../../api/index';
 
 const StyledSection = styled.section`
@@ -74,6 +79,9 @@ margin-left: 8px;
 margin-bottom: 10px;
 `;
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles({
   avatarGrid: {
     marginLeft: '2rem',
@@ -119,27 +127,52 @@ const useStyles = makeStyles({
 
 });
 const NewFormikEditForm = ({ profileInfo }) => {
-  const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('DD/MM/YYYY');
-
   const classes = useStyles();
-  const [selectedDate, setSelectedDate] = useState(dateOfBirthFormat);
-  const [onUpdateAction, setUpdateAction] = useState(false);
-  const [key, setKey] = useState(0);
+
+  const allCountries = [];
+  for (const country in countries) {
+    allCountries.push({ value: countries[country].name, label: countries[country].name });
+  }
+  const [successText, setSuccessText] = useState('Your profile has been changed successfully!');
+  const [ErrorProfile, setErrorProfile] = useState('');
   const [newSkill, setNewSkill] = useState('');
   const [updateProfileInitialValue, setUpdateProfileInitialValue] = useState(profileInfo);
-  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  const [successUpdate, setSuccessUpdate] = useState('false');
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
+  const openPopOver = Boolean(anchorEl);
+  const id = openPopOver ? 'simple-popover' : undefined;
 
-  const handleDateChange = (date) => {
-    const dateNew = moment(date).format('DD.MM.YYYY');
-    setSelectedDate(dateNew);
+  const handleCloseSnackBar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
+  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
   const onProfileUpdateHandler = async (profileData) => {
+    setErrorProfile('');
     await Api.updateProfileData(profileData)
       .then((res) => {
         if (res.status === 200) {
-          window.location = `/profile/${profileInfo.user}`;
+          setOpen(true);
+          setTimeout(() => {
+            setOpen(false);
+            setSuccessUpdate(true);
+            window.location = `/profile/${profileInfo.user}`;
+          }, 2000);
+
+          //
         }
+      })
+      .catch((err) => {
+        setErrorProfile(err.response.data);
       });
   };
 
@@ -148,7 +181,7 @@ const NewFormikEditForm = ({ profileInfo }) => {
     firstName: profileInfo.firstName,
     email: profileInfo.email,
     phone: profileInfo.phone,
-    dateOfBirth: selectedDate,
+    dateOfBirth: profileInfo.dateOfBirth,
     country: profileInfo.country,
     major: profileInfo.major,
     semester: profileInfo.semester,
@@ -182,171 +215,193 @@ const NewFormikEditForm = ({ profileInfo }) => {
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      <StyledSection>
-        <Grid
-          container
-          spacing={3}
-          alignItems="center"
-        >
-          <Grid item className={classes.avatarGrid}>
-            <MaterialAvatar
-              src={profileInfo.avatar}
-              className={classes.avatar}
-            />
-          </Grid>
-          <Grid item xs={8}>
-            <div>
-              <StyledTitleName>
-                {`${profileInfo.firstName} ${profileInfo.lastName}`}
-              </StyledTitleName>
-              <StyledUnderData>{`${profileInfo.major}`}</StyledUnderData>
-              <StyledUnderData>{`Semester ${profileInfo.semester}`}</StyledUnderData>
-            </div>
-          </Grid>
-        </Grid>
-        <StyledInfoSection>
-          <Grid container spacing={3} justify="center">
-            <Grid item xs={12}>
-              <StyledTitleEditProfile>Edit Profile</StyledTitleEditProfile>
+      {(formik) => {
+        const {
+          errors, touched, isValid, dirty, isSubmitting, values, setFieldValue, handleReset,
+        } = formik;
+        return (
+          <StyledSection>
+
+            <Grid
+              container
+              spacing={3}
+              alignItems="center"
+            >
+              <Grid item className={classes.avatarGrid}>
+                <MaterialAvatar
+                  src={profileInfo.avatar}
+                  className={classes.avatar}
+                />
+              </Grid>
+              <Snackbar
+                anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+                open={open}
+                autoHideDuration={3000}
+                onClose={handleCloseSnackBar}
+              >
+                <Alert onClose={handleCloseSnackBar} severity="success">
+                  {successText}
+                </Alert>
+              </Snackbar>
+              {ErrorProfile && <Alert severity="error">{ErrorProfile}</Alert>}
+              <Grid item xs={8}>
+                <div>
+                  <StyledTitleName>
+                    {`${profileInfo.firstName} ${profileInfo.lastName}`}
+                  </StyledTitleName>
+                  <StyledUnderData>{`${profileInfo.major}`}</StyledUnderData>
+                  <StyledUnderData>{`Semester ${profileInfo.semester}`}</StyledUnderData>
+                </div>
+              </Grid>
             </Grid>
-          </Grid>
-          <Form>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Field
-                  as={TextField}
-                  id="firstName"
-                  name="firstName"
-                  label="First Name"
-                  type="search"
-                  variant="outlined"
-                  className={classes.inputStyle}
-                />
-                <ErrorMessage
-                  name="firstName"
-                  component="div"
-                  className={classes.error}
-                />
+            <StyledInfoSection>
+              <Grid container spacing={3} justify="center">
+                <Grid item xs={12}>
+                  <StyledTitleEditProfile>Edit Profile</StyledTitleEditProfile>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <Field
-                  as={TextField}
-                  id="lastName"
-                  name="lastName"
-                  label="Last Name"
-                  type="search"
-                  variant="outlined"
-                  className={classes.inputStyle}
-                />
-                <ErrorMessage
-                  name="lastName"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Field
-                  as={TextField}
-                  id="email"
-                  name="email"
-                  label="E-mail"
-                  type="search"
-                  variant="outlined"
-                  className={classes.inputStyle}
-                />
-                <ErrorMessage
-                  name="email"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Field
-                  as={TextField}
-                  id="phone"
-                  name="phone"
-                  label="Phone Number"
-                  type="search"
-                  variant="outlined"
-                  className={classes.inputStyle}
-                />
-                <ErrorMessage
-                  name="phone"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <Field
-                    as={KeyboardDatePicker}
-                    disableToolbar
-                    variant="inline"
-                    format="dd.MM.yyyy"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="Date of birth"
-                    className={classes.datePickerStyle}
-                    value={selectedDate}
-                    onChange={handleDateChange}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change date',
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
-              </Grid>
-              <Grid item xs={12}>
-                <Field
-                  as={TextField}
-                  id="country"
-                  name="country"
-                  label="Country"
-                  type="search"
-                  variant="outlined"
-                  className={classes.inputStyle}
-                />
-                <ErrorMessage
-                  name="country"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Field
-                  as={TextField}
-                  id="major"
-                  name="major"
-                  label="Major"
-                  type="search"
-                  variant="outlined"
-                  className={classes.inputStyle}
-                />
-                <ErrorMessage
-                  name="major"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Field
-                  as={TextField}
-                  id="semester"
-                  name="semester"
-                  label="Semester"
-                  type="search"
-                  variant="outlined"
-                  className={classes.inputStyle}
-                />
-                <ErrorMessage
-                  name="semester"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <StyledLabel>Skills:</StyledLabel>
-                <FieldArray name="skills">
-                  {
+              <Form>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      id="firstName"
+                      name="firstName"
+                      label="First Name"
+                      type="search"
+                      variant="outlined"
+                      className={classes.inputStyle}
+                    />
+                    <ErrorMessage
+                      name="firstName"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      id="lastName"
+                      name="lastName"
+                      label="Last Name"
+                      type="search"
+                      variant="outlined"
+                      className={classes.inputStyle}
+                    />
+                    <ErrorMessage
+                      name="lastName"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      id="email"
+                      name="email"
+                      label="E-mail"
+                      type="search"
+                      variant="outlined"
+                      className={classes.inputStyle}
+                    />
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      id="phone"
+                      name="phone"
+                      label="Phone Number"
+                      type="search"
+                      variant="outlined"
+                      className={classes.inputStyle}
+                    />
+                    <ErrorMessage
+                      name="phone"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+
+                      <Field
+                        className={classes.datePickerStyle}
+                        component={KeyboardDatePicker}
+                        name="dateOfBirth"
+                        label="Date of birth"
+                        format="dd/MM/yyyy"
+                        clearable
+                        autoOk
+                        fullWidth
+                        inputVariant="outlined"
+                        error={!!(errors.startDate && touched.startDate)}
+                        helperText={errors.startDate && touched.startDate ? errors.startDate : null}
+                      />
+
+                    </MuiPickersUtilsProvider>
+
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      id="country"
+                      required
+                      label="Country"
+                      size="medium"
+                      name="country"
+                      variant="outlined"
+                      options={allCountries}
+                      component={Select}
+                      className={classes.inputStyle}
+
+                    />
+
+                    <ErrorMessage
+                      name="country"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      id="major"
+                      name="major"
+                      label="Major"
+                      type="search"
+                      variant="outlined"
+                      className={classes.inputStyle}
+                    />
+                    <ErrorMessage
+                      name="major"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      id="semester"
+                      name="semester"
+                      label="Semester"
+                      type="search"
+                      variant="outlined"
+                      className={classes.inputStyle}
+                    />
+                    <ErrorMessage
+                      name="semester"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <StyledLabel>Skills:</StyledLabel>
+                    <FieldArray name="skills">
+                      {
                         (fieldArrayProps) => {
                           const { push, remove, form } = fieldArrayProps;
                           const { values } = form;
@@ -370,6 +425,7 @@ const NewFormikEditForm = ({ profileInfo }) => {
                               }
                               <div>
                                 <TextField
+                                  id="skillTextField"
                                   size="small"
                                   className={classes.skillFieldStyle}
                                   label="Add skill"
@@ -378,7 +434,10 @@ const NewFormikEditForm = ({ profileInfo }) => {
                                 />
                                 <AddIcon
                                   className={classes.addIconStyle}
-                                  onClick={() => push(newSkill)}
+                                  onClick={() => {
+                                    push(newSkill);
+                                    document.getElementById('skillTextField').value = '';
+                                  }}
                                 />
                               </div>
 
@@ -386,37 +445,40 @@ const NewFormikEditForm = ({ profileInfo }) => {
                           );
                         }
                     }
-                </FieldArray>
-              </Grid>
-              <Grid item xs={12}>
-                <Field
-                  as={TextField}
-                  id="experiences"
-                  name="experiences"
-                  label="Experiences"
-                  type="search"
-                  variant="outlined"
-                  className={classes.inputStyle}
-                />
-              </Grid>
-              <Grid
-                container
-                direction="row"
-                justify="center"
-              >
-                <Button
-                  variant="contained"
-                  justify="center"
-                  color="secondary"
-                  type="submit"
-                >
-                  Save changes
-                </Button>
-              </Grid>
-            </Grid>
-          </Form>
-        </StyledInfoSection>
-      </StyledSection>
+                    </FieldArray>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      as={TextField}
+                      id="experiences"
+                      name="experiences"
+                      label="Experiences"
+                      type="search"
+                      variant="outlined"
+                      className={classes.inputStyle}
+                    />
+                  </Grid>
+                  <Grid
+                    container
+                    direction="row"
+                    justify="center"
+                  >
+                    <Button
+                      variant="contained"
+                      justify="center"
+                      color="secondary"
+                      type="submit"
+                    >
+                      Save changes
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Form>
+            </StyledInfoSection>
+          </StyledSection>
+        );
+      }}
+
     </Formik>
   );
 };

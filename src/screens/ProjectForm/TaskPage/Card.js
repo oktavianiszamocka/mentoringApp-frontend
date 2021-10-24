@@ -8,6 +8,8 @@ import MaterialAvatar from '@material-ui/core/Avatar';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import TaskDetail from './TaskDetail';
+import TaskEdit from './TaskEdit';
+import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
   padding: 15px 25px;
@@ -22,13 +24,14 @@ const StyledDiv2 = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 250px;
+  width: 200px;
 `;
 
 const StyledDivIcons = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: right;
+  margin-right: 1rem;
   `;
 
 const StyledDiv3 = styled.div`
@@ -41,7 +44,8 @@ const StyledDiv4 = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: start;
-  margin-left: 40px;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
 `;
 const StyledDiv5 = styled.div`
   display: flex;
@@ -71,10 +75,11 @@ const StyledP2 = styled.p`
 const useStyles = makeStyles({
   edit: {
     fontSize: '15px',
-    marginRight: '5px',
+
   },
   delete: {
     fontSize: '15px',
+
   },
   avatar: {
     width: '32px',
@@ -108,10 +113,44 @@ function Card(props) {
   const deadlineFormat = moment(deadline).format('LL');
   const idOfCard = props.id;
   const [showDetail, setShowDetail] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
 
+  const reload = props.reloadTasks;
   const handleClose = () => {
     setShowDetail(false);
   };
+
+  const [taskTitle, setTaskTitle] = useState('');
+  const [taskDeadline, settaskDeadline] = React.useState(new Date('2021-06-10T21:11:54'));
+  const [taskDescription, setTaskDescription] = useState('');
+  const [taskCreator, setTaskCreator] = useState('');
+  const [taskCreatedOn, setTaskCreatedOn] = useState('');
+  const [taskPriority, setTaskPriority] = useState('');
+  const [assignedUsers, setAssignedUsers] = useState([]);
+  const [taskStatus, setTaskStatus] = useState();
+  const [taskEnd, setTaskEnd] = useState();
+  const [taskStart, setTaskStart] = useState();
+
+  useEffect(() => {
+    const loadData = async () => {
+      const res = await Promise.all([Api.getTaskDetails(idOfCard)]);
+      console.log(res[0].data.data);
+      const assignedIds = [];
+      res[0].data.data.assignedUser.map((user) => {
+        assignedIds.push(user.idUser);
+      });
+      setTaskTitle(res[0].data.data.title);
+      setTaskDescription(res[0].data.data.description);
+      setTaskCreator(res[0].data.data.creatorUser);
+      setTaskCreatedOn(res[0].data.data.createdOn);
+      setTaskPriority(res[0].data.data.priority);
+      setAssignedUsers(assignedIds);
+      setTaskStatus(res[0].data.data.status);
+      setTaskEnd(res[0].data.data.expectedEndDate);
+      setTaskStart(res[0].data.data.startDate);
+    };
+    loadData();
+  }, []);
 
   const getPositionXY = () => {
     const element = document.getElementById(props.id);
@@ -119,6 +158,15 @@ function Card(props) {
     const { x } = rect;
     const { y } = rect;
     return [x, y];
+  };
+
+  const updateTaskStatus = async (idOfCard, newstatus) => {
+    const taskData = {
+      IdTask: idOfCard,
+      Status: newstatus,
+    };
+
+    await Api.updateTaskStatus(taskData);
   };
 
   const dragStart = (e) => {
@@ -145,8 +193,32 @@ function Card(props) {
     setShowDetail(false);
   };
 
-  const showDelete = (e) => {
-    console.log('deleteee!');
+  const hideEdit = () => {
+    console.log('hidding...');
+    setShowEdit(false);
+  };
+
+  const delCom = () => {
+    console.log(reload);
+    reload(idOfCard);
+  };
+
+  const showEditting = () => {
+    setShowEdit(true);
+  };
+
+  const taskData = {
+    idTask: idOfCard,
+    title: taskTitle,
+    status: taskStatus,
+    description: taskDescription,
+    startDate: taskStart,
+    expectedEndDate: taskEnd,
+    project: 5,
+    creator: 9,
+    createdOn: taskCreatedOn,
+    priority,
+    assignedUsers,
   };
 
   return (
@@ -156,9 +228,7 @@ function Card(props) {
       onDragStart={dragStart}
       onDragOver={dragOver}
     >
-
       <StyledDiv2 id="card">
-
         <StyledDiv3>
           <StyledDiv5>
             {(() => {
@@ -175,10 +245,10 @@ function Card(props) {
                 <ArrowDownwardIcon className={classes.arrowlow} />
               );
             })()}
-            <StyledP style={{ width: '220px' }}>{props.content}</StyledP>
+            <StyledP style={{ width: '170px' }}>{props.content}</StyledP>
             <StyledDivIcons>
-              <EditIcon fontSize="small" className={classes.edit} />
-              <DeleteIcon fontSize="small" className={classes.delete} onClick={showDelete} />
+              <EditIcon fontSize="small" className={classes.edit} onClick={showEditting} />
+              <DeleteIcon fontSize="small" className={classes.delete} onClick={delCom} />
             </StyledDivIcons>
           </StyledDiv5>
           <StyledDiv2>
@@ -188,19 +258,20 @@ function Card(props) {
               {deadlineFormat}
 
             </StyledP2>
-            <StyledDiv4>
-              {props.avatars ? (
-                props.avatars.map((item) => (
-                  <MaterialAvatar
-                    className={classes.avatar}
-                    src={item}
-                  />
-                ))) : (
-                  <div />
-              )}
-            </StyledDiv4>
+
           </StyledDiv2>
-          <div>
+          <StyledDiv4>
+            {props.avatars ? (
+              props.avatars.map((item) => (
+                <MaterialAvatar
+                  className={classes.avatar}
+                  src={item}
+                />
+              ))) : (
+                <div />
+            )}
+          </StyledDiv4>
+          <div style={{ marginTop: '0.5rem' }}>
             <StyledP2 onClick={showCom} style={{ color: 'grey' }}>
               See details
 
@@ -213,6 +284,13 @@ function Card(props) {
         if (showDetail) {
           return (
             <TaskDetail cardPosition={getPositionXY()} idT={idOfCard} showDet={hideCom} />
+          );
+        }
+      })()}
+      {(() => {
+        if (showEdit) {
+          return (
+            <TaskEdit description={taskDescription} taskInfo={taskData} cardPosition={getPositionXY()} idT={idOfCard} showEdit={hideEdit} />
           );
         }
       })()}
