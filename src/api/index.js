@@ -52,6 +52,7 @@ axios.interceptors.response.use((response) => response,
 
 const getUserId = () => 9;
 // const getUserId = () => localStorage.getItem('idUser');
+
 const getNotes = (pageNumber) => axios.get(`${apiUrl}/personal-notes/${getUserId()}?pageNumber=${pageNumber}&pageSize=3`);
 const getPosts = (pageNumber) => axios.get(`${apiUrl}/posts?pageNumber=${pageNumber}&pageSize=10`);
 const getGeneralPosts = (pageNumber) => axios.get(`${apiUrl}/posts/general?pageNumber=${pageNumber}&pageSize=10`);
@@ -88,6 +89,10 @@ const getProjectTasks = (idProject) => axios.get(`${apiUrl}/tasks/${idProject}`)
 const login = (logininfo) => axios.post(`${apiUrl}/account/login`, logininfo);
 const register = (registerinfo) => axios.post(`${apiUrl}/account/register`, registerinfo);
 const getTaskDetails = (idTask) => axios.get(`${apiUrl}/tasks/detail/${idTask}`);
+const getProjectMilestones = (idProject) => axios.get(`${apiUrl}/milestones/5`);
+const updateMilestoneToPassed = (milestoneData) => axios.patch(`${apiUrl}/milestones/update-step`, milestoneData);
+const addNewMilestone = (milestoneData) => axios.post(`${apiUrl}/milestones`, milestoneData);
+const editMilestone = (milestoneData) => axios.patch(`${apiUrl}/milestones`, milestoneData);
 const deleteTask = (idTask) => axios.delete(`${apiUrl}/tasks/${idTask}`);
 const updateTaskStatus = (tasksData) => axios.patch(`${apiUrl}/tasks/update-status`, tasksData);
 const getTasksStatuses = () => axios.get(`${apiUrl}/tasks/status`);
@@ -104,6 +109,7 @@ const getProjectPromotorInvitation = (idProject) => axios.get(`${apiUrl}/invitat
 const deleteProjectPromotor = (idProject, emailUser) => axios.delete(`${apiUrl}/project-promoters/${idProject}?email=${emailUser}`);
 const updateUserAvatar = (idUser, pictureUrl) => axios.patch(`${apiUrl}/account/avatar?user=${idUser}&url=${pictureUrl}`);
 const changePassword = (passwordData) => axios.post(`${apiUrl}/account/changePassword`, passwordData);
+
 
 
 export default {
@@ -143,6 +149,10 @@ export default {
   login,
   register,
   getTaskDetails,
+  getProjectMilestones,
+  updateMilestoneToPassed,
+  addNewMilestone,
+  editMilestone,
   deleteTask,
   updateTaskStatus,
   getTasksStatuses,
@@ -159,5 +169,6 @@ export default {
   deleteProjectPromotor,
   updateUserAvatar,
   changePassword,
+
 
 };
