@@ -48,6 +48,7 @@ const getTaskDetails = (idTask) => axios.get(`${apiUrl}/tasks/detail/${idTask}`)
 const getProjectMilestones = (idProject) => axios.get(`${apiUrl}/milestones/5`);
 const updateMilestoneToPassed = (milestoneData) => axios.patch(`${apiUrl}/milestones/update-step`, milestoneData);
 const addNewMilestone = (milestoneData) => axios.post(`${apiUrl}/milestones`, milestoneData);
+const editMilestone = (milestoneData) => axios.patch(`${apiUrl}/milestones`, milestoneData);
 
 export default {
   getUserId,
@@ -86,4 +87,6 @@ export default {
   getTaskDetails,
   getProjectMilestones,
   updateMilestoneToPassed,
+  addNewMilestone,
+  editMilestone,
 };
