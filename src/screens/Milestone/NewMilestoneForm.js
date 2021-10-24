@@ -6,7 +6,6 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import PropTypes from 'prop-types';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { blue50 } from 'material-ui/styles/colors';
@@ -41,8 +40,6 @@ const MilestoneSchema = Yup.object().shape({
 
 const MilestoneForm = (props) => {
   const handleSubmit = async (values, { resetForm }) => {
-    const successCallout = false;
-
     await props.onSubmitHandler(values)
       .then((res) => {
         resetForm({
