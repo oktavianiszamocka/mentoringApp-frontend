@@ -57,7 +57,6 @@ const getNotes = (pageNumber) => axios.get(`${apiUrl}/personal-notes/${getUserId
 const getPosts = (pageNumber) => axios.get(`${apiUrl}/posts?pageNumber=${pageNumber}&pageSize=10`);
 const getGeneralPosts = (pageNumber) => axios.get(`${apiUrl}/posts/general?pageNumber=${pageNumber}&pageSize=10`);
 const getProjectPosts = (pageNumber, idProject) => axios.get(`${apiUrl}/posts/project/${idProject}?pageNumber=${pageNumber}&pageSize=10`);
-// http://localhost:57864/api/posts?pageNumber=2&pageSize=3
 const getUserAvaAndName = () => axios.get(`${apiUrl}/profiles/user/${getUserId()}`);
 const getProjectDetails = (idProject) => axios.get(`${apiUrl}/projects/project-info/${idProject}`);
 const getUserProfile = (idUser) => axios.get(`${apiUrl}/profiles/${idUser}`);
@@ -74,7 +73,7 @@ const deletePost = (idPost) => axios.delete(`${apiUrl}/posts/${idPost}`);
 const updatePost = (postData) => axios.patch(`${apiUrl}/posts`, postData);
 const updateProfileData = (profileData) => axios.patch(`${apiUrl}/profiles`, profileData);
 const getMyProject = (pageNumber) => axios.get(`${apiUrl}/projects/user-projects/${getUserId()}?pageNumber=${pageNumber}&pageSize=5`);
-const getMyProjectBySearch = (searchString, pageNumber) => axios.get(`${apiUrl}/projects/user-projects/${getUserId()}/search?projectName=${searchString}&pageNumber=${pageNumber}&pageSize=5`);
+const getMyProjectBySearch = (additionalSearchUrl, pageNumber) => axios.get(`${apiUrl}/projects/user-projects/${getUserId()}/search?${additionalSearchUrl}pageNumber=${pageNumber}&pageSize=5`);
 const getProjectMembers = (idProject) => axios.get(`${apiUrl}/project-members/${idProject}`);
 const getProjectPromoters = (idProject) => axios.get(`${apiUrl}/project-promoters/${idProject}`);
 const getProjectStatus = () => axios.get(`${apiUrl}/projects/status`);
@@ -109,8 +108,8 @@ const getProjectPromotorInvitation = (idProject) => axios.get(`${apiUrl}/invitat
 const deleteProjectPromotor = (idProject, emailUser) => axios.delete(`${apiUrl}/project-promoters/${idProject}?email=${emailUser}`);
 const updateUserAvatar = (idUser, pictureUrl) => axios.patch(`${apiUrl}/account/avatar?user=${idUser}&url=${pictureUrl}`);
 const changePassword = (passwordData) => axios.post(`${apiUrl}/account/changePassword`, passwordData);
-
-
+const getProjectStudies = () => axios.get(`${apiUrl}/projects/studies`);
+const getProjectModes = () => axios.get(`${apiUrl}/projects/mode`);
 
 export default {
   getUserId,
@@ -169,6 +168,7 @@ export default {
   deleteProjectPromotor,
   updateUserAvatar,
   changePassword,
-
+  getProjectStudies,
+  getProjectModes,
 
 };

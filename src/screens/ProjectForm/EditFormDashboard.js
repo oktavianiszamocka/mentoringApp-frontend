@@ -140,6 +140,8 @@ const EditProjectFormDashboard = () => {
   const [value, setValue] = useState(0);
   const [statusList, setStatusOptions] = useState([]);
   const [roleList, setRoleOptions] = useState([]);
+  const [studiesList, setStudiesList] = useState([]);
+  const [modeList, setModeList] = useState([]);
   const [newProjectInfoError, setProjectInfoError] = useState('');
   const [newProjectSupervisorError, setProjectSupervisorError] = useState('');
   const [newProjectMemberError, setProjectMemberError] = useState('');
@@ -173,7 +175,8 @@ const EditProjectFormDashboard = () => {
     const response = await Promise.all([Api.getProjectStatus(), Api.getRoleMembers(),
       Api.getProjectDetails(IdProject), Api.getProjectPromoterEmails(IdProject),
       Api.getProjectMembers(IdProject), Api.getProjectMemberInvitation(IdProject),
-      Api.getProjectPromotorInvitation(IdProject)]);
+      Api.getProjectPromotorInvitation(IdProject),
+      Api.getProjectStudies(), Api.getProjectModes()]);
 
     setStatusOptions(response[0].data.data);
     setRoleOptions(response[1].data.data);
@@ -182,6 +185,8 @@ const EditProjectFormDashboard = () => {
     setExistingProjectMember(response[4].data.data);
     setPendingProjectMemberInvitation(response[5].data.data);
     setPendingProjectPromotorInvitation(await setEditProjectSupervisors(response[6].data.data));
+    setStudiesList(response[7].data.data);
+    setModeList(response[8].data.data);
 
     setLoad(true);
   };
@@ -468,7 +473,17 @@ const EditProjectFormDashboard = () => {
             >
               <TabPanel value={value} index={0} dir={theme.direction}>
                 {newProjectInfoError && <Alert severity="error">{newProjectInfoError}</Alert>}
-                {isLoad && <ProjectInfoForm onSubmit={handleProjectInfoSubmit} statusOptions={statusList} initialValues={initialProjectInfoValue} isReadOnly={false} isEdit />}
+                {isLoad && (
+                <ProjectInfoForm
+                  onSubmit={handleProjectInfoSubmit}
+                  statusOptions={statusList}
+                  studiesOptions={studiesList}
+                  modeOptions={modeList}
+                  initialValues={initialProjectInfoValue}
+                  isReadOnly={false}
+                  isEdit
+                />
+                )}
 
               </TabPanel>
 
