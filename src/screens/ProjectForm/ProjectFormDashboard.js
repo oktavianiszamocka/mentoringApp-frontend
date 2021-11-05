@@ -119,6 +119,8 @@ const ProjectFormBoard = () => {
   const [value, setValue] = useState(0);
   const [statusList, setStatusOptions] = useState([]);
   const [roleList, setRoleOptions] = useState([]);
+  const [studiesList, setStudiesList] = useState([]);
+  const [modeList, setModeList] = useState([]);
   const [newProjectInfoError, setProjectInfoError] = useState('');
   const [newProjectSupervisorError, setProjectSupervisorError] = useState('');
   const [newProjectMemberError, setProjectMemberError] = useState('');
@@ -133,9 +135,11 @@ const ProjectFormBoard = () => {
   const [pendingProjectMember, setPendingProjectMemberInvitation] = useState([]);
 
   const loadData = async () => {
-    const response = await Promise.all([Api.getProjectStatus(), Api.getRoleMembers()]);
+    const response = await Promise.all([Api.getProjectStatus(), Api.getRoleMembers(), Api.getProjectStudies(), Api.getProjectModes()]);
     setStatusOptions(response[0].data.data);
     setRoleOptions(response[1].data.data);
+    setStudiesList(response[2].data.data);
+    setModeList(response[3].data.data);
   };
 
   const handleCloseSnackBar = (event, reason) => {
@@ -342,7 +346,14 @@ const ProjectFormBoard = () => {
             >
               <TabPanel value={value} index={0} dir={theme.direction}>
                 {newProjectInfoError && <Alert severity="error">{newProjectInfoError}</Alert>}
-                <ProjectInfoForm onSubmit={handleProjectInfoSubmit} statusOptions={statusList} initialValues={initialProjectInfoValue} isReadOnly={isNewProjectCreated} />
+                <ProjectInfoForm
+                  onSubmit={handleProjectInfoSubmit}
+                  statusOptions={statusList}
+                  studiesOptions={studiesList}
+                  modeOptions={modeList}
+                  initialValues={initialProjectInfoValue}
+                  isReadOnly={isNewProjectCreated}
+                />
 
               </TabPanel>
 
