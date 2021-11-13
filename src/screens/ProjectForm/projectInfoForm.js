@@ -142,6 +142,36 @@ const ProjectInfoForm = (props) => {
 
                   </Grid>
                   <Grid item xs={12}>
+
+                    <Field
+                      required
+                      name="studies"
+                      label="Study"
+                      variant="outlined"
+                      options={props.studiesOptions}
+                      component={Select}
+                      className={classes.fieldStyle}
+                      error={!!(errors.studies && touched.studies)}
+                      helperText={errors.studies && touched.studies ? errors.studies : null}
+                    />
+
+                  </Grid>
+                  <Grid item xs={12}>
+
+                    <Field
+                      required
+                      name="mode"
+                      label="Mode"
+                      variant="outlined"
+                      options={props.modeOptions}
+                      component={Select}
+                      className={classes.fieldStyle}
+                      error={!!(errors.mode && touched.mode)}
+                      helperText={errors.mode && touched.mode ? errors.mode : null}
+                    />
+
+                  </Grid>
+                  <Grid item xs={12}>
                     {props.isEdit !== true
                     && (
                     <Field
@@ -236,6 +266,8 @@ ProjectInfoForm.prototype = {
   statusOptions: PropTypes.object,
   isReadOnly: PropTypes.bool,
   isEdit: PropTypes.bool,
+  studiesOptions: PropTypes.object,
+  modeOptions: PropTypes.object,
 
 };
 

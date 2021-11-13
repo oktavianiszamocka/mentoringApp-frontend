@@ -35,6 +35,8 @@ const projectDetails = ({ projectInfo }) => {
 
         <Grid container spacing={1}>
           <Grid item xs={2}>
+            {projectInfo.icon
+            && (
             <Avatar
               src={projectInfo.icon}
               style={{
@@ -42,6 +44,7 @@ const projectDetails = ({ projectInfo }) => {
                 height: '150px',
               }}
             />
+            )}
           </Grid>
           <Grid container item xs={8} justify="center">
             <h1
@@ -94,6 +97,19 @@ const projectDetails = ({ projectInfo }) => {
             Project Leader :
             {' '}
             {`${projectInfo.projectLeaderFirstName} ${projectInfo.projectLeaderLastName}`}
+
+          </p>
+          <p>
+            Study :
+            {' '}
+
+            {`${projectInfo.studiesName} `}
+
+          </p>
+          <p>
+            Mode :
+            {' '}
+            {`${projectInfo.modeName} `}
 
           </p>
 

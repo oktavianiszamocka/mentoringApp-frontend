@@ -41,7 +41,7 @@ const ProjectCard = ({ project }) => {
           <br />
           Status :
           {' '}
-          {project.status}
+          {project.statusName}
           {' '}
           <br />
           Description :
@@ -58,6 +58,16 @@ const ProjectCard = ({ project }) => {
           End Date :
           {' '}
           {project.endDate}
+          {' '}
+          <br />
+          Study :
+          {' '}
+          {project.studyName}
+          {' '}
+          <br />
+          Mode :
+          {' '}
+          {project.modeName}
           {' '}
           <br />
 
