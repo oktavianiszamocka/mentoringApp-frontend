@@ -23,6 +23,7 @@ import CalendarMain from './shared/Calendar/CalendarMain';
 import UseToken from './UseToken';
 import EditProjectFormDashboard from './ProjectForm/EditFormDashboard';
 import ChangePassword from './Auth/ChangePassword';
+import MeetingList from './shared/components/MeetingList';
 
 const App = () => {
   const { token, setToken } = UseToken();
@@ -56,6 +57,8 @@ const App = () => {
         <Route path="/task-add" component={TaskAdd} />
         <Route path="/calendar" component={CalendarMain} />
         <Route path="/change-password" component={ChangePassword} />
+        <Route path="/meeting-notes" component={MeetingList} />
+
       </Switch>
     </BrowserRouter>
 
