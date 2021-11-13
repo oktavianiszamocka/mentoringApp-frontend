@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Grid, Button, Paper, Typography, AppBar, Tabs, Tab, Snackbar, Popover,
+  Grid, Button, Paper, Avatar, Typography, AppBar, Tabs, Tab, Snackbar, Popover,
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -8,6 +8,7 @@ import SwipeableViews from 'react-swipeable-views';
 import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
 import styled from 'styled-components';
+import S3FileUpload from 'react-s3';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import ProjectInfoForm from './projectInfoForm';
@@ -15,6 +16,7 @@ import ProjectBar from '../shared/components/ProjectBar';
 import ProjectSupervisorsForm from './ProjectSupervisorsForm';
 import ProjectMembersForm from './ProjectMembersForm';
 import ProjectMembersInput from './ProjectMemberInput';
+import S3config from '../../globals/S3Config';
 
 const StyledSection = styled.section`
   margin: 1rem;
@@ -92,6 +94,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  avatar: {
+    width: '150px',
+    height: '150px',
+    marginTop: '1rem',
+  },
 }));
 
 const ProjectFormBoard = () => {
@@ -133,6 +140,8 @@ const ProjectFormBoard = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isShowMemberList, setShowMemberList] = useState(false);
   const [pendingProjectMember, setPendingProjectMemberInvitation] = useState([]);
+  const [uploadUrl, setUploadUrl] = useState('');
+  const [iconError, setIconError] = useState('');
 
   const loadData = async () => {
     const response = await Promise.all([Api.getProjectStatus(), Api.getRoleMembers(), Api.getProjectStudies(), Api.getProjectModes()]);
@@ -300,6 +309,33 @@ const ProjectFormBoard = () => {
     setPendingProjectMemberInvitation(refreshedPendingInvitation.data.data);
   };
 
+  const uploadToBackend = async (s3url) => {
+    const uploadBackend = Api.postProjectIconUrl(newProjectId, s3url)
+      .then((response) => {
+        setSuccessText('Project Icon has been successfully uploaded');
+        setOpen(true);
+        setTimeout(() => {
+          setOpen(false);
+        }, 5000);
+      })
+      .catch((err) => {
+        //   setIsUpload(false);
+        setIconError(err.response.data);
+      });
+  };
+
+  const uploadIcon = async (e) => {
+    setUploadUrl('');
+    S3FileUpload.uploadFile(e.target.files[0], S3config.config)
+      .then((data) => {
+        setUploadUrl(data.location);
+        uploadToBackend(data.location);
+      })
+      .catch((err) => {
+        setIconError(err.response.data);
+      });
+  };
+
   return (
     <div style={{ marginTop: '6rem' }}>
       <Grid container>
@@ -333,7 +369,7 @@ const ProjectFormBoard = () => {
                 <Tab label="Project Info" />
                 <Tab label="Project Supervisors" />
                 <Tab label="Project Members" />
-                <Tab label="Project Milestones" />
+                <Tab label="Project Icon" />
 
               </Tabs>
 
@@ -407,6 +443,31 @@ const ProjectFormBoard = () => {
                     <ProjectMembersForm onSubmit={handleProjectMembersSubmit} roleOption={roleList} />
                   </div>
                 </Popover>
+
+              </TabPanel>
+              <TabPanel value={value} index={3} dir={theme.direction}>
+                {!isNewProjectCreated ? <span>Please fill Project Info section first</span> : <span />}
+
+                {iconError && <Alert severity="error">{iconError}</Alert>}
+
+                {isNewProjectCreated ? (
+                  <div>
+                    <input
+                      accept="image/*"
+                      id="contained-button-file"
+                      type="file"
+                      onChange={uploadIcon}
+                    />
+                    {uploadUrl && (
+                    <Avatar
+                      src={uploadUrl}
+                      className={classes.avatar}
+                    />
+                    ) }
+
+                  </div>
+
+                ) : <span />}
 
               </TabPanel>
 
