@@ -5,6 +5,8 @@ import AvatarImage from '../../assets/images/avatar.jpg';
 import UserAvailability from './UserAvailability';
 import SearchBar from '../shared/components/SearchBar';
 import Header from '../shared/components/Header';
+import MessageItem from './MessageItem';
+import MessageList from './MessagesList';
 // import MessageForm from '../shared/components/MessageForm'
 
 const useStyles = makeStyles((theme) => ({
@@ -33,14 +35,20 @@ export default function MessagePage() {
       <Grid container>
         {Header()}
         <Grid container spacing={4}>
-          <Grid item xs={4} container direction="column" spacing={3}>
+          <Grid item xs={3} container direction="column" spacing={2}>
             <Grid item>
               <Paper style={{ height: '6rem' }}>
                 <SearchBar />
               </Paper>
             </Grid>
             <Grid item>
-              <Paper style={{ height: '25rem' }}>chat</Paper>
+              <Paper style={{ height: '25rem', backgroundColor: '#f4f6f8' }}>
+                <Grid container direction="column" spacing={1}>
+                  <Grid item>
+                    <MessageList />
+                  </Grid>
+                </Grid>
+              </Paper>
             </Grid>
           </Grid>
           <Grid item xs={8} container direction="column" spacing={3}>

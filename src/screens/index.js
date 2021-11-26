@@ -21,6 +21,7 @@ import TaskDetail from './ProjectForm/TaskPage/TaskDetail';
 import TaskAdd from './ProjectForm/TaskPage/TaskAdd';
 import CalendarMain from './shared/Calendar/CalendarMain';
 import Milestone from './Milestone/MilestoneDashboard';
+import MessageItem from './MessagePage/MessageItem';
 
 // const renderRoute = (route) => <Route key={route.path} {...route} />;
 
@@ -62,6 +63,8 @@ const App = () => {
         <Route path="/calendar" component={CalendarMain} />
         <Route path="/change-password" component={ChangePassword} />
         <Route path="/milestones/:IdProject" component={Milestone} />
+        <Route path="/mitem" component={MessageItem} />
+
       </Switch>
     </BrowserRouter>
 
