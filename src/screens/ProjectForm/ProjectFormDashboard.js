@@ -16,6 +16,7 @@ import ProjectBar from '../shared/components/ProjectBar';
 import ProjectSupervisorsForm from './ProjectSupervisorsForm';
 import ProjectMembersForm from './ProjectMembersForm';
 import ProjectMembersInput from './ProjectMemberInput';
+import ProjectUrlsForm from './ProjectUrl';
 import S3config from '../../globals/S3Config';
 
 const StyledSection = styled.section`
@@ -142,13 +143,18 @@ const ProjectFormBoard = () => {
   const [pendingProjectMember, setPendingProjectMemberInvitation] = useState([]);
   const [uploadUrl, setUploadUrl] = useState('');
   const [iconError, setIconError] = useState('');
+  const [urlTypeOption, setUrlTypeOption] = useState([]);
+  const [urlErrorMessage, setUrlErrorMessage] = useState('');
+  const [projectLinks, setProjectLinks] = useState([]);
 
   const loadData = async () => {
-    const response = await Promise.all([Api.getProjectStatus(), Api.getRoleMembers(), Api.getProjectStudies(), Api.getProjectModes()]);
+    const response = await Promise.all([Api.getProjectStatus(), Api.getRoleMembers(),
+      Api.getProjectStudies(), Api.getProjectModes(), Api.getProjectUrlTypes()]);
     setStatusOptions(response[0].data.data);
     setRoleOptions(response[1].data.data);
     setStudiesList(response[2].data.data);
     setModeList(response[3].data.data);
+    setUrlTypeOption(response[4].data.data);
   };
 
   const handleCloseSnackBar = (event, reason) => {
@@ -319,20 +325,53 @@ const ProjectFormBoard = () => {
         }, 5000);
       })
       .catch((err) => {
-        //   setIsUpload(false);
         setIconError(err.response.data);
       });
   };
 
   const uploadIcon = async (e) => {
     setUploadUrl('');
-    S3FileUpload.uploadFile(e.target.files[0], S3config.config)
+    setIconError('');
+    await S3FileUpload.uploadFile(e.target.files[0], S3config.config)
       .then((data) => {
         setUploadUrl(data.location);
         uploadToBackend(data.location);
       })
       .catch((err) => {
         setIconError(err.response.data);
+      });
+  };
+
+  const convertToProjectUrlArr = (data) => {
+    if (data.url1 !== '') {
+      projectLinks.push({
+        link: data.url1,
+        project: newProjectId,
+        type: data.url1_type,
+      });
+    }
+    if (data.url2 !== '') {
+      projectLinks.push({
+        link: data.url2,
+        project: newProjectId,
+        type: data.url2_type,
+      });
+    }
+  };
+  const postProjectUrl = async (e) => {
+    console.log(e);
+    convertToProjectUrlArr(e);
+    setUrlErrorMessage('');
+    await Api.postProjectUrls(projectLinks)
+      .then((data) => {
+        setSuccessText('Project Urls has been saved!');
+        setOpen(true);
+        setTimeout(() => {
+          setOpen(false);
+        }, 5000);
+      })
+      .catch((err) => {
+        setUrlErrorMessage(err.response.data);
       });
   };
 
@@ -365,12 +404,11 @@ const ProjectFormBoard = () => {
                 onChange={handleChange}
                 aria-label="disabled tabs example"
               >
-
                 <Tab label="Project Info" />
                 <Tab label="Project Supervisors" />
                 <Tab label="Project Members" />
                 <Tab label="Project Icon" />
-
+                <Tab label="Project Urls" />
               </Tabs>
 
             </AppBar>
@@ -471,6 +509,20 @@ const ProjectFormBoard = () => {
 
               </TabPanel>
 
+              <TabPanel value={value} index={4} dir={theme.direction}>
+                {!isNewProjectCreated ? <span>Please fill Project Info section first</span> : <span />}
+
+                {urlErrorMessage && <Alert severity="error">{urlErrorMessage}</Alert>}
+
+                {isNewProjectCreated ? (
+                  <ProjectUrlsForm
+                    urlTypeOption={urlTypeOption}
+                    onSubmit={postProjectUrl}
+                  />
+
+                ) : <span />}
+
+              </TabPanel>
             </SwipeableViews>
 
           </StyledSection>
