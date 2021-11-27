@@ -111,6 +111,8 @@ const changePassword = (passwordData) => axios.post(`${apiUrl}/account/changePas
 const getProjectStudies = () => axios.get(`${apiUrl}/projects/studies`);
 const getProjectModes = () => axios.get(`${apiUrl}/projects/mode`);
 const postProjectIconUrl = (idProject, urlIcon) => axios.patch(`${apiUrl}/projects/project-icon?project=${idProject}&icon=${urlIcon}`);
+const getProjectUrlTypes = () => axios.get(`${apiUrl}/projects/url-types`);
+const postProjectUrls = (links) => axios.patch(`${apiUrl}/projects/project-urls`, links);
 
 export default {
   getUserId,
@@ -172,5 +174,7 @@ export default {
   getProjectStudies,
   getProjectModes,
   postProjectIconUrl,
+  getProjectUrlTypes,
+  postProjectUrls,
 
 };
