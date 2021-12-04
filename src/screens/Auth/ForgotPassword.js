@@ -70,14 +70,12 @@ function Alert(props) {
   return <MuiAlert style={{ marginTop: '5px' }} elevation={6} variant="filled" {...props} />;
 }
 
-export default function ChangePassword({ setToken, setRefreshToken }) {
+export default function ForgotPassword() {
   const classes = useStyles();
   const [ErrorLogin, setErrorLogin] = useState('');
-  const emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  const [projectError, setProjectError] = useState('');
-  const [projectSuccess, setProjectSuccess] = useState(false);
 
-  const submitChangePassword = async (values) => {
+  const submit = async (values) => {
+    /*
     const passwordData = {
       idUser: Api.getUserId(),
       oldPassword: values.oldPassword, // test123
@@ -90,12 +88,11 @@ export default function ChangePassword({ setToken, setRefreshToken }) {
       }).catch((err) => {
         setProjectError(err.response.data);
       });
+      */
   };
 
   const validationSchema = Yup.object({
-    oldPassword: Yup.string().required('Required'),
-    newPassword: Yup.string().required('Required'),
-    confirmPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Passwords must match').required('Required'),
+    userEmail: Yup.string().required('Required').email('Invalid email'),
   });
 
   return (
@@ -107,66 +104,30 @@ export default function ChangePassword({ setToken, setRefreshToken }) {
           <Alert severity="error">{ErrorLogin}</Alert>
         )}
         <Formik
-          onSubmit={submitChangePassword}
+          onSubmit={submit}
           validationSchema={validationSchema}
-          initialValues={{ oldPassword: '', newPassword: '' }}
+          initialValues={{ userEmail: '' }}
         >
           <Form className={classes.form}>
-            <StyledTitle>Change your password</StyledTitle>
-            <StyledUnderTitle>Enter old password and new password below</StyledUnderTitle>
-            <Grid container direction="column" justify="center" spacing={2}>
-              <Grid item>
-                <Field
-                  style={{ width: '350px' }}
-                  as={TextField}
-                  className={classes.email}
-                  id="oldPassword"
-                  name="oldPassword"
-                  label="Old Password"
-                  type="password"
-                  variant="outlined"
-                />
-                <ErrorMessage
-                  name="oldPassword"
-                  component="div"
-                  className={classes.error}
-                />
-                {projectError && <Alert severity="error">{projectError}</Alert>}
+            <Grid container direction="column" justifyContent="center" alignItems="center" spacing={2}>
+              <StyledTitle>Forgot Password</StyledTitle>
+              <StyledUnderTitle>Enter your email</StyledUnderTitle>
 
-              </Grid>
               <Grid item>
                 <Field
                   style={{ width: '350px' }}
                   as={TextField}
-                  id="newPassword"
-                  name="newPassword"
-                  label="New Password"
-                  type="password"
+                  id="userEmail"
+                  name="userEmail"
+                  label="Email"
                   variant="outlined"
                 />
                 <ErrorMessage
-                  name="newPassword"
+                  name="userEmail"
                   component="div"
                   className={classes.error}
                 />
               </Grid>
-              <Grid item>
-                <Field
-                  style={{ width: '350px' }}
-                  as={TextField}
-                  id="confirmPassword"
-                  label="Confirm Password"
-                  name="confirmPassword"
-                  type="password"
-                  variant="outlined"
-                />
-                <ErrorMessage
-                  name="confirmPassword"
-                  component="div"
-                  className={classes.error}
-                />
-              </Grid>
-
               <Grid item>
                 <Button
                   className={classes.signupbot}
@@ -176,7 +137,6 @@ export default function ChangePassword({ setToken, setRefreshToken }) {
                 >
                   Submit
                 </Button>
-                {projectSuccess && <MuiAlert style={{ marginTop: '5px' }}>Password successfuly changed</MuiAlert>}
 
               </Grid>
 
@@ -189,8 +149,3 @@ export default function ChangePassword({ setToken, setRefreshToken }) {
     </Container>
   );
 }
-
-ChangePassword.propTypes = {
-  setToken: PropTypes.func.isRequired,
-  setRefreshToken: PropTypes.func.isRequired,
-};

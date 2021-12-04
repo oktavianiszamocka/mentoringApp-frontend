@@ -70,14 +70,13 @@ function Alert(props) {
   return <MuiAlert style={{ marginTop: '5px' }} elevation={6} variant="filled" {...props} />;
 }
 
-export default function ChangePassword({ setToken, setRefreshToken }) {
+export default function ResetPassword() {
   const classes = useStyles();
   const [ErrorLogin, setErrorLogin] = useState('');
-  const emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  const [projectError, setProjectError] = useState('');
   const [projectSuccess, setProjectSuccess] = useState(false);
 
   const submitChangePassword = async (values) => {
+    /*
     const passwordData = {
       idUser: Api.getUserId(),
       oldPassword: values.oldPassword, // test123
@@ -90,10 +89,11 @@ export default function ChangePassword({ setToken, setRefreshToken }) {
       }).catch((err) => {
         setProjectError(err.response.data);
       });
+      */
+
   };
 
   const validationSchema = Yup.object({
-    oldPassword: Yup.string().required('Required'),
     newPassword: Yup.string().required('Required'),
     confirmPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Passwords must match').required('Required'),
   });
@@ -112,28 +112,9 @@ export default function ChangePassword({ setToken, setRefreshToken }) {
           initialValues={{ oldPassword: '', newPassword: '' }}
         >
           <Form className={classes.form}>
-            <StyledTitle>Change your password</StyledTitle>
-            <StyledUnderTitle>Enter old password and new password below</StyledUnderTitle>
-            <Grid container direction="column" justify="center" spacing={2}>
-              <Grid item>
-                <Field
-                  style={{ width: '350px' }}
-                  as={TextField}
-                  className={classes.email}
-                  id="oldPassword"
-                  name="oldPassword"
-                  label="Old Password"
-                  type="password"
-                  variant="outlined"
-                />
-                <ErrorMessage
-                  name="oldPassword"
-                  component="div"
-                  className={classes.error}
-                />
-                {projectError && <Alert severity="error">{projectError}</Alert>}
-
-              </Grid>
+            <Grid container direction="column" spacing={2} justifyContent="center" alignItems="center">
+              <StyledTitle>Reset password</StyledTitle>
+              <StyledUnderTitle>Enter the new password</StyledUnderTitle>
               <Grid item>
                 <Field
                   style={{ width: '350px' }}
@@ -189,8 +170,3 @@ export default function ChangePassword({ setToken, setRefreshToken }) {
     </Container>
   );
 }
-
-ChangePassword.propTypes = {
-  setToken: PropTypes.func.isRequired,
-  setRefreshToken: PropTypes.func.isRequired,
-};
