@@ -25,7 +25,6 @@ axios.interceptors.response.use((response) => response,
     const originalRequest = error.config;
     if (error.response.status === 401 && !originalRequest._retry) {
       const refreshToken = localStorage.getItem('refresh_token');
-      console.log('expired');
       originalRequest._retry = true;
       return axios.post(`${apiUrl}/account/${refreshToken}/refresh`)
         .then((res) => {
