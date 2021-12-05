@@ -4,9 +4,31 @@ import styled from 'styled-components';
 import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import GitHubIcon from '@material-ui/icons/GitHub';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import moment from 'moment';
+import { makeStyles } from '@material-ui/core/styles';
 import AllNotes from '../shared/components/AllNotes';
 import Header from '../shared/components/Header';
+
+const useStyles = makeStyles({
+  projectIcon: {
+    height: '50px',
+    width: '50px',
+
+  },
+  avatarIcon: {
+    width: '150px',
+    height: '150px',
+  },
+  title: {
+    fontFamily: 'sans-serif',
+    fontWeight: 100,
+    letterSpacing: '0.3rem',
+    textTransform: 'uppercase',
+    fontSize: '35px',
+    marginTop: '50px',
+  },
+});
 
 const StyledSection = styled.section`
   margin: 2rem;
@@ -25,7 +47,8 @@ const StyledInfoSection = styled.section`
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
 
-const projectDetails = ({ projectInfo }) => {
+const ProjectDetails = ({ projectInfo }) => {
+  const classes = useStyles();
   const dateOfStartDate = moment(projectInfo.startDate).format('LL');
   const dateOfEndDate = (projectInfo.endDate != null) ? moment(projectInfo.startDate).format('LL') : '-';
 
@@ -39,24 +62,12 @@ const projectDetails = ({ projectInfo }) => {
             && (
             <Avatar
               src={projectInfo.icon}
-              style={{
-                width: '150px',
-                height: '150px',
-              }}
+              className={classes.avatarIcon}
             />
             )}
           </Grid>
           <Grid container item xs={8} justify="center">
-            <h1
-              style={{
-                fontFamily: 'sans-serif',
-                fontWeight: 100,
-                letterSpacing: '0.3rem',
-                textTransform: 'uppercase',
-                fontSize: '35px',
-                marginTop: '50px',
-              }}
-            >
+            <h1 className={classes.title}>
               {`${projectInfo.name} `}
             </h1>
           </Grid>
@@ -112,29 +123,38 @@ const projectDetails = ({ projectInfo }) => {
             {`${projectInfo.modeName} `}
 
           </p>
-
-          <Button
-            variant="contained"
-            color="primary"
-            style={{
-              marginTop: '5px',
-              height: '20px',
-              width: '10px',
-            }}
-          >
-            Edit
-          </Button>
+          <Grid container item justify="center">
+            <Button
+              variant="contained"
+              color="primary"
+              href={`/edit-project/${projectInfo.idProject}`}
+            >
+              Edit
+            </Button>
+          </Grid>
 
         </StyledInfoSection>
         <Grid container justify="center">
-          <GitHubIcon
-            style={{
+          { projectInfo.urlLinks && (
+          <div>
+            <Grid item container direction="row" spacing={5} justifyContent="center" alignItems="center">
+              <Grid>
+                <AssignmentTurnedInIcon
+                  className={classes.projectIcon}
+                  onClick={(event) => window.open(projectInfo.urlLinks[0].link)}
+                />
+              </Grid>
+              <Grid>
+                <GitHubIcon
+                  className={classes.projectIcon}
+                  onClick={(event) => window.open(projectInfo.urlLinks[1].link)}
+                />
+              </Grid>
+            </Grid>
 
-              height: '50px',
-              width: '50px',
-            }}
-            onClick={(event) => window.open(projectInfo.urlLinks[1])}
-          />
+          </div>
+          )}
+
         </Grid>
 
       </StyledSection>
@@ -143,4 +163,4 @@ const projectDetails = ({ projectInfo }) => {
   );
 };
 
-export default projectDetails;
+export default ProjectDetails;
