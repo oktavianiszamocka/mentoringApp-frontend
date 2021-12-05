@@ -1,6 +1,4 @@
 import axios from 'axios';
-import moment from 'moment';
-import UseToken from '../screens/UseToken';
 
 const apiUrl = 'http://localhost:57864/api';
 
@@ -54,11 +52,11 @@ axios.interceptors.response.use((response) => response,
 
 const getUserId = () => 9;
 // const getUserId = () => localStorage.getItem('idUser');
+
 const getNotes = (pageNumber) => axios.get(`${apiUrl}/personal-notes/${getUserId()}?pageNumber=${pageNumber}&pageSize=3`);
 const getPosts = (pageNumber) => axios.get(`${apiUrl}/posts?pageNumber=${pageNumber}&pageSize=10`);
 const getGeneralPosts = (pageNumber) => axios.get(`${apiUrl}/posts/general?pageNumber=${pageNumber}&pageSize=10`);
 const getProjectPosts = (pageNumber, idProject) => axios.get(`${apiUrl}/posts/project/${idProject}?pageNumber=${pageNumber}&pageSize=10`);
-// http://localhost:57864/api/posts?pageNumber=2&pageSize=3
 const getUserAvaAndName = () => axios.get(`${apiUrl}/profiles/user/${getUserId()}`);
 const getProjectDetails = (idProject) => axios.get(`${apiUrl}/projects/project-info/${idProject}`);
 const getUserProfile = (idUser) => axios.get(`${apiUrl}/profiles/${idUser}`);
@@ -75,7 +73,7 @@ const deletePost = (idPost) => axios.delete(`${apiUrl}/posts/${idPost}`);
 const updatePost = (postData) => axios.patch(`${apiUrl}/posts`, postData);
 const updateProfileData = (profileData) => axios.patch(`${apiUrl}/profiles`, profileData);
 const getMyProject = (pageNumber) => axios.get(`${apiUrl}/projects/user-projects/${getUserId()}?pageNumber=${pageNumber}&pageSize=5`);
-const getMyProjectBySearch = (searchString, pageNumber) => axios.get(`${apiUrl}/projects/user-projects/${getUserId()}/search?projectName=${searchString}&pageNumber=${pageNumber}&pageSize=5`);
+const getMyProjectBySearch = (additionalSearchUrl, pageNumber) => axios.get(`${apiUrl}/projects/user-projects/${getUserId()}/search?${additionalSearchUrl}pageNumber=${pageNumber}&pageSize=5`);
 const getProjectMembers = (idProject) => axios.get(`${apiUrl}/project-members/${idProject}`);
 const getProjectPromoters = (idProject) => axios.get(`${apiUrl}/project-promoters/${idProject}`);
 const getProjectStatus = () => axios.get(`${apiUrl}/projects/status`);
@@ -90,6 +88,10 @@ const getProjectTasks = (idProject) => axios.get(`${apiUrl}/tasks/${idProject}`)
 const login = (logininfo) => axios.post(`${apiUrl}/account/login`, logininfo);
 const register = (registerinfo) => axios.post(`${apiUrl}/account/register`, registerinfo);
 const getTaskDetails = (idTask) => axios.get(`${apiUrl}/tasks/detail/${idTask}`);
+const getProjectMilestones = (idProject) => axios.get(`${apiUrl}/milestones/5`);
+const updateMilestoneToPassed = (milestoneData) => axios.patch(`${apiUrl}/milestones/update-step`, milestoneData);
+const addNewMilestone = (milestoneData) => axios.post(`${apiUrl}/milestones`, milestoneData);
+const editMilestone = (milestoneData) => axios.patch(`${apiUrl}/milestones`, milestoneData);
 const deleteTask = (idTask) => axios.delete(`${apiUrl}/tasks/${idTask}`);
 const updateTaskStatus = (tasksData) => axios.patch(`${apiUrl}/tasks/update-status`, tasksData);
 const getTasksStatuses = () => axios.get(`${apiUrl}/tasks/status`);
@@ -102,6 +104,25 @@ const addMeeting = (meetingData) => axios.post(`${apiUrl}/meetings/`, meetingDat
 const getMeetingDetail = (meetingId) => axios.get(`${apiUrl}/meetings/${meetingId}`);
 const updateMeeting = (meetingData) => axios.patch(`${apiUrl}/meetings/`, meetingData);
 const updateMeetingAttendance = (newData) => axios.patch(`${apiUrl}/meetings/attendee/update-status`, newData);
+const editProjectInfo = (projectInfo) => axios.patch(`${apiUrl}/projects/`, projectInfo);
+const getProjectPromoterEmails = (idProject) => axios.get(`${apiUrl}/project-promoters/${idProject}/email`);
+const updateProjectPromoter = (editProjectPromoter) => axios.patch(`${apiUrl}/project-promoters/`, editProjectPromoter);
+const deleteProjectMember = (idProjectMember) => axios.delete(`${apiUrl}/project-members/${idProjectMember}`);
+const updateProjectMember = (editProjectMember) => axios.patch(`${apiUrl}/project-members/`, editProjectMember);
+const getProjectMemberInvitation = (idProject) => axios.get(`${apiUrl}/invitations/member/${idProject}`);
+const getProjectPromotorInvitation = (idProject) => axios.get(`${apiUrl}/invitations/promotor/${idProject}`);
+const deleteProjectPromotor = (idProject, emailUser) => axios.delete(`${apiUrl}/project-promoters/${idProject}?email=${emailUser}`);
+const updateUserAvatar = (idUser, pictureUrl) => axios.patch(`${apiUrl}/account/avatar?user=${idUser}&url=${pictureUrl}`);
+const changePassword = (passwordData) => axios.post(`${apiUrl}/account/changePassword`, passwordData);
+const getProjectStudies = () => axios.get(`${apiUrl}/projects/studies`);
+const getProjectModes = () => axios.get(`${apiUrl}/projects/mode`);
+const getAllMessages = () => axios.get(`${apiUrl}/messages/${getUserId()}`);
+const getDetailMessages = () => axios.get('http://localhost:57864/api/messages/detail?sender=9&receiver=10');
+// const getDetailMessages  axios.get(`${apiUrl}/messages/detail?sender=${idSender}&reciever=${idReciever}`);
+const sendMessage = (messageData) => axios.post(`${apiUrl}/messages`, messageData);
+const postProjectIconUrl = (idProject, urlIcon) => axios.patch(`${apiUrl}/projects/project-icon?project=${idProject}&icon=${urlIcon}`);
+const getProjectUrlTypes = () => axios.get(`${apiUrl}/projects/url-types`);
+const postProjectUrls = (links) => axios.patch(`${apiUrl}/projects/project-urls`, links);
 
 export default {
   getUserId,
@@ -140,6 +161,10 @@ export default {
   login,
   register,
   getTaskDetails,
+  getProjectMilestones,
+  updateMilestoneToPassed,
+  addNewMilestone,
+  editMilestone,
   deleteTask,
   updateTaskStatus,
   getTasksStatuses,
@@ -152,4 +177,20 @@ export default {
   getMeetingDetail,
   updateMeeting,
   updateMeetingAttendance,
+  editProjectInfo,
+  getProjectPromoterEmails,
+  updateProjectPromoter,
+  deleteProjectMember,
+  updateProjectMember,
+  getProjectMemberInvitation,
+  getProjectPromotorInvitation,
+  deleteProjectPromotor,
+  updateUserAvatar,
+  changePassword,
+  getProjectStudies,
+  getProjectModes,
+  getAllMessages,
+  getDetailMessages,
+  sendMessage,
+
 };

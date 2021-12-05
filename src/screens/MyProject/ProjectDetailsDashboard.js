@@ -9,10 +9,16 @@ import ProjectBar from '../shared/components/ProjectBar';
 const ProjectDetailsDashboard = () => {
   const { IdProject } = useParams();
   const [projectDetail, setprojectDetail] = useState();
+  const [errorMsg, setErrorMsg] = useState();
 
   const loadData = async () => {
-    const res = await Promise.all([Api.getProjectDetails(IdProject)]);
-    setprojectDetail(res[0].data.data);
+    setErrorMsg(null);
+    await Api.getProjectDetails(IdProject)
+      .then((response) => {
+        setprojectDetail(response.data.data);
+      }).catch((err) => {
+        setErrorMsg(err.response.data);
+      });
   };
 
   useEffect(async () => {
@@ -27,6 +33,8 @@ const ProjectDetailsDashboard = () => {
           <ProjectBar />
         </Grid>
         <Grid item xs={8}>
+          {errorMsg && <span>Error in system</span>}
+
           {projectDetail && <ProjectDetails projectInfo={projectDetail} />}
         </Grid>
       </Grid>

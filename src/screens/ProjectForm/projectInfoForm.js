@@ -144,6 +144,37 @@ const ProjectInfoForm = (props) => {
                   <Grid item xs={12}>
 
                     <Field
+
+                      name="studies"
+                      label="Study"
+                      variant="outlined"
+                      options={props.studiesOptions}
+                      component={Select}
+                      className={classes.fieldStyle}
+                      error={!!(errors.studies && touched.studies)}
+                      helperText={errors.studies && touched.studies ? errors.studies : null}
+                    />
+
+                  </Grid>
+                  <Grid item xs={12}>
+
+                    <Field
+
+                      name="mode"
+                      label="Mode"
+                      variant="outlined"
+                      options={props.modeOptions}
+                      component={Select}
+                      className={classes.fieldStyle}
+                      error={!!(errors.mode && touched.mode)}
+                      helperText={errors.mode && touched.mode ? errors.mode : null}
+                    />
+
+                  </Grid>
+                  <Grid item xs={12}>
+                    {props.isEdit !== true
+                    && (
+                    <Field
                       as={TextField}
                       required
                       fullWidth
@@ -154,7 +185,7 @@ const ProjectInfoForm = (props) => {
                       error={!!(errors.superviserEmail && touched.superviserEmail)}
                       helperText={errors.superviserEmail ? errors.superviserEmail : null}
                     />
-
+                    )}
                   </Grid>
                   <Grid item xs={6}>
 
@@ -234,6 +265,9 @@ ProjectInfoForm.prototype = {
   initialValues: PropTypes.object,
   statusOptions: PropTypes.object,
   isReadOnly: PropTypes.bool,
+  isEdit: PropTypes.bool,
+  studiesOptions: PropTypes.object,
+  modeOptions: PropTypes.object,
 
 };
 

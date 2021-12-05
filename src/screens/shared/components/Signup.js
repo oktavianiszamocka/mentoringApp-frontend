@@ -198,7 +198,7 @@ const Signup = (props) => {
         setTimeout(() => {
           setOpen(false);
           setRedirect(true);
-        }, 5000);
+        }, 3000);
       })
       .catch((err) => {
         setErrorAccount(err.response.data);
@@ -206,8 +206,7 @@ const Signup = (props) => {
   };
 
   if (redirect) {
-    console.log('rediretc');
-    return <Redirect to="/login" />;
+    window.location.href = '/login';
   }
 
   const validationSchema = Yup.object({

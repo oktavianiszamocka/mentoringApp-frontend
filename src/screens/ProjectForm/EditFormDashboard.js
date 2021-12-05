@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Grid, Button, Paper, Avatar, Typography, AppBar, Tabs, Tab, Snackbar, Popover,
+  Grid, Button, Paper, Typography, AppBar, Tabs, Tab, Snackbar, Popover, Avatar,
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -8,6 +8,11 @@ import SwipeableViews from 'react-swipeable-views';
 import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import FSelect from 'material-ui-formik-components/Select/Select';
+import CloseIcon from '@material-ui/icons/Close';
+import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
+import ProjectPromoter from 'screens/ProjectPromoters/promoter';
 import S3FileUpload from 'react-s3';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
@@ -16,8 +21,8 @@ import ProjectBar from '../shared/components/ProjectBar';
 import ProjectSupervisorsForm from './ProjectSupervisorsForm';
 import ProjectMembersForm from './ProjectMembersForm';
 import ProjectMembersInput from './ProjectMemberInput';
-import ProjectUrlsForm from './ProjectUrl';
 import S3config from '../../globals/S3Config';
+import ProjectUrlsForm from './ProjectUrl';
 
 const StyledSection = styled.section`
   margin: 1rem;
@@ -102,7 +107,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProjectFormBoard = () => {
+const EditProjectFormDashboard = () => {
+  const { IdProject } = useParams();
   const classes = useStyles();
   const theme = useTheme();
 
@@ -113,14 +119,30 @@ const ProjectFormBoard = () => {
     startDate: new Date(),
     superviserEmail: '',
     endDate: '',
+    icon: '',
 
   });
+
   const [initialProjectSupervisors, setInitialProjectSupervisors] = useState({
     superviser2Email: '',
     superviser3Email: '',
     superviser4Email: '',
     superviser5Email: '',
 
+  });
+
+  const [deleteProjectMemberDialogOptions, setDeleteProjectMemberDialogOptions] = useState({
+    title: 'Remove Project Member',
+    mainText: 'Are you sure you want to remove this project member?',
+    id: null,
+    open: false,
+  });
+
+  const [deleteProjectSupervisorDialogOptions, setDeleteProjectSupervisorDialogOptions] = useState({
+    title: 'Remove Project Supervisor',
+    mainText: 'Are you sure you want to remove this project supervisor?',
+    id: null,
+    open: false,
   });
 
   const [open, setOpen] = useState(false);
@@ -133,28 +155,77 @@ const ProjectFormBoard = () => {
   const [newProjectSupervisorError, setProjectSupervisorError] = useState('');
   const [newProjectMemberError, setProjectMemberError] = useState('');
   const [newProjectMembers, setProjectMembers] = useState([]);
-  const [newProjectId, setNewProjectId] = useState('');
-  const [isNewProjectCreated, setIscreated] = useState(false);
   const [isDisableProjectSupervisor, setDisableProjectSupervisor] = useState(true);
   const [successText, setSuccessText] = useState('');
   const [isProjectMemberSuccess, setIsProjectMembersCreated] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isShowMemberList, setShowMemberList] = useState(false);
+  const [isLoad, setLoad] = useState(false);
+  const [superviserToRemove, setSupervisorToRemove] = useState([]);
+  const [superviserToSubmit, setSupervisorToSubmit] = useState([]);
+  const [projectMembersError, setProjectMemberErrorEdit] = useState('');
+  const [existingProjectMember, setExistingProjectMember] = useState([]);
   const [pendingProjectMember, setPendingProjectMemberInvitation] = useState([]);
+  const [pendingProjectPromotor, setPendingProjectPromotorInvitation] = useState([]);
+  const [documentId, setDocumentId] = useState('');
   const [uploadUrl, setUploadUrl] = useState('');
   const [iconError, setIconError] = useState('');
+  const [initialProjectUrl, setInitialProjectUrl] = useState('');
   const [urlTypeOption, setUrlTypeOption] = useState([]);
   const [urlErrorMessage, setUrlErrorMessage] = useState('');
   const [projectLinks, setProjectLinks] = useState([]);
 
+  const setEditProjectSupervisors = async (data) => {
+    const projectPromoter = {
+      superviser2Email: data[0],
+      superviser3Email: data[1],
+      superviser4Email: data[2],
+      superviser5Email: data[3],
+    };
+    return projectPromoter;
+  };
+
+  const setEditProjectUrls = (data) => {
+    const initialValues = {
+      url1_type: '',
+      url1: '',
+      url2_type: '',
+      url2: '',
+    };
+
+    if (data) {
+      if (data[0]) {
+        initialValues.url1 = data[0].link;
+        initialValues.url1_type = data[0].type;
+      }
+
+      if (data[1]) {
+        initialValues.url2 = data[1].link;
+        initialValues.url2_type = data[1].type;
+      }
+    }
+    setInitialProjectUrl(initialValues);
+  };
   const loadData = async () => {
     const response = await Promise.all([Api.getProjectStatus(), Api.getRoleMembers(),
-      Api.getProjectStudies(), Api.getProjectModes(), Api.getProjectUrlTypes()]);
+      Api.getProjectDetails(IdProject), Api.getProjectPromoterEmails(IdProject),
+      Api.getProjectMembers(IdProject), Api.getProjectMemberInvitation(IdProject),
+      Api.getProjectPromotorInvitation(IdProject),
+      Api.getProjectStudies(), Api.getProjectModes(),
+      Api.getProjectUrlTypes()]);
+
     setStatusOptions(response[0].data.data);
     setRoleOptions(response[1].data.data);
-    setStudiesList(response[2].data.data);
-    setModeList(response[3].data.data);
-    setUrlTypeOption(response[4].data.data);
+    setInitialProjectInfoValue(response[2].data.data);
+    setInitialProjectSupervisors(await setEditProjectSupervisors(response[3].data.data));
+    setExistingProjectMember(response[4].data.data);
+    setPendingProjectMemberInvitation(response[5].data.data);
+    setPendingProjectPromotorInvitation(await setEditProjectSupervisors(response[6].data.data));
+    setStudiesList(response[7].data.data);
+    setModeList(response[8].data.data);
+    setEditProjectUrls(response[2].data.data.urlLinks);
+    setUrlTypeOption(response[9].data.data);
+
+    setLoad(true);
   };
 
   const handleCloseSnackBar = (event, reason) => {
@@ -187,21 +258,27 @@ const ProjectFormBoard = () => {
     loadData();
   }, []);
 
+  const removeSupervisor = async (e) => {
+    const idName = `superviser-${e.currentTarget.id}`;
+    const toRemove = document.getElementById(idName).value;
+    setDocumentId(idName);
+
+    setDeleteProjectSupervisorDialogOptions({
+      ...deleteProjectSupervisorDialogOptions,
+      open: true,
+      id: toRemove,
+
+    });
+  };
+
   const handleProjectInfoSubmit = async (e) => {
     setProjectInfoError('');
 
-    const postProject = await Api.postNewProject(e)
+    const postProject = await Api.editProjectInfo(e)
       .then((response) => {
-        setNewProjectId(response.data.idProject);
-        setSuccessText('Project is successfuly created!!');
+        setSuccessText('Project is successfully edited!!');
         setOpen(true);
-        setIscreated(true);
-        setDisableProjectSupervisor(false);
         setInitialProjectInfoValue(e);
-        setTimeout(() => {
-          setValue(1);
-          setOpen(false);
-        }, 1000);
       })
       .catch((err) => {
         setProjectInfoError(err.response.data);
@@ -212,26 +289,33 @@ const ProjectFormBoard = () => {
     setProjectSupervisorError('');
     const newSupervisors = [e.superviser2Email, e.superviser3Email, e.superviser4Email, e.superviser5Email];
 
-    const postNewSupervisorsData = {
-      IdProject: newProjectId,
-      SupervisorEmails: newSupervisors,
-    };
+    newSupervisors.forEach((element) => {
+      if (typeof element !== 'undefined') {
+        superviserToSubmit.push(element);
+      }
+    });
 
-    await Api.postNewSupervisors(postNewSupervisorsData)
+    const editSupervisorsData = {
+      IdProject,
+      SupervisorEmails: superviserToSubmit,
+    };
+    await Api.postNewSupervisors(editSupervisorsData)
       .then((response) => {
         setSuccessText('Invitation Project Supervisors are sent!');
         setOpen(true);
-        setInitialProjectSupervisors(e);
-        setDisableProjectSupervisor(true);
+
         setTimeout(() => {
-          setValue(2);
           setOpen(false);
         }, 1000);
       })
       .catch((err) => {
         setProjectSupervisorError(err.response.data);
       });
+
+    const projectPromotorInvitation = await Api.getProjectPromotorInvitation(IdProject);
+    setPendingProjectPromotorInvitation(await setEditProjectSupervisors(projectPromotorInvitation.data.data));
   };
+
   const convertIntoArrayMember = async (e) => {
     if (e.projectMember1 !== '') {
       const member1 = {
@@ -278,30 +362,20 @@ const ProjectFormBoard = () => {
     }
   };
 
-  const changeToBeProjectLead = async () => {
-    newProjectMembers[0].role = 1;
-    newProjectMembers[0].roleLabel = roleList[0].label;
-  };
-
   const handleProjectMembersSubmit = async (e) => {
     setProjectMemberError('');
     setProjectMembers([]);
     convertIntoArrayMember(e);
 
     const projectMemberReq = {
-      IdProject: newProjectId,
+      IdProject,
       NewMembers: newProjectMembers,
     };
 
     const projectMembersToPost = await Api.postNewMembers(projectMemberReq)
       .then((response) => {
         setSuccessText('Invitation Project Members are sent!');
-        // setProjectMembers(newProjectMembers);
-        if (newProjectMembers.length === 1) {
-          changeToBeProjectLead();
-        }
-
-        setShowMemberList(true);
+        setProjectMembers([]);
         setAnchorEl(null);
         setOpen(true);
       })
@@ -309,30 +383,106 @@ const ProjectFormBoard = () => {
         setProjectMemberError(err.response.data);
       });
 
-    setPendingProjectMemberInvitation([]);
-    const refreshedPendingInvitation = await Api.getProjectMemberInvitation(newProjectId);
-
+    const refreshedPendingInvitation = await Api.getProjectMemberInvitation(IdProject);
     setPendingProjectMemberInvitation(refreshedPendingInvitation.data.data);
   };
 
-  const uploadToBackend = async (s3url) => {
-    const uploadBackend = Api.postProjectIconUrl(newProjectId, s3url)
+  const onRemoveProjectMember = async (idProjectMember) => {
+    setDeleteProjectMemberDialogOptions({
+      ...deleteProjectMemberDialogOptions,
+      open: true,
+      id: idProjectMember,
+    });
+  };
+
+  const changeProjectMemberRole = async (e) => {
+    const updateProjectMemberWrapper = {
+      IdProjectMember: e.idProjectMemberField,
+      IdNewRole: e.roledropdown,
+    };
+
+    await Api.updateProjectMember(updateProjectMemberWrapper)
       .then((response) => {
+        setSuccessText('Member role has been updated!');
+        setAnchorEl(null);
+        setOpen(true);
+      }).catch((err) => {
+        setProjectMemberErrorEdit(err.response.data);
+      });
+  };
+
+  const onProjectMemberDeleteDialogClosed = async (confirmed, idProjectMember) => {
+    if (confirmed) {
+      await Api.deleteProjectMember(idProjectMember);
+      const refreshedProjectMembers = await Api.getProjectMembers(IdProject);
+
+      setExistingProjectMember([]);
+      setExistingProjectMember(refreshedProjectMembers.data.data);
+      setDeleteProjectMemberDialogOptions({
+        ...deleteProjectMemberDialogOptions,
+        open: false,
+      });
+    } else {
+      setDeleteProjectMemberDialogOptions({
+        ...deleteProjectMemberDialogOptions,
+        open: false,
+      });
+    }
+  };
+
+  const onProjectPromotorDeleteDialogClosed = async (confirmed, emailUser) => {
+    if (confirmed) {
+      await Api.deleteProjectPromotor(IdProject, emailUser);
+      switch (documentId) {
+        case 'superviser-2':
+          initialProjectSupervisors.superviser2Email = '';
+          break;
+        case 'superviser-3':
+          initialProjectSupervisors.superviser3Email = '';
+          break;
+        case 'superviser-4':
+          initialProjectSupervisors.superviser4Email = '';
+          break;
+        case 'superviser-5':
+          initialProjectSupervisors.superviser5Email = '';
+          break;
+        default:
+          console.log('unexpected case');
+      }
+
+      setDeleteProjectSupervisorDialogOptions({
+        ...deleteProjectSupervisorDialogOptions,
+        open: false,
+      });
+    } else {
+      setDeleteProjectSupervisorDialogOptions({
+        ...deleteProjectSupervisorDialogOptions,
+        open: false,
+      });
+    }
+  };
+
+  const uploadToBackend = async (s3url) => {
+    const uploadBackend = Api.postProjectIconUrl(IdProject, s3url)
+      .then((response) => {
+        // setIsUpload(false);
         setSuccessText('Project Icon has been successfully uploaded');
         setOpen(true);
         setTimeout(() => {
           setOpen(false);
+          //   setRefreshPage(true);
+          //    window.location.reload();
         }, 5000);
       })
       .catch((err) => {
+        //   setIsUpload(false);
         setIconError(err.response.data);
       });
   };
 
   const uploadIcon = async (e) => {
     setUploadUrl('');
-    setIconError('');
-    await S3FileUpload.uploadFile(e.target.files[0], S3config.config)
+    S3FileUpload.uploadFile(e.target.files[0], S3config.config)
       .then((data) => {
         setUploadUrl(data.location);
         uploadToBackend(data.location);
@@ -346,18 +496,19 @@ const ProjectFormBoard = () => {
     if (data.url1 !== '') {
       projectLinks.push({
         link: data.url1,
-        project: newProjectId,
+        project: IdProject,
         type: data.url1_type,
       });
     }
     if (data.url2 !== '') {
       projectLinks.push({
         link: data.url2,
-        project: newProjectId,
+        project: IdProject,
         type: data.url2_type,
       });
     }
   };
+
   const postProjectUrl = async (e) => {
     console.log(e);
     convertToProjectUrlArr(e);
@@ -379,12 +530,15 @@ const ProjectFormBoard = () => {
     <div style={{ marginTop: '6rem' }}>
       <Grid container>
         <Header />
+        <ConfirmDialog {...deleteProjectSupervisorDialogOptions} onDialogClosed={onProjectPromotorDeleteDialogClosed} />
+
+        <ConfirmDialog {...deleteProjectMemberDialogOptions} onDialogClosed={onProjectMemberDeleteDialogClosed} />
         <Grid item xs={2}>
           <ProjectBar className={classes.projectBar} />
         </Grid>
 
         <Grid item xs={8}>
-          <Typography variant="h4" gutterBottom>Project Form</Typography>
+          <Typography variant="h4" gutterBottom>Edit Project Form</Typography>
           <StyledSection>
             <Snackbar
               anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
@@ -420,51 +574,70 @@ const ProjectFormBoard = () => {
             >
               <TabPanel value={value} index={0} dir={theme.direction}>
                 {newProjectInfoError && <Alert severity="error">{newProjectInfoError}</Alert>}
+                {isLoad && (
                 <ProjectInfoForm
                   onSubmit={handleProjectInfoSubmit}
                   statusOptions={statusList}
                   studiesOptions={studiesList}
                   modeOptions={modeList}
                   initialValues={initialProjectInfoValue}
-                  isReadOnly={isNewProjectCreated}
+                  isReadOnly={false}
+                  isEdit
                 />
+                )}
 
               </TabPanel>
 
               <TabPanel value={value} index={1} dir={theme.direction}>
-                {!isNewProjectCreated ? <span>Please fill Project Info section first</span> : <span />}
 
                 {newProjectSupervisorError && <Alert severity="error">{newProjectSupervisorError}</Alert>}
 
-                <ProjectSupervisorsForm onSubmit={handleProjectSupervisorsSubmit} initialValues={initialProjectSupervisors} isReadOnly={isDisableProjectSupervisor} />
+                {isLoad && <ProjectSupervisorsForm onSubmit={handleProjectSupervisorsSubmit} initialValues={initialProjectSupervisors} isEdit closeIconAction={removeSupervisor} /> }
+                <div>
+                  <span>Pending Project Promotor Invitation</span>
+                  {isLoad && <ProjectSupervisorsForm initialValues={pendingProjectPromotor} isReadOnly /> }
+
+                </div>
 
               </TabPanel>
 
               <TabPanel value={value} index={2} dir={theme.direction}>
-                {!isNewProjectCreated ? (
-                  <div>
-                    <span>Please fill Project Info section first</span>
 
-                    <br />
-                    <br />
-
-                  </div>
-                ) : <span /> }
-
-                <Button className={classes.buttonAddMember} aria-describedby={id} variant="contained" color="primary" onClick={handleClickAddMember} disabled={!isNewProjectCreated}>
+                <Button className={classes.buttonAddMember} aria-describedby={id} variant="contained" color="primary" onClick={handleClickAddMember}>
                   Add Project Members
                 </Button>
 
                 <div>
-                  { isShowMemberList ? (
+                  {projectMembersError && <Alert severity="error">{projectMembersError}</Alert>}
+                  { isLoad && existingProjectMember.length > 0 ? (
+                    existingProjectMember.map((member) => (
+
+                      <ProjectMembersInput
+                        idProjectMember={member.idProjectMember}
+                        member
+                        name={`${member.firstName} ${member.lastName}`}
+                        role={member.projectRole}
+                        isEdit
+                        removeAction={() => onRemoveProjectMember(member.idProjectMember)}
+                        roleOption={roleList}
+                        roleDefaultValue={member.role}
+                        changeSubmit={changeProjectMemberRole}
+                      />
+
+                    ))) : (<span />) }
+                </div>
+                <div>
+                  {pendingProjectMember.length > 0 && (<span>Pending Project Member Invitation</span>)}
+                  { isLoad && pendingProjectMember.length > 0 ? (
                     pendingProjectMember.map((invitation) => (
 
                       <ProjectMembersInput
                         name={invitation.nameUser}
                         role={invitation.roleName}
-                      />
 
+                      />
                     ))) : (<span />) }
+
                 </div>
 
                 <Popover
@@ -484,45 +657,45 @@ const ProjectFormBoard = () => {
 
               </TabPanel>
               <TabPanel value={value} index={3} dir={theme.direction}>
-                {!isNewProjectCreated ? <span>Please fill Project Info section first</span> : <span />}
 
                 {iconError && <Alert severity="error">{iconError}</Alert>}
 
-                {isNewProjectCreated ? (
-                  <div>
-                    <input
-                      accept="image/*"
-                      id="contained-button-file"
-                      type="file"
-                      onChange={uploadIcon}
-                    />
-                    {uploadUrl && (
+                <div>
+                  <input
+                    accept="image/*"
+                    id="contained-button-file"
+                    type="file"
+                    onChange={uploadIcon}
+                  />
+
+                  {initialProjectInfoValue.icon && uploadUrl === '' && (
+                  <Avatar
+                    src={initialProjectInfoValue.icon}
+                    className={classes.avatar}
+                  />
+                  ) }
+                  {uploadUrl && (
                     <Avatar
                       src={uploadUrl}
                       className={classes.avatar}
                     />
-                    ) }
+                  ) }
 
-                  </div>
-
-                ) : <span />}
+                </div>
 
               </TabPanel>
-
               <TabPanel value={value} index={4} dir={theme.direction}>
-                {!isNewProjectCreated ? <span>Please fill Project Info section first</span> : <span />}
 
                 {urlErrorMessage && <Alert severity="error">{urlErrorMessage}</Alert>}
 
-                {isNewProjectCreated ? (
-                  <ProjectUrlsForm
-                    urlTypeOption={urlTypeOption}
-                    onSubmit={postProjectUrl}
-                  />
-
-                ) : <span />}
+                <ProjectUrlsForm
+                  urlTypeOption={urlTypeOption}
+                  onSubmit={postProjectUrl}
+                  initialValues={initialProjectUrl}
+                />
 
               </TabPanel>
+
             </SwipeableViews>
 
           </StyledSection>
@@ -534,4 +707,4 @@ const ProjectFormBoard = () => {
   );
 };
 
-export default ProjectFormBoard;
+export default EditProjectFormDashboard;

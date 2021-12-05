@@ -20,9 +20,16 @@ import Signup from './shared/components/Signup';
 import TaskDashboard from './ProjectForm/TaskPage/TaskDashborad';
 import TaskDetail from './ProjectForm/TaskPage/TaskDetail';
 import TaskAdd from './ProjectForm/TaskPage/TaskAdd';
-
 import CalendarMain from './shared/Calendar/CalendarMain';
+import Milestone from './Milestone/MilestoneDashboard';
+import MessageItem from './MessagePage/MessageItem';
+
+// const renderRoute = (route) => <Route key={route.path} {...route} />;
+
 import UseToken from './UseToken';
+import EditProjectFormDashboard from './ProjectForm/EditFormDashboard';
+import ChangePassword from './Auth/ChangePassword';
+import MeetingList from './shared/components/MeetingList';
 
 const App = () => {
   const { token, setToken } = UseToken();
@@ -48,6 +55,7 @@ const App = () => {
         <Route path="/project-detail/:IdProject" component={ProjectDetailsDashboard} />
         <Route path="/project-promoters/:IdProject" component={ProjectPromotersBoard} />
         <Route path="/project-form" component={ProjectFormBoard} />
+        <Route path="/edit-project/:IdProject" component={EditProjectFormDashboard} />
         <Route path="/invitations" component={InvitationPage} />
         <Route path="/signup" component={Signup} />
         <Route path="/task/:IdProject" component={TaskDashboard} />
@@ -55,6 +63,10 @@ const App = () => {
         <Route path="/task-add" component={TaskAdd} />
         <Route path="/calendar" component={CalendarMain} />
         <Route path="/forgot-password" component={ForgottenPassword} />
+        <Route path="/change-password" component={ChangePassword} />
+        <Route path="/milestones/:IdProject" component={Milestone} />
+        <Route path="/mitem" component={MessageItem} />
+
       </Switch>
     </BrowserRouter>
 

@@ -54,16 +54,11 @@ export default function Login({ setToken, setRefreshToken }) {
         setToken(response.data.token);
         setRefreshToken(response.data.refreshToken);
         localStorage.setItem('idUser', response.data.idUser);
+        window.location.href = '/';
       })
       .catch((err) => {
         setErrorLogin(err.response.data);
       });
-
-    /// setToken(responseToken.token);
-    //  setRefreshToken(responseToken.refreshToken);
-    //  console.log(responseToken.token);
-
-    // console.log(responseToken.refreshToken);
   };
 
   return (

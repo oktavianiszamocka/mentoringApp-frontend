@@ -96,8 +96,6 @@ const TaskDashboard = () => {
       }
     }
   };
-  console.log(tasksToDo);
-  console.log('ITEEEM');
 
   return (
     <div className={classes.root}>

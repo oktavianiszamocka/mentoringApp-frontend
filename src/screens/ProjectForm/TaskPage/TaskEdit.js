@@ -15,10 +15,8 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
-import { add } from 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   Formik, Form, Field, ErrorMessage, FieldArray,
@@ -43,21 +41,6 @@ const StyledUnderTitle = styled.p`
    font-size: 12px;
    font-weight: bold;
    color: #616366;
-`;
-
-const StyledP = styled.p`
-  font-family: 'Roboto', sans-serif;
-  word-break: break-word;
-  font-size: 12px;
-  color: #616366;
-  margin: 0px;
-`;
-
-const StyledDescription = styled.p`
-  font-family: 'Roboto', sans-serif;
-  word-break: break-word;
-  font-size: 12px;
-  color: black;
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -133,6 +116,14 @@ const useStyles = makeStyles((theme) => ({
   },
   chip: {
     margin: 2,
+  },
+  error: {
+    color: 'rgb(255,0,0,0.6)',
+    marginTop: '-9px',
+    marginLeft: '5px',
+    marginBottom: '5px',
+    fontFamily: 'Roboto',
+    fontSize: '13px',
   },
 }));
 
@@ -260,7 +251,6 @@ const TaskEdit = (props) => {
   }, []);
 
   const onTaskEditHandler = async (taskData) => {
-    console.log(taskData);
     await Api.updateTask(taskData)
       .then(async () => {
         props.showEdit(false);
@@ -300,12 +290,16 @@ const TaskEdit = (props) => {
     onTaskEditHandler(taskData);
   };
 
+  const validate = Yup.object({
+    title: Yup.string().required('Required'),
+    description: Yup.string().min(10, 'Must have at least 10 characters'),
+  });
+
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={onSubmit}
-      validator={() => ({})}
-
+      validationSchema={validate}
     >
       <StyledDiv style={styles}>
         <Form>
@@ -323,6 +317,11 @@ const TaskEdit = (props) => {
                   },
                 }}
                 className={classes.title}
+              />
+              <ErrorMessage
+                name="title"
+                component="div"
+                className={classes.error}
               />
             </Grid>
             <CloseIcon className={classes.close} onClick={() => props.showEdit()} />
@@ -342,6 +341,11 @@ const TaskEdit = (props) => {
               },
             }}
             variant="outlined"
+          />
+          <ErrorMessage
+            name="description"
+            component="div"
+            className={classes.error}
           />
           <Divider />
           <Grid container direction="row">

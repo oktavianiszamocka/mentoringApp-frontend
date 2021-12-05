@@ -132,6 +132,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
     marginLeft: '3rem',
   },
+  error: {
+    color: 'rgb(255,0,0,0.6)',
+    marginTop: '-9px',
+    marginLeft: '5px',
+    marginBottom: '5px',
+    fontFamily: 'Roboto',
+    fontSize: '13px',
+  },
 }));
 
 const ITEM_HEIGHT = 48;
@@ -154,43 +162,11 @@ const TaskAdd = (props) => {
 
   const [statuses, setStatuses] = useState([]);
   const [asignees, setAsignees] = useState([]);
-  const [taskDeadline, settaskDeadline] = React.useState(new Date());
-  const [taskStart, settaskStart] = React.useState(moment());
   const [asigneeIds, setAsigneeIds] = React.useState([]);
 
   const handleChange = (event) => {
     console.log(event.target.value);
     setAsigneeIds(event.target.value);
-  };
-
-  const handleChangeMultiple = (event) => {
-    const { options } = event.target;
-    const value = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        value.push(options[i].value);
-      }
-    }
-    setAsigneeIds(value);
-  };
-
-  const getCurrentDate = () => {
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-    const yyyy = today.getFullYear();
-
-    return `${yyyy}-${mm}-${dd}`;
-  };
-
-  const handleDeadlineChange = (date) => {
-    const dateNew = moment(date).format('DD.MM.YYYY');
-    settaskDeadline(dateNew);
-  };
-
-  const handleStartChange = (date) => {
-    const dateNew = moment(date).format('DD.MM.YYYY');
-    settaskStart(dateNew);
   };
 
   const getTaskStatuses = async () => {
@@ -217,20 +193,6 @@ const TaskAdd = (props) => {
     return name_id;
   };
 
-  const changeDateFormat = (dat) => {
-    if (dat == null) {
-      return 'Not set';
-    }
-    const date = new Date(dat);
-    let dd = date.getDate();
-    let mm = date.getMonth() + 1;
-    const yyyy = date.getFullYear();
-    if (dd < 10) { dd = `0${dd}`; }
-    if (mm < 10) { mm = `0${mm}`; }
-    const d = `${dd}/${mm}/${yyyy}`;
-    return d;
-  };
-
   const styles = {
     position: 'absolute',
     zIndex: 5,
@@ -248,16 +210,6 @@ const TaskAdd = (props) => {
 
     loadData();
   }, []);
-
-  const onTaskAddHandler = async (taskData) => {
-    console.log(taskData);
-    await Api.createTask(taskData)
-      .then(async () => {
-        console.log('sucess');
-        props.close(false);
-        const res = await Promise.all([Api.getProjectTasks(5)]);
-      });
-  };
 
   const initialValues = {
     title: '',
@@ -288,24 +240,27 @@ const TaskAdd = (props) => {
       assignedUsers: asigneeIds,
     };
     // onTaskAddHandler(taskData);
-    console.log(taskData);
     await Api.createTask(taskData)
       .then(async () => {
-        console.log('sucess');
         props.close(false);
         const res = await Promise.all([Api.getProjectTasks(5)]);
       });
   };
 
+  const validate = Yup.object({
+    title: Yup.string().required('Required'),
+    description: Yup.string().min(10, 'Must have at least 10 characters'),
+  });
+
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={onSubmit}
-      validator={() => ({})}
+      validationSchema={validate}
     >
       {(formik) => {
         const {
-          errors, touched, isValid, dirty, isSubmitting, values, setFieldValue, handleReset,
+          errors, touched,
         } = formik;
         return (
           <StyledDiv style={styles}>
@@ -328,6 +283,11 @@ const TaskAdd = (props) => {
                     }}
                     className={classes.title}
                   />
+                  <ErrorMessage
+                    name="title"
+                    component="div"
+                    className={classes.error}
+                  />
                 </Grid>
                 <Grid item />
               </Grid>
@@ -345,6 +305,11 @@ const TaskAdd = (props) => {
                   },
                 }}
                 variant="outlined"
+              />
+              <ErrorMessage
+                name="description"
+                component="div"
+                className={classes.error}
               />
               <Divider />
               <Grid container direction="row">
