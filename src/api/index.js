@@ -1,4 +1,5 @@
 import axios from 'axios';
+import UseToken from 'screens/UseToken';
 
 const apiUrl = 'http://localhost:57864/api';
 
@@ -51,6 +52,7 @@ axios.interceptors.response.use((response) => response,
   });
 
 const getUserId = () => 9;
+const getUserRole = () => localStorage.getItem('userRole');
 // const getUserId = () => localStorage.getItem('idUser');
 
 const getNotes = (pageNumber) => axios.get(`${apiUrl}/personal-notes/${getUserId()}?pageNumber=${pageNumber}&pageSize=3`);
@@ -110,19 +112,17 @@ const updateUserAvatar = (idUser, pictureUrl) => axios.patch(`${apiUrl}/account/
 const changePassword = (passwordData) => axios.post(`${apiUrl}/account/changePassword`, passwordData);
 const getProjectStudies = () => axios.get(`${apiUrl}/projects/studies`);
 const getProjectModes = () => axios.get(`${apiUrl}/projects/mode`);
-<<<<<<< HEAD
 const getAllMessages = () => axios.get(`${apiUrl}/messages/${getUserId()}`);
-const getDetailMessages = () => axios.get('http://localhost:57864/api/messages/detail?sender=9&receiver=10');
+const getDetailMessages = () => axios.get(`${apiUrl}/api/messages/detail?sender=9&receiver=10`);
 // const getDetailMessages  axios.get(`${apiUrl}/messages/detail?sender=${idSender}&reciever=${idReciever}`);
 const sendMessage = (messageData) => axios.post(`${apiUrl}/messages`, messageData);
-=======
 const postProjectIconUrl = (idProject, urlIcon) => axios.patch(`${apiUrl}/projects/project-icon?project=${idProject}&icon=${urlIcon}`);
 const getProjectUrlTypes = () => axios.get(`${apiUrl}/projects/url-types`);
 const postProjectUrls = (links) => axios.patch(`${apiUrl}/projects/project-urls`, links);
->>>>>>> e64ec964cbe810535a54a317d70501cbe8647471
 
 export default {
   getUserId,
+  getUserRole,
   getNotes,
   getPosts,
   getUserProfile,
@@ -183,4 +183,7 @@ export default {
   getAllMessages,
   getDetailMessages,
   sendMessage,
+  postProjectIconUrl,
+  getProjectUrlTypes,
+  postProjectUrls,
 };

@@ -33,10 +33,19 @@ import MeetingList from './shared/components/MeetingList';
 const App = () => {
   const { token, setToken } = UseToken();
   const { refreshToken, setRefreshToken } = UseToken();
+  const { idUser, setIdUser } = UseToken();
+  const { userRole, setUserRole } = UseToken();
   const { pathname } = window.location;
 
   if (!token && pathname !== '/signup') {
-    return <Login setToken={setToken} setRefreshToken={setRefreshToken} />;
+    return (
+      <Login
+        setToken={setToken}
+        setRefreshToken={setRefreshToken}
+        setIdUser={setIdUser}
+        setUserRole={setUserRole}
+      />
+    );
   }
 
   return (
