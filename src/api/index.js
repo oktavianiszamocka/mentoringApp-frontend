@@ -100,6 +100,12 @@ const getTasksStatuses = () => axios.get(`${apiUrl}/tasks/status`);
 const getTasksAsignees = () => axios.get(`${apiUrl}/project-members/5`);
 const createTask = (taskData) => axios.post(`${apiUrl}/tasks/`, taskData);
 const updateTask = (taskData) => axios.patch(`${apiUrl}/tasks/`, taskData);
+const getUserMeetings = (date) => axios.get(`${apiUrl}/meetings/user/9?date=${date}`);
+const deleteMeeting = (idMeeting) => axios.delete(`${apiUrl}/meetings/${idMeeting}`);
+const addMeeting = (meetingData) => axios.post(`${apiUrl}/meetings/`, meetingData);
+const getMeetingDetail = (meetingId) => axios.get(`${apiUrl}/meetings/${meetingId}`);
+const updateMeeting = (meetingData) => axios.patch(`${apiUrl}/meetings/`, meetingData);
+const updateMeetingAttendance = (newData) => axios.patch(`${apiUrl}/meetings/attendee/update-status`, newData);
 const editProjectInfo = (projectInfo) => axios.patch(`${apiUrl}/projects/`, projectInfo);
 const getProjectPromoterEmails = (idProject) => axios.get(`${apiUrl}/project-promoters/${idProject}/email`);
 const updateProjectPromoter = (editProjectPromoter) => axios.patch(`${apiUrl}/project-promoters/`, editProjectPromoter);
@@ -168,6 +174,12 @@ export default {
   getTasksAsignees,
   createTask,
   updateTask,
+  getUserMeetings,
+  deleteMeeting,
+  addMeeting,
+  getMeetingDetail,
+  updateMeeting,
+  updateMeetingAttendance,
   editProjectInfo,
   getProjectPromoterEmails,
   updateProjectPromoter,
@@ -186,4 +198,5 @@ export default {
   postProjectIconUrl,
   getProjectUrlTypes,
   postProjectUrls,
+
 };

@@ -165,6 +165,7 @@ const TaskAdd = (props) => {
   const [asigneeIds, setAsigneeIds] = React.useState([]);
 
   const handleChange = (event) => {
+    console.log(event.target.value);
     setAsigneeIds(event.target.value);
   };
 
@@ -288,7 +289,6 @@ const TaskAdd = (props) => {
                     className={classes.error}
                   />
                 </Grid>
-
                 <Grid item />
               </Grid>
               <Field
