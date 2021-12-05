@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
-  Grid, Button, Typography,
+  Grid, Button,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import moment from 'moment';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@material-ui/core/TextField';
@@ -12,19 +11,12 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
 import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
 import {
   Formik, Form, Field, ErrorMessage, FieldArray,
 } from 'formik';
 import * as Yup from 'yup';
 import Chip from '@material-ui/core/Chip';
-import MaterialAvatar from '@material-ui/core/Avatar';
 import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
@@ -149,6 +141,20 @@ const useStyles = makeStyles((theme) => ({
   attendees: {
     fontSize: '15px',
   },
+  error: {
+    color: 'rgb(255,0,0,0.6)',
+    marginTop: '-20px',
+    marginLeft: '5px',
+    marginBottom: '10px',
+    fontFamily: 'Roboto',
+    fontSize: '13px',
+  },
+  error2: {
+    color: 'rgb(255,0,0,0.6)',
+    marginLeft: '5px',
+    fontFamily: 'Roboto',
+    fontSize: '13px',
+  },
 }));
 
 const ITEM_HEIGHT = 48;
@@ -258,15 +264,23 @@ const MeetingAdd = (props) => {
     onMeetingAddHandler(meetingData);
   };
 
+  const validate = Yup.object({
+    title: Yup.string().max(20, 'Must be 20 characters or less').required('Required'),
+    location: Yup.string().required('Required'),
+    description: Yup.string().min(10, 'Must be at least 10 characters'),
+    start: Yup.string().matches(/^(?:\d|[01]\d|2[0-3]):[0-5]\d$/, 'Hour not valid').required('Required'),
+    end: Yup.string().matches(/^(?:\d|[01]\d|2[0-3]):[0-5]\d$/, 'Hour not valid').required('Required'),
+  });
+
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={onSubmit}
-      validator={() => ({})}
+      validationSchema={validate}
     >
       {(formik) => {
         const {
-          errors, touched, isValid, dirty, isSubmitting, values, setFieldValue, handleReset,
+          errors, touched,
         } = formik;
         return (
           <StyledDiv style={styles}>
@@ -277,19 +291,26 @@ const MeetingAdd = (props) => {
                 </Grid>
                 <CloseIcon className={classes.close} onClick={closeAdd} />
                 <Grid item>
-                  <Field
-                    as={TextField}
-                    id="title"
-                    name="title"
-                    label="Enter title"
-                    type="search"
-                    InputProps={{
-                      classes: {
-                        input: classes.resize,
-                      },
-                    }}
-                    className={classes.title}
-                  />
+                  <div>
+                    <Field
+                      as={TextField}
+                      id="title"
+                      name="title"
+                      label="Enter title"
+                      type="search"
+                      InputProps={{
+                        classes: {
+                          input: classes.resize,
+                        },
+                      }}
+                      className={classes.title}
+                    />
+                    <ErrorMessage
+                      name="title"
+                      component="div"
+                      className={classes.error}
+                    />
+                  </div>
                 </Grid>
               </Grid>
               <Grid
@@ -318,6 +339,11 @@ const MeetingAdd = (props) => {
                         }}
                         variant="outlined"
                       />
+                      <ErrorMessage
+                        name="start"
+                        component="div"
+                        className={classes.error2}
+                      />
                     </Grid>
                   </Grid>
                 </Grid>
@@ -339,6 +365,11 @@ const MeetingAdd = (props) => {
                         }}
                         variant="outlined"
                       />
+                      <ErrorMessage
+                        name="end"
+                        component="div"
+                        className={classes.error2}
+                      />
                     </Grid>
                   </Grid>
                 </Grid>
@@ -346,39 +377,55 @@ const MeetingAdd = (props) => {
               <Grid item>
                 <StyledUnderTitle>DESCRIPTION</StyledUnderTitle>
               </Grid>
-              <Field
-                as={TextField}
-                id="description"
-                name="description"
-                label="Enter description"
-                className={classes.description}
-                multiline
-                rows={3}
-                InputProps={{
-                  classes: {
-                    input: classes.resize,
-                  },
-                }}
-                variant="outlined"
-              />
+              <div>
+                <Field
+                  as={TextField}
+                  id="description"
+                  name="description"
+                  label="Enter description"
+                  className={classes.description}
+                  multiline
+                  rows={3}
+                  InputProps={{
+                    classes: {
+                      input: classes.resize,
+                    },
+                  }}
+                  variant="outlined"
+                />
+                <ErrorMessage
+                  name="description"
+                  component="div"
+                  className={classes.error2}
+                />
+              </div>
+
               <Grid container direction="column">
                 <Grid item>
                   <StyledUnderTitle>LOCATION</StyledUnderTitle>
                 </Grid>
                 <Grid item>
-                  <Field
-                    as={TextField}
-                    id="location"
-                    name="location"
-                    label="Enter location"
-                    className={classes.location}
-                    InputProps={{
-                      classes: {
-                        input: classes.resize,
-                      },
-                    }}
-                    variant="outlined"
-                  />
+                  <div>
+                    <Field
+                      as={TextField}
+                      id="location"
+                      name="location"
+                      label="Enter location"
+                      className={classes.location}
+                      InputProps={{
+                        classes: {
+                          input: classes.resize,
+                        },
+                      }}
+                      variant="outlined"
+                    />
+                    <ErrorMessage
+                      name="location"
+                      component="div"
+                      className={classes.error2}
+                    />
+                  </div>
+
                 </Grid>
               </Grid>
 
