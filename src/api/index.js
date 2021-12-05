@@ -98,6 +98,12 @@ const getTasksStatuses = () => axios.get(`${apiUrl}/tasks/status`);
 const getTasksAsignees = () => axios.get(`${apiUrl}/project-members/5`);
 const createTask = (taskData) => axios.post(`${apiUrl}/tasks/`, taskData);
 const updateTask = (taskData) => axios.patch(`${apiUrl}/tasks/`, taskData);
+const getUserMeetings = (date) => axios.get(`${apiUrl}/meetings/user/9?date=${date}`);
+const deleteMeeting = (idMeeting) => axios.delete(`${apiUrl}/meetings/${idMeeting}`);
+const addMeeting = (meetingData) => axios.post(`${apiUrl}/meetings/`, meetingData);
+const getMeetingDetail = (meetingId) => axios.get(`${apiUrl}/meetings/${meetingId}`);
+const updateMeeting = (meetingData) => axios.patch(`${apiUrl}/meetings/`, meetingData);
+const updateMeetingAttendance = (newData) => axios.patch(`${apiUrl}/meetings/attendee/update-status`, newData);
 const editProjectInfo = (projectInfo) => axios.patch(`${apiUrl}/projects/`, projectInfo);
 const getProjectPromoterEmails = (idProject) => axios.get(`${apiUrl}/project-promoters/${idProject}/email`);
 const updateProjectPromoter = (editProjectPromoter) => axios.patch(`${apiUrl}/project-promoters/`, editProjectPromoter);
@@ -110,16 +116,13 @@ const updateUserAvatar = (idUser, pictureUrl) => axios.patch(`${apiUrl}/account/
 const changePassword = (passwordData) => axios.post(`${apiUrl}/account/changePassword`, passwordData);
 const getProjectStudies = () => axios.get(`${apiUrl}/projects/studies`);
 const getProjectModes = () => axios.get(`${apiUrl}/projects/mode`);
-<<<<<<< HEAD
 const getAllMessages = () => axios.get(`${apiUrl}/messages/${getUserId()}`);
 const getDetailMessages = () => axios.get('http://localhost:57864/api/messages/detail?sender=9&receiver=10');
 // const getDetailMessages  axios.get(`${apiUrl}/messages/detail?sender=${idSender}&reciever=${idReciever}`);
 const sendMessage = (messageData) => axios.post(`${apiUrl}/messages`, messageData);
-=======
 const postProjectIconUrl = (idProject, urlIcon) => axios.patch(`${apiUrl}/projects/project-icon?project=${idProject}&icon=${urlIcon}`);
 const getProjectUrlTypes = () => axios.get(`${apiUrl}/projects/url-types`);
 const postProjectUrls = (links) => axios.patch(`${apiUrl}/projects/project-urls`, links);
->>>>>>> e64ec964cbe810535a54a317d70501cbe8647471
 
 export default {
   getUserId,
@@ -168,6 +171,12 @@ export default {
   getTasksAsignees,
   createTask,
   updateTask,
+  getUserMeetings,
+  deleteMeeting,
+  addMeeting,
+  getMeetingDetail,
+  updateMeeting,
+  updateMeetingAttendance,
   editProjectInfo,
   getProjectPromoterEmails,
   updateProjectPromoter,
@@ -183,4 +192,5 @@ export default {
   getAllMessages,
   getDetailMessages,
   sendMessage,
+
 };

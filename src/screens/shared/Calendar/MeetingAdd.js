@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
-  Grid, Button,
+  Grid, Button, Typography,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import moment from 'moment';
@@ -39,6 +39,13 @@ const StyledDiv = styled.div`
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
 
+const StyledTitle = styled.p`
+   font-family: 'Roboto', sans-serif;
+   font-size: 16px;
+   font-weight: bold;
+   color: #616366;
+`;
+
 const StyledUnderTitle = styled.p`
    font-family: 'Roboto', sans-serif;
    font-size: 12px;
@@ -70,22 +77,45 @@ const useStyles = makeStyles((theme) => ({
   },
   close: {
     fontSize: '20px',
+    marginLeft: '135px',
+
   },
   grid: {
     marginBottom: '-15px',
   },
   title: {
     marginLeft: '2px',
-    marginBottom: '15px',
+    marginBottom: '25px',
+    marginTop: '-10px',
     width: '225px',
   },
   resize: {
     fontSize: '13px',
   },
+  resize_time: {
+    fontSize: '13px',
+    padding: '8px',
+  },
   description: {
     marginBottom: '10px',
-    marginTop: '20px',
     width: '230px',
+  },
+  location: {
+    marginBottom: '5px',
+    marginTop: '-2px',
+    width: '230px',
+  },
+  times: {
+    marginBottom: '5px',
+    marginTop: '-2px',
+    width: '90px',
+  },
+  times_grid: {
+    marginRight: '25px',
+  },
+  times_grid2: {
+    marginLeft: '15px',
+    marginRight: '25px',
   },
   prioritySelect: {
     width: '140px',
@@ -98,28 +128,15 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '13px',
     marginLeft: '7px',
   },
-  datepick: {
-    width: '180px',
-    marginLeft: '10px',
-    fontSize: '10px',
-    marginTop: '6px',
-
-  },
-  datepick2: {
-    width: '168px',
-    marginLeft: '10px',
-    fontSize: '10px',
-    marginTop: '6px',
-
-  },
   button: {
     marginLeft: '85px',
     marginTop: '8px',
   },
   formControl: {
     marginTop: '10px',
-    marginBottom: '5px',
-    minWidth: 190,
+    marginLeft: '5px',
+    marginBottom: '15px',
+    minWidth: 230,
     maxWidth: 300,
   },
   chips: {
@@ -128,6 +145,9 @@ const useStyles = makeStyles((theme) => ({
   },
   chip: {
     margin: 2,
+  },
+  attendees: {
+    fontSize: '15px',
   },
 }));
 
@@ -146,14 +166,58 @@ const MenuProps = {
 const MeetingAdd = (props) => {
   const theme = useTheme();
   const classes = useStyles();
+  const [asignees, setAsignees] = useState([]);
+  const [asigneeIds, setAsigneeIds] = React.useState([]);
 
-  const getCurrentDate = () => {
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-    const yyyy = today.getFullYear();
+  const compare = (a, b) => {
+    const time1 = parseFloat(a.startTime.slice(0, -3).replace(':', '.'));
+    const time2 = parseFloat(b.startTime.slice(0, -3).replace(':', '.'));
+    if (time1 < time2) return -1;
+    if (time1 > time2) return 1;
+    return 0;
+  };
 
-    return `${yyyy}-${mm}-${dd}`;
+  const getTaskAsignees = async () => {
+    const res = await Promise.all([Api.getTasksAsignees()]);
+
+    setAsignees(res[0].data.data);
+  };
+
+  const handleChange = (event) => {
+    console.log(event.target.value);
+    setAsigneeIds(event.target.value);
+  };
+
+  useEffect(() => {
+    const loadData = async () => {
+      getTaskAsignees();
+    };
+
+    loadData();
+  }, []);
+
+  const onMeetingAddHandler = async (meetingData) => {
+    await Api.addMeeting(meetingData)
+      .then(async () => {
+        console.log('sucess');
+        props.close(false);
+        const res = await Promise.all([Api.getUserMeetings(props.date)]);
+        res[0].data.data.sort(compare);
+        props.setMeetings(res[0].data.data);
+      });
+  };
+
+  const getNameIdPair = () => {
+    const name_id = {};
+    for (const asignee in asignees) {
+      const name = asignees[asignee].firstName;
+      const surname = asignees[asignee].lastName;
+      const fullName = `${name} ${surname}`;
+      const id = asignees[asignee].idUser;
+      name_id[id] = fullName;
+    }
+
+    return name_id;
   };
 
   const styles = {
@@ -167,73 +231,203 @@ const MeetingAdd = (props) => {
     props.close(false);
   };
 
+  const initialValues = {
+    title: '',
+    date: props.date,
+    location: '',
+    description: '',
+    project: 2,
+    start: '',
+    end: '',
+    attendeeUsers: [],
+  };
+
+  const onSubmit = (values) => {
+    const attendees = [];
+    attendees.push(values.attendees);
+    const meetingData = {
+      title: values.title,
+      meetingDate: props.date,
+      location: values.location,
+      description: values.description,
+      project: 2,
+      startTime: values.start,
+      endTime: values.end,
+      attendeeUsers: asigneeIds,
+    };
+    onMeetingAddHandler(meetingData);
+  };
+
   return (
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validator={() => ({})}
+    >
+      {(formik) => {
+        const {
+          errors, touched, isValid, dirty, isSubmitting, values, setFieldValue, handleReset,
+        } = formik;
+        return (
+          <StyledDiv style={styles}>
+            <Form>
+              <Grid container direction="row" className={classes.grid}>
+                <Grid item>
+                  <StyledTitle>Add Meeting</StyledTitle>
+                </Grid>
+                <CloseIcon className={classes.close} onClick={closeAdd} />
+                <Grid item>
+                  <Field
+                    as={TextField}
+                    id="title"
+                    name="title"
+                    label="Enter title"
+                    type="search"
+                    InputProps={{
+                      classes: {
+                        input: classes.resize,
+                      },
+                    }}
+                    className={classes.title}
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                direction="row"
+                className={classes.times_grid2}
+              >
+                <Grid
+                  item
+                  className={classes.times_grid}
+                >
+                  <Grid container direction="column">
+                    <Grid item>
+                      <StyledUnderTitle>START TIME</StyledUnderTitle>
+                    </Grid>
+                    <Grid item>
+                      <Field
+                        as={TextField}
+                        id="start"
+                        name="start"
+                        className={classes.times}
+                        InputProps={{
+                          classes: {
+                            input: classes.resize_time,
+                          },
+                        }}
+                        variant="outlined"
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <Grid container direction="column">
+                    <Grid item>
+                      <StyledUnderTitle>END TIME</StyledUnderTitle>
+                    </Grid>
+                    <Grid item>
+                      <Field
+                        as={TextField}
+                        id="end"
+                        name="end"
+                        className={classes.times}
+                        InputProps={{
+                          classes: {
+                            input: classes.resize_time,
+                          },
+                        }}
+                        variant="outlined"
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <StyledUnderTitle>DESCRIPTION</StyledUnderTitle>
+              </Grid>
+              <Field
+                as={TextField}
+                id="description"
+                name="description"
+                label="Enter description"
+                className={classes.description}
+                multiline
+                rows={3}
+                InputProps={{
+                  classes: {
+                    input: classes.resize,
+                  },
+                }}
+                variant="outlined"
+              />
+              <Grid container direction="column">
+                <Grid item>
+                  <StyledUnderTitle>LOCATION</StyledUnderTitle>
+                </Grid>
+                <Grid item>
+                  <Field
+                    as={TextField}
+                    id="location"
+                    name="location"
+                    label="Enter location"
+                    className={classes.location}
+                    InputProps={{
+                      classes: {
+                        input: classes.resize,
+                      },
+                    }}
+                    variant="outlined"
+                  />
+                </Grid>
+              </Grid>
 
-    <StyledDiv style={styles}>
-      <Grid container direction="row" className={classes.grid}>
-        <Grid item>
-          <TextField
-            id="title"
-            name="title"
-            label="Enter title"
-            type="search"
-            InputProps={{
-              classes: {
-                input: classes.resize,
-              },
-            }}
-            className={classes.title}
-          />
-        </Grid>
-        <CloseIcon className={classes.close} onClick={closeAdd} />
-      </Grid>
-      <TextField
-        id="description"
-        name="description"
-        label="Enter description"
-        className={classes.description}
-        multiline
-        rows={3}
-        InputProps={{
-          classes: {
-            input: classes.resize,
-          },
-        }}
-        variant="outlined"
-      />
-      <Grid container direction="row">
-        <StyledUnderTitle>PEOPLE</StyledUnderTitle>
-        <Grid container direction="row">
-          <Grid item>
-            <MaterialAvatar
-              className={classes.avatar2}
-            />
-          </Grid>
-          <Grid item>
-            <div>
-              <StyledP style={{ marginTop: '2px' }}>
-                Maria Wilk
-              </StyledP>
-            </div>
-          </Grid>
-        </Grid>
-      </Grid>
+              <Grid item>
+                <FormControl className={classes.formControl}>
+                  <InputLabel className={classes.attendees} id="demo-mutiple-chip-label">Attendees</InputLabel>
+                  <Field
+                    as={Select}
+                    type="text"
+                    name="attendeeUsers"
+                    multiple
+                    value={asigneeIds}
+                    onChange={handleChange}
+                    renderValue={(selected) => (
+                      <div className={classes.chips}>
+                        {selected.map((value) => (
+                          <Chip key={value} label={getNameIdPair()[value]} className={classes.chip} />
+                        ))}
+                      </div>
+                    )}
+                    MenuProps={MenuProps}
+                  >
+                    {asignees.map((user) => (
+                      <MenuItem key={user.idUser} value={user.idUser}>
+                        {`${user.firstName} ${user.lastName}`}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                </FormControl>
+              </Grid>
 
-      <Divider />
+              <Divider />
 
-      <Grid container direction="row">
+              <Grid container direction="row">
 
-        <Button
-          className={classes.button}
-          variant="contained"
-          color="primary"
-          type="submit"
-        >
-          Save
-        </Button>
-      </Grid>
-    </StyledDiv>
-
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                >
+                  Save
+                </Button>
+              </Grid>
+            </Form>
+          </StyledDiv>
+        );
+      }}
+    </Formik>
   );
 };
 
