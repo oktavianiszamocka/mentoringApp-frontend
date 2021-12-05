@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Paper, Grid } from '@material-ui/core';
@@ -11,6 +11,7 @@ import Divider from '@material-ui/core/Divider';
 import InboxIcon from '@material-ui/icons/Inbox';
 import DraftsIcon from '@material-ui/icons/Drafts';
 import MessageItem from './MessageItem';
+import Api from '../../api/index';
 
 const StyledTitle = styled.p`
     font-family: 'Roboto', sans-serif;
@@ -42,19 +43,32 @@ const useStyles = makeStyles((theme) => ({
 
 const MessageList = () => {
   const classes = useStyles();
+  const [messages, setMessages] = useState([]);
+
+  const loadData = async () => {
+    const res = await Promise.all([Api.getAllMessages(9, 10)]);
+    setMessages(res[0].data.data);
+  };
+
+  useEffect(() => {
+    loadData();
+  });
 
   return (
     <div className={classes.root}>
       <List component="nav" aria-label="secondary mailbox folders">
-        <ListItem button>
-          <MessageItem onClick={console.log('aaaa')} />
-        </ListItem>
-        <ListItem button>
-          <MessageItem onClick={console.log('aaaa')} />
-        </ListItem>
-        <ListItem button>
-          <MessageItem onClick={console.log('aaaa')} />
-        </ListItem>
+        {messages.length > 0 ? (
+          messages.map((item) => (
+            <ListItem button>
+              <MessageItem
+                message={item.message}
+                user={item.senderUser}
+              />
+            </ListItem>
+
+          ))) : (
+            <div />
+        )}
       </List>
     </div>
   );

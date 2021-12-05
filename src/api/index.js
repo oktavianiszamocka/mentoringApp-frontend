@@ -110,6 +110,10 @@ const updateUserAvatar = (idUser, pictureUrl) => axios.patch(`${apiUrl}/account/
 const changePassword = (passwordData) => axios.post(`${apiUrl}/account/changePassword`, passwordData);
 const getProjectStudies = () => axios.get(`${apiUrl}/projects/studies`);
 const getProjectModes = () => axios.get(`${apiUrl}/projects/mode`);
+const getAllMessages = () => axios.get(`${apiUrl}/messages/${getUserId()}`);
+const getDetailMessages = () => axios.get('http://localhost:57864/api/messages/detail?sender=9&receiver=10');
+// const getDetailMessages  axios.get(`${apiUrl}/messages/detail?sender=${idSender}&reciever=${idReciever}`);
+const sendMessage = (messageData) => axios.post(`${apiUrl}/messages`, messageData);
 
 export default {
   getUserId,
@@ -170,5 +174,7 @@ export default {
   changePassword,
   getProjectStudies,
   getProjectModes,
-
+  getAllMessages,
+  getDetailMessages,
+  sendMessage,
 };

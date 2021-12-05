@@ -44,28 +44,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MessageItem = ({
-  message, user,
-}) => {
+const MessageItem = () => {
   const classes = useStyles();
 
   return (
     <Paper className={classes.container}>
       <Grid container direction="row">
         <Grid item className={classes.iconcontainer}>
-          <Avatar alt="person image" src={user.imageUrl} />
+          <Avatar alt="person image" />
         </Grid>
         <Grid item xs={8}>
           <Grid container direction="column" spacing={0}>
             <Grid item className={classes.message}>
-              <StyledTitle>
-                {user.firstName}
-                {' '}
-                {user.lastName}
-              </StyledTitle>
+              <StyledTitle>Joanna Bienkowska</StyledTitle>
             </Grid>
             <Grid item className={classes.message}>
-              <StyledMessage>{message}</StyledMessage>
+              <StyledMessage>Hey please contact me about the frontend :)</StyledMessage>
             </Grid>
           </Grid>
         </Grid>
