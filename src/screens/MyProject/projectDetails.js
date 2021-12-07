@@ -52,7 +52,7 @@ const StyledInfoSection = styled.section`
 `;
 
 const ProjectDetails = ({ projectInfo }) => {
-  const userRole = Api.getUserRole();
+  const isMentor = Api.isMentor();
   const classes = useStyles();
   const dateOfStartDate = moment(projectInfo.startDate).format('LL');
   const dateOfEndDate = (projectInfo.endDate != null) ? moment(projectInfo.startDate).format('LL') : '-';
@@ -129,7 +129,7 @@ const ProjectDetails = ({ projectInfo }) => {
 
           </p>
 
-          {userRole === 3 && (
+          {isMentor && (
           <Grid container item justify="center">
 
             <Button

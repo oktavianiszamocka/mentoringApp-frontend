@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  forgotPass: {
+    marginLeft: '4rem',
+  },
 }));
 
 function Alert(props) {
@@ -117,6 +120,11 @@ export default function Login({
               Dont have an account yet? Register
               {' '}
               <u><a href="/signup">here</a></u>
+            </StyledLabel>
+            <StyledLabel>
+
+              <a className={classes.forgotPass} href="/forgot-password">Forgot your password?</a>
+
             </StyledLabel>
             <Grid container />
           </Form>

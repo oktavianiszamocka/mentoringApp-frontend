@@ -51,9 +51,12 @@ axios.interceptors.response.use((response) => response,
     return Promise.reject(error);
   });
 
-const getUserId = () => 9;
+// const getUserId = () => 9;
 const getUserRole = () => localStorage.getItem('userRole');
-// const getUserId = () => localStorage.getItem('idUser');
+const isMentor = () => getUserRole() == 3;
+console.log(getUserRole());
+console.log(isMentor());
+const getUserId = () => localStorage.getItem('idUser');
 
 const getNotes = (pageNumber) => axios.get(`${apiUrl}/personal-notes/${getUserId()}?pageNumber=${pageNumber}&pageSize=3`);
 const getPosts = (pageNumber) => axios.get(`${apiUrl}/posts?pageNumber=${pageNumber}&pageSize=10`);
@@ -129,6 +132,7 @@ const postProjectUrls = (links) => axios.patch(`${apiUrl}/projects/project-urls`
 export default {
   getUserId,
   getUserRole,
+  isMentor,
   getNotes,
   getPosts,
   getUserProfile,

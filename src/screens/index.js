@@ -38,7 +38,7 @@ const App = () => {
   const { userRole, setUserRole } = UseToken();
   const { pathname } = window.location;
 
-  if (!token && pathname !== '/signup') {
+  if (!token && pathname !== '/signup' && pathname !== '/forgot-password') {
     return (
       <Login
         setToken={setToken}
@@ -74,6 +74,7 @@ const App = () => {
         <Route path="/forgot-password" component={ForgottenPassword} />
         <Route path="/change-password" component={ChangePassword} />
         <Route path="/milestones/:IdProject" component={Milestone} />
+        <Route path="/wall/:IdProject" component={StudentDashboard} />
         <Route path="/mitem" component={MessageItem} />
 
       </Switch>
