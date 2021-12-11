@@ -1,72 +1,67 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import FolderIcon from '@material-ui/icons/Folder';
-import DeleteIcon from '@material-ui/icons/Delete';
-import NoteOutlinedIcon from '@material-ui/icons/NoteOutlined';
+import styled from 'styled-components';
+import Paper from '@material-ui/core/Paper';
+
+const StyledDiv = styled.div`
+  background-color: #F5F5F5;
+  position: absolute;
+  padding: 10px;
+  max-width: 600px;
+`;
+
+const StyledP = styled.p`
+  font-family: 'Roboto', sans-serif;
+  word-break: break-word;
+  font-size: 18px;
+  color: #616366;
+  margin: 8px;
+`;
+
+const StyledP2 = styled.p`
+  font-family: 'Roboto', sans-serif;
+  word-break: break-word;
+  font-size: 15px;
+  color: black;
+`;
 
 const useStyles = makeStyles({
-  alert: {
-    backgroundColor: 'rgba(255,165,0,0.2)',
+  title: {
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
     color: 'black',
     width: '150px',
-    margin: '10px auto',
   },
-  buttonAdd: {
-    marginTop: 10,
-    marginLeft: 100,
+  noteContainer: {
+    padding: '5px 15px',
   },
 });
 
-const meetings = [{
-  meetingId: 1, meetingname: 'hey', author: 'Amon', subject: 'aaaa',
-},
-{
-  meetingId: 2, meetingname: 'hey', author: 'Amon', subject: 'aaaa',
-},
-{
-  meetingId: 3, meetingname: 'meet3', author: 'Amon', subject: 'ccc',
-}];
-
-function generate(element) {
-  return [0, 1, 2].map((value) => React.cloneElement(element, {
-    key: value,
-  }));
-}
-
-const MeetingList = () => {
+const MeetingDetails = () => {
   const classes = useStyles();
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
-
-  const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
-  };
-
-  console.log(selectedIndex);
 
   return (
-    <Grid item xs={12} md={6}>
+    <StyledDiv>
       <Typography variant="h6" className={classes.title}>
         Meeting 1 Note
       </Typography>
       <div className={classes.demo}>
-        <p>Subject: AAAA</p>
-        <p>Author: AAAA</p>
+        <StyledP>Subject: AAAA</StyledP>
+        <StyledP>Author: AAAA</StyledP>
       </div>
-    </Grid>
+      <Paper className={classes.noteContainer}>
+        <StyledP2>
+          Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+
+          The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
+
+        </StyledP2>
+      </Paper>
+    </StyledDiv>
+
   );
 };
 
-export default MeetingList;
+export default MeetingDetails;

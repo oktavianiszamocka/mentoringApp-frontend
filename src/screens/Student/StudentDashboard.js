@@ -72,6 +72,7 @@ const StudentDashboard = () => {
   const loadData = async () => {
     const postType = project === 'General' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
     const res = await Promise.all([postType, Api.getUserProject(), Api.getUserAvaAndName()]);
+    console.log(res);
     setPosts(res[0].data.data);
     setCount(res[0].data.totalPages);
     setProjects(res[1].data.data);
