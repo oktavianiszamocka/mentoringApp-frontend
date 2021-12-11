@@ -8,6 +8,7 @@ import Message from './MessagePage/MessagePage';
 import EditForm from './Profile/EditFormDashboard';
 // import Admin from './Admin/routes';
 import Login from './Auth/Login';
+import ForgottenPassword from './Auth/ForgottenPassword';
 import UpsertPassword from './Auth/UpsertPassword';
 import MyProject from './MyProject/myProject';
 import ProjectDetailsDashboard from './MyProject/ProjectDetailsDashboard';
@@ -21,6 +22,7 @@ import TaskDetail from './ProjectForm/TaskPage/TaskDetail';
 import TaskAdd from './ProjectForm/TaskPage/TaskAdd';
 import CalendarMain from './shared/Calendar/CalendarMain';
 import Milestone from './Milestone/MilestoneDashboard';
+import MessageItem from './MessagePage/MessageItem';
 
 // const renderRoute = (route) => <Route key={route.path} {...route} />;
 
@@ -61,11 +63,12 @@ const App = () => {
         <Route path="/task-detail" component={TaskDetail} />
         <Route path="/task-add" component={TaskAdd} />
         <Route path="/calendar" component={CalendarMain} />
+        <Route path="/forgot-password" component={ForgottenPassword} />
         <Route path="/change-password" component={ChangePassword} />
         <Route path="/milestones/:IdProject" component={Milestone} />
         <Route path="/meeting_notes" component={MeetingList} />
         <Route path="/meeting_details" component={MeetingDetail} />
-
+        <Route path="/mitem" component={MessageItem} />
       </Switch>
     </BrowserRouter>
 

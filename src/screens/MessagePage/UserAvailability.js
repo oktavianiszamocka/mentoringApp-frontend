@@ -2,6 +2,7 @@ import React from 'react';
 import { Paper, Grid } from '@material-ui/core';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import PropTypes from 'prop-types';
+import { zIndex } from 'material-ui/styles';
 import Avatar from '../shared/components/Avatar';
 import Title from '../shared/components/Title';
 
@@ -17,20 +18,18 @@ const userAvailability = ({ user, active }) => {
   }
 
   return (
-    <Paper style={{ height: '6rem' }}>
+    <Paper style={{ height: '6rem', backgroundColor: '#f4f6f8' }}>
       <Grid container>
         <Grid Item style={{ padding: 10, height: 20 }} xs="auto">
-          <Avatar firstName={user.firstName} lastName={user.lastName} imageUrl={user.imageUrl} />
-        </Grid>
-        <Grid item xs={1} container direction="column">
-          <Grid Item />
-          <Grid Item style={{ marginTop: 25, marginLeft: 0 }}>
-            <FiberManualRecordIcon style={{ fill: colorText }} />
+          <Grid container direction="row" spacing={0}>
+            <Avatar firstName={user.firstName} lastName={user.lastName} imageUrl={user.imageUrl} />
+            <FiberManualRecordIcon
+              fontSize="small"
+              style={{
+                fill: colorText, marginLeft: '-128px', marginTop: '50px', zIndex: '999',
+              }}
+            />
           </Grid>
-        </Grid>
-
-        <Grid item xs={12} style={{ marginTop: -25, marginLeft: 50 }}>
-          <Title text={availableText} textAlign="left" fontColor={colorText} fontSize="0.9rem" />
         </Grid>
       </Grid>
     </Paper>

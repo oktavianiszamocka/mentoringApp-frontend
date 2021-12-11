@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Grid, Button, Paper, Typography, AppBar, Tabs, Tab, Snackbar, Popover,
+  Grid, Button, Paper, Typography, AppBar, Tabs, Tab, Snackbar, Popover, Avatar,
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -13,6 +13,7 @@ import FSelect from 'material-ui-formik-components/Select/Select';
 import CloseIcon from '@material-ui/icons/Close';
 import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
 import ProjectPromoter from 'screens/ProjectPromoters/promoter';
+import S3FileUpload from 'react-s3';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import ProjectInfoForm from './projectInfoForm';
@@ -20,6 +21,8 @@ import ProjectBar from '../shared/components/ProjectBar';
 import ProjectSupervisorsForm from './ProjectSupervisorsForm';
 import ProjectMembersForm from './ProjectMembersForm';
 import ProjectMembersInput from './ProjectMemberInput';
+import S3config from '../../globals/S3Config';
+import ProjectUrlsForm from './ProjectUrl';
 
 const StyledSection = styled.section`
   margin: 1rem;
@@ -97,6 +100,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  avatar: {
+    width: '150px',
+    height: '150px',
+    marginTop: '1rem',
+  },
 }));
 
 const EditProjectFormDashboard = () => {
@@ -111,6 +119,7 @@ const EditProjectFormDashboard = () => {
     startDate: new Date(),
     superviserEmail: '',
     endDate: '',
+    icon: '',
 
   });
 
@@ -158,6 +167,12 @@ const EditProjectFormDashboard = () => {
   const [pendingProjectMember, setPendingProjectMemberInvitation] = useState([]);
   const [pendingProjectPromotor, setPendingProjectPromotorInvitation] = useState([]);
   const [documentId, setDocumentId] = useState('');
+  const [uploadUrl, setUploadUrl] = useState('');
+  const [iconError, setIconError] = useState('');
+  const [initialProjectUrl, setInitialProjectUrl] = useState('');
+  const [urlTypeOption, setUrlTypeOption] = useState([]);
+  const [urlErrorMessage, setUrlErrorMessage] = useState('');
+  const [projectLinks, setProjectLinks] = useState([]);
 
   const setEditProjectSupervisors = async (data) => {
     const projectPromoter = {
@@ -166,17 +181,37 @@ const EditProjectFormDashboard = () => {
       superviser4Email: data[2],
       superviser5Email: data[3],
     };
-
-    console.log('set edit');
     return projectPromoter;
   };
 
+  const setEditProjectUrls = (data) => {
+    const initialValues = {
+      url1_type: '',
+      url1: '',
+      url2_type: '',
+      url2: '',
+    };
+
+    if (data) {
+      if (data[0]) {
+        initialValues.url1 = data[0].link;
+        initialValues.url1_type = data[0].type;
+      }
+
+      if (data[1]) {
+        initialValues.url2 = data[1].link;
+        initialValues.url2_type = data[1].type;
+      }
+    }
+    setInitialProjectUrl(initialValues);
+  };
   const loadData = async () => {
     const response = await Promise.all([Api.getProjectStatus(), Api.getRoleMembers(),
       Api.getProjectDetails(IdProject), Api.getProjectPromoterEmails(IdProject),
       Api.getProjectMembers(IdProject), Api.getProjectMemberInvitation(IdProject),
       Api.getProjectPromotorInvitation(IdProject),
-      Api.getProjectStudies(), Api.getProjectModes()]);
+      Api.getProjectStudies(), Api.getProjectModes(),
+      Api.getProjectUrlTypes()]);
 
     setStatusOptions(response[0].data.data);
     setRoleOptions(response[1].data.data);
@@ -187,6 +222,8 @@ const EditProjectFormDashboard = () => {
     setPendingProjectPromotorInvitation(await setEditProjectSupervisors(response[6].data.data));
     setStudiesList(response[7].data.data);
     setModeList(response[8].data.data);
+    setEditProjectUrls(response[2].data.data.urlLinks);
+    setUrlTypeOption(response[9].data.data);
 
     setLoad(true);
   };
@@ -424,6 +461,71 @@ const EditProjectFormDashboard = () => {
       });
     }
   };
+
+  const uploadToBackend = async (s3url) => {
+    const uploadBackend = Api.postProjectIconUrl(IdProject, s3url)
+      .then((response) => {
+        // setIsUpload(false);
+        setSuccessText('Project Icon has been successfully uploaded');
+        setOpen(true);
+        setTimeout(() => {
+          setOpen(false);
+          //   setRefreshPage(true);
+          //    window.location.reload();
+        }, 5000);
+      })
+      .catch((err) => {
+        //   setIsUpload(false);
+        setIconError(err.response.data);
+      });
+  };
+
+  const uploadIcon = async (e) => {
+    setUploadUrl('');
+    S3FileUpload.uploadFile(e.target.files[0], S3config.config)
+      .then((data) => {
+        setUploadUrl(data.location);
+        uploadToBackend(data.location);
+      })
+      .catch((err) => {
+        setIconError(err.response.data);
+      });
+  };
+
+  const convertToProjectUrlArr = (data) => {
+    if (data.url1 !== '') {
+      projectLinks.push({
+        link: data.url1,
+        project: IdProject,
+        type: data.url1_type,
+      });
+    }
+    if (data.url2 !== '') {
+      projectLinks.push({
+        link: data.url2,
+        project: IdProject,
+        type: data.url2_type,
+      });
+    }
+  };
+
+  const postProjectUrl = async (e) => {
+    console.log(e);
+    convertToProjectUrlArr(e);
+    setUrlErrorMessage('');
+    await Api.postProjectUrls(projectLinks)
+      .then((data) => {
+        setSuccessText('Project Urls has been saved!');
+        setOpen(true);
+        setTimeout(() => {
+          setOpen(false);
+        }, 5000);
+      })
+      .catch((err) => {
+        setUrlErrorMessage(err.response.data);
+      });
+  };
+
   return (
     <div style={{ marginTop: '6rem' }}>
       <Grid container>
@@ -456,12 +558,11 @@ const EditProjectFormDashboard = () => {
                 onChange={handleChange}
                 aria-label="disabled tabs example"
               >
-
                 <Tab label="Project Info" />
                 <Tab label="Project Supervisors" />
                 <Tab label="Project Members" />
-                <Tab label="Project Milestones" />
-
+                <Tab label="Project Icon" />
+                <Tab label="Project Urls" />
               </Tabs>
 
             </AppBar>
@@ -553,6 +654,45 @@ const EditProjectFormDashboard = () => {
                     <ProjectMembersForm onSubmit={handleProjectMembersSubmit} roleOption={roleList} />
                   </div>
                 </Popover>
+
+              </TabPanel>
+              <TabPanel value={value} index={3} dir={theme.direction}>
+
+                {iconError && <Alert severity="error">{iconError}</Alert>}
+
+                <div>
+                  <input
+                    accept="image/*"
+                    id="contained-button-file"
+                    type="file"
+                    onChange={uploadIcon}
+                  />
+
+                  {initialProjectInfoValue.icon && uploadUrl === '' && (
+                  <Avatar
+                    src={initialProjectInfoValue.icon}
+                    className={classes.avatar}
+                  />
+                  ) }
+                  {uploadUrl && (
+                    <Avatar
+                      src={uploadUrl}
+                      className={classes.avatar}
+                    />
+                  ) }
+
+                </div>
+
+              </TabPanel>
+              <TabPanel value={value} index={4} dir={theme.direction}>
+
+                {urlErrorMessage && <Alert severity="error">{urlErrorMessage}</Alert>}
+
+                <ProjectUrlsForm
+                  urlTypeOption={urlTypeOption}
+                  onSubmit={postProjectUrl}
+                  initialValues={initialProjectUrl}
+                />
 
               </TabPanel>
 
