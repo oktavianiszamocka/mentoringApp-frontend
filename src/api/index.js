@@ -1,4 +1,5 @@
 import axios from 'axios';
+import UseToken from 'screens/UseToken';
 
 const apiUrl = 'http://localhost:57864/api';
 
@@ -50,8 +51,12 @@ axios.interceptors.response.use((response) => response,
     return Promise.reject(error);
   });
 
-const getUserId = () => 9;
-// const getUserId = () => localStorage.getItem('idUser');
+// const getUserId = () => 9;
+const getUserRole = () => localStorage.getItem('userRole');
+const isMentor = () => getUserRole() == 3;
+console.log(getUserRole());
+console.log(isMentor());
+const getUserId = () => localStorage.getItem('idUser');
 
 const getNotes = (pageNumber) => axios.get(`${apiUrl}/personal-notes/${getUserId()}?pageNumber=${pageNumber}&pageSize=3`);
 const getPosts = (pageNumber) => axios.get(`${apiUrl}/posts?pageNumber=${pageNumber}&pageSize=10`);
@@ -117,7 +122,7 @@ const changePassword = (passwordData) => axios.post(`${apiUrl}/account/changePas
 const getProjectStudies = () => axios.get(`${apiUrl}/projects/studies`);
 const getProjectModes = () => axios.get(`${apiUrl}/projects/mode`);
 const getAllMessages = () => axios.get(`${apiUrl}/messages/${getUserId()}`);
-const getDetailMessages = () => axios.get('http://localhost:57864/api/messages/detail?sender=9&receiver=10');
+const getDetailMessages = () => axios.get(`${apiUrl}/api/messages/detail?sender=9&receiver=10`);
 // const getDetailMessages  axios.get(`${apiUrl}/messages/detail?sender=${idSender}&reciever=${idReciever}`);
 const sendMessage = (messageData) => axios.post(`${apiUrl}/messages`, messageData);
 const postProjectIconUrl = (idProject, urlIcon) => axios.patch(`${apiUrl}/projects/project-icon?project=${idProject}&icon=${urlIcon}`);
@@ -126,6 +131,8 @@ const postProjectUrls = (links) => axios.patch(`${apiUrl}/projects/project-urls`
 
 export default {
   getUserId,
+  getUserRole,
+  isMentor,
   getNotes,
   getPosts,
   getUserProfile,
@@ -192,5 +199,8 @@ export default {
   getAllMessages,
   getDetailMessages,
   sendMessage,
+  postProjectIconUrl,
+  getProjectUrlTypes,
+  postProjectUrls,
 
 };

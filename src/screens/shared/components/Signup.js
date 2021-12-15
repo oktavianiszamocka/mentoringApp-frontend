@@ -215,8 +215,10 @@ const Signup = (props) => {
     role: Yup.string().required('Required'),
     phone: Yup.string().matches(phoneRegExp, 'Enter a valid phone number').required('Required'),
     country: Yup.string().required('Required'),
-    major: Yup.string().required('Required'),
-    semester: Yup.string().matches(/^(?:[1-6])$/, 'Semester 1-6!').required('Required'),
+    semester: Yup.number().integer().nullable(true),
+    major: Yup.string(),
+    title: Yup.string(),
+    // semester: Yup.string().matches(/^(?:[1-6])$/, 'Semester 1-6!'),
     email: Yup.string().matches(emailRegExp, 'Enter a valid email').required('Required'),
     password: Yup.string().required('Required'),
     confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Required'),
@@ -304,6 +306,7 @@ const Signup = (props) => {
                   </Grid>
 
                   <Grid item xs={5}>
+
                     <FormControl variant="outlined" className={classes.formControl2}>
                       <Field
                         required
@@ -348,8 +351,23 @@ const Signup = (props) => {
                         error={!!(errors.country && touched.country)}
                         helperText={errors.country && touched.country ? errors.country : null}
                       />
-
                     </FormControl>
+
+                  </Grid>
+                  <Grid item xs={10}>
+                    <Field
+                      as={TextField}
+                      id="title"
+                      name="title"
+                      label="Title for Mentor"
+                      variant="outlined"
+                      className={classes.email}
+                    />
+                    <ErrorMessage
+                      name="title"
+                      component="div"
+                      className={classes.error}
+                    />
                   </Grid>
 
                   <Grid item xs={5}>

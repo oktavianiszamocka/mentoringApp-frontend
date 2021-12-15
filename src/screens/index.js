@@ -35,10 +35,19 @@ import MeetingDetail from './shared/components/MeetingDetail';
 const App = () => {
   const { token, setToken } = UseToken();
   const { refreshToken, setRefreshToken } = UseToken();
+  const { idUser, setIdUser } = UseToken();
+  const { userRole, setUserRole } = UseToken();
   const { pathname } = window.location;
 
-  if (!token && pathname !== '/signup') {
-    return <Login setToken={setToken} setRefreshToken={setRefreshToken} />;
+  if (!token && pathname !== '/signup' && pathname !== '/forgot-password') {
+    return (
+      <Login
+        setToken={setToken}
+        setRefreshToken={setRefreshToken}
+        setIdUser={setIdUser}
+        setUserRole={setUserRole}
+      />
+    );
   }
 
   return (
@@ -66,6 +75,7 @@ const App = () => {
         <Route path="/forgot-password" component={ForgottenPassword} />
         <Route path="/change-password" component={ChangePassword} />
         <Route path="/milestones/:IdProject" component={Milestone} />
+        <Route path="/wall/:IdProject" component={StudentDashboard} />
         <Route path="/meeting_notes" component={MeetingList} />
         <Route path="/meeting_details" component={MeetingDetail} />
         <Route path="/mitem" component={MessageItem} />

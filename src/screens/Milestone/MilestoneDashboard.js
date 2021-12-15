@@ -33,6 +33,7 @@ function Alert(props) {
 const MilestoneDashboard = () => {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const isMentor = Api.isMentor();
 
   const handleCloseSnackBar = (event, reason) => {
     if (reason === 'clickaway') {
@@ -50,7 +51,7 @@ const MilestoneDashboard = () => {
     description: '',
   };
   const [milestones, setMilestones] = useState([]);
-  const [newMilestoneVisible, setNewMilestoneVisible] = useState(true);
+  const [newMilestoneVisible, setNewMilestoneVisible] = useState(isMentor);
   const [isUpdate, setIsUpdate] = useState(false);
   const [milestoneInitialValue, setMilestoneInitialValue] = useState(defaultMilestoneValue);
   const [idMilestoneToEdit, setIdMilestone] = useState('');
@@ -68,7 +69,6 @@ const MilestoneDashboard = () => {
   });
 
   useEffect(() => {
-    setNewMilestoneVisible(true);
     window.scrollTo(0, 0);
   }, [milestoneInitialValue]);
 
@@ -143,7 +143,11 @@ const MilestoneDashboard = () => {
 
           {milestones
               && milestones.map((mile) => (
-                <MilestoneLine milestone={mile} onEditHandler={() => editMilestoneAction(mile.idMilestone, mile.description)} />
+                <MilestoneLine
+                  milestone={mile}
+                  isAllowToEdit={isMentor}
+                  onEditHandler={() => editMilestoneAction(mile.idMilestone, mile.description)}
+                />
 
               ))}
 

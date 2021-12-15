@@ -7,6 +7,7 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import moment from 'moment';
 import { makeStyles } from '@material-ui/core/styles';
+import Api from '../../api/index';
 import AllNotes from '../shared/components/AllNotes';
 import Header from '../shared/components/Header';
 
@@ -28,6 +29,9 @@ const useStyles = makeStyles({
     fontSize: '35px',
     marginTop: '50px',
   },
+  button: {
+    marginLeft: '1rem',
+  },
 });
 
 const StyledSection = styled.section`
@@ -48,6 +52,7 @@ const StyledInfoSection = styled.section`
 `;
 
 const ProjectDetails = ({ projectInfo }) => {
+  const isMentor = Api.isMentor();
   const classes = useStyles();
   const dateOfStartDate = moment(projectInfo.startDate).format('LL');
   const dateOfEndDate = (projectInfo.endDate != null) ? moment(projectInfo.startDate).format('LL') : '-';
@@ -123,15 +128,29 @@ const ProjectDetails = ({ projectInfo }) => {
             {`${projectInfo.modeName} `}
 
           </p>
+
+          {isMentor && (
           <Grid container item justify="center">
+
             <Button
+              className={classes.button}
               variant="contained"
               color="primary"
               href={`/edit-project/${projectInfo.idProject}`}
             >
               Edit
             </Button>
+
+            <Button
+              className={classes.button}
+              variant="contained"
+              color="secondary"
+            >
+              Delete
+            </Button>
+
           </Grid>
+          )}
 
         </StyledInfoSection>
         <Grid container justify="center">

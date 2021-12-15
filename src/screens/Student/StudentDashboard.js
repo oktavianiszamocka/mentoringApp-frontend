@@ -7,12 +7,14 @@ import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
 import moment from 'moment';
 import Pagination from '@material-ui/lab/Pagination';
 import Alert from '@material-ui/lab/Alert';
+import { useParams } from 'react-router-dom';
 import Api from '../../api/index';
 import Header from '../shared/components/Header';
 import Post from './Post';
 import CreatePostForm from './Post/FormwithFormik';
 import EditPostDialog from './Post/EditPostDialog';
 import AllNotes from '../shared/components/AllNotes';
+import ProjectBar from '../shared/components/ProjectBar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const StudentDashboard = () => {
+  const { IdProject } = useParams();
   const classes = useStyles();
   const defaultInitialValuePost = {
     idPost: '',
@@ -65,9 +68,10 @@ const StudentDashboard = () => {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
-  const [project, setProject] = useState('General');
+  const [project, setProject] = useState(IdProject || 'General');
   const [projects, setProjects] = useState([]);
   const [newPost, setNewPost] = useState(defaultInitialValuePost);
+  const [showProjectBar, setShowProjectBar] = useState(!!IdProject);
 
   const loadData = async () => {
     const postType = project === 'General' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
@@ -196,10 +200,14 @@ const StudentDashboard = () => {
           md={3}
           s={12}
         >
-          <AllNotes />
-        </Grid>
-        <Grid item lg={10} md={10} s={12} xs={12}>
+          {showProjectBar && <ProjectBar />}
 
+          {!showProjectBar && <AllNotes /> }
+        </Grid>
+
+        <Grid item lg={10} md={10} s={12} xs={12}>
+          {!showProjectBar
+          && (
           <FormControl className={classes.formControl}>
             <InputLabel id="project-label" className={classes.selectProject}>Project</InputLabel>
             <Select
@@ -222,7 +230,7 @@ const StudentDashboard = () => {
             <FormHelperText>Choose Posts from General topic or Posts from Specific Project</FormHelperText>
 
           </FormControl>
-
+          )}
           <CreatePostForm
             initialValues={newPost}
             formSumbitCallback={handleSubmit}
