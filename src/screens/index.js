@@ -30,6 +30,7 @@ import UseToken from './UseToken';
 import EditProjectFormDashboard from './ProjectForm/EditFormDashboard';
 import ChangePassword from './Auth/ChangePassword';
 import MeetingList from './shared/components/MeetingList';
+import MeetingDetail from './shared/components/MeetingDetail';
 
 const App = () => {
   const { token, setToken } = UseToken();
@@ -75,8 +76,9 @@ const App = () => {
         <Route path="/change-password" component={ChangePassword} />
         <Route path="/milestones/:IdProject" component={Milestone} />
         <Route path="/wall/:IdProject" component={StudentDashboard} />
+        <Route path="/meeting_notes" component={MeetingList} />
+        <Route path="/meeting_details" component={MeetingDetail} />
         <Route path="/mitem" component={MessageItem} />
-
       </Switch>
     </BrowserRouter>
 
