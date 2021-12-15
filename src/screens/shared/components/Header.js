@@ -230,8 +230,6 @@ const Header = () => {
               )}
 
             <Divider />
-            <MenuItem onClick={handleClose}>Settings</MenuItem>
-            <Divider />
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </div>
