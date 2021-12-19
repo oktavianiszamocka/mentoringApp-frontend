@@ -75,24 +75,21 @@ export default function ForgotPassword() {
   const [ErrorLogin, setErrorLogin] = useState('');
 
   const submit = async (values) => {
-    /*
-    const passwordData = {
-      idUser: Api.getUserId(),
-      oldPassword: values.oldPassword, // test123
-      newPassword: values.newPassword,
-    };
+    const emailuser = {
+      email: values.email,
 
-    await Api.changePassword(passwordData)
+    };
+    await Api.forgotPassword(emailuser)
       .then(async (response) => {
-        setProjectSuccess(true);
+        console.log('successs');
       }).catch((err) => {
-        setProjectError(err.response.data);
+        setErrorLogin(err.response.data);
+        console.log(err.response.data);
       });
-      */
   };
 
   const validationSchema = Yup.object({
-    userEmail: Yup.string().required('Required').email('Invalid email'),
+    email: Yup.string().required('Required').email('Invalid email'),
   });
 
   return (
@@ -106,7 +103,7 @@ export default function ForgotPassword() {
         <Formik
           onSubmit={submit}
           validationSchema={validationSchema}
-          initialValues={{ userEmail: '' }}
+          initialValues={{ email: '' }}
         >
           <Form className={classes.form}>
             <Grid container direction="column" justifyContent="center" alignItems="center" spacing={2}>
@@ -117,13 +114,13 @@ export default function ForgotPassword() {
                 <Field
                   style={{ width: '350px' }}
                   as={TextField}
-                  id="userEmail"
-                  name="userEmail"
+                  id="email"
+                  name="email"
                   label="Email"
                   variant="outlined"
                 />
                 <ErrorMessage
-                  name="userEmail"
+                  name="email"
                   component="div"
                   className={classes.error}
                 />

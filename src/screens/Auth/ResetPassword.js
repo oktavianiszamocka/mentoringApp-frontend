@@ -10,6 +10,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 import logo from '../../assets/images/pja.png';
 import Api from '../../api/index';
 
@@ -72,10 +73,13 @@ function Alert(props) {
 
 export default function ResetPassword() {
   const classes = useStyles();
+  const { search } = useLocation();
+  const token = new URLSearchParams(search).get('token');
   const [ErrorLogin, setErrorLogin] = useState('');
   const [projectSuccess, setProjectSuccess] = useState(false);
 
   const submitChangePassword = async (values) => {
+    console.log(token);
     /*
     const passwordData = {
       idUser: Api.getUserId(),
@@ -90,7 +94,6 @@ export default function ResetPassword() {
         setProjectError(err.response.data);
       });
       */
-
   };
 
   const validationSchema = Yup.object({

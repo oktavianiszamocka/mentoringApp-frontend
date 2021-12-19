@@ -71,7 +71,6 @@ const App = () => {
         <Route path="/task-detail" component={TaskDetail} />
         <Route path="/task-add" component={TaskAdd} />
         <Route path="/calendar" component={CalendarMain} />
-        <Route path="/forgot-password" component={ForgottenPassword} />
         <Route path="/change-password" component={ChangePassword} />
         <Route path="/milestones/:IdProject" component={Milestone} />
         <Route path="/forgot-password" component={ForgotPassword} />
