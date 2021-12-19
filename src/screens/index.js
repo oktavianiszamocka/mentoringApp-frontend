@@ -8,6 +8,7 @@ import Message from './MessagePage/MessagePage';
 import EditForm from './Profile/EditFormDashboard';
 // import Admin from './Admin/routes';
 import Login from './Auth/Login';
+import ForgottenPassword from './Auth/ForgottenPassword';
 import UpsertPassword from './Auth/UpsertPassword';
 import MyProject from './MyProject/myProject';
 import ProjectDetailsDashboard from './MyProject/ProjectDetailsDashboard';
@@ -23,18 +24,30 @@ import CalendarMain from './shared/Calendar/CalendarMain';
 import Milestone from './Milestone/MilestoneDashboard';
 import ForgotPassword from './Auth/ForgotPassword';
 import ResetPassword from './Auth/ResetPassword';
+import MessageItem from './MessagePage/MessageItem';
+// const renderRoute = (route) => <Route key={route.path} {...route} />;
 import UseToken from './UseToken';
 import EditProjectFormDashboard from './ProjectForm/EditFormDashboard';
 import ChangePassword from './Auth/ChangePassword';
 import MeetingList from './shared/components/MeetingList';
+import MeetingDetail from './shared/components/MeetingDetail';
 
 const App = () => {
   const { token, setToken } = UseToken();
   const { refreshToken, setRefreshToken } = UseToken();
+  const { idUser, setIdUser } = UseToken();
+  const { userRole, setUserRole } = UseToken();
   const { pathname } = window.location;
 
-  if (!token && pathname !== '/signup') {
-    return <Login setToken={setToken} setRefreshToken={setRefreshToken} />;
+  if (!token && pathname !== '/signup' && pathname !== '/forgot-password') {
+    return (
+      <Login
+        setToken={setToken}
+        setRefreshToken={setRefreshToken}
+        setIdUser={setIdUser}
+        setUserRole={setUserRole}
+      />
+    );
   }
 
   return (
@@ -58,10 +71,15 @@ const App = () => {
         <Route path="/task-detail" component={TaskDetail} />
         <Route path="/task-add" component={TaskAdd} />
         <Route path="/calendar" component={CalendarMain} />
+        <Route path="/forgot-password" component={ForgottenPassword} />
         <Route path="/change-password" component={ChangePassword} />
         <Route path="/milestones/:IdProject" component={Milestone} />
         <Route path="/forgot-password" component={ForgotPassword} />
         <Route path="/reset-password" component={ResetPassword} />
+        <Route path="/wall/:IdProject" component={StudentDashboard} />
+        <Route path="/meeting_notes" component={MeetingList} />
+        <Route path="/meeting_details" component={MeetingDetail} />
+        <Route path="/mitem" component={MessageItem} />
       </Switch>
     </BrowserRouter>
 

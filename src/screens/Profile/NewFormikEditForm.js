@@ -20,6 +20,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import { countries } from 'countries-list';
 import MuiAlert from '@material-ui/lab/Alert';
+import PropTypes from 'prop-types';
 import Api from '../../api/index';
 
 const StyledSection = styled.section`
@@ -128,6 +129,7 @@ const useStyles = makeStyles({
 });
 const NewFormikEditForm = ({ profileInfo }) => {
   const classes = useStyles();
+  const { isMentor } = profileInfo;
 
   const allCountries = [];
   for (const country in countries) {
@@ -187,6 +189,7 @@ const NewFormikEditForm = ({ profileInfo }) => {
     semester: profileInfo.semester,
     skills: profileInfo.skills,
     experiences: profileInfo.experiences,
+    title: profileInfo.title,
   };
 
   const onSubmit = (values) => {
@@ -196,6 +199,7 @@ const NewFormikEditForm = ({ profileInfo }) => {
       idProfile: profileInfo.idProfile,
       ...values,
     };
+    console.log(`prfile data ${profileData}`);
     onProfileUpdateHandler(profileData);
   };
 
@@ -205,8 +209,8 @@ const NewFormikEditForm = ({ profileInfo }) => {
     email: Yup.string().email('Enter a valid email').required('Required'),
     phone: Yup.string().matches(phoneRegExp, 'Enter a valid phone number').required('Required'),
     country: Yup.string().required('Required'),
-    major: Yup.string().required('Required'),
-    semester: Yup.string().matches(/^\d+$/, 'Digits only!').required('Required'),
+    major: Yup.string(),
+    semester: Yup.string().matches(/^\d+$/, 'Digits only!').nullable(true),
   });
 
   return (
@@ -249,8 +253,19 @@ const NewFormikEditForm = ({ profileInfo }) => {
                   <StyledTitleName>
                     {`${profileInfo.firstName} ${profileInfo.lastName}`}
                   </StyledTitleName>
-                  <StyledUnderData>{`${profileInfo.major}`}</StyledUnderData>
-                  <StyledUnderData>{`Semester ${profileInfo.semester}`}</StyledUnderData>
+                  {isMentor
+                  && (
+                  <div>
+                    <StyledUnderData>{`${profileInfo.title}`}</StyledUnderData>
+                  </div>
+                  ) }
+                  {!isMentor
+                  && (
+                  <div>
+                    <StyledUnderData>{`${profileInfo.major}`}</StyledUnderData>
+                    <StyledUnderData>{`Semester ${profileInfo.semester}`}</StyledUnderData>
+                  </div>
+                  ) }
                 </div>
               </Grid>
             </Grid>
@@ -366,38 +381,65 @@ const NewFormikEditForm = ({ profileInfo }) => {
                       className={classes.error}
                     />
                   </Grid>
+
+                  { isMentor
+                  && (
                   <Grid item xs={12}>
                     <Field
                       as={TextField}
-                      id="major"
-                      name="major"
-                      label="Major"
-                      type="search"
+                      id="title"
+                      defaultValue=""
+                      name="title"
+                      label="Title"
                       variant="outlined"
                       className={classes.inputStyle}
                     />
                     <ErrorMessage
-                      name="major"
+                      name="title"
                       component="div"
                       className={classes.error}
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <Field
-                      as={TextField}
-                      id="semester"
-                      name="semester"
-                      label="Semester"
-                      type="search"
-                      variant="outlined"
-                      className={classes.inputStyle}
-                    />
-                    <ErrorMessage
-                      name="semester"
-                      component="div"
-                      className={classes.error}
-                    />
+                  )}
+
+                  { !isMentor
+                  && (
+                  <Grid item container spacing={3} alignItems="center">
+                    <Grid item xs={12}>
+                      <Field
+                        as={TextField}
+                        def
+                        id="major"
+                        name="major"
+                        label="Major"
+                        type="search"
+                        variant="outlined"
+                        className={classes.inputStyle}
+                      />
+                      <ErrorMessage
+                        name="major"
+                        component="div"
+                        className={classes.error}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Field
+                        as={TextField}
+                        id="semester"
+                        name="semester"
+                        label="Semester"
+                        type="search"
+                        variant="outlined"
+                        className={classes.inputStyle}
+                      />
+                      <ErrorMessage
+                        name="semester"
+                        component="div"
+                        className={classes.error}
+                      />
+                    </Grid>
                   </Grid>
+                  )}
                   <Grid item xs={12}>
                     <StyledLabel>Skills:</StyledLabel>
                     <FieldArray name="skills">
@@ -409,7 +451,7 @@ const NewFormikEditForm = ({ profileInfo }) => {
                           return (
                             <div className={classes.divFieldArrayStyle}>
                               {
-                                  skills.map((skill, index) => (
+                                  skills && skills.map((skill, index) => (
                                     <Field
                                       as={Chip}
                                       name={`skills[${index}]`}
@@ -483,4 +525,20 @@ const NewFormikEditForm = ({ profileInfo }) => {
   );
 };
 
+NewFormikEditForm.defaultProps = {
+  initialValues: {
+    lastName: '',
+    firstName: '',
+    email: '',
+    phone: '',
+    dateOfBirth: '',
+    country: '',
+    major: '',
+    semester: '',
+    skills: [],
+    experiences: '',
+    title: '',
+  },
+
+};
 export default NewFormikEditForm;

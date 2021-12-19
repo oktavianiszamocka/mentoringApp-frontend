@@ -157,6 +157,8 @@ const TaskEdit = (props) => {
 
   const initialIds = taskInfo.assignedUsers;
 
+  console.log(`${taskInfo.assignedUsers}aaa`);
+
   const handleChange = (event) => {
     const newIds = event.target.value;
     let addAssignee = false;
@@ -234,24 +236,11 @@ const TaskEdit = (props) => {
     return name_id;
   };
 
-  const changeDateFormat = (dat) => {
-    if (dat == null) {
-      return 'Not set';
-    }
-    const date = new Date(dat);
-    let dd = date.getDate();
-    let mm = date.getMonth() + 1;
-    const yyyy = date.getFullYear();
-    if (dd < 10) { dd = `0${dd}`; }
-    if (mm < 10) { mm = `0${mm}`; }
-    const d = `${dd}/${mm}/${yyyy}`;
-    return d;
-  };
-
   const styles = {
     position: 'absolute',
     zIndex: 5,
   };
+
   useEffect(() => {
     const loadData = async () => {
       getTaskStatuses();

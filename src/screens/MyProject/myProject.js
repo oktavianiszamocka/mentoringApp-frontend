@@ -50,6 +50,7 @@ const useStyles = makeStyles({
 
 const MyProject = () => {
   const classes = useStyles();
+  const isMentor = Api.isMentor();
   const defaultErrorMsg = 'Sorry! You have no projects assigned to you';
   const [projects, setProjects] = useState([]);
   const [page, setPage] = useState(1);
@@ -85,10 +86,9 @@ const MyProject = () => {
     if (selectedMode !== '') {
       concatUrl += `mode=${selectedMode}&`;
     }
-    console.log(concatUrl);
+
     const projectResult = await Api.getMyProjectBySearch(concatUrl, 1)
       .then((response) => {
-        console.log(response.data.totalRecords);
         setProjects(response.data.data);
         setCount(response.data.totalPages);
       })
@@ -134,6 +134,21 @@ const MyProject = () => {
 
         </Grid>
         <Grid item xs={8} container spacing={2} className={classes.gridItem}>
+
+          <Grid container item justify="center" alignItems="center">
+            {isMentor
+            && (
+            <Button
+              size="big"
+              variant="contained"
+              color="primary"
+              href="project-form"
+            >
+
+              Add New Project
+            </Button>
+            )}
+          </Grid>
           <SearchBar styleSearch={classes.search} onEnterAction={(e) => searchProject(e)} />
 
           <Grid item xs={4} className={classes.gridItem}>

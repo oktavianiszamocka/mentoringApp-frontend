@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
 import styled from 'styled-components';
 import S3FileUpload from 'react-s3';
+import AllNotes from 'screens/shared/components/AllNotes';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import ProjectInfoForm from './projectInfoForm';
@@ -359,7 +360,6 @@ const ProjectFormBoard = () => {
     }
   };
   const postProjectUrl = async (e) => {
-    console.log(e);
     convertToProjectUrlArr(e);
     setUrlErrorMessage('');
     await Api.postProjectUrls(projectLinks)
@@ -380,7 +380,7 @@ const ProjectFormBoard = () => {
       <Grid container>
         <Header />
         <Grid item xs={2}>
-          <ProjectBar className={classes.projectBar} />
+          <AllNotes className={classes.projectBar} />
         </Grid>
 
         <Grid item xs={8}>

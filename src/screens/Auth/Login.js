@@ -37,13 +37,18 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  forgotPass: {
+    marginLeft: '4rem',
+  },
 }));
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function Login({ setToken, setRefreshToken }) {
+export default function Login({
+  setToken, setRefreshToken, setIdUser, setUserRole,
+}) {
   const classes = useStyles();
   const [ErrorLogin, setErrorLogin] = useState('');
 
@@ -53,7 +58,9 @@ export default function Login({ setToken, setRefreshToken }) {
       .then((response) => {
         setToken(response.data.token);
         setRefreshToken(response.data.refreshToken);
-        localStorage.setItem('idUser', response.data.idUser);
+        setIdUser(response.data.idUser);
+        setUserRole(response.data.role);
+        // localStorage.setItem('idUser', response.data.idUser);
         window.location.href = '/';
       })
       .catch((err) => {
@@ -114,6 +121,11 @@ export default function Login({ setToken, setRefreshToken }) {
               {' '}
               <u><a href="/signup">here</a></u>
             </StyledLabel>
+            <StyledLabel>
+
+              <a className={classes.forgotPass} href="/forgot-password">Forgot your password?</a>
+
+            </StyledLabel>
             <Grid container />
           </Form>
 
@@ -127,4 +139,6 @@ export default function Login({ setToken, setRefreshToken }) {
 Login.propTypes = {
   setToken: PropTypes.func.isRequired,
   setRefreshToken: PropTypes.func.isRequired,
+  setIdUser: PropTypes.func.isRequired,
+  setUserRole: PropTypes.func.isRequired,
 };
