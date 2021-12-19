@@ -25,6 +25,7 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import Chip from '@material-ui/core/Chip';
+import PropTypes from 'prop-types';
 import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
@@ -175,7 +176,7 @@ const TaskAdd = (props) => {
   };
 
   const getTaskAsignees = async () => {
-    const res = await Promise.all([Api.getTasksAsignees()]);
+    const res = await Promise.all([Api.getTasksAsignees(IdProject)]);
 
     setAsignees(res[0].data.data);
   };
@@ -213,7 +214,7 @@ const TaskAdd = (props) => {
 
   const initialValues = {
     title: '',
-    status: 1,
+    status: props.idStatus,
     description: '',
     startDate: new Date(),
     expectedEndDate: new Date(),
@@ -416,34 +417,6 @@ const TaskAdd = (props) => {
               <Divider />
               <Grid container direction="row">
                 <Grid item>
-                  <StyledUnderTitle>DEADLINE DATE</StyledUnderTitle>
-                </Grid>
-                <Grid item>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid container justify="space-around">
-                      <Field
-                        className={classes.datepick}
-                        size="small"
-                        component={KeyboardDatePicker}
-                        name="expectedEndDate"
-                        label="Deadline Date"
-                        format="dd/MM/yyyy"
-                        clearable
-                        autoOk
-
-                        inputVariant="outlined"
-                        error={!!(errors.taskDeadline && touched.taskDeadline)}
-                        helperText={errors.taskDeadline && touched.taskDeadline ? errors.taskDeadline : null}
-                      />
-
-                    </Grid>
-                  </MuiPickersUtilsProvider>
-                </Grid>
-              </Grid>
-              <Divider />
-
-              <Grid container direction="row">
-                <Grid item>
                   <StyledUnderTitle>START DATE</StyledUnderTitle>
                 </Grid>
                 <Grid item>
@@ -466,6 +439,33 @@ const TaskAdd = (props) => {
                     </Grid>
                   </MuiPickersUtilsProvider>
                 </Grid>
+                <Grid container direction="row">
+                  <Grid item>
+                    <StyledUnderTitle>DEADLINE DATE</StyledUnderTitle>
+                  </Grid>
+                  <Grid item>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <Grid container justify="space-around">
+                        <Field
+                          className={classes.datepick}
+                          size="small"
+                          component={KeyboardDatePicker}
+                          name="expectedEndDate"
+                          label="Deadline Date"
+                          format="dd/MM/yyyy"
+                          clearable
+                          autoOk
+                          inputVariant="outlined"
+                          error={!!(errors.taskDeadline && touched.taskDeadline)}
+                          helperText={errors.taskDeadline && touched.taskDeadline ? errors.taskDeadline : null}
+                        />
+
+                      </Grid>
+                    </MuiPickersUtilsProvider>
+                  </Grid>
+                </Grid>
+                <Divider />
+
                 <Button
                   className={classes.button}
                   variant="contained"
@@ -484,4 +484,9 @@ const TaskAdd = (props) => {
   );
 };
 
+TaskAdd.prototype = {
+  close: PropTypes.func.isRequired,
+  idStatus: PropTypes.string,
+
+};
 export default TaskAdd;

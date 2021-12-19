@@ -10,6 +10,7 @@ import Card from './Card';
 import Header from '../../shared/components/Header';
 import Api from '../../../api/index';
 import ProjectBar from '../../shared/components/ProjectBar';
+import ConfirmDialog from '../../shared/components/ConfirmDialog';
 
 const StyledMain = styled.main`
   display: flex;
@@ -36,6 +37,12 @@ const TaskDashboard = () => {
   const [tasksInpr, setTasksInPr] = useState([]);
   const [tasksDone, setTasksDone] = useState([]);
   const [tasksBlock, setTasksBlock] = useState([]);
+  const [deleteTaskDialogOptions, setDeleteTaskDialogOptions] = useState({
+    title: 'Delete Task',
+    mainText: 'Are you sure you want to delete this task?',
+    id: null,
+    open: false,
+  });
 
   useEffect(() => {
     const loadData = async () => {
@@ -61,6 +68,7 @@ const TaskDashboard = () => {
   }, []);
 
   const deleteTask = async (idOfCard) => {
+    console.log(' deleteTask');
     await Api.deleteTask(idOfCard);
 
     const res = await Promise.all([Api.getProjectTasks(IdProject)]);
@@ -97,6 +105,27 @@ const TaskDashboard = () => {
     }
   };
 
+  const onTaskCloseHandler = (id) => {
+    console.log('onTaskCloseHandler');
+    setDeleteTaskDialogOptions({
+      ...deleteTaskDialogOptions,
+      open: true,
+      id,
+    });
+  };
+
+  const onTaskDeleteDialogClosed = async (confirmed, idTask) => {
+    if (confirmed) {
+      console.log('onTaskDeleteDialogClosed');
+      deleteTask(idTask);
+    }
+
+    setDeleteTaskDialogOptions({
+      ...deleteTaskDialogOptions,
+      open: false,
+    });
+  };
+
   return (
     <div className={classes.root}>
       <Grid container>
@@ -108,10 +137,13 @@ const TaskDashboard = () => {
         </Grid>
 
         <Grid item xs={8} container>
+
           <Typography variant="h4" gutterBottom>Project Tasks</Typography>
 
           <StyledMain>
-            <Board id="board-1" title="To do">
+            <ConfirmDialog {...deleteTaskDialogOptions} onDialogClosed={onTaskDeleteDialogClosed} />
+
+            <Board id="board-1" title="To do" idStatus="1">
               {tasksToDo.length > 0 ? (
                 tasksToDo.map((item) => (
                   <Card
@@ -126,14 +158,14 @@ const TaskDashboard = () => {
                     avatars={item.assignedUserAvatars}
                     priority={item.priority}
                     taskId={item.idTask}
-                    reloadTasks={deleteTask}
+                    reloadTasks={() => onTaskCloseHandler(item.idTask)}
                   />
                 ))) : (
                   <div />
               )}
             </Board>
 
-            <Board id="board-2" title="In progress">
+            <Board id="board-2" title="In progress" idStatus="2">
 
               {tasksInpr.length > 0 ? (
                 tasksInpr.map((item) => (
@@ -149,14 +181,14 @@ const TaskDashboard = () => {
                     avatars={item.assignedUserAvatars}
                     priority={item.priority}
                     taskId={item.idTask}
-                    reloadTasks={deleteTask}
+                    reloadTasks={() => onTaskCloseHandler(item.idTask)}
                   />
                 ))) : (
                   <div />
               )}
             </Board>
 
-            <Board id="board-3" title="Done">
+            <Board id="board-3" title="Done" idStatus="3">
               {tasksDone.length > 0 ? (
                 tasksDone.map((item) => (
                   <Card
@@ -171,14 +203,14 @@ const TaskDashboard = () => {
                     avatars={item.assignedUserAvatars}
                     priority={item.priority}
                     taskId={item.idTask}
-                    reloadTasks={deleteTask}
+                    reloadTasks={() => onTaskCloseHandler(item.idTask)}
                   />
                 ))) : (
                   <div />
               )}
             </Board>
 
-            <Board id="board-4" title="Blocked">
+            <Board id="board-4" title="Blocked" idStatus="4">
               {tasksBlock.length > 0 ? (
                 tasksBlock.map((item) => (
                   <Card
@@ -193,7 +225,7 @@ const TaskDashboard = () => {
                     avatars={item.assignedUserAvatars}
                     priority={item.priority}
                     taskId={item.idTask}
-                    reloadTasks={deleteTask}
+                    reloadTasks={() => onTaskCloseHandler(item.idTask)}
                   />
                 ))) : (
                   <div />
