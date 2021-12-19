@@ -34,6 +34,11 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
+  rightgrid: {
+    '@media (max-width: 460px)': {
+      minWidth: '100%',
+    },
+  },
 }));
 
 export default function MessagePage() {
@@ -118,7 +123,7 @@ export default function MessagePage() {
       <Grid container>
         {Header()}
         <Grid container spacing={2}>
-          <Grid item xs={3} container direction="column" spacing={2} className={classes.leftgrid}>
+          <Grid item xs={6} sm={3} container direction="column" spacing={2} className={classes.leftgrid}>
             <Grid item>
               <Paper style={{ height: '25rem', backgroundColor: '#f4f6f8' }}>
                 <Grid item>
@@ -132,7 +137,7 @@ export default function MessagePage() {
               </Paper>
             </Grid>
           </Grid>
-          <Grid item xs={8} container direction="column" spacing={1}>
+          <Grid item xs={6} sm={9} container direction="column" spacing={1} className={classes.rightgrid}>
             <Grid item>
               <UserAvailability user={user} active={isAvailable} />
             </Grid>

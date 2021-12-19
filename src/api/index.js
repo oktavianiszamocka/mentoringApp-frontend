@@ -117,6 +117,7 @@ const changePassword = (passwordData) => axios.post(`${apiUrl}/account/changePas
 const getProjectStudies = () => axios.get(`${apiUrl}/projects/studies`);
 const getProjectModes = () => axios.get(`${apiUrl}/projects/mode`);
 const getAllMessages = () => axios.get(`${apiUrl}/messages/${getUserId()}`);
+const messageSearch = () => axios.get(`${apiUrl}/messages/receiverList`);
 const getDetailMessages = (senderId, recieverId) => axios.get(`${apiUrl}/messages/detail?sender=${senderId}&receiver=${recieverId}`);
 // const getDetailMessages  axios.get(`${apiUrl}/messages/detail?sender=${idSender}&reciever=${idReciever}`);
 const sendMessage = (messageData) => axios.post(`${apiUrl}/messages`, messageData);

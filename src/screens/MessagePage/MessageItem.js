@@ -37,12 +37,30 @@ const useStyles = makeStyles((theme) => ({
   },
   message: {
     maxHeight: '25px',
+    '@media (max-width: 900px)': {
+      maxHeight: '45px',
+
+    },
+  },
+  messageTime: {
+    maxHeight: '25px',
+    '@media (max-width: 900px)': {
+      display: 'none',
+    },
   },
   number: {
     maxHeight: '35px',
     maxWidth: '20px',
-
   },
+  messageContainer: {
+    '@media (min-width: 1536px)': {
+      minWidth: '230px',
+    },
+    '@media (min-width: 1750px)': {
+      minWidth: '260px',
+    },
+  },
+
 }));
 
 const MessageItem = ({
@@ -56,12 +74,11 @@ const MessageItem = ({
         <Grid item className={classes.iconcontainer}>
           <Avatar alt="person image" src={user.imageUrl} />
         </Grid>
-        <Grid item xs={8}>
+        <Grid item sm={4} md={5} lg={6} xl={9} className={classes.messageContainer}>
           <Grid
             container
             direction="column"
             spacing={0}
-
           >
             <Grid item className={classes.message}>
               <StyledTitle>
@@ -75,12 +92,8 @@ const MessageItem = ({
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
-          <Grid container direction="column" spacing={0} style={{ marginLeft: '10px' }}>
-            <Grid item className={classes.message}>
-              <StyledMessage>11:30</StyledMessage>
-            </Grid>
-          </Grid>
+        <Grid item className={classes.messageTime}>
+          <StyledMessage>11:30</StyledMessage>
         </Grid>
       </Grid>
     </Paper>
