@@ -23,22 +23,42 @@ export default function UseToken() {
 
   const saveRefreshToken = (userRefreshToken) => {
     localStorage.setItem('refresh_token', userRefreshToken);
-    console.log(`refresh token${userRefreshToken}`);
     setRefreshToken(userRefreshToken);
   };
 
   const clearToken = () => {
-    console.log('clear tokme');
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('idUser');
   };
+
+  const getIdUser = () => localStorage.getItem('idUser');
+  const [idUser, setIdUser] = useState(getIdUser());
+
+  const saveIdUser = (idUser) => {
+    localStorage.setItem('idUser', idUser);
+    setIdUser(idUser);
+  };
+
+  const getUserRole = () => localStorage.getItem('userRole');
+  const [userRole, setUserRole] = useState(getUserRole());
+
+  const saveUserRole = (userRole) => {
+    localStorage.setItem('userRole', userRole);
+    setUserRole(userRole);
+  };
+
   return {
     setToken: saveToken,
     token,
     setRefreshToken: saveRefreshToken,
     refreshToken,
     clearToken,
+    idUser,
+    setIdUser: saveIdUser,
+    userRole,
+    setUserRole: saveUserRole,
+    getUserRole,
 
   };
 }

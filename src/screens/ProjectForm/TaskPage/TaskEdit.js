@@ -25,12 +25,12 @@ import * as Yup from 'yup';
 import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
-  background-color: #F5F5F5;
-  position: absolute;
-  max-width: 250px;
-  min-height: 250px;
-  max-height: 750px;
-  padding: 10px;
+  background-color: #F5F5F5;                                                                                                                                                                           
+  position: relative;
+  min-height: 30rem;
+  width: 25rem;
+  height: auto;
+  padding: 2rem;
   border-radius: 5px;
   border: 1px solid #9e9e99;
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
@@ -145,8 +145,8 @@ const TaskEdit = (props) => {
 
   const [statuses, setStatuses] = useState([]);
   const [asignees, setAsignees] = useState([]);
-  const [taskDeadline, settaskDeadline] = React.useState(new Date('2021-06-10T21:11:54'));
-  const [taskStart, settaskStart] = React.useState(new Date('2021-06-10T21:11:54'));
+  const [taskDeadline, settaskDeadline] = useState(taskInfo.expectedEndDate);
+  const [taskStart, settaskStart] = useState(taskInfo.startDate);
   const [assignedIds, setAsignedIds] = React.useState(taskInfo.assignedUsers);
 
   const [peopleToAdd, setPeopleToAdd] = useState([]);
@@ -219,7 +219,7 @@ const TaskEdit = (props) => {
   };
 
   const getTaskAsignees = async () => {
-    const res = await Promise.all([Api.getTasksAsignees()]);
+    const res = await Promise.all([Api.getTasksAsignees(taskInfo.project)]);
     setAsignees(res[0].data.data);
   };
 
@@ -260,12 +260,12 @@ const TaskEdit = (props) => {
 
   const initialValues = {
     title: taskInfo.title,
-    status: 1,
+    status: taskInfo.status,
     description: taskInfo.description,
     startDate: taskInfo.startDate,
     expectedEndDate: taskInfo.expectedEndDate,
-    project: 5,
-    creator: 9,
+    project: taskInfo.project,
+    creator: taskInfo.creator,
     createdOn: taskInfo.createdOn,
     priority: taskInfo.priority,
     assignedUsers: taskInfo.assignedUsers,
@@ -447,37 +447,6 @@ const TaskEdit = (props) => {
           <Divider />
           <Grid container direction="row">
             <Grid item>
-              <StyledUnderTitle>DEADLINE</StyledUnderTitle>
-            </Grid>
-            <Grid item>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <Grid container justify="space-around">
-                  <Field
-                    as={KeyboardDatePicker}
-                    disableToolbar
-                    className={classes.datepick}
-                    InputProps={{
-                      classes: {
-                        input: classes.resize2,
-                      },
-                    }}
-                    variant="inline"
-                    format="MM/dd/yyyy"
-                    value={taskDeadline}
-                    onChange={handleDeadlineChange}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change date',
-                    }}
-                  />
-
-                </Grid>
-              </MuiPickersUtilsProvider>
-            </Grid>
-          </Grid>
-          <Divider />
-
-          <Grid container direction="row">
-            <Grid item>
               <StyledUnderTitle>START DATE</StyledUnderTitle>
             </Grid>
             <Grid item>
@@ -503,6 +472,37 @@ const TaskEdit = (props) => {
                 </Grid>
               </MuiPickersUtilsProvider>
             </Grid>
+            <Grid container direction="row">
+              <Grid item>
+                <StyledUnderTitle>DEADLINE</StyledUnderTitle>
+              </Grid>
+              <Grid item>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <Grid container justify="space-around">
+                    <Field
+                      as={KeyboardDatePicker}
+                      disableToolbar
+                      className={classes.datepick}
+                      InputProps={{
+                        classes: {
+                          input: classes.resize2,
+                        },
+                      }}
+                      variant="inline"
+                      format="MM/dd/yyyy"
+                      value={taskDeadline}
+                      onChange={handleDeadlineChange}
+                      KeyboardButtonProps={{
+                        'aria-label': 'change date',
+                      }}
+                    />
+
+                  </Grid>
+                </MuiPickersUtilsProvider>
+              </Grid>
+            </Grid>
+            <Divider />
+
             <Button
               className={classes.button}
               variant="contained"

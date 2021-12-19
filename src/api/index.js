@@ -1,4 +1,6 @@
 import axios from 'axios';
+import UseToken from 'screens/UseToken';
+import React, { useState, useEffect } from 'react';
 
 const apiUrl = 'http://localhost:57864/api';
 
@@ -20,12 +22,15 @@ axios.interceptors.request.use(
   },
 );
 
+let isRefresh = false;
 axios.interceptors.response.use((response) => response,
   (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+
+    if (error.response.status === 401 && !originalRequest._retry && !isRefresh) {
+      isRefresh = true;
       const refreshToken = localStorage.getItem('refresh_token');
-      console.log('expired');
+
       originalRequest._retry = true;
       return axios.post(`${apiUrl}/account/${refreshToken}/refresh`)
         .then((res) => {
@@ -33,6 +38,7 @@ axios.interceptors.response.use((response) => response,
             // 1) put token to LocalStorage
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('refresh_token', res.data.refreshToken);
+            isRefresh = false;
 
             // 2) Change Authorization header
             axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('token')}`;
@@ -50,8 +56,12 @@ axios.interceptors.response.use((response) => response,
     return Promise.reject(error);
   });
 
-const getUserId = () => 9;
-// const getUserId = () => localStorage.getItem('idUser');
+// const getUserId = () => 9;
+const getUserRole = () => localStorage.getItem('userRole');
+const isMentor = () => getUserRole() == 3;
+console.log(getUserRole());
+console.log(isMentor());
+const getUserId = () => localStorage.getItem('idUser');
 
 const getNotes = (pageNumber) => axios.get(`${apiUrl}/personal-notes/${getUserId()}?pageNumber=${pageNumber}&pageSize=3`);
 const getPosts = (pageNumber) => axios.get(`${apiUrl}/posts?pageNumber=${pageNumber}&pageSize=10`);
@@ -88,14 +98,14 @@ const getProjectTasks = (idProject) => axios.get(`${apiUrl}/tasks/${idProject}`)
 const login = (logininfo) => axios.post(`${apiUrl}/account/login`, logininfo);
 const register = (registerinfo) => axios.post(`${apiUrl}/account/register`, registerinfo);
 const getTaskDetails = (idTask) => axios.get(`${apiUrl}/tasks/detail/${idTask}`);
-const getProjectMilestones = (idProject) => axios.get(`${apiUrl}/milestones/5`);
+const getProjectMilestones = (idProject) => axios.get(`${apiUrl}/milestones/${idProject}`);
 const updateMilestoneToPassed = (milestoneData) => axios.patch(`${apiUrl}/milestones/update-step`, milestoneData);
 const addNewMilestone = (milestoneData) => axios.post(`${apiUrl}/milestones`, milestoneData);
 const editMilestone = (milestoneData) => axios.patch(`${apiUrl}/milestones`, milestoneData);
 const deleteTask = (idTask) => axios.delete(`${apiUrl}/tasks/${idTask}`);
 const updateTaskStatus = (tasksData) => axios.patch(`${apiUrl}/tasks/update-status`, tasksData);
 const getTasksStatuses = () => axios.get(`${apiUrl}/tasks/status`);
-const getTasksAsignees = () => axios.get(`${apiUrl}/project-members/5`);
+const getTasksAsignees = (idProject) => axios.get(`${apiUrl}/project-members/${idProject}`);
 const createTask = (taskData) => axios.post(`${apiUrl}/tasks/`, taskData);
 const updateTask = (taskData) => axios.patch(`${apiUrl}/tasks/`, taskData);
 const getUserMeetings = (date) => axios.get(`${apiUrl}/meetings/user/9?date=${date}`);
@@ -127,6 +137,8 @@ const postProjectUrls = (links) => axios.patch(`${apiUrl}/projects/project-urls`
 
 export default {
   getUserId,
+  getUserRole,
+  isMentor,
   getNotes,
   getPosts,
   getUserProfile,
@@ -193,5 +205,8 @@ export default {
   getAllMessages,
   getDetailMessages,
   sendMessage,
+  postProjectIconUrl,
+  getProjectUrlTypes,
+  postProjectUrls,
 
 };

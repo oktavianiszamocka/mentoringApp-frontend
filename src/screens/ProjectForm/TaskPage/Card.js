@@ -7,6 +7,9 @@ import moment from 'moment';
 import MaterialAvatar from '@material-ui/core/Avatar';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import {
+  Grid, Popover,
+} from '@material-ui/core';
 import TaskDetail from './TaskDetail';
 import TaskEdit from './TaskEdit';
 import Api from '../../../api/index';
@@ -103,6 +106,15 @@ const useStyles = makeStyles({
     fontSize: '20px',
     marginTop: '-7px',
   },
+  popOverDiv: {
+    width: '25rem',
+    height: '34rem',
+  },
+  popoverRoot: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 function Card(props) {
@@ -110,6 +122,7 @@ function Card(props) {
 
   const { deadline } = props;
   const { priority } = props;
+
   const deadlineFormat = moment(deadline).format('LL');
   const idOfCard = props.id;
   const [showDetail, setShowDetail] = useState(false);
@@ -119,9 +132,23 @@ function Card(props) {
   const handleClose = () => {
     setShowDetail(false);
   };
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl2, setAnchorEl2] = useState(null);
+
+  const handleClosePop = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClosePop2 = () => {
+    setAnchorEl2(null);
+  };
+
+  const openPopOver = Boolean(anchorEl);
+  const openPopOver2 = Boolean(anchorEl2);
+  const id = openPopOver ? 'simple-popover' : undefined;
+  const id2 = openPopOver2 ? 'simple-popover' : undefined;
 
   const [taskTitle, setTaskTitle] = useState('');
-  const [taskDeadline, settaskDeadline] = React.useState(new Date('2021-06-10T21:11:54'));
   const [taskDescription, setTaskDescription] = useState('');
   const [taskCreator, setTaskCreator] = useState('');
   const [taskCreatedOn, setTaskCreatedOn] = useState('');
@@ -130,11 +157,12 @@ function Card(props) {
   const [taskStatus, setTaskStatus] = useState();
   const [taskEnd, setTaskEnd] = useState();
   const [taskStart, setTaskStart] = useState();
+  const [project, setProject] = useState();
 
   useEffect(() => {
     const loadData = async () => {
       const res = await Promise.all([Api.getTaskDetails(idOfCard)]);
-      console.log(res[0].data.data);
+
       const assignedIds = [];
       res[0].data.data.assignedUser.map((user) => {
         assignedIds.push(user.idUser);
@@ -148,6 +176,7 @@ function Card(props) {
       setTaskStatus(res[0].data.data.status);
       setTaskEnd(res[0].data.data.expectedEndDate);
       setTaskStart(res[0].data.data.startDate);
+      setProject(res[0].data.data.project);
     };
     loadData();
   }, []);
@@ -171,7 +200,6 @@ function Card(props) {
 
   const dragStart = (e) => {
     const { target } = e;
-
     e.dataTransfer.setData('card_id', target.id);
 
     setTimeout(() => {
@@ -186,6 +214,7 @@ function Card(props) {
   const showCom = (e) => {
     setShowDetail(true);
     getPositionXY();
+    setAnchorEl(e.currentTarget);
   };
 
   const hideCom = () => {
@@ -203,7 +232,8 @@ function Card(props) {
     reload(idOfCard);
   };
 
-  const showEditting = () => {
+  const showEditting = (e) => {
+    setAnchorEl2(e.currentTarget);
     setShowEdit(true);
   };
 
@@ -214,8 +244,8 @@ function Card(props) {
     description: taskDescription,
     startDate: taskStart,
     expectedEndDate: taskEnd,
-    project: 5,
-    creator: 9,
+    project,
+    creator: taskCreator,
     createdOn: taskCreatedOn,
     priority,
     assignedUsers,
@@ -228,6 +258,7 @@ function Card(props) {
       onDragStart={dragStart}
       onDragOver={dragOver}
     >
+
       <StyledDiv2 id="card">
         <StyledDiv3>
           <StyledDiv5>
@@ -283,14 +314,50 @@ function Card(props) {
       {(() => {
         if (showDetail) {
           return (
-            <TaskDetail cardPosition={getPositionXY()} idT={idOfCard} showDet={hideCom} />
+
+            <div>
+              <Popover
+                open={openPopOver}
+                anchorReference="none"
+                classes={{
+                  root: classes.popoverRoot,
+                }}
+                onClose={handleClosePop}
+              >
+                <div className={classes.popOverDiv}>
+                  <TaskDetail idT={idOfCard} showDet={hideCom} />
+                </div>
+              </Popover>
+            </div>
+
           );
         }
       })()}
       {(() => {
         if (showEdit) {
           return (
-            <TaskEdit description={taskDescription} taskInfo={taskData} cardPosition={getPositionXY()} idT={idOfCard} showEdit={hideEdit} />
+
+            <div>
+              <Popover
+                open={openPopOver2}
+                anchorReference="none"
+                classes={{
+                  root: classes.popoverRoot,
+                }}
+                onClose={handleClosePop2}
+              >
+                <div className={classes.popOverDiv}>
+                  <TaskEdit
+                    description={taskDescription}
+                    taskInfo={taskData}
+                    cardPosition={getPositionXY()}
+                    idT={idOfCard}
+                    showEdit={hideEdit}
+                  />
+                </div>
+              </Popover>
+            </div>
+
           );
         }
       })()}

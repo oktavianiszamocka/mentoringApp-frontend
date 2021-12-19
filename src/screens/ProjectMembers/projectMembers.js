@@ -4,6 +4,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useParams } from 'react-router-dom';
+import AlertLab from '@material-ui/lab/Alert';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import MemberAvatar from './member';
@@ -27,6 +28,11 @@ const useStyles = makeStyles({
   paperLeft: {
     height: '25rem',
     width: '15rem',
+
+  },
+  alert: {
+    backgroundColor: 'rgba(255,165,0,0.2)',
+    color: 'black',
 
   },
 
@@ -68,6 +74,18 @@ const ProjectMembersBoard = () => {
               </Grid>
 
             ))}
+
+            {members.length === 0
+                            && (
+                            <div>
+                              <AlertLab
+                                severity="warning"
+                                className={classes.alert}
+                              >
+                                There are no project members yet!
+                              </AlertLab>
+                            </div>
+                            )}
 
           </Grid>
         </div>

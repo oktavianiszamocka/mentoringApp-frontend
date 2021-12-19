@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Title from '../shared/components/Title';
+import Api from '../../api/index';
 
 const StyledSection = styled.section`
   margin: 2rem;
@@ -99,6 +100,7 @@ const MyProfile = ({
   const dateOfBirthFormat = moment(profileInfo.dateOfBirth).format('LL');
   const allSkills = profileInfo.skills;
   const classes = useStyles();
+  const { isMentor } = profileInfo;
 
   return (
     <div>
@@ -119,8 +121,26 @@ const MyProfile = ({
               <StyledTitleName>
                 {`${profileInfo.firstName} ${profileInfo.lastName}`}
               </StyledTitleName>
-              <StyledUnderData>{`${profileInfo.major}`}</StyledUnderData>
-              <StyledUnderData>{`Semester ${profileInfo.semester}`}</StyledUnderData>
+              { isMentor && profileInfo.title
+              && (
+              <div>
+
+                <StyledUnderData>{`${profileInfo.title}`}</StyledUnderData>
+              </div>
+              )}
+
+              { !isMentor
+              && (
+              <div>
+                { profileInfo.major && (
+
+                <StyledUnderData>{`${profileInfo.major}`}</StyledUnderData>
+                )}
+                { profileInfo.semester && (
+                <StyledUnderData>{`Semester ${profileInfo.semester}`}</StyledUnderData>
+                )}
+              </div>
+              )}
             </div>
           </Grid>
         </Grid>
@@ -239,30 +259,35 @@ const MyProfile = ({
                 {profileInfo.country}
               </StyledData>
             </Grid>
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-            <Grid item xs={1.5}>
-              <StyledLabels>
-                Major:
-              </StyledLabels>
-            </Grid>
-            <Grid item xs={10}>
-              <StyledData>
-                {profileInfo.major}
-              </StyledData>
-            </Grid>
-            <Grid item xs={1.5}>
-              <StyledLabels>
-                Semester:
-              </StyledLabels>
-            </Grid>
-            <Grid item xs={9}>
-              <StyledData>
-                {profileInfo.semester}
-              </StyledData>
-            </Grid>
+            {!isMentor
+                && (
+                <Grid container spacing={2} item xs={12}>
+                  <Grid item xs={12}>
+                    <Divider />
+                  </Grid>
 
+                  <Grid item xs={1.5}>
+                    <StyledLabels>
+                      Major:
+                    </StyledLabels>
+                  </Grid>
+                  <Grid item xs={9}>
+                    <StyledData>
+                      {profileInfo.major}
+                    </StyledData>
+                  </Grid>
+                  <Grid item xs={1.5}>
+                    <StyledLabels>
+                      Semester:
+                    </StyledLabels>
+                  </Grid>
+                  <Grid item xs={9}>
+                    <StyledData>
+                      {profileInfo.semester}
+                    </StyledData>
+                  </Grid>
+                </Grid>
+                )}
           </Grid>
 
         </StyledInfoSection>
@@ -278,7 +303,7 @@ const MyProfile = ({
             </Grid>
             <Grid item xs={12}>
               <div>
-                {allSkills.map((tag) => (
+                {allSkills && allSkills.map((tag) => (
                   <Chip label={tag} color="primary" className={classes.chipStyle} />
                 ))}
               </div>

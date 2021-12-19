@@ -13,12 +13,12 @@ import TimelapseOutlinedIcon from '@material-ui/icons/TimelapseOutlined';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
 import NoteOutlinedIcon from '@material-ui/icons/NoteOutlined';
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
-import HistoryIcon from '@material-ui/icons/History';
+import ForumIcon from '@material-ui/icons/Forum';
 import { makeStyles } from '@material-ui/core/styles';
 
 const StyledWrapper = styled.div`
   width: 13rem;
-  height: 37rem;
+  height: 30rem;
   border-radius: 5px;
   background-color: #E0E0E0	;
 `;
@@ -85,22 +85,7 @@ const ProjectBar = () => {
         <Grid item xs={12}>
           <Divider className={classes.dividerStyle} />
         </Grid>
-        <Grid item xs={12}>
-          <Button size="small" className={classes.buttonStyle} href={`/project-promoters/${IdProject}`}>
-            <div className={classes.divItem}>
-              <HomeOutlinedIcon className={classes.IconStyle} />
-              <StyledP>Homepage</StyledP>
-            </div>
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
-          <Button size="small" className={classes.buttonStyle} href={`/project-promoters/${IdProject}`}>
-            <div className={classes.divItem}>
-              <DashboardIcon className={classes.IconStyle} />
-              <StyledP>Dashboard</StyledP>
-            </div>
-          </Button>
-        </Grid>
+
         <Grid item xs={12}>
           <Button size="small" className={classes.buttonStyle} href={`/project-detail/${IdProject}`}>
             <div className={classes.divItem}>
@@ -110,11 +95,18 @@ const ProjectBar = () => {
           </Button>
         </Grid>
         <Grid item xs={12}>
+          <Button size="small" className={classes.buttonStyle} href={`/wall/${IdProject}`}>
+            <div className={classes.divItem}>
+              <ForumIcon className={classes.IconStyle} />
+              <StyledP>Wall</StyledP>
+            </div>
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
           <Button size="small" className={classes.buttonStyle} href={`/project-promoters/${IdProject}`}>
             <div className={classes.divItem}>
               <PersonOutlineOutlinedIcon className={classes.IconStyle} />
               <StyledP>Supervisors</StyledP>
-
             </div>
           </Button>
         </Grid>
@@ -126,16 +118,9 @@ const ProjectBar = () => {
             </div>
           </Button>
         </Grid>
+
         <Grid item xs={12}>
-          <Button size="small" className={classes.buttonStyle} href={`/project-promoters/${IdProject}`}>
-            <div className={classes.divItem}>
-              <TimelineIcon className={classes.IconStyle} />
-              <StyledP>Timeline</StyledP>
-            </div>
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
-          <Button size="small" className={classes.buttonStyle} href={`/milestones/5`}>
+          <Button size="small" className={classes.buttonStyle} href={`/milestones/${IdProject}`}>
             <div className={classes.divItem}>
               <TimelapseOutlinedIcon className={classes.IconStyle} />
               <StyledP>Milestone</StyledP>
@@ -163,14 +148,6 @@ const ProjectBar = () => {
             <div className={classes.divItem}>
               <FormatListBulletedIcon className={classes.IconStyle} />
               <StyledP>Tasks</StyledP>
-            </div>
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
-          <Button size="small" className={classes.buttonStyle} href={`/project-promoters/${IdProject}`}>
-            <div className={classes.divItem}>
-              <HistoryIcon className={classes.IconStyle} />
-              <StyledP>History</StyledP>
             </div>
           </Button>
         </Grid>

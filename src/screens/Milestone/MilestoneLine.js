@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const MilestoneLine = ({ milestone, onEditHandler }) => {
+const MilestoneLine = ({ milestone, onEditHandler, isAllowToEdit }) => {
   const [isDone, setIsDone] = useState(milestone.isDone);
   const [milestoneDate, setMilestoneDate] = useState(milestone.date);
   const classes = useStyles();
@@ -140,15 +140,19 @@ const MilestoneLine = ({ milestone, onEditHandler }) => {
         <TimelineContent>
 
           <Paper elevation={3} className={classes.paperEdit}>
+            { isAllowToEdit
+            && (
             <IconButton size="small" onClick={onEditHandler} className={classes.iconButton}>
               <EditIcon size="small" />
 
             </IconButton>
+            )}
 
             <Typography variant="h6" component="h1">
               {milestone.description}
             </Typography>
-
+            { isAllowToEdit
+            && (
             <Button
               className={classes.button}
               variant="contained"
@@ -158,6 +162,7 @@ const MilestoneLine = ({ milestone, onEditHandler }) => {
             >
               Complete
             </Button>
+            )}
           </Paper>
 
         </TimelineContent>
