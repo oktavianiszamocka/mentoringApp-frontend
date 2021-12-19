@@ -73,18 +73,23 @@ function Alert(props) {
 export default function ForgotPassword() {
   const classes = useStyles();
   const [ErrorLogin, setErrorLogin] = useState('');
+  const [success, setSucessMsg] = useState(false);
 
-  const submit = async (values) => {
+  const submit = async (values, { resetForm }) => {
+    setErrorLogin('');
     const emailuser = {
       email: values.email,
 
     };
     await Api.forgotPassword(emailuser)
       .then(async (response) => {
-        console.log('successs');
+        setSucessMsg(true);
+        setTimeout(() => {
+          setSucessMsg(false);
+          resetForm();
+        }, 5000);
       }).catch((err) => {
         setErrorLogin(err.response.data);
-        console.log(err.response.data);
       });
   };
 
@@ -97,6 +102,8 @@ export default function ForgotPassword() {
       <CssBaseline />
       <div className={classes.paper}>
         <img src={logo} alt="Logo" />
+        {success
+        && <Alert severity="success">Please check your email to reset your password!</Alert>}
         {ErrorLogin && (
           <Alert severity="error">{ErrorLogin}</Alert>
         )}
@@ -136,6 +143,12 @@ export default function ForgotPassword() {
                 </Button>
 
               </Grid>
+              <span>
+                Not a member yet?
+
+                <a href="/signup">Sign up for free!</a>
+
+              </span>
 
             </Grid>
           </Form>

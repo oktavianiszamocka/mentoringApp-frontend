@@ -39,7 +39,7 @@ const App = () => {
   const { userRole, setUserRole } = UseToken();
   const { pathname } = window.location;
 
-  if (!token && pathname !== '/signup' && pathname !== '/forgot-password') {
+  if (!token && pathname !== '/signup' && pathname !== '/forgot-password' && pathname !== '/reset-password') {
     return (
       <Login
         setToken={setToken}

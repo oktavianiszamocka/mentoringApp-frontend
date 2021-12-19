@@ -127,7 +127,8 @@ const sendMessage = (messageData) => axios.post(`${apiUrl}/messages`, messageDat
 const postProjectIconUrl = (idProject, urlIcon) => axios.patch(`${apiUrl}/projects/project-icon?project=${idProject}&icon=${urlIcon}`);
 const getProjectUrlTypes = () => axios.get(`${apiUrl}/projects/url-types`);
 const postProjectUrls = (links) => axios.patch(`${apiUrl}/projects/project-urls`, links);
-const forgotPassword = (email) => axios.post(`${apiUrl}/account/reset`, email);
+const forgotPassword = (email) => axios.post(`${apiUrl}/account/sendReset`, email);
+const resetPassword = (data) => axios.post(`${apiUrl}/account/resetPassword`, data);
 
 export default {
   getUserId,
@@ -203,5 +204,6 @@ export default {
   getProjectUrlTypes,
   postProjectUrls,
   forgotPassword,
+  resetPassword,
 
 };

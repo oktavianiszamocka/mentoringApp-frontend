@@ -76,24 +76,24 @@ export default function ResetPassword() {
   const { search } = useLocation();
   const token = new URLSearchParams(search).get('token');
   const [ErrorLogin, setErrorLogin] = useState('');
-  const [projectSuccess, setProjectSuccess] = useState(false);
+  const [success, setSucessMsg] = useState(false);
 
-  const submitChangePassword = async (values) => {
-    console.log(token);
-    /*
-    const passwordData = {
-      idUser: Api.getUserId(),
-      oldPassword: values.oldPassword, // test123
+  const submitChangePassword = async (values, { resetForm }) => {
+    const data = {
+      resetToken: token,
       newPassword: values.newPassword,
     };
 
-    await Api.changePassword(passwordData)
+    await Api.resetPassword(data)
       .then(async (response) => {
-        setProjectSuccess(true);
+        setSucessMsg(true);
+        setTimeout(() => {
+          setSucessMsg(false);
+          resetForm();
+        }, 5000);
       }).catch((err) => {
-        setProjectError(err.response.data);
+        setErrorLogin(err.response.data);
       });
-      */
   };
 
   const validationSchema = Yup.object({
@@ -106,6 +106,8 @@ export default function ResetPassword() {
       <CssBaseline />
       <div className={classes.paper}>
         <img src={logo} alt="Logo" />
+        {success
+        && <Alert severity="success">Your password has been reset. You can login with your new password!</Alert>}
         {ErrorLogin && (
           <Alert severity="error">{ErrorLogin}</Alert>
         )}
@@ -160,8 +162,14 @@ export default function ResetPassword() {
                 >
                   Submit
                 </Button>
-                {projectSuccess && <MuiAlert style={{ marginTop: '5px' }}>Password successfuly changed</MuiAlert>}
 
+              </Grid>
+              <Grid item>
+                <StyledLabel style={{ marginRight: '30px' }}>
+                  Already have account? Log in
+                  {' '}
+                  <u><a href="/login">here</a></u>
+                </StyledLabel>
               </Grid>
 
             </Grid>
