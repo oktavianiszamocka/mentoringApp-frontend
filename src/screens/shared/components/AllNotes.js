@@ -65,7 +65,7 @@ const AllNotes = () => {
       CreatedOn: moment(),
       LastModified: moment(),
     };
-    
+
     const newNote = await Api.postNote(noteData)
       .then((response) => response.data);
     const getNotes = await Api.getNotes(pageNote)

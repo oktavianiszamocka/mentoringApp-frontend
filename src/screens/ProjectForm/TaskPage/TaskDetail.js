@@ -12,10 +12,11 @@ import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
   background-color: #F5F5F5;
-  position: absolute;
-  max-width: 250px;
-  max-height: 450px;
-  padding: 10px;
+  position: relative;
+  padding: 2rem;
+  min-Height: 30rem;
+  width: 25rem;
+  height: auto;
   border-radius: 5px;
   border: 1px solid #9e9e99;
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
@@ -23,13 +24,16 @@ const StyledDiv = styled.div`
 
 const StyledTitle = styled.p`
    font-family: 'Roboto', sans-serif;
-   font-size: 15px;
+   font-size: 20px;
    font-weight: bold;
-   width: 160px;
+   width : 100%;
+   margin-Top : 1rem;
+   margin-Left : 6rem;
+  
 `;
 const StyledUnderTitle = styled.p`
    font-family: 'Roboto', sans-serif;
-   font-size: 12px;
+   font-size: 16px;
    font-weight: bold;
    color: #616366;
 `;
@@ -37,7 +41,7 @@ const StyledUnderTitle = styled.p`
 const StyledP = styled.p`
   font-family: 'Roboto', sans-serif;
   word-break: break-word;
-  font-size: 12px;
+  font-size: 14px;
   color: #616366;
   margin: 0px;
 `;
@@ -45,7 +49,7 @@ const StyledP = styled.p`
 const StyledDescription = styled.p`
   font-family: 'Roboto', sans-serif;
   word-break: break-word;
-  font-size: 12px;
+  font-size: 13px;
   color: black;
 `;
 
@@ -56,18 +60,24 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '-5px',
   },
   avatar2: {
-    width: theme.spacing(4),
-    height: theme.spacing(4),
+    width: theme.spacing(5),
+    height: theme.spacing(5),
     marginRight: '5px',
     marginTop: '-5px',
     marginBottom: '5px',
 
   },
   close: {
-    fontSize: '20px',
+    fontSize: '30px',
+    marginLeft: '10rem',
   },
   grid: {
-    marginBottom: '-15px',
+    margin: 'auto',
+
+  },
+  assignee: {
+    height: '20rem',
+
   },
 
 }));
@@ -75,8 +85,6 @@ const useStyles = makeStyles((theme) => ({
 const TaskDetail = (props) => {
   const classes = useStyles();
 
-  const positionX = `${props.cardPosition[0]}`;
-  const positionY = `${props.cardPosition[1]}`;
   const taskid = props.idT;
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
@@ -119,21 +127,16 @@ const TaskDetail = (props) => {
     return d;
   };
 
-  const styles = {
-    top: positionX,
-    right: positionY,
-    position: 'absolute',
-    zIndex: 5,
-  };
-
   return (
-    <StyledDiv style={styles}>
-      <Grid container direction="row" className={classes.grid}>
-        <Grid item>
+    <StyledDiv>
+      <Grid container direction="row" className={classes.grid} space={2}>
+        <Grid item xs={5}>
           <StyledTitle>{taskTitle}</StyledTitle>
         </Grid>
-        <CloseIcon className={classes.close} onClick={() => props.showDet()} />
-        <Grid item />
+        <Grid item>
+          <CloseIcon className={classes.close} onClick={() => props.showDet()} />
+        </Grid>
+
       </Grid>
       <StyledUnderTitle>Created by:</StyledUnderTitle>
       <Grid container direction="row">
@@ -161,14 +164,15 @@ const TaskDetail = (props) => {
           <StyledUnderTitle>PRIORITY</StyledUnderTitle>
         </Grid>
         <Grid item>
-          <StyledUnderTitle style={{ marginLeft: '15px', textTransform: 'uppercase' }}>{taskPriority}</StyledUnderTitle>
+          <StyledUnderTitle style={{ marginLeft: '50px', textTransform: 'uppercase' }}>{taskPriority}</StyledUnderTitle>
         </Grid>
       </Grid>
       <Divider />
       <StyledUnderTitle>ASIGNEES</StyledUnderTitle>
+
       {assignedUsers.length > 0 ? (
         assignedUsers.map((item) => (
-          <Grid container direction="row">
+          <Grid container direction="row" spacing={2}>
 
             <Grid item>
               <MaterialAvatar
@@ -185,11 +189,13 @@ const TaskDetail = (props) => {
                 </StyledP>
               </div>
             </Grid>
+
           </Grid>
 
         ))) : (
           <div />
       )}
+
       <Divider />
       <Grid container direction="row">
         <Grid item>
@@ -202,22 +208,22 @@ const TaskDetail = (props) => {
       <Divider />
       <Grid container direction="row">
         <Grid item>
-          <StyledUnderTitle>Deadline</StyledUnderTitle>
-        </Grid>
-        <Grid item>
-          <StyledUnderTitle style={{ marginLeft: '15px' }}>{changeDateFormat(taskEnd)}</StyledUnderTitle>
-        </Grid>
-      </Grid>
-      <Divider />
-
-      <Grid container direction="row">
-        <Grid item>
           <StyledUnderTitle>Start date</StyledUnderTitle>
         </Grid>
         <Grid item>
           <StyledUnderTitle style={{ marginLeft: '15px' }}>{changeDateFormat(taskStart)}</StyledUnderTitle>
         </Grid>
       </Grid>
+      <Divider />
+      <Grid container direction="row">
+        <Grid item>
+          <StyledUnderTitle>Deadline</StyledUnderTitle>
+        </Grid>
+        <Grid item>
+          <StyledUnderTitle style={{ marginLeft: '15px' }}>{changeDateFormat(taskEnd)}</StyledUnderTitle>
+        </Grid>
+      </Grid>
+
     </StyledDiv>
   );
 };
