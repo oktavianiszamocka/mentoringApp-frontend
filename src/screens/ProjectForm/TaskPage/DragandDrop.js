@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   Grid, Popover,
 } from '@material-ui/core';
+import PropTypes from 'prop-types';
 import NewTaskForm from './NewTaskForm';
 import Api from '../../../api/index';
 import TaskAdd from './TaskAdd';
@@ -33,7 +34,7 @@ const useStyles = makeStyles({
   },
   popOverDiv: {
     width: '30rem',
-    height: '36rem',
+    height: '36 rem',
   },
   popoverRoot: {
     display: 'flex',
@@ -112,7 +113,7 @@ function DragandDrop(props) {
           onClose={handleClose}
         >
           <div className={classes.popOverDiv}>
-            <TaskAdd close={setAnchorEl} />
+            <TaskAdd close={setAnchorEl} idStatus={props.idStatus} />
           </div>
         </Popover>
       </div>
@@ -120,5 +121,11 @@ function DragandDrop(props) {
 
   );
 }
+DragandDrop.prototype = {
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  children: PropTypes.object,
+  idStatus: PropTypes.string.isRequired,
 
+};
 export default DragandDrop;

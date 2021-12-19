@@ -7,6 +7,7 @@ import {
   Grid, Button, Paper, Typography, Snackbar,
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
+import AlertLab from '@material-ui/lab/Alert';
 import Header from '../shared/components/Header';
 import Api from '../../api/index';
 import MilestoneLine from './MilestoneLine';
@@ -23,6 +24,15 @@ const useStyles = makeStyles({
   },
   search: {
     width: 500,
+  },
+  membersDiv: {
+    flexGrow: 1,
+
+  },
+  alert: {
+    backgroundColor: 'rgba(255,165,0,0.2)',
+    color: 'black',
+
   },
 
 });
@@ -60,7 +70,9 @@ const MilestoneDashboard = () => {
   const [errorMsg, setErrorMsg] = useState('');
 
   const loadData = async () => {
+    console.log(IdProject);
     const res = await Promise.all([Api.getProjectMilestones(IdProject)]);
+    console.log(res[0].data.data);
     setMilestones(res[0].data.data);
   };
 
@@ -138,10 +150,15 @@ const MilestoneDashboard = () => {
           <ProjectBar />
 
         </Grid>
+        <div className={classes.membersDiv}>
+          <Grid item xs={8}>
+            <Typography variant="h4" gutterBottom>Project Milestones</Typography>
 
-        <Grid item xs={5} justify="center" alignItems="center">
+          </Grid>
 
-          {milestones
+          <Grid item xs={5} justify="center" alignItems="center">
+
+            {milestones
               && milestones.map((mile) => (
                 <MilestoneLine
                   milestone={mile}
@@ -149,33 +166,45 @@ const MilestoneDashboard = () => {
                   onEditHandler={() => editMilestoneAction(mile.idMilestone, mile.description)}
                 />
 
-              ))}
+              )) }
+            {milestones.length === 0
+                            && (
+                            <div>
+                              <AlertLab
+                                severity="warning"
+                                className={classes.alert}
+                              >
+                                There are no milestones available
+                              </AlertLab>
+                            </div>
+                            )}
 
-        </Grid>
-        <Grid item xs={4}>
-          <Snackbar
-            anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
-            open={open}
-            autoHideDuration={2000}
-            onClose={handleCloseSnackBar}
-          >
-            <Alert onClose={handleCloseSnackBar} severity="success">
-              {successMsg}
-            </Alert>
+          </Grid>
+          <Grid item xs={4}>
+            <Snackbar
+              anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+              open={open}
+              autoHideDuration={2000}
+              onClose={handleCloseSnackBar}
+            >
+              <Alert onClose={handleCloseSnackBar} severity="success">
+                {successMsg}
+              </Alert>
 
-          </Snackbar>
-          {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+            </Snackbar>
+            {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
-          {newMilestoneVisible && (
+            {newMilestoneVisible && (
             <NewMilestoneForm
               onSubmitHandler={isUpdate ? handleUpdateMilestone : handlePostMilestoneSubmit}
               initialValues={milestoneInitialValue}
               formState={isUpdate ? 'Edit' : 'New'}
 
             />
-          )}
+            )}
 
-        </Grid>
+          </Grid>
+        </div>
 
       </Grid>
     </div>
