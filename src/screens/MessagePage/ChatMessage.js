@@ -68,9 +68,7 @@ const MessageItem = () => {
             <Grid item className={classes.message}>
               <StyledMessage>11:30</StyledMessage>
             </Grid>
-            <Grid item className={classes.number}>
-              <StyledNumber>1</StyledNumber>
-            </Grid>
+
           </Grid>
         </Grid>
       </Grid>

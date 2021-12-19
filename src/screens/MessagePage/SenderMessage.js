@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '20px',
 
   },
+  grid_container: {
+
+  },
 }));
 
 const SenderMessage = ({
@@ -46,7 +49,7 @@ const SenderMessage = ({
   const classes = useStyles();
 
   return (
-    <Grid container direction="row">
+    <Grid container direction="row" className={classes.grid_container}>
       <Grid item className={classes.iconcontainer}>
         <Avatar alt="person image" src={senderUser.imageUrl} />
       </Grid>
