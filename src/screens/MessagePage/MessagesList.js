@@ -41,7 +41,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MessageList = () => {
+const MessageList = ({
+  parentCallback,
+}) => {
   const classes = useStyles();
   const [messages, setMessages] = useState([]);
 
@@ -54,12 +56,23 @@ const MessageList = () => {
     loadData();
   });
 
+  const onTrigger = async (e, senderUser, recieverUser) => {
+    await Api.getDetailMessages(9, senderUser.idUser)
+      .then((response) => {
+        parentCallback(response.data.data.messages.sort((a, b) => ((a.createdOn > b.createdOn) ? 1 : -1)), senderUser, recieverUser);
+      }).catch((err) => {
+        //   // setErrorMsg(err.response.data);
+      });
+
+    e.preventDefault();
+  };
+
   return (
     <div className={classes.root}>
       <List component="nav" aria-label="secondary mailbox folders">
         {messages.length > 0 ? (
           messages.map((item) => (
-            <ListItem button>
+            <ListItem button onClick={(e) => onTrigger(e, item.senderUser, item.recieverUser)}>
               <MessageItem
                 message={item.message}
                 user={item.senderUser}
