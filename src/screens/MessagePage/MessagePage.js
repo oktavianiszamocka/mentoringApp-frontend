@@ -4,6 +4,10 @@ import { Paper, Grid } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
 import moment from 'moment';
+import Alert from '@material-ui/lab/Alert';
+import SearchIcon from '@material-ui/icons/Search';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import AvatarImage from '../../assets/images/avatar.jpg';
 import UserAvailability from './UserAvailability';
 import SearchBar from '../shared/components/SearchBar';
@@ -14,6 +18,7 @@ import MessageFull from './MessageFull';
 import Api from '../../api/index';
 import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
+import MessageItem from './MessageItem';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +44,18 @@ const useStyles = makeStyles((theme) => ({
       minWidth: '100%',
     },
   },
+  icon: {
+    color: 'grey',
+  },
+  search: {
+    width: '92%',
+    margin: '10px',
+    backgroundColor: '#e6e7eb',
+    borderRadius: '2px',
+  },
+  noBorder: {
+    border: 'none',
+  },
 }));
 
 export default function MessagePage() {
@@ -50,8 +67,13 @@ export default function MessagePage() {
   const [senderName, setSenderName] = useState();
   const [senderSurname, setSenderSurname] = useState();
   const [senderImg, setSenderImg] = useState();
+  const [hasMessages, setHasMessages] = useState();
+  const [searchString, setSearchString] = useState();
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchClicked, setSearchClicked] = useState(false);
 
   const classes = useStyles();
+  const icon = <SearchIcon className={classes.icon} />;
 
   const user = {
     firstName: senderName,
@@ -75,10 +97,15 @@ export default function MessagePage() {
     setErrorMsg(null);
     await Api.getAllMessages()
       .then((response) => {
-        setSenderName(response.data.data[0].senderUser.firstName);
-        setSenderSurname(response.data.data[0].senderUser.lastName);
-        setSenderImg(response.data.data[0].senderUser.imageUrl);
-        loadMessData(response.data.data[0].senderUser.idUser);
+        if (response.data.data.length === 0) {
+          setHasMessages(false);
+        } else {
+          setSenderName(response.data.data[0].senderUser.firstName);
+          setSenderSurname(response.data.data[0].senderUser.lastName);
+          setSenderImg(response.data.data[0].senderUser.imageUrl);
+          setHasMessages(true);
+          loadMessData(response.data.data[0].senderUser.idUser);
+        }
       }).catch((err) => {
         // setErrorMsg(err.response.data);
       });
@@ -116,8 +143,20 @@ export default function MessagePage() {
     setSender(senderData);
   };
 
-  const isAvailable = false;
+  const handleSearch = async () => {
+    const response = await Promise.all([Api.messageSearch(searchString)]);
+    if (response) {
+      setSearchResults(response[0].data.data);
+    }
+  };
 
+  const getDetailMessage = (reciever) => {
+    setSearchClicked(true);
+    console.log(reciever);
+    setReciever(reciever);
+  };
+
+  console.log(searchClicked);
   return (
     <div className={classes.root} style={{ marginTop: '6rem' }}>
       <Grid container>
@@ -127,69 +166,161 @@ export default function MessagePage() {
             <Grid item>
               <Paper style={{ height: '25rem', backgroundColor: '#f4f6f8' }}>
                 <Grid item>
-                  <SearchBar />
+                  <TextField
+                    id="outlined-basic"
+                    label="Search"
+                    variant="outlined"
+                    className={classes.search}
+                    size="small"
+                    onChange={(e) => {
+                      setSearchString(e.target.value);
+                      handleSearch();
+                    }}
+                    InputProps={{
+                      endAdornment: icon,
+                      classes: { notchedOutline: classes.noBorder },
+                    }}
+                  />
                 </Grid>
                 <Grid container direction="column" spacing={1}>
                   <Grid item>
-                    <MessageList parentCallback={handleChildCallback} />
+                    {searchResults.length > 0
+                      ? (
+                        <List component="nav" aria-label="secondary mailbox folders">
+                          {searchResults.map((item) => (
+                            <ListItem button onClick={() => { getDetailMessage(item); console.log(searchClicked); }}>
+                              <MessageItem user={item} />
+                            </ListItem>
+                          ))}
+                        </List>
+                      )
+                      : hasMessages
+                        ? <MessageList parentCallback={handleChildCallback} />
+                        : (
+                          <div>
+                            <Alert severity="info">You have no messages</Alert>
+                          </div>
+                        )}
                   </Grid>
                 </Grid>
               </Paper>
             </Grid>
           </Grid>
-          <Grid item xs={6} sm={9} container direction="column" spacing={1} className={classes.rightgrid}>
-            <Grid item>
-              <UserAvailability user={user} active={isAvailable} />
+          { searchClicked ? (
+            <Grid item xs={6} sm={9} container direction="column" spacing={1} className={classes.rightgrid}>
+              <Grid item>
+                <UserAvailability user={reciever} />
+              </Grid>
+              <Grid item>
+                <Paper style={{
+                  minHeight: '30vh', maxHeight: '50vh', overflow: 'auto', display: 'flex', flexDirection: 'column-reverse', backgroundColor: '#f4f6f8',
+                }}
+                >
+                  <div>
+                    {messages.length > 0 && sender && reciever ? (
+                      messages.map((item) => (
+                        item.sender == 9
+                          ? (
+                            <div style={{
+                              display: 'flex', justifyContent: 'flex-end',
+                            }}
+                            >
+                              {' '}
+                              <SenderMessage message={item.message1} senderUser={sender} />
+                              {' '}
+                            </div>
+                          )
+                          : <RecieverMessage message={item.message1} recieverUser={reciever} />
+                      ))) : (
+                        <div />
+                    )}
+                  </div>
+                </Paper>
+                <Paper style={{ marginTop: '5px' }}>
+                  <TextField
+                    onKeyPress={(ev) => {
+                      if (ev.key === 'Enter') {
+                        ev.preventDefault();
+                        setWrittenMessage(ev.target.value);
+                        sendMessage();
+                      }
+                    }}
+                    multiline
+                    variant="standard"
+                    InputProps={{
+                      disableUnderline: true,
+                    }}
+                    value={writtenMessage}
+                    label="Type message here"
+                    className={classes.message}
+                    onChange={handleMessage}
+                  />
+                  <SendIcon style={{ color: '#4f5052', marginTop: '2%', marginLeft: '10px' }} onClick={sendMessage} />
+                </Paper>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Paper style={{
-                minHeight: '30vh', maxHeight: '50vh', overflow: 'auto', display: 'flex', flexDirection: 'column-reverse', backgroundColor: '#f4f6f8',
-              }}
-              >
-                <div>
-                  {messages.length > 0 && sender && reciever ? (
-                    messages.map((item) => (
-                      item.sender == 9
-                        ? (
-                          <div style={{
-                            display: 'flex', justifyContent: 'flex-end',
-                          }}
-                          >
-                            {' '}
-                            <SenderMessage message={item.message1} senderUser={sender} />
-                            {' '}
-                          </div>
-                        )
-                        : <RecieverMessage message={item.message1} recieverUser={reciever} />
-                    ))) : (
-                      <div />
-                  )}
-                </div>
-              </Paper>
-              <Paper style={{ marginTop: '5px' }}>
-                <TextField
-                  onKeyPress={(ev) => {
-                    if (ev.key === 'Enter') {
-                      ev.preventDefault();
-                      console.log(ev.target.value);
-                      setWrittenMessage(ev.target.value);
-                      sendMessage();
-                    }
+          ) : <div />}
+          { hasMessages
+            ? (
+              <Grid item xs={6} sm={9} container direction="column" spacing={1} className={classes.rightgrid}>
+                <Grid item>
+                  <UserAvailability user={user} />
+                </Grid>
+                <Grid item>
+                  <Paper style={{
+                    minHeight: '30vh', maxHeight: '50vh', overflow: 'auto', display: 'flex', flexDirection: 'column-reverse', backgroundColor: '#f4f6f8',
                   }}
-                  multiline
-                  variant="standard"
-                  InputProps={{
-                    disableUnderline: true,
-                  }}
-                  value={writtenMessage}
-                  label="Type message here"
-                  className={classes.message}
-                  onChange={handleMessage}
-                />
-                <SendIcon style={{ color: '#4f5052', marginTop: '2%', marginLeft: '10px' }} onClick={sendMessage} />
-              </Paper>
-            </Grid>
-          </Grid>
+                  >
+                    <div>
+                      {messages.length > 0 && sender && reciever ? (
+                        messages.map((item) => (
+                          item.sender == 9
+                            ? (
+                              <div style={{
+                                display: 'flex', justifyContent: 'flex-end',
+                              }}
+                              >
+                                {' '}
+                                <SenderMessage message={item.message1} senderUser={sender} />
+                                {' '}
+                              </div>
+                            )
+                            : <RecieverMessage message={item.message1} recieverUser={reciever} />
+                        ))) : (
+                          <div />
+                      )}
+                    </div>
+                  </Paper>
+                  <Paper style={{ marginTop: '5px' }}>
+                    <TextField
+                      onKeyPress={(ev) => {
+                        if (ev.key === 'Enter') {
+                          ev.preventDefault();
+                          setWrittenMessage(ev.target.value);
+                          sendMessage();
+                        }
+                      }}
+                      multiline
+                      variant="standard"
+                      InputProps={{
+                        disableUnderline: true,
+                      }}
+                      value={writtenMessage}
+                      label="Type message here"
+                      className={classes.message}
+                      onChange={handleMessage}
+                    />
+                    <SendIcon style={{ color: '#4f5052', marginTop: '2%', marginLeft: '10px' }} onClick={sendMessage} />
+                  </Paper>
+                </Grid>
+              </Grid>
+            )
+            : (
+              <Grid item xs={6} sm={9}>
+                <Alert severity="info">Your inbox is empty</Alert>
+              </Grid>
+            )}
+
         </Grid>
       </Grid>
     </div>

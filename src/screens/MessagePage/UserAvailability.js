@@ -23,12 +23,6 @@ const userAvailability = ({ user, active }) => {
         <Grid Item style={{ padding: 10, height: 20 }} xs="auto">
           <Grid container direction="row" spacing={0}>
             <Avatar firstName={user.firstName} lastName={user.lastName} imageUrl={user.imageUrl} />
-            <FiberManualRecordIcon
-              fontSize="small"
-              style={{
-                fill: colorText, marginLeft: '-128px', marginTop: '50px', zIndex: '999',
-              }}
-            />
           </Grid>
         </Grid>
       </Grid>
