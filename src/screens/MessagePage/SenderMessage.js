@@ -17,7 +17,7 @@ const StyledMessage = styled.p`
     color: #4f5052;
     padding: 8px;
     border-radius: 6px;
-    background-color: #b7cced;
+    background-color: #e3e4e6;
     min-width: 50px;
 `;
 
