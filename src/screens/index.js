@@ -22,10 +22,10 @@ import TaskDetail from './ProjectForm/TaskPage/TaskDetail';
 import TaskAdd from './ProjectForm/TaskPage/TaskAdd';
 import CalendarMain from './shared/Calendar/CalendarMain';
 import Milestone from './Milestone/MilestoneDashboard';
+import ForgotPassword from './Auth/ForgotPassword';
+import ResetPassword from './Auth/ResetPassword';
 import MessageItem from './MessagePage/MessageItem';
-
 // const renderRoute = (route) => <Route key={route.path} {...route} />;
-
 import UseToken from './UseToken';
 import EditProjectFormDashboard from './ProjectForm/EditFormDashboard';
 import ChangePassword from './Auth/ChangePassword';
@@ -39,7 +39,7 @@ const App = () => {
   const { userRole, setUserRole } = UseToken();
   const { pathname } = window.location;
 
-  if (!token && pathname !== '/signup' && pathname !== '/forgot-password') {
+  if (!token && pathname !== '/signup' && pathname !== '/forgot-password' && pathname !== '/reset-password') {
     return (
       <Login
         setToken={setToken}
@@ -55,7 +55,6 @@ const App = () => {
       <Switch>
         <Route path="/" exact render={() => <Redirect to="/mainpage" />} />
         <Route path="/login" component={Login} />
-        <Route path={['/reset-password', '/register']} component={UpsertPassword} />
         <Route path="/mainpage" component={StudentDashboard} />
         <Route path="/profile/:IdUser" component={MyProfileDashboard} />
         <Route path="/message" component={Message} />
@@ -72,9 +71,10 @@ const App = () => {
         <Route path="/task-detail" component={TaskDetail} />
         <Route path="/task-add" component={TaskAdd} />
         <Route path="/calendar" component={CalendarMain} />
-        <Route path="/forgot-password" component={ForgottenPassword} />
         <Route path="/change-password" component={ChangePassword} />
         <Route path="/milestones/:IdProject" component={Milestone} />
+        <Route path="/forgot-password" component={ForgotPassword} />
+        <Route path="/reset-password" component={ResetPassword} />
         <Route path="/wall/:IdProject" component={StudentDashboard} />
         <Route path="/meeting_notes" component={MeetingList} />
         <Route path="/meeting_details" component={MeetingDetail} />

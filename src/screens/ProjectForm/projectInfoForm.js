@@ -142,9 +142,7 @@ const ProjectInfoForm = (props) => {
 
                   </Grid>
                   <Grid item xs={12}>
-
                     <Field
-
                       name="studies"
                       label="Study"
                       variant="outlined"
@@ -159,7 +157,6 @@ const ProjectInfoForm = (props) => {
                   <Grid item xs={12}>
 
                     <Field
-
                       name="mode"
                       label="Mode"
                       variant="outlined"
