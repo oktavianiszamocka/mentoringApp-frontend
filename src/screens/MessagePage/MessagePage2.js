@@ -68,7 +68,6 @@ export default function MessagePage() {
   const [senderSurname, setSenderSurname] = useState();
   const [senderImg, setSenderImg] = useState();
   const [hasMessages, setHasMessages] = useState();
-  const [searchString, setSearchString] = useState();
   const [searchResults, setSearchResults] = useState([]);
   const [searchClicked, setSearchClicked] = useState(false);
 
@@ -83,7 +82,7 @@ export default function MessagePage() {
 
   const loadMessData = async (id) => {
     setErrorMsg(null);
-    await Api.getDetailMessages(9, id)
+    await Api.getDetailMessages(Api.getUserId(), id)
       .then((response) => {
         setMessages(response.data.data.messages.sort((a, b) => ((a.createdOn > b.createdOn) ? 1 : -1)));
         setSender(response.data.data.senderUser);
@@ -99,7 +98,7 @@ export default function MessagePage() {
       .then((response) => {
         if (response.data.data.length === 0) {
           setHasMessages(false);
-        } else {
+        } else if (response.data.data[0].senderId != Api.getUserId()) {
           setSenderName(response.data.data[0].senderUser.firstName);
           setSenderSurname(response.data.data[0].senderUser.lastName);
           setSenderImg(response.data.data[0].senderUser.imageUrl);
@@ -115,13 +114,14 @@ export default function MessagePage() {
     const timeElapsed = Date.now();
     const date = new Date(timeElapsed);
     const messageData = {
-      receiver: 9,
-      sender: sender.idUser,
+      receiver: sender.idUser,
+      sender: Api.getUserId(),
       message1: writtenMessage,
       createdOn: moment().toJSON(),
     };
+    console.log(messageData);
     const messageResult = await Promise.all([Api.sendMessage(messageData)]);
-    const response = await Promise.all([Api.getDetailMessages(9, sender.idUser)]);
+    const response = await Promise.all([Api.getDetailMessages(Api.getUserId(), sender.idUser)]);
     setMessages(response[0].data.data.messages.sort((a, b) => ((a.createdOn > b.createdOn) ? 1 : -1)));
     setWrittenMessage('');
   };
@@ -143,20 +143,38 @@ export default function MessagePage() {
     setSender(senderData);
   };
 
-  const handleSearch = async () => {
-    const response = await Promise.all([Api.messageSearch(searchString)]);
+  const handleSearch = async (e) => {
+    const response = await Promise.all([Api.messageSearch(e.target.value)]);
     if (response) {
       setSearchResults(response[0].data.data);
+      // console.log(response[0].data.data);
+      // const details = await Promise.all([Api.getDetailMessages(Api.getUserId(), response[0].data.data.idReceiver)]);
     }
   };
 
-  const getDetailMessage = (reciever) => {
+  const getDetailSearch = async (receiver) => {
     setSearchClicked(true);
-    console.log(reciever);
-    setReciever(reciever);
+    setReciever(receiver);
+    // eslint-disable-next-line radix
+    // const details = await Promise.all([Api.getDetailMessages(38, 30)]);
+    await Api.getDetailMessages(receiver.idReceiver, Api.getUserId())
+      .then((response) => {
+        if (response.data.data.length === 0) {
+          setHasMessages(false);
+        } else {
+          setHasMessages(true);
+          setSenderName(response.data.data.senderUser.firstName);
+          setSenderSurname(response.data.data.senderUser.lastName);
+          setSenderImg(response.data.data.senderUser.imageUrl);
+          loadMessData(response.data.data.senderUser.idUser);
+        }
+      }).catch((err) => {
+        if (err.response.data === 'No message founds') {
+          setHasMessages(false);
+        }
+      });
   };
 
-  console.log(searchClicked);
   return (
     <div className={classes.root} style={{ marginTop: '6rem' }}>
       <Grid container>
@@ -164,7 +182,10 @@ export default function MessagePage() {
         <Grid container spacing={2}>
           <Grid item xs={6} sm={3} container direction="column" spacing={2} className={classes.leftgrid}>
             <Grid item>
-              <Paper style={{ height: '25rem', backgroundColor: '#f4f6f8' }}>
+              <Paper style={{
+                height: '45rem', overflowY: 'scroll', overflowX: 'hidden', backgroundColor: '#f4f6f8',
+              }}
+              >
                 <Grid item>
                   <TextField
                     id="outlined-basic"
@@ -173,8 +194,7 @@ export default function MessagePage() {
                     className={classes.search}
                     size="small"
                     onChange={(e) => {
-                      setSearchString(e.target.value);
-                      handleSearch();
+                      handleSearch(e);
                     }}
                     InputProps={{
                       endAdornment: icon,
@@ -184,97 +204,56 @@ export default function MessagePage() {
                 </Grid>
                 <Grid container direction="column" spacing={1}>
                   <Grid item>
-                    {searchResults.length > 0
+                    { searchResults.length > 0
                       ? (
                         <List component="nav" aria-label="secondary mailbox folders">
                           {searchResults.map((item) => (
-                            <ListItem button onClick={() => { getDetailMessage(item); console.log(searchClicked); }}>
+                            <ListItem button onClick={() => { getDetailSearch(item); console.log(item); }}>
                               <MessageItem user={item} />
                             </ListItem>
                           ))}
                         </List>
-                      )
-                      : hasMessages
-                        ? <MessageList parentCallback={handleChildCallback} />
-                        : (
-                          <div>
-                            <Alert severity="info">You have no messages</Alert>
-                          </div>
-                        )}
+                      ) : <div />}
+                    { (hasMessages && searchResults.length === 0)
+                      ? <MessageList parentCallback={handleChildCallback} />
+                      : (
+                        (hasMessages)
+                          ? <div />
+                          : (
+                            <div>
+                              <Alert severity="info">You have no messages</Alert>
+                            </div>
+                          )
+                      )}
                   </Grid>
                 </Grid>
               </Paper>
             </Grid>
           </Grid>
-          { searchClicked ? (
-            <Grid item xs={6} sm={9} container direction="column" spacing={1} className={classes.rightgrid}>
-              <Grid item>
-                <UserAvailability user={reciever} />
-              </Grid>
-              <Grid item>
-                <Paper style={{
-                  minHeight: '30vh', maxHeight: '50vh', overflow: 'auto', display: 'flex', flexDirection: 'column-reverse', backgroundColor: '#f4f6f8',
-                }}
-                >
-                  <div>
-                    {messages.length > 0 && sender && reciever ? (
-                      messages.map((item) => (
-                        item.sender == 9
-                          ? (
-                            <div style={{
-                              display: 'flex', justifyContent: 'flex-end',
-                            }}
-                            >
-                              {' '}
-                              <SenderMessage message={item.message1} senderUser={sender} />
-                              {' '}
-                            </div>
-                          )
-                          : <RecieverMessage message={item.message1} recieverUser={reciever} />
-                      ))) : (
-                        <div />
-                    )}
-                  </div>
-                </Paper>
-                <Paper style={{ marginTop: '5px' }}>
-                  <TextField
-                    onKeyPress={(ev) => {
-                      if (ev.key === 'Enter') {
-                        ev.preventDefault();
-                        setWrittenMessage(ev.target.value);
-                        sendMessage();
-                      }
-                    }}
-                    multiline
-                    variant="standard"
-                    InputProps={{
-                      disableUnderline: true,
-                    }}
-                    value={writtenMessage}
-                    label="Type message here"
-                    className={classes.message}
-                    onChange={handleMessage}
-                  />
-                  <SendIcon style={{ color: '#4f5052', marginTop: '2%', marginLeft: '10px' }} onClick={sendMessage} />
-                </Paper>
-              </Grid>
-            </Grid>
-          ) : <div />}
+
           { hasMessages
             ? (
-              <Grid item xs={6} sm={9} container direction="column" spacing={1} className={classes.rightgrid}>
+              <Grid
+                item
+                xs={6}
+                sm={9}
+                container
+                direction="column"
+                spacing={1}
+                className={classes.rightgrid}
+              >
                 <Grid item>
                   <UserAvailability user={user} />
                 </Grid>
                 <Grid item>
                   <Paper style={{
-                    minHeight: '30vh', maxHeight: '50vh', overflow: 'auto', display: 'flex', flexDirection: 'column-reverse', backgroundColor: '#f4f6f8',
+                    height: '34rem', overflow: 'auto', display: 'flex', flexDirection: 'column-reverse', backgroundColor: '#f4f6f8',
                   }}
                   >
                     <div>
                       {messages.length > 0 && sender && reciever ? (
                         messages.map((item) => (
-                          item.sender == 9
+                          item.sender != Api.getUserId()
                             ? (
                               <div style={{
                                 display: 'flex', justifyContent: 'flex-end',

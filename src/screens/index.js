@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom';
 import StudentDashboard from './Student/StudentDashboard';
 import MyProfileDashboard from './Profile/MyProfileDashboard';
-import Message from './MessagePage/MessagePage';
+import Message from './MessagePage/MessagePage2';
 import EditForm from './Profile/EditFormDashboard';
 // import Admin from './Admin/routes';
 import Login from './Auth/Login';
