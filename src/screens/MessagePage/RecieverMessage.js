@@ -41,10 +41,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const RecieverMessage = ({
-  message, recieverUser,
+  message, recieverUser, img,
 }) => {
   const classes = useStyles();
-
   return (
     <Grid container direction="row">
       <Grid item className={classes.iconcontainer}>

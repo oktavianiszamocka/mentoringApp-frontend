@@ -57,9 +57,9 @@ const MessageList = ({
   });
 
   const onTrigger = async (e, senderUser, recieverUser) => {
-    await Api.getDetailMessages(Api.getUserId(), senderUser.idUser)
+    await Api.getDetailMessages(Api.getUserId(), recieverUser.idUser)
       .then((response) => {
-        parentCallback(response.data.data.messages.sort((a, b) => ((a.createdOn > b.createdOn) ? 1 : -1)), senderUser, recieverUser);
+        parentCallback(response.data.data.messages.sort((a, b) => ((a.createdOn > b.createdOn) ? 1 : -1)), recieverUser, response.data.data.senderUser);
       }).catch((err) => {
         //   // setErrorMsg(err.response.data);
       });
@@ -72,7 +72,13 @@ const MessageList = ({
       <List component="nav" aria-label="secondary mailbox folders">
         {messages.length > 0 ? (
           messages.map((item) => (
-            <ListItem button onClick={(e) => { console.log(item); onTrigger(e, item.senderUser, item.recieverUser); }}>
+            <ListItem
+              button
+              onClick={(e) => {
+                console.log(item);
+                onTrigger(e, item.recieverUser, item.senderUser);
+              }}
+            >
               <MessageItem
                 message={item.message}
                 user={item.senderUser}
