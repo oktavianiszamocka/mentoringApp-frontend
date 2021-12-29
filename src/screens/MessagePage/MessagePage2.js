@@ -85,8 +85,8 @@ export default function MessagePage() {
     await Api.getDetailMessages(Api.getUserId(), id)
       .then((response) => {
         setMessages(response.data.data.messages.sort((a, b) => ((a.createdOn > b.createdOn) ? 1 : -1)));
-        setSender(response.data.data.senderUser);
-        setReciever(response.data.data.receiverUser);
+        setSender(response.data.data.receiverUser);
+        setReciever(response.data.data.senderUser);
       }).catch((err) => {
         // setErrorMsg(err.response.data);
       });
@@ -113,22 +113,24 @@ export default function MessagePage() {
   const sendMessage = async () => {
     const timeElapsed = Date.now();
     const date = new Date(timeElapsed);
+    console.log('from send');
+
+    console.log(Object.values(sender)[0]);
     const messageData = {
-      receiver: sender.idUser,
+      receiver: Object.values(sender)[0],
       sender: Api.getUserId(),
       message1: writtenMessage,
       createdOn: moment().toJSON(),
     };
     console.log(messageData);
     const messageResult = await Promise.all([Api.sendMessage(messageData)]);
-    const response = await Promise.all([Api.getDetailMessages(Api.getUserId(), sender.idUser)]);
+    const response = await Promise.all([Api.getDetailMessages(Api.getUserId(), Object.values(sender)[0])]);
     setMessages(response[0].data.data.messages.sort((a, b) => ((a.createdOn > b.createdOn) ? 1 : -1)));
     setWrittenMessage('');
   };
 
   useEffect(async () => {
     loadInitialData();
-    // loadData();
   }, []);
 
   const handleMessage = (e) => {
@@ -141,6 +143,7 @@ export default function MessagePage() {
     setSenderSurname(senderData.lastName);
     setSenderImg(senderData.imageUrl);
     setSender(senderData);
+    setReciever(recieverUser);
   };
 
   const handleSearch = async (e) => {
@@ -154,23 +157,33 @@ export default function MessagePage() {
 
   const getDetailSearch = async (receiver) => {
     setSearchClicked(true);
+    console.log(receiver);
     setReciever(receiver);
     // eslint-disable-next-line radix
     // const details = await Promise.all([Api.getDetailMessages(38, 30)]);
-    await Api.getDetailMessages(receiver.idReceiver, Api.getUserId())
+    await Api.getDetailMessages(Api.getUserId(), receiver.idReceiver)
       .then((response) => {
         if (response.data.data.length === 0) {
           setHasMessages(false);
         } else {
           setHasMessages(true);
-          setSenderName(response.data.data.senderUser.firstName);
-          setSenderSurname(response.data.data.senderUser.lastName);
-          setSenderImg(response.data.data.senderUser.imageUrl);
-          loadMessData(response.data.data.senderUser.idUser);
+          setSenderName(response.data.data.receiverUser.firstName);
+          setSenderSurname(response.data.data.receiverUser.lastName);
+          setSenderImg(response.data.data.receiverUser.imageUrl);
+          loadMessData(response.data.data.receiverUser.idUser);
         }
       }).catch((err) => {
         if (err.response.data === 'No message founds') {
           setHasMessages(false);
+          setSenderName(receiver.firstName);
+          setSenderSurname(receiver.lastName);
+          setSenderImg(receiver.imageUrl);
+          setMessages([]);
+          console.log('from no mess');
+          setSender(receiver);
+          //  setReciever(receiver);
+          console.log(receiver);
+          console.log(reciever);
         }
       });
   };
@@ -225,13 +238,14 @@ export default function MessagePage() {
                             </div>
                           )
                       )}
+
                   </Grid>
                 </Grid>
               </Paper>
             </Grid>
           </Grid>
 
-          { hasMessages
+          { hasMessages || (!hasMessages && searchResults.length > 0)
             ? (
               <Grid
                 item
@@ -299,7 +313,6 @@ export default function MessagePage() {
                 <Alert severity="info">Your inbox is empty</Alert>
               </Grid>
             )}
-
         </Grid>
       </Grid>
     </div>
