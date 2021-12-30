@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '10px',
     padding: '10px',
   },
+  sendIcon: {
+    margin: 'auto',
+  },
   leftgrid: {
     '@media (max-width: 460px)': {
       display: 'none',
@@ -113,16 +116,13 @@ export default function MessagePage() {
   const sendMessage = async () => {
     const timeElapsed = Date.now();
     const date = new Date(timeElapsed);
-    console.log('from send');
 
-    console.log(Object.values(sender)[0]);
     const messageData = {
       receiver: Object.values(sender)[0],
       sender: Api.getUserId(),
       message1: writtenMessage,
       createdOn: moment().toJSON(),
     };
-    console.log(messageData);
     const messageResult = await Promise.all([Api.sendMessage(messageData)]);
     const response = await Promise.all([Api.getDetailMessages(Api.getUserId(), Object.values(sender)[0])]);
     setMessages(response[0].data.data.messages.sort((a, b) => ((a.createdOn > b.createdOn) ? 1 : -1)));
@@ -150,8 +150,6 @@ export default function MessagePage() {
     const response = await Promise.all([Api.messageSearch(e.target.value)]);
     if (response) {
       setSearchResults(response[0].data.data);
-      // console.log(response[0].data.data);
-      // const details = await Promise.all([Api.getDetailMessages(Api.getUserId(), response[0].data.data.idReceiver)]);
     }
   };
 
@@ -160,7 +158,6 @@ export default function MessagePage() {
     console.log(receiver);
     setReciever(receiver);
     // eslint-disable-next-line radix
-    // const details = await Promise.all([Api.getDetailMessages(38, 30)]);
     await Api.getDetailMessages(Api.getUserId(), receiver.idReceiver)
       .then((response) => {
         if (response.data.data.length === 0) {
@@ -179,11 +176,7 @@ export default function MessagePage() {
           setSenderSurname(receiver.lastName);
           setSenderImg(receiver.imageUrl);
           setMessages([]);
-          console.log('from no mess');
           setSender(receiver);
-          //  setReciever(receiver);
-          console.log(receiver);
-          console.log(reciever);
         }
       });
   };
@@ -193,7 +186,7 @@ export default function MessagePage() {
       <Grid container>
         {Header()}
         <Grid container spacing={2}>
-          <Grid item xs={6} sm={3} container direction="column" spacing={2} className={classes.leftgrid}>
+          <Grid item xs={4} sm={4} md={3} lg={3} container direction="column" spacing={2} className={classes.leftgrid}>
             <Grid item>
               <Paper style={{
                 height: '45rem', overflowY: 'scroll', overflowX: 'hidden', backgroundColor: '#f4f6f8',
@@ -249,8 +242,9 @@ export default function MessagePage() {
             ? (
               <Grid
                 item
-                xs={6}
-                sm={9}
+                xs={8}
+                sm={8}
+                md={9}
                 container
                 direction="column"
                 spacing={1}
@@ -285,25 +279,39 @@ export default function MessagePage() {
                     </div>
                   </Paper>
                   <Paper style={{ marginTop: '5px' }}>
-                    <TextField
-                      onKeyPress={(ev) => {
-                        if (ev.key === 'Enter') {
-                          ev.preventDefault();
-                          setWrittenMessage(ev.target.value);
-                          sendMessage();
-                        }
-                      }}
-                      multiline
-                      variant="standard"
-                      InputProps={{
-                        disableUnderline: true,
-                      }}
-                      value={writtenMessage}
-                      label="Type message here"
-                      className={classes.message}
-                      onChange={handleMessage}
-                    />
-                    <SendIcon style={{ color: '#4f5052', marginTop: '2%', marginLeft: '10px' }} onClick={sendMessage} />
+                    <Grid container direction="row">
+                      <Grid
+                        item
+                        xs={11}
+                        sm={11}
+                        lg={11}
+                      >
+                        <TextField
+                          onKeyPress={(ev) => {
+                            if (ev.key === 'Enter') {
+                              ev.preventDefault();
+                              setWrittenMessage(ev.target.value);
+                              sendMessage();
+                            }
+                          }}
+                          multiline
+                          variant="standard"
+                          InputProps={{
+                            disableUnderline: true,
+                          }}
+                          value={writtenMessage}
+                          label="Type message here"
+                          className={classes.message}
+                          onChange={handleMessage}
+                        />
+                      </Grid>
+                      <Grid
+                        item
+                        className={classes.sendIcon}
+                      >
+                        <SendIcon style={{ color: '#4f5052' }} onClick={sendMessage} />
+                      </Grid>
+                    </Grid>
                   </Paper>
                 </Grid>
               </Grid>
