@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 const Comment = ({
-  comment, loggedUser, onDeleteHandler, sendComment,
+  comment, loggedUser, onDeleteHandler, editComment,
 }) => {
   const momentTime = moment(JSON.stringify(comment.createdOn), 'YYYY-MM-DD hh:mm:ss').fromNow();
   const classes = useStyles();
@@ -115,8 +115,8 @@ const Comment = ({
               onKeyPress={(ev) => {
                 if (ev.key === 'Enter') {
                   ev.preventDefault();
-                  console.log(ev.target.value);
-                  sendComment(ev.target.value);
+
+                  editComment(ev.target.value);
                   setShowEdit(false);
                 }
               }}

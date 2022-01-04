@@ -137,9 +137,9 @@ const Post = ({
       createdBy: currentUser.idUser,
       comment1: comm,
     };
-    const commentResult = await Promise.all([Api.sendPostComment(commentData)]);
-    const response = await Promise.all([Api.getPostComment(postData.idPost)]);
-    setPostComments(response[0].data.data);
+    await Api.sendPostComment(commentData);
+    const response = await Api.getPostComment(postData.idPost);
+    setPostComments(response.data.data);
   };
 
   const sendEditComment = async (comm) => {
@@ -151,9 +151,9 @@ const Post = ({
       createdBy: currentUser.idUser,
       comment1: comm,
     };
-    const commentResult = await Promise.all([Api.editPostComment(commentData)]);
-    const response = await Promise.all([Api.getPostComment(postData.idPost)]);
-    setPostComments(response[0].data.data);
+    await Api.editPostComment(commentData);
+    const response = await Api.getPostComment(postData.idPost);
+    setPostComments(response.data.data);
   };
 
   const onDeleteComment = async (idComment) => {
@@ -236,13 +236,13 @@ const Post = ({
                   )}
 
                   { postData.newestComment
-                    && <Comment comment={postData.newestComment} loggedUser={currentUser} onDeleteHandler={onDeleteComment} sendComment={sendEditComment} />}
+                    && <Comment comment={postData.newestComment} loggedUser={currentUser} onDeleteHandler={onDeleteComment} editComment={sendEditComment} />}
 
                 </div>
               )}
               <div className={classes.divComment}>
                 {showAllComments && (postComments.map((comment) => (
-                  <Comment comment={comment} loggedUser={currentUser} onDeleteHandler={onDeleteComment} sendComment={sendComment} />
+                  <Comment comment={comment} loggedUser={currentUser} onDeleteHandler={onDeleteComment} editComment={sendEditComment} />
                 )))}
               </div>
 
