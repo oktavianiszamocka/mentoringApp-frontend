@@ -12,6 +12,7 @@ import moment from 'moment';
 import Comment from '../../shared/components/Comment';
 import TagsComponent from '../../shared/components/TagsComponent';
 import Api from '../../../api/index';
+import ConfirmDialog from '../../shared/components/ConfirmDialog';
 
 const StyledSection = styled.section`
   margin: 2rem;
@@ -120,6 +121,12 @@ const Post = ({
   const [showAllComments, setShowAllComments] = useState(false);
   const [postComments, setPostComments] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
+  const [deleteCommentDialogOptions, setDeleteCommentDialogOptions] = useState({
+    title: 'Delete Comment',
+    mainText: 'Are you sure you want to delete this comment?',
+    id: null,
+    open: false,
+  });
 
   const createdTime = moment(JSON.stringify(postData.dateOfPublication), 'YYYY-MM-DD hh:mm:ss').fromNow();
 
@@ -129,8 +136,6 @@ const Post = ({
   };
 
   const sendComment = async (comm) => {
-    const timeElapsed = Date.now();
-    const date = new Date(timeElapsed);
     const commentData = {
       post: postData.idPost,
       createdOn: moment().toJSON(),
@@ -142,24 +147,35 @@ const Post = ({
     setPostComments(response.data.data);
   };
 
-  const sendEditComment = async (comm) => {
-    const timeElapsed = Date.now();
-    const date = new Date(timeElapsed);
+  const sendEditComment = async (idComment, comm) => {
     const commentData = {
-      post: postData.idPost,
-      createdOn: moment().toJSON(),
-      createdBy: currentUser.idUser,
+      idComment,
       comment1: comm,
     };
+
     await Api.editPostComment(commentData);
     const response = await Api.getPostComment(postData.idPost);
     setPostComments(response.data.data);
   };
 
-  const onDeleteComment = async (idComment) => {
-    await Api.deletePostComment(idComment);
-    const response = await Promise.all([Api.getPostComment(postData.idPost)]);
-    setPostComments(response[0].data.data);
+  const onCommentDeleteHandler = (id) => {
+    setDeleteCommentDialogOptions({
+      ...deleteCommentDialogOptions,
+      open: true,
+      id,
+    });
+  };
+  const onDeleteComment = async (confirmed, idComment) => {
+    if (confirmed) {
+      await Api.deletePostComment(idComment);
+      const response = await Promise.all([Api.getPostComment(postData.idPost)]);
+      setPostComments(response[0].data.data);
+    }
+
+    setDeleteCommentDialogOptions({
+      ...deleteCommentDialogOptions,
+      open: false,
+    });
   };
 
   const handleAllComments = () => {
@@ -169,6 +185,7 @@ const Post = ({
 
   return (
     <Grid className={classes.root}>
+      <ConfirmDialog {...deleteCommentDialogOptions} onDialogClosed={onDeleteComment} />
 
       <>
         {postData && (
@@ -236,20 +253,32 @@ const Post = ({
                   )}
 
                   { postData.newestComment
-                    && <Comment comment={postData.newestComment} loggedUser={currentUser} onDeleteHandler={onDeleteComment} editComment={sendEditComment} />}
+                    && (
+                    <Comment
+                      comment={postData.newestComment}
+                      loggedUser={currentUser}
+                      onDeleteHandler={() => onCommentDeleteHandler(postData.newestComment.idComment)}
+                      editComment={sendEditComment}
+                    />
+                    )}
 
                 </div>
               )}
               <div className={classes.divComment}>
                 {showAllComments && (postComments.map((comment) => (
-                  <Comment comment={comment} loggedUser={currentUser} onDeleteHandler={onDeleteComment} editComment={sendEditComment} />
+                  <Comment
+                    comment={comment}
+                    loggedUser={currentUser}
+                    onDeleteHandler={() => onCommentDeleteHandler(comment.idComment)}
+                    editComment={sendEditComment}
+                  />
                 )))}
               </div>
 
               <hr />
               <StyledDiv>
                 <MaterialAvatar
-                  src={user.imageUrl}
+                  src={currentUser.imageUrl}
                   className={classes.avatarComment}
                 />
                 <TextField

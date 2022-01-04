@@ -116,10 +116,11 @@ const Comment = ({
                 if (ev.key === 'Enter') {
                   ev.preventDefault();
 
-                  editComment(ev.target.value);
+                  editComment(comment.idComment, ev.target.value);
                   setShowEdit(false);
                 }
               }}
+              name="comm"
               size="small"
               InputProps={{ classes }}
               multiline
