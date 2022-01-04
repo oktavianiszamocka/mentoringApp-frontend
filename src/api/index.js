@@ -48,6 +48,7 @@ axios.interceptors.response.use((response) => response,
         })
         .catch((err) => {
           console.log(err.response.data);
+          window.location.href = '/login';
         });
     }
 
@@ -58,8 +59,7 @@ axios.interceptors.response.use((response) => response,
 // const getUserId = () => 9;
 const getUserRole = () => localStorage.getItem('userRole');
 const isMentor = () => getUserRole() == 3;
-console.log(getUserRole());
-console.log(isMentor());
+
 const getUserId = () => localStorage.getItem('idUser');
 
 const getNotes = (pageNumber) => axios.get(`${apiUrl}/personal-notes/${getUserId()}?pageNumber=${pageNumber}&pageSize=3`);

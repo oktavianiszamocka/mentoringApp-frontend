@@ -23,7 +23,6 @@ const EditProfileDashboard = () => {
 
   const loadData = async () => {
     const res = await Promise.all([Api.getUserProfile(IdUser)]);
-    console.log(`USER INITIAL ${res[0].data.data}`);
     setProfile(res[0].data.data);
   };
 

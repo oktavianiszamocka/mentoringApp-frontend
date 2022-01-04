@@ -10,6 +10,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import {
   Grid, Popover,
 } from '@material-ui/core';
+import PropTypes from 'prop-types';
 import TaskDetail from './TaskDetail';
 import TaskEdit from './TaskEdit';
 import Api from '../../../api/index';
@@ -148,6 +149,7 @@ function Card(props) {
   const id = openPopOver ? 'simple-popover' : undefined;
   const id2 = openPopOver2 ? 'simple-popover' : undefined;
 
+  const [IdTask, setIdTask] = useState('');
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
   const [taskCreator, setTaskCreator] = useState('');
@@ -167,6 +169,7 @@ function Card(props) {
       res[0].data.data.assignedUser.map((user) => {
         assignedIds.push(user.idUser);
       });
+      setIdTask(res[0].data.data.idTask);
       setTaskTitle(res[0].data.data.title);
       setTaskDescription(res[0].data.data.description);
       setTaskCreator(res[0].data.data.creatorUser);
@@ -180,14 +183,6 @@ function Card(props) {
     };
     loadData();
   }, []);
-
-  const getPositionXY = () => {
-    const element = document.getElementById(props.id);
-    const rect = element.getBoundingClientRect();
-    const { x } = rect;
-    const { y } = rect;
-    return [x, y];
-  };
 
   const updateTaskStatus = async (idOfCard, newstatus) => {
     const taskData = {
@@ -213,22 +208,18 @@ function Card(props) {
 
   const showCom = (e) => {
     setShowDetail(true);
-    getPositionXY();
     setAnchorEl(e.currentTarget);
   };
 
   const hideCom = () => {
-    console.log('hidding...');
     setShowDetail(false);
   };
 
   const hideEdit = () => {
-    console.log('hidding...');
     setShowEdit(false);
   };
 
   const delCom = () => {
-    console.log(reload);
     reload(idOfCard);
   };
 
@@ -238,7 +229,7 @@ function Card(props) {
   };
 
   const taskData = {
-    idTask: idOfCard,
+    idTask: IdTask,
     title: taskTitle,
     status: taskStatus,
     description: taskDescription,
@@ -348,11 +339,10 @@ function Card(props) {
               >
                 <div className={classes.popOverDiv}>
                   <TaskEdit
-                    description={taskDescription}
                     taskInfo={taskData}
-                    cardPosition={getPositionXY()}
                     idT={idOfCard}
                     showEdit={hideEdit}
+                    reRender={props.handleRerender}
                   />
                 </div>
               </Popover>
@@ -366,5 +356,17 @@ function Card(props) {
 
   );
 }
+
+Card.prototype = {
+  deadline: PropTypes.string,
+  priority: PropTypes.string,
+  id: PropTypes.string,
+  avatars: PropTypes.object,
+  handleRerender: PropTypes.func,
+  children: PropTypes.object,
+  reloadTasks: PropTypes.func,
+  content: PropTypes.string,
+
+};
 
 export default Card;
