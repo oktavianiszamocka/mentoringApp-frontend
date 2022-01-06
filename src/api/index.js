@@ -135,6 +135,7 @@ const getProjectUrlTypes = () => axios.get(`${apiUrl}/projects/url-types`);
 const postProjectUrls = (links) => axios.patch(`${apiUrl}/projects/project-urls`, links);
 const forgotPassword = (email) => axios.post(`${apiUrl}/account/sendReset`, email);
 const resetPassword = (data) => axios.post(`${apiUrl}/account/resetPassword`, data);
+const deleteProject = (idProject) => axios.delete(`${apiUrl}/projects/${idProject}`);
 
 export default {
   getUserId,
@@ -211,5 +212,6 @@ export default {
   postProjectUrls,
   forgotPassword,
   resetPassword,
+  deleteProject,
 
 };
