@@ -48,7 +48,7 @@ const MessageList = ({
   const [messages, setMessages] = useState([]);
 
   const loadData = async () => {
-    const res = await Promise.all([Api.getAllMessages(9, 10)]);
+    const res = await Promise.all([Api.getAllMessages()]);
     setMessages(res[0].data.data);
   };
 
@@ -57,9 +57,9 @@ const MessageList = ({
   });
 
   const onTrigger = async (e, senderUser, recieverUser) => {
-    await Api.getDetailMessages(9, senderUser.idUser)
+    await Api.getDetailMessages(Api.getUserId(), recieverUser.idUser)
       .then((response) => {
-        parentCallback(response.data.data.messages.sort((a, b) => ((a.createdOn > b.createdOn) ? 1 : -1)), senderUser, recieverUser);
+        parentCallback(response.data.data.messages.sort((a, b) => ((a.createdOn > b.createdOn) ? 1 : -1)), recieverUser, response.data.data.senderUser);
       }).catch((err) => {
         //   // setErrorMsg(err.response.data);
       });
@@ -72,10 +72,17 @@ const MessageList = ({
       <List component="nav" aria-label="secondary mailbox folders">
         {messages.length > 0 ? (
           messages.map((item) => (
-            <ListItem button onClick={(e) => onTrigger(e, item.senderUser, item.recieverUser)}>
+            <ListItem
+              button
+              onClick={(e) => {
+                console.log(item);
+                onTrigger(e, item.recieverUser, item.senderUser);
+              }}
+            >
               <MessageItem
                 message={item.message}
                 user={item.senderUser}
+                lastmessage={item.lastMessage}
               />
             </ListItem>
 

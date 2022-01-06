@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MessageItem = ({
-  message, user,
+  message, user, lastmessage,
 }) => {
   const classes = useStyles();
 
@@ -93,7 +93,8 @@ const MessageItem = ({
           </Grid>
         </Grid>
         <Grid item className={classes.messageTime}>
-          <StyledMessage>11:30</StyledMessage>
+          {lastmessage ? <StyledMessage>{lastmessage.split('T').pop().substr(0, 5)}</StyledMessage> : <div />}
+
         </Grid>
       </Grid>
     </Paper>

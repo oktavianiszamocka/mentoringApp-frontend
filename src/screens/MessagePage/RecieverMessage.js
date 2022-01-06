@@ -17,7 +17,7 @@ const StyledMessage = styled.p`
     color: #4f5052;
     padding: 8px;
     border-radius: 6px;
-    background-color: #e3e4e6;
+    background-color: #b7cced;
     min-width: 50px;
 `;
 
@@ -41,10 +41,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const RecieverMessage = ({
-  message, recieverUser,
+  message, recieverUser, img,
 }) => {
   const classes = useStyles();
-
   return (
     <Grid container direction="row">
       <Grid item className={classes.iconcontainer}>
