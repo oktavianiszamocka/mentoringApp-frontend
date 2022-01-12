@@ -134,11 +134,8 @@ const getProjectUrlTypes = () => axios.get(`${apiUrl}/projects/url-types`);
 const postProjectUrls = (links) => axios.patch(`${apiUrl}/projects/project-urls`, links);
 const forgotPassword = (email) => axios.post(`${apiUrl}/account/sendReset`, email);
 const resetPassword = (data) => axios.post(`${apiUrl}/account/resetPassword`, data);
-<<<<<<< HEAD
 const getMeetingNotes = (meetingId) => axios.get(`${apiUrl}/meeting-notes/${meetingId}`);
-=======
 const deleteProject = (idProject) => axios.delete(`${apiUrl}/projects/${idProject}`);
->>>>>>> 2e95214d3c001978e449601e00b5ecc84a576b55
 
 export default {
   getUserId,
@@ -216,10 +213,7 @@ export default {
   messageSearch,
   forgotPassword,
   resetPassword,
-<<<<<<< HEAD
   getMeetingNotes,
-=======
   deleteProject,
 
->>>>>>> 2e95214d3c001978e449601e00b5ecc84a576b55
 };
