@@ -107,9 +107,9 @@ const getTasksStatuses = () => axios.get(`${apiUrl}/tasks/status`);
 const getTasksAsignees = (idProject) => axios.get(`${apiUrl}/project-members/${idProject}`);
 const createTask = (taskData) => axios.post(`${apiUrl}/tasks/`, taskData);
 const updateTask = (taskData) => axios.patch(`${apiUrl}/tasks/`, taskData);
-const getUserMeetings = (date) => axios.get(`${apiUrl}/meetings/user/9?date=${date}`);
+const getUserMeetings = (userId, date) => axios.get(`${apiUrl}/meetings/user/${userId}?date=${date}`);
 const deleteMeeting = (idMeeting) => axios.delete(`${apiUrl}/meetings/${idMeeting}`);
-const addMeeting = (meetingData) => axios.post(`${apiUrl}/meetings/`, meetingData);
+const addMeeting = (meetingData) => axios.post(`${apiUrl}/meetings`, meetingData);
 const getMeetingDetail = (meetingId) => axios.get(`${apiUrl}/meetings/${meetingId}`);
 const updateMeeting = (meetingData) => axios.patch(`${apiUrl}/meetings/`, meetingData);
 const updateMeetingAttendance = (newData) => axios.patch(`${apiUrl}/meetings/attendee/update-status`, newData);
@@ -135,6 +135,8 @@ const postProjectUrls = (links) => axios.patch(`${apiUrl}/projects/project-urls`
 const forgotPassword = (email) => axios.post(`${apiUrl}/account/sendReset`, email);
 const resetPassword = (data) => axios.post(`${apiUrl}/account/resetPassword`, data);
 const getMeetingNotes = (meetingId) => axios.get(`${apiUrl}/meeting-notes/${meetingId}`);
+const addMeetingNote = (noteData) => axios.post(`${apiUrl}/meeting-notes`, noteData);
+const deleteMeetingNote = (idNote) => axios.delete(`${apiUrl}/meeting-notes/${idNote}`);
 const deleteProject = (idProject) => axios.delete(`${apiUrl}/projects/${idProject}`);
 
 export default {
@@ -215,5 +217,6 @@ export default {
   resetPassword,
   getMeetingNotes,
   deleteProject,
-
+  addMeetingNote,
+  deleteMeetingNote,
 };

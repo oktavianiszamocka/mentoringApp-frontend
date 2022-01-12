@@ -174,6 +174,9 @@ const MeetingAdd = (props) => {
   const classes = useStyles();
   const [asignees, setAsignees] = useState([]);
   const [asigneeIds, setAsigneeIds] = React.useState([]);
+  const [userProjects, setUserProjects] = useState([]);
+  const [userChosenProject, setUserChosenProject] = useState('');
+  const [chosenProjectId, setchosenProjectId] = useState('');
 
   const compare = (a, b) => {
     const time1 = parseFloat(a.startTime.slice(0, -3).replace(':', '.'));
@@ -184,28 +187,39 @@ const MeetingAdd = (props) => {
   };
 
   const getTaskAsignees = async () => {
-    const res = await Promise.all([Api.getTasksAsignees()]);
-
+    const res = await Promise.all([Api.getTasksAsignees(userChosenProject.idProject)]);
     setAsignees(res[0].data.data);
   };
 
+  const getUserProjects = async () => {
+    const res = await Promise.all([Api.getUserProject()]);
+    setUserProjects(res[0].data.data);
+  };
+
   const handleChange = (event) => {
-    console.log(event.target.value);
     setAsigneeIds(event.target.value);
+  };
+
+  const handleProjectChange = async (event, child) => {
+    setUserChosenProject(event.target.value);
+    const res = await Promise.all([Api.getTasksAsignees(child.key.match(/\d+/)[0])]);
+    setAsignees(res[0].data.data);
+    setchosenProjectId(child.key.match(/\d+/)[0]);
   };
 
   useEffect(() => {
     const loadData = async () => {
-      getTaskAsignees();
+      // getTaskAsignees();
+      getUserProjects();
     };
 
     loadData();
   }, []);
 
   const onMeetingAddHandler = async (meetingData) => {
+    console.log(meetingData);
     await Api.addMeeting(meetingData)
       .then(async () => {
-        console.log('sucess');
         props.close(false);
         const res = await Promise.all([Api.getUserMeetings(props.date)]);
         res[0].data.data.sort(compare);
@@ -256,11 +270,12 @@ const MeetingAdd = (props) => {
       meetingDate: props.date,
       location: values.location,
       description: values.description,
-      project: 2,
+      project: chosenProjectId,
       startTime: values.start,
       endTime: values.end,
       attendeeUsers: asigneeIds,
     };
+    console.log(meetingData);
     onMeetingAddHandler(meetingData);
   };
 
@@ -427,6 +442,26 @@ const MeetingAdd = (props) => {
                   </div>
 
                 </Grid>
+              </Grid>
+
+              <Grid item>
+                <FormControl className={classes.formControl}>
+                  <InputLabel className={classes.attendees} id="demo-mutiple-chip-label">Project</InputLabel>
+                  <Field
+                    as={Select}
+                    type="text"
+                    name="project"
+                    value={userChosenProject}
+                    onChange={(event, child) => handleProjectChange(event, child)}
+                    label="Project"
+                  >
+                    {userProjects.map((project) => (
+                      <MenuItem key={project.idProject} value={project.name}>
+                        {`${project.name}`}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                </FormControl>
               </Grid>
 
               <Grid item>

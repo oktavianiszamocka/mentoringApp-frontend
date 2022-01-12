@@ -15,7 +15,7 @@ import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
   background-color: white;
-  min-width: 150px;
+  max-width: 150px;
   min-height: 360px;
   border-left: 1px solid #9e9e99;
 `;
@@ -102,7 +102,7 @@ const MeetingsView = (props) => {
 
   useEffect(() => {
     const loadData = async () => {
-      const res = await Promise.all([Api.getUserMeetings(props.date)]);
+      const res = await Promise.all([Api.getUserMeetings(Api.getUserId(), props.date)]);
       console.log(res[0].data.data);
       res[0].data.data.sort(compare);
 
