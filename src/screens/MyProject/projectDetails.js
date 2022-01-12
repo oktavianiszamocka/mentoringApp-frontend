@@ -51,7 +51,7 @@ const StyledInfoSection = styled.section`
   box-shadow: 1px 1px 2px 0px rgba(135, 135, 135, 1);
 `;
 
-const ProjectDetails = ({ projectInfo }) => {
+const ProjectDetails = ({ projectInfo, onDeleteHandler }) => {
   const isMentor = Api.isMentor();
   const classes = useStyles();
   const dateOfStartDate = moment(projectInfo.startDate).format('LL');
@@ -145,6 +145,7 @@ const ProjectDetails = ({ projectInfo }) => {
               className={classes.button}
               variant="contained"
               color="secondary"
+              onClick={onDeleteHandler}
             >
               Delete
             </Button>

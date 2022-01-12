@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   },
   popOverDiv: {
     width: '30rem',
-    height: '36 rem',
+    height: '36rem',
   },
   popoverRoot: {
     display: 'flex',
@@ -113,7 +113,7 @@ function DragandDrop(props) {
           onClose={handleClose}
         >
           <div className={classes.popOverDiv}>
-            <TaskAdd close={setAnchorEl} idStatus={props.idStatus} />
+            <TaskAdd close={setAnchorEl} idStatus={props.idStatus} reRender={props.handleRerender} />
           </div>
         </Popover>
       </div>
@@ -126,6 +126,7 @@ DragandDrop.prototype = {
   title: PropTypes.string.isRequired,
   children: PropTypes.object,
   idStatus: PropTypes.string.isRequired,
+  handleRerender: PropTypes.func,
 
 };
 export default DragandDrop;

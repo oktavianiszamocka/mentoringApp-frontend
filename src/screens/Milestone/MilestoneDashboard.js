@@ -97,7 +97,6 @@ const MilestoneDashboard = () => {
       })
       .catch((err) => {
         setErrorMsg(err.response.data);
-        setOpen(true);
       });
 
     const getProjectMilestones = await Api.getProjectMilestones(IdProject) // needs to be updated
@@ -155,55 +154,57 @@ const MilestoneDashboard = () => {
             <Typography variant="h4" gutterBottom>Project Milestones</Typography>
 
           </Grid>
+          <Grid item container xs={12}>
+            <Grid item xs={5} justify="center" alignItems="center">
 
-          <Grid item xs={5} justify="center" alignItems="center">
+              {milestones
+  && milestones.map((mile) => (
+    <MilestoneLine
+      milestone={mile}
+      isAllowToEdit={isMentor}
+      onEditHandler={() => editMilestoneAction(mile.idMilestone, mile.description)}
+    />
 
-            {milestones
-              && milestones.map((mile) => (
-                <MilestoneLine
-                  milestone={mile}
-                  isAllowToEdit={isMentor}
-                  onEditHandler={() => editMilestoneAction(mile.idMilestone, mile.description)}
-                />
+  )) }
+              {milestones.length === 0
+                && (
+                <div>
+                  <AlertLab
+                    severity="warning"
+                    className={classes.alert}
+                  >
+                    There are no milestones available
+                  </AlertLab>
+                </div>
+                )}
 
-              )) }
-            {milestones.length === 0
-                            && (
-                            <div>
-                              <AlertLab
-                                severity="warning"
-                                className={classes.alert}
-                              >
-                                There are no milestones available
-                              </AlertLab>
-                            </div>
-                            )}
+            </Grid>
+            <Grid item xs={4}>
+              <Snackbar
+                anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+                open={open}
+                autoHideDuration={2000}
+                onClose={handleCloseSnackBar}
+              >
+                <Alert onClose={handleCloseSnackBar} severity="success">
+                  {successMsg}
+                </Alert>
+
+              </Snackbar>
+              {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+
+              {newMilestoneVisible && (
+              <NewMilestoneForm
+                onSubmitHandler={isUpdate ? handleUpdateMilestone : handlePostMilestoneSubmit}
+                initialValues={milestoneInitialValue}
+                formState={isUpdate ? 'Edit' : 'New'}
+              />
+              )}
+
+            </Grid>
 
           </Grid>
-          <Grid item xs={4}>
-            <Snackbar
-              anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
-              open={open}
-              autoHideDuration={2000}
-              onClose={handleCloseSnackBar}
-            >
-              <Alert onClose={handleCloseSnackBar} severity="success">
-                {successMsg}
-              </Alert>
 
-            </Snackbar>
-            {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
-
-            {newMilestoneVisible && (
-            <NewMilestoneForm
-              onSubmitHandler={isUpdate ? handleUpdateMilestone : handlePostMilestoneSubmit}
-              initialValues={milestoneInitialValue}
-              formState={isUpdate ? 'Edit' : 'New'}
-
-            />
-            )}
-
-          </Grid>
         </div>
 
       </Grid>

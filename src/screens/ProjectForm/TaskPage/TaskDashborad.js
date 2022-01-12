@@ -33,6 +33,7 @@ const useStyles = makeStyles({
 const TaskDashboard = () => {
   const { IdProject } = useParams();
   const classes = useStyles();
+  const [isRerender, setIsRerender] = useState(false);
   const [tasksToDo, setTasksToDo] = useState([]);
   const [tasksInpr, setTasksInPr] = useState([]);
   const [tasksDone, setTasksDone] = useState([]);
@@ -44,69 +45,48 @@ const TaskDashboard = () => {
     open: false,
   });
 
-  useEffect(() => {
-    const loadData = async () => {
-      const res = await Promise.all([Api.getProjectTasks(IdProject)]);
-
-      for (const tasks in res[0].data.data) {
-        if (res[0].data.data[tasks].status == 1) {
-          setTasksToDo(res[0].data.data[tasks].tasks);
-        }
-        if (res[0].data.data[tasks].status == 2) {
-          setTasksInPr(res[0].data.data[tasks].tasks);
-        }
-        if (res[0].data.data[tasks].status == 3) {
-          setTasksDone(res[0].data.data[tasks].tasks);
-        }
-        if (res[0].data.data[tasks].status == 4) {
-          setTasksBlock(res[0].data.data[tasks].tasks);
-        }
+  const categorizeTasks = async (response) => {
+    for (const tasks in response.data) {
+      if (response.data[tasks].status == 1) {
+        setTasksToDo(response.data[tasks].tasks);
       }
-    };
-
-    loadData();
-  }, []);
-
-  const deleteTask = async (idOfCard) => {
-    console.log(' deleteTask');
-    await Api.deleteTask(idOfCard);
-
-    const res = await Promise.all([Api.getProjectTasks(IdProject)]);
-    if (res[0].data.data.length === 1) {
-      if (res[0].data.data[0].status !== 1) {
-        setTasksToDo([]);
+      if (response.data[tasks].status == 2) {
+        setTasksInPr(response.data[tasks].tasks);
       }
-    }
-    if (res[0].data.data.length > 1) {
-      if (res[0].data.data[1].status !== 2) {
-        setTasksInPr([]);
+      if (response.data[tasks].status == 3) {
+        setTasksDone(response.data[tasks].tasks);
       }
-    }
-    if (res[0].data.data.length > 2) {
-      if (res[0].data.data[2].status !== 3) {
-        setTasksDone([]);
-      }
-    }
-
-    for (const tasks in res[0].data.data) {
-      console.log(res[0].data.data[tasks].status);
-      if (res[0].data.data[tasks].status == 1) {
-        setTasksToDo(res[0].data.data[tasks].tasks);
-      }
-      if (res[0].data.data[tasks].status == 2) {
-        setTasksInPr(res[0].data.data[tasks].tasks);
-      }
-      if (res[0].data.data[tasks].status == 3) {
-        setTasksDone(res[0].data.data[tasks].tasks);
-      }
-      if (res[0].data.data[tasks].status == 4) {
-        setTasksBlock(res[0].data.data[tasks].tasks);
+      if (response.data[tasks].status == 4) {
+        setTasksBlock(response.data[tasks].tasks);
       }
     }
   };
 
+  const loadData = async () => {
+    const res = await Promise.all([Api.getProjectTasks(IdProject)]);
+    setTasksToDo([]);
+    setTasksInPr([]);
+    setTasksDone([]);
+    setTasksBlock([]);
+    categorizeTasks(res[0].data);
+  };
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [isRerender]);
+
+  const handleRerender = () => {
+    setIsRerender(!isRerender);
+  };
+  const deleteTask = async (idOfCard) => {
+    await Api.deleteTask(idOfCard);
+    setIsRerender(!isRerender);
+  };
+
   const onTaskCloseHandler = (id) => {
-    console.log('onTaskCloseHandler');
     setDeleteTaskDialogOptions({
       ...deleteTaskDialogOptions,
       open: true,
@@ -116,7 +96,6 @@ const TaskDashboard = () => {
 
   const onTaskDeleteDialogClosed = async (confirmed, idTask) => {
     if (confirmed) {
-      console.log('onTaskDeleteDialogClosed');
       deleteTask(idTask);
     }
 
@@ -143,7 +122,7 @@ const TaskDashboard = () => {
           <StyledMain>
             <ConfirmDialog {...deleteTaskDialogOptions} onDialogClosed={onTaskDeleteDialogClosed} />
 
-            <Board id="board-1" title="To do" idStatus="1">
+            <Board id="board-1" title="To do" idStatus="1" handleRerender={handleRerender}>
               {tasksToDo.length > 0 ? (
                 tasksToDo.map((item) => (
                   <Card
@@ -159,6 +138,8 @@ const TaskDashboard = () => {
                     priority={item.priority}
                     taskId={item.idTask}
                     reloadTasks={() => onTaskCloseHandler(item.idTask)}
+                    handleRerender={handleRerender}
+
                   />
                 ))) : (
                   <div />

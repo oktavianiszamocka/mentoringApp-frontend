@@ -4,7 +4,6 @@ import {
   Grid, Button, Typography,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import moment from 'moment';
 import { useParams } from 'react-router-dom';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
@@ -21,7 +20,7 @@ import {
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {
-  Formik, Form, Field, ErrorMessage, FieldArray,
+  Formik, Form, Field, ErrorMessage,
 } from 'formik';
 import * as Yup from 'yup';
 import Chip from '@material-ui/core/Chip';
@@ -166,7 +165,6 @@ const TaskAdd = (props) => {
   const [asigneeIds, setAsigneeIds] = React.useState([]);
 
   const handleChange = (event) => {
-    console.log(event.target.value);
     setAsigneeIds(event.target.value);
   };
 
@@ -244,7 +242,7 @@ const TaskAdd = (props) => {
     await Api.createTask(taskData)
       .then(async () => {
         props.close(false);
-        const res = await Promise.all([Api.getProjectTasks(5)]);
+        props.reRender();
       });
   };
 
@@ -487,6 +485,7 @@ const TaskAdd = (props) => {
 TaskAdd.prototype = {
   close: PropTypes.func.isRequired,
   idStatus: PropTypes.string,
+  reRender: PropTypes.func,
 
 };
 export default TaskAdd;
