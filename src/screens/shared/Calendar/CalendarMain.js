@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
   control: {
     padding: theme.spacing(2),
   },
+
 }));
 
 function CalendarMain() {
@@ -46,7 +47,7 @@ function CalendarMain() {
 
   console.log(formatDate(value));
   return (
-    <Grid container justifyContent="center" spacing={0}>
+    <Grid container justifyContent="center" direction="row" spacing={0}>
       <Grid item>
         <MuiPickersUtilsProvider
           utils={DateFnsUtils}
@@ -56,6 +57,7 @@ function CalendarMain() {
             format="MM/dd/yyyy"
             value={value}
             onChange={onChange}
+
           />
         </MuiPickersUtilsProvider>
       </Grid>

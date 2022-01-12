@@ -8,6 +8,7 @@ import moment from 'moment';
 import Pagination from '@material-ui/lab/Pagination';
 import Alert from '@material-ui/lab/Alert';
 import { useParams } from 'react-router-dom';
+import CalendarMain from 'screens/shared/Calendar/CalendarMain';
 import Api from '../../api/index';
 import Header from '../shared/components/Header';
 import Post from './Post';
@@ -36,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
     width: '280px',
     margin: '20px 30%',
 
+  },
+  calendar: {
+    maxWidth: '5vw',
   },
 
 }));
@@ -190,22 +194,35 @@ const StudentDashboard = () => {
       <EditPostDialog {...editPostDialogOptions} onDialogClosed={onPostEditDialogClosed} handleSubmit={onPostEditSubmit} />
       <Grid
         container
-        spacing={2}
+        spacing={1}
         justify="center"
+        direction="row"
       >
         {Header()}
-        <Grid
-          item
-          lg={2}
-          md={3}
-          s={12}
-        >
-          {showProjectBar && <ProjectBar />}
+        <Grid item lg={4}>
+          <Grid container direction="column">
+            <Grid
+              item
+              lg={12}
+              md={12}
+              s={12}
+            >
+              <CalendarMain className={classes.calendar} />
+            </Grid>
+            <Grid
+              item
+              lg={2}
+              md={3}
+              s={12}
+            >
+              {showProjectBar && <ProjectBar />}
 
-          {!showProjectBar && <AllNotes /> }
+              {!showProjectBar && <AllNotes /> }
+            </Grid>
+          </Grid>
         </Grid>
 
-        <Grid item lg={10} md={10} s={12} xs={12}>
+        <Grid item lg={8} md={8} s={12} xs={12}>
           {!showProjectBar
           && (
           <FormControl className={classes.formControl}>

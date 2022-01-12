@@ -1,16 +1,18 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
+import { Button, Grid } from '@material-ui/core';
 
 const StyledDiv = styled.div`
   background-color: #F5F5F5;
   position: absolute;
   padding: 10px;
   max-width: 600px;
+  min-width: 400px;
+  min-height: 400px;
 `;
 
 const StyledP = styled.p`
@@ -37,21 +39,37 @@ const useStyles = makeStyles({
   },
   noteContainer: {
     padding: '5px 15px',
+    minHeight: '100px',
+  },
+  button: {
+    fontFamily: 'Roboto',
+    fontSize: '13px',
+    height: '30px',
+    width: '50px',
   },
 });
 
 const MeetingDetails = (props) => {
   const classes = useStyles();
-  const location = useLocation();
-  // const { from } = location.state;
+  const history = useHistory();
 
-  console.log(props.location.detailProps.allData);
+  const routeChange = () => {
+    const path = '/meeting_notes';
+    history.push(path);
+  };
 
   return (
     <StyledDiv>
-      <Typography variant="h6" className={classes.title}>
-        {props.location.detailProps.allData.title}
-      </Typography>
+      <Grid container direction="row">
+        <Grid item lg={9}>
+          <Typography variant="h6" className={classes.title}>
+            {props.location.detailProps.allData.title}
+          </Typography>
+        </Grid>
+        <Grid item lg={3}>
+          <Button variant="contained" color="primary" className={classes.button} onClick={routeChange}>Back</Button>
+        </Grid>
+      </Grid>
       <div className={classes.demo}>
         <StyledP>
           Subject:

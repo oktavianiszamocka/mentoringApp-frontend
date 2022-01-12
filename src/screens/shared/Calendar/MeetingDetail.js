@@ -133,6 +133,8 @@ const MeetingDetail = (props) => {
   const [attendanceId, setAttendanceId] = useState([]);
   const [assignedUsersForEdit, setAssignedUsersForEdit] = useState([]);
   const [loggedUserAttend, setloggedUserAttend] = useState(false);
+  const [userProjects, setUserProjects] = useState([]);
+
   // let loggedUserAttend = false;
 
   const styles = {
@@ -140,6 +142,11 @@ const MeetingDetail = (props) => {
     left: '450px',
     position: 'absolute',
     zIndex: 5,
+  };
+
+  const getUserProjects = async () => {
+    const res = await Promise.all([Api.getUserProject()]);
+    setUserProjects(res[0].data.data);
   };
 
   useEffect(() => {
@@ -151,8 +158,8 @@ const MeetingDetail = (props) => {
       setEnd(res[0].data.data.endTime);
       setLocation(res[0].data.data.location);
       setAssignedUsers(res[0].data.data.meetingAttendee);
-      setAttendanceId(res[0].data.data.meetingAttendee.find((x) => x.idUser === 9).idAttendence);
-      setloggedUserAttend(res[0].data.data.meetingAttendee.find((x) => x.idUser === 9).isAttend);
+      setAttendanceId(res[0].data.data.meetingAttendee.find((x) => x.idUser == Api.getUserId()).idAttendence);
+      setloggedUserAttend(res[0].data.data.meetingAttendee.find((x) => x.idUser == Api.getUserId()).isAttend);
     };
 
     loadData();
@@ -176,7 +183,7 @@ const MeetingDetail = (props) => {
       setEnd(res[0].data.data.endTime);
       setLocation(res[0].data.data.location);
       setAssignedUsers(res[0].data.data.meetingAttendee);
-      setAttendanceId(res[0].data.data.meetingAttendee.find((x) => x.idUser === 9).idAttendence);
+      setAttendanceId(res[0].data.data.meetingAttendee.find((x) => x.idUser == Api.getUserId()).idAttendence);
       setloggedUserAttend(true);
     });
   };
@@ -195,7 +202,7 @@ const MeetingDetail = (props) => {
       setEnd(res[0].data.data.endTime);
       setLocation(res[0].data.data.location);
       setAssignedUsers(res[0].data.data.meetingAttendee);
-      setAttendanceId(res[0].data.data.meetingAttendee.find((x) => x.idUser === 9).idAttendence);
+      setAttendanceId(res[0].data.data.meetingAttendee.find((x) => x.idUser == Api.getUserId()).idAttendence);
       setloggedUserAttend(false);
     });
   };
