@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
 import Table from '@material-ui/core/Table';
@@ -9,18 +9,14 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
+import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
   background-color: #F5F5F5;
   position: absolute;
   padding: 10px;
 `;
-
-const currentlySelected = (id) => {
-  console.log('clickes');
-  console.log(id);
-  window.location.href = 'http://localhost:3000/meeting_details';
-};
 
 const useStyles = makeStyles({
   table: {
@@ -35,49 +31,59 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(id, meetingName, authors, subject) {
-  return {
-    id, meetingName, authors, subject,
-  };
-}
-
-const rows = [
-  createData(1, 'hey', 'Amon', 'aaaaaa'),
-  createData(2, 'hellllo', 'Jaba', 'sfasfasf'),
-  createData(3, 'bye', 'Amon', 'gdgsd'),
-
-];
-
-export default function DataTable() {
+const MeetingList = () => {
   const classes = useStyles();
+  const [notes, setNotes] = useState([]);
+  const [author, setAuthor] = useState('');
+
+  const loadMeetingData = async () => {
+    const res = await Promise.all([Api.getMeetingNotes(16)]);
+    setNotes(res[0].data.data);
+  };
+
+  const loadAuthorData = async (id) => {
+    const res2 = await Promise.all([Api.getUserProfile(id)]);
+    const name = (res2[0].data.data.firstName);
+    const surname = (res2[0].data.data.lastName);
+    setAuthor(`${name} ${surname}`);
+  };
+
+  useEffect(() => {
+    loadMeetingData();
+    loadAuthorData();
+  });
+
+  const currentlySelected = (id) => {
+    console.log('clickes');
+    console.log(id);
+    window.location.href = 'http://localhost:3000/meeting_details';
+  };
 
   return (
     <StyledDiv>
       <Typography variant="h6" className={classes.title}>
-        Meeting 1 Note
+        Meeting Notes
       </Typography>
       <TableContainer component={Paper} style={{ maxWidth: 750 }}>
         <Table className={classes.table} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <TableCell>Meeting Id</TableCell>
-              <TableCell align="left">Meeting Name</TableCell>
+              <TableCell align="left">Note title</TableCell>
               <TableCell align="left">Authors</TableCell>
               <TableCell align="left">Subject</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {notes.map((row) => (
               <TableRow
+                component={Link}
+                to={{ pathname: '/meeting_details', detailProps: { allData: row } }}
                 key={row.id}
-                onClick={() => currentlySelected(row.id)}
+                style={{ textDecoration: 'none', color: 'black' }}
                 hover
               >
-                <TableCell component="th" scope="row">
-                  {row.id}
-                </TableCell>
-                <TableCell align="left">{row.meetingName}</TableCell>
-                <TableCell align="left">{row.authors}</TableCell>
+                <TableCell align="left">{row.title}</TableCell>
+                <TableCell align="left">{row.author}</TableCell>
                 <TableCell align="left">{row.subject}</TableCell>
               </TableRow>
             ))}
@@ -87,4 +93,6 @@ export default function DataTable() {
     </StyledDiv>
 
   );
-}
+};
+
+export default MeetingList;

@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 import Paper from '@material-ui/core/Paper';
+import { useLocation } from 'react-router-dom';
 
 const StyledDiv = styled.div`
   background-color: #F5F5F5;
@@ -39,23 +40,33 @@ const useStyles = makeStyles({
   },
 });
 
-const MeetingDetails = () => {
+const MeetingDetails = (props) => {
   const classes = useStyles();
+  const location = useLocation();
+  // const { from } = location.state;
+
+  console.log(props.location.detailProps.allData);
 
   return (
     <StyledDiv>
       <Typography variant="h6" className={classes.title}>
-        Meeting 1 Note
+        {props.location.detailProps.allData.title}
       </Typography>
       <div className={classes.demo}>
-        <StyledP>Subject: AAAA</StyledP>
-        <StyledP>Author: AAAA</StyledP>
+        <StyledP>
+          Subject:
+          {' '}
+          {props.location.detailProps.allData.subject}
+        </StyledP>
+        <StyledP>
+          Author:
+          {' '}
+          {props.location.detailProps.allData.author}
+        </StyledP>
       </div>
       <Paper className={classes.noteContainer}>
         <StyledP2>
-          Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-
-          The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
+          {props.location.detailProps.allData.note1}
 
         </StyledP2>
       </Paper>
