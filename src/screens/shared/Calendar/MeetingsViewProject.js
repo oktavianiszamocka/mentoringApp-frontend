@@ -12,6 +12,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import MeetingDetail from './MeetingDetail';
 import MeetingAdd from './MeetingAdd';
 import Api from '../../../api/index';
+import MeetingsAddProject from './MeetingsAddProject';
+import MeetingDetailProject from './MeetingDetailProject';
 
 const StyledDiv = styled.div`
   background-color: white;
@@ -83,7 +85,7 @@ const useStyles = makeStyles({
   },
 });
 
-const MeetingsView = (props) => {
+const MeetingsViewProject = (props) => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([1]);
   const [showDetail, setShowDetail] = useState(false);
@@ -103,6 +105,7 @@ const MeetingsView = (props) => {
   useEffect(() => {
     const loadData = async () => {
       const res = await Promise.all([Api.getUserMeetings(Api.getUserId(), props.date)]);
+      console.log(res[0].data.data);
       res[0].data.data.sort(compare);
 
       setUserMeetings(res[0].data.data);
@@ -218,7 +221,7 @@ const MeetingsView = (props) => {
         {(() => {
           if (showDetail) {
             return (
-              <MeetingDetail cardPosition={cardPosition} showDet={hideDet} meetingId={clickedMeeting} date={props.date} setMeetings={setUserMeetings} />
+              <MeetingDetailProject cardPosition={cardPosition} showDet={hideDet} meetingId={clickedMeeting} date={props.date} setMeetings={setUserMeetings} />
             );
           }
         })()}
@@ -231,11 +234,11 @@ const MeetingsView = (props) => {
           Add
         </Button>
         {newMeetingVisible && (
-        <MeetingAdd close={setNewMeetingVisible} date={props.date} setMeetings={setUserMeetings} />
+        <MeetingsAddProject close={setNewMeetingVisible} date={props.date} setMeetings={setUserMeetings} />
         )}
       </Grid>
     </StyledDiv>
   );
 };
 
-export default MeetingsView;
+export default MeetingsViewProject;

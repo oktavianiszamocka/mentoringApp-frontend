@@ -253,7 +253,9 @@ const MeetingEdit = (props) => {
   };
 
   const getProjectPeople = async () => {
-    const res = await Promise.all([Api.getTasksAsignees()]);
+    const res = await Promise.all([Api.getTasksAsignees(props.projectId)]);
+    console.log('get assignees');
+    console.log(res);
     setAsignees(res[0].data.data);
   };
 

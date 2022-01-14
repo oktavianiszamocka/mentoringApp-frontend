@@ -73,6 +73,7 @@ export default function MessagePage() {
   const [hasMessages, setHasMessages] = useState();
   const [searchResults, setSearchResults] = useState([]);
   const [searchClicked, setSearchClicked] = useState(false);
+  const [searchUserClicked, setSearchUserClicked] = useState(false);
 
   const classes = useStyles();
   const icon = <SearchIcon className={classes.icon} />;
@@ -147,6 +148,8 @@ export default function MessagePage() {
   };
 
   const handleSearch = async (e) => {
+    setSearchUserClicked(false);
+
     const response = await Promise.all([Api.messageSearch(e.target.value)]);
     if (response) {
       setSearchResults(response[0].data.data);
@@ -155,7 +158,6 @@ export default function MessagePage() {
 
   const getDetailSearch = async (receiver) => {
     setSearchClicked(true);
-    console.log(receiver);
     setReciever(receiver);
     // eslint-disable-next-line radix
     await Api.getDetailMessages(Api.getUserId(), receiver.idReceiver)
@@ -179,6 +181,7 @@ export default function MessagePage() {
           setSender(receiver);
         }
       });
+    setSearchUserClicked(true);
   };
 
   return (
@@ -214,7 +217,7 @@ export default function MessagePage() {
                       ? (
                         <List component="nav" aria-label="secondary mailbox folders">
                           {searchResults.map((item) => (
-                            <ListItem button onClick={() => { getDetailSearch(item); console.log(item); }}>
+                            <ListItem button onClick={() => { getDetailSearch(item); console.log(searchUserClicked); }}>
                               <MessageItem user={item} />
                             </ListItem>
                           ))}
@@ -238,7 +241,7 @@ export default function MessagePage() {
             </Grid>
           </Grid>
 
-          { hasMessages || (!hasMessages && searchResults.length > 0)
+          { hasMessages || (!hasMessages && searchResults.length > 0 && searchUserClicked)
             ? (
               <Grid
                 item

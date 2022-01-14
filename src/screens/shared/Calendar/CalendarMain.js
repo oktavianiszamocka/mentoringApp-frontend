@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
 function CalendarMain() {
   const [value, onChange] = useState(new Date());
   const [showForm, setShowForm] = useState(false);
-
   const [spacing, setSpacing] = React.useState(2);
   const classes = useStyles();
 
@@ -45,7 +44,6 @@ function CalendarMain() {
     return [year, month, day].join('-');
   };
 
-  console.log(formatDate(value));
   return (
     <Grid container justifyContent="center" direction="row" spacing={0}>
       <Grid item>

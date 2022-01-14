@@ -128,7 +128,7 @@ const ProjectBar = () => {
           </Button>
         </Grid>
         <Grid item xs={12}>
-          <Button size="small" className={classes.buttonStyle} href={`/project-promoters/${IdProject}`}>
+          <Button size="small" className={classes.buttonStyle} href={`/calendar/${IdProject}`}>
             <div className={classes.divItem}>
               <CalendarTodayOutlinedIcon className={classes.IconStyle} />
               <StyledP>Calendar</StyledP>

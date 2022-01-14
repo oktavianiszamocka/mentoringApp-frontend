@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
-  Grid, Button,
+  Grid, Button, Typography,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import moment from 'moment';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@material-ui/core/TextField';
@@ -11,12 +12,19 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
 import {
   Formik, Form, Field, ErrorMessage, FieldArray,
 } from 'formik';
 import * as Yup from 'yup';
 import Chip from '@material-ui/core/Chip';
+import MaterialAvatar from '@material-ui/core/Avatar';
 import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
@@ -169,14 +177,29 @@ const MenuProps = {
   },
 };
 
-const MeetingAdd = (props) => {
+const MeetingEditProject = (props) => {
   const theme = useTheme();
+  const { IdProject } = useParams();
+
+  const styles = {
+    top: '-1px',
+    left: '-1px',
+    position: 'absolute',
+    minWidth: '251px',
+    zIndex: 6,
+  };
+
   const classes = useStyles();
   const [asignees, setAsignees] = useState([]);
-  const [asigneeIds, setAsigneeIds] = React.useState([]);
-  const [userProjects, setUserProjects] = useState([]);
-  const [userChosenProject, setUserChosenProject] = useState('');
-  const [chosenProjectId, setchosenProjectId] = useState('');
+  const [assignedIds, setAsignedIds] = React.useState([]);
+
+  const [peopleToAdd, setPeopleToAdd] = useState([]);
+  const [peopleAdd, setPeopleAdd] = useState(false);
+
+  const [peopleToRemove, setPeopleToRemove] = useState([]);
+  const [peopleRemove, setPeopleRemove] = useState(false);
+
+  const [initialIds, setInitialIds] = useState([]);
 
   const compare = (a, b) => {
     const time1 = parseFloat(a.startTime.slice(0, -3).replace(':', '.'));
@@ -186,62 +209,88 @@ const MeetingAdd = (props) => {
     return 0;
   };
 
-  const getTaskAsignees = async () => {
-    const res = await Promise.all([Api.getTasksAsignees(userChosenProject.idProject)]);
-    setAsignees(res[0].data.data);
-  };
-
-  const getUserProjects = async () => {
-    const res = await Promise.all([Api.getUserProject()]);
-    setUserProjects(res[0].data.data);
-  };
-
   const handleChange = (event) => {
-    console.log(event.target.value);
-    for (const i in event.target.value) {
-      console.log(event.target.value[i]);
-      console.log(typeof event.target.value[i]);
+    const newIds = event.target.value;
+    let addAssignee = false;
+    let removeAssignee = false;
+
+    const idsToRemove = [];
+    const checker = (arr, target) => target.every((v) => arr.includes(v));
+
+    if (checker(newIds, initialIds) === false) {
+      removeAssignee = true;
+    } else if (checker(newIds, initialIds) === true) {
+      removeAssignee = false;
     }
-    setAsigneeIds(event.target.value);
-    console.log(typeof event.target.value);
+
+    const union = [];
+    newIds.map((id) => {
+      if (initialIds.includes(id)) {
+        union.push(id);
+      }
+    });
+
+    initialIds.map((id) => {
+      if (!union.includes(id)) {
+        idsToRemove.push(id);
+      }
+    });
+
+    const idsToAdd = [];
+    newIds.map((id) => {
+      if (!initialIds.includes(id)) {
+        addAssignee = true;
+        idsToAdd.push(id);
+      }
+    });
+
+    setPeopleToAdd(idsToAdd);
+    setPeopleAdd(addAssignee);
+
+    setPeopleRemove(removeAssignee);
+    setPeopleToRemove(idsToRemove);
+
+    setAsignedIds(event.target.value);
   };
 
-  const handleProjectChange = async (event, child) => {
-    setUserChosenProject(event.target.value);
-    const res = await Promise.all([Api.getTasksAsignees(child.key.match(/\d+/)[0])]);
-
+  const getProjectPeople = async () => {
+    const res = await Promise.all([Api.getTasksAsignees(IdProject)]);
+    console.log(res);
     setAsignees(res[0].data.data);
-    setchosenProjectId(child.key.match(/\d+/)[0]);
+  };
+
+  const addIds = () => {
+    const ids = [];
+    for (const att in props.attendees) {
+      ids.push(props.attendees[att].idUser);
+    }
+    setAsignedIds(ids);
+    setInitialIds(ids);
   };
 
   useEffect(() => {
     const loadData = async () => {
-      // getTaskAsignees();
-      getUserProjects();
+      getProjectPeople();
+      addIds();
     };
 
     loadData();
   }, []);
 
-  const onMeetingAddHandler = async () => {
-    const meetingData = {
-      title: 'HI',
-      meetingDate: props.date,
-      location: 'test',
-      description: 'test',
-      project: parseInt(chosenProjectId),
-      startTime: '9:00',
-      endTime: '9:30',
-      attendeeUsers: [38, 9],
-    };
-    const res = await Promise.all([Api.addMeeting(meetingData)]);
-    console.log(res);
-    // .then(async () => {
-    //   props.close(false);
-    //   const res = await Promise.all([Api.getUserMeetings(props.date)]);
-    //   res[0].data.data.sort(compare);
-    //   props.setMeetings(res[0].data.data);
-    // });
+  const closeAdd = () => {
+    props.close(false);
+    props.closeDetail();
+  };
+
+  const onMeetingEditHandler = async (meetingData) => {
+    console.log(meetingData);
+    await Api.updateMeeting(meetingData)
+      .then(async () => {
+        closeAdd();
+        const res = await Promise.all([Api.getUserMeetings(props.date)]);
+        res[0].data.data.sort(compare);
+        props.setMeetings(res[0].data.data);
+      });
   };
 
   const getNameIdPair = () => {
@@ -253,46 +302,38 @@ const MeetingAdd = (props) => {
       const id = asignees[asignee].idUser;
       name_id[id] = fullName;
     }
-
     return name_id;
   };
 
-  const styles = {
-    position: 'absolute',
-    zIndex: 5,
-    top: '150px',
-    left: '450px',
-  };
-
-  const closeAdd = () => {
-    props.close(false);
-  };
-
   const initialValues = {
-    title: '',
+    title: props.meetingTitle,
     date: props.date,
-    location: '',
-    description: '',
+    location: props.meetingLocation,
+    description: props.meetingDescription,
     project: 2,
-    start: '',
-    end: '',
-    attendeeUsers: [9, 10],
+    start: props.startTime.slice(0, -3),
+    end: props.endTime.slice(0, -3),
+    attendeeUsers: props.attendees,
   };
 
   const onSubmit = (values) => {
     const attendees = [];
     attendees.push(values.attendees);
     const meetingData = {
+      IdMeeting: props.meetingId,
       title: values.title,
       meetingDate: props.date,
       location: values.location,
       description: values.description,
-      project: parseInt(chosenProjectId),
+      project: 2,
       startTime: values.start,
       endTime: values.end,
-      attendeeUsers: [38, 9],
+      IsRemoveAttendee: peopleRemove,
+      AttendeeToRemove: peopleToRemove,
+      IsAddNewAttendee: peopleAdd,
+      AttendeeToAdd: peopleToAdd,
     };
-    onMeetingAddHandler(meetingData);
+    onMeetingEditHandler(meetingData);
   };
 
   const validate = Yup.object({
@@ -311,14 +352,14 @@ const MeetingAdd = (props) => {
     >
       {(formik) => {
         const {
-          errors, touched,
+          errors, touched, isValid, dirty, isSubmitting, values, setFieldValue, handleReset,
         } = formik;
         return (
           <StyledDiv style={styles}>
             <Form>
               <Grid container direction="row" className={classes.grid}>
                 <Grid item>
-                  <StyledTitle>Add Meeting</StyledTitle>
+                  <StyledTitle>Edit Meeting</StyledTitle>
                 </Grid>
                 <CloseIcon className={classes.close} onClick={closeAdd} />
                 <Grid item>
@@ -358,23 +399,25 @@ const MeetingAdd = (props) => {
                       <StyledUnderTitle>START TIME</StyledUnderTitle>
                     </Grid>
                     <Grid item>
-                      <Field
-                        as={TextField}
-                        id="start"
-                        name="start"
-                        className={classes.times}
-                        InputProps={{
-                          classes: {
-                            input: classes.resize_time,
-                          },
-                        }}
-                        variant="outlined"
-                      />
-                      <ErrorMessage
-                        name="start"
-                        component="div"
-                        className={classes.error2}
-                      />
+                      <div>
+                        <Field
+                          as={TextField}
+                          id="start"
+                          name="start"
+                          className={classes.times}
+                          InputProps={{
+                            classes: {
+                              input: classes.resize_time,
+                            },
+                          }}
+                          variant="outlined"
+                        />
+                        <ErrorMessage
+                          name="start"
+                          component="div"
+                          className={classes.error2}
+                        />
+                      </div>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -384,23 +427,25 @@ const MeetingAdd = (props) => {
                       <StyledUnderTitle>END TIME</StyledUnderTitle>
                     </Grid>
                     <Grid item>
-                      <Field
-                        as={TextField}
-                        id="end"
-                        name="end"
-                        className={classes.times}
-                        InputProps={{
-                          classes: {
-                            input: classes.resize_time,
-                          },
-                        }}
-                        variant="outlined"
-                      />
-                      <ErrorMessage
-                        name="end"
-                        component="div"
-                        className={classes.error2}
-                      />
+                      <div>
+                        <Field
+                          as={TextField}
+                          id="end"
+                          name="end"
+                          className={classes.times}
+                          InputProps={{
+                            classes: {
+                              input: classes.resize_time,
+                            },
+                          }}
+                          variant="outlined"
+                        />
+                        <ErrorMessage
+                          name="end"
+                          component="div"
+                          className={classes.error2}
+                        />
+                      </div>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -430,7 +475,6 @@ const MeetingAdd = (props) => {
                   className={classes.error2}
                 />
               </div>
-
               <Grid container direction="column">
                 <Grid item>
                   <StyledUnderTitle>LOCATION</StyledUnderTitle>
@@ -456,39 +500,18 @@ const MeetingAdd = (props) => {
                       className={classes.error2}
                     />
                   </div>
-
                 </Grid>
               </Grid>
 
               <Grid item>
                 <FormControl className={classes.formControl}>
-                  <InputLabel className={classes.attendees} id="demo-mutiple-chip-label">Project</InputLabel>
+                  <InputLabel id="demo-mutiple-chip-label">Attendees</InputLabel>
                   <Field
                     as={Select}
                     type="text"
-                    name="project"
-                    value={userChosenProject}
-                    onChange={(event, child) => handleProjectChange(event, child)}
-                    label="Project"
-                  >
-                    {userProjects.map((project) => (
-                      <MenuItem key={project.idProject} value={project.name}>
-                        {`${project.name}`}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                </FormControl>
-              </Grid>
-
-              <Grid item>
-                <FormControl className={classes.formControl}>
-                  <InputLabel className={classes.attendees} id="demo-mutiple-chip-label">Attendees</InputLabel>
-                  <Field
-                    as={Select}
-                    type="text"
-                    name="attendeeUsers"
+                    name="assignedUsers"
                     multiple
-                    value={asigneeIds}
+                    value={assignedIds}
                     onChange={handleChange}
                     renderValue={(selected) => (
                       <div className={classes.chips}>
@@ -529,4 +552,4 @@ const MeetingAdd = (props) => {
   );
 };
 
-export default MeetingAdd;
+export default MeetingEditProject;

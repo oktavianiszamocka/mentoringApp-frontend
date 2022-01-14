@@ -31,6 +31,7 @@ import EditProjectFormDashboard from './ProjectForm/EditFormDashboard';
 import ChangePassword from './Auth/ChangePassword';
 import MeetingList from './shared/components/MeetingList';
 import MeetingDetail from './shared/components/MeetingDetail';
+import CalendarMainProject from './shared/Calendar/CalendarMainProject';
 
 const App = () => {
   const { token, setToken } = UseToken();
@@ -70,7 +71,6 @@ const App = () => {
         <Route path="/task/:IdProject" component={TaskDashboard} />
         <Route path="/task-detail" component={TaskDetail} />
         <Route path="/task-add" component={TaskAdd} />
-        <Route path="/calendar" component={CalendarMain} />
         <Route path="/change-password" component={ChangePassword} />
         <Route path="/milestones/:IdProject" component={Milestone} />
         <Route path="/forgot-password" component={ForgotPassword} />
@@ -79,6 +79,7 @@ const App = () => {
         <Route path="/meeting_notes" component={MeetingList} />
         <Route path="/meeting_details" component={MeetingDetail} />
         <Route path="/mitem" component={MessageItem} />
+        <Route path="/calendar/:IdProject" component={CalendarMainProject} />
       </Switch>
     </BrowserRouter>
 

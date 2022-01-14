@@ -118,7 +118,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MeetingDetail = (props) => {
+const MeetingDetailProject = (props) => {
   const classes = useStyles();
   const positionX = `${props.cardPosition[0]}`;
   const positionY = `${props.cardPosition[1]}`;
@@ -133,7 +133,7 @@ const MeetingDetail = (props) => {
   const [attendanceId, setAttendanceId] = useState([]);
   const [assignedUsersForEdit, setAssignedUsersForEdit] = useState([]);
   const [loggedUserAttend, setloggedUserAttend] = useState(false);
-  const [userProject, setUserProject] = useState([]);
+  const [userProjects, setUserProjects] = useState([]);
 
   // let loggedUserAttend = false;
 
@@ -147,7 +147,7 @@ const MeetingDetail = (props) => {
   useEffect(() => {
     const loadData = async () => {
       const res = await Promise.all([Api.getMeetingDetail(props.meetingId)]);
-      setUserProject(res[0].data.data.project);
+      console.log(res);
       setTitle(res[0].data.data.title);
       setDescription(res[0].data.data.description);
       setStart(res[0].data.data.startTime);
@@ -279,7 +279,6 @@ const MeetingDetail = (props) => {
           meetingLocation={location}
           attendees={assignedUsers}
           setMeetings={props.setMeetings}
-          projectId={userProject}
         />
         )}
       </Grid>
@@ -323,4 +322,4 @@ const MeetingDetail = (props) => {
   );
 };
 
-export default MeetingDetail;
+export default MeetingDetailProject;
