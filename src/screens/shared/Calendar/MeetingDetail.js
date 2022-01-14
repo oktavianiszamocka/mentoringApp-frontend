@@ -133,7 +133,7 @@ const MeetingDetail = (props) => {
   const [attendanceId, setAttendanceId] = useState([]);
   const [assignedUsersForEdit, setAssignedUsersForEdit] = useState([]);
   const [loggedUserAttend, setloggedUserAttend] = useState(false);
-  const [userProjects, setUserProjects] = useState([]);
+  const [userProject, setUserProject] = useState([]);
 
   // let loggedUserAttend = false;
 
@@ -144,14 +144,10 @@ const MeetingDetail = (props) => {
     zIndex: 5,
   };
 
-  const getUserProjects = async () => {
-    const res = await Promise.all([Api.getUserProject()]);
-    setUserProjects(res[0].data.data);
-  };
-
   useEffect(() => {
     const loadData = async () => {
       const res = await Promise.all([Api.getMeetingDetail(props.meetingId)]);
+      setUserProject(res[0].data.data.project);
       setTitle(res[0].data.data.title);
       setDescription(res[0].data.data.description);
       setStart(res[0].data.data.startTime);
@@ -283,6 +279,7 @@ const MeetingDetail = (props) => {
           meetingLocation={location}
           attendees={assignedUsers}
           setMeetings={props.setMeetings}
+          projectId={userProject}
         />
         )}
       </Grid>

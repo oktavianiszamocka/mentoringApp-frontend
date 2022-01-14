@@ -197,7 +197,13 @@ const MeetingAdd = (props) => {
   };
 
   const handleChange = (event) => {
+    console.log(event.target.value);
+    for (const i in event.target.value) {
+      console.log(event.target.value[i]);
+      console.log(typeof event.target.value[i]);
+    }
     setAsigneeIds(event.target.value);
+    console.log(typeof event.target.value);
   };
 
   const handleProjectChange = async (event, child) => {
@@ -217,15 +223,25 @@ const MeetingAdd = (props) => {
     loadData();
   }, []);
 
-  const onMeetingAddHandler = async (meetingData) => {
-    console.log(meetingData);
-    await Api.addMeeting(meetingData)
-      .then(async () => {
-        props.close(false);
-        const res = await Promise.all([Api.getUserMeetings(props.date)]);
-        res[0].data.data.sort(compare);
-        props.setMeetings(res[0].data.data);
-      });
+  const onMeetingAddHandler = async () => {
+    const meetingData = {
+      title: 'HI',
+      meetingDate: props.date,
+      location: 'test',
+      description: 'test',
+      project: parseInt(chosenProjectId),
+      startTime: '9:00',
+      endTime: '9:30',
+      attendeeUsers: [38, 9],
+    };
+    const res = await Promise.all([Api.addMeeting(meetingData)]);
+    console.log(res);
+    // .then(async () => {
+    //   props.close(false);
+    //   const res = await Promise.all([Api.getUserMeetings(props.date)]);
+    //   res[0].data.data.sort(compare);
+    //   props.setMeetings(res[0].data.data);
+    // });
   };
 
   const getNameIdPair = () => {
@@ -260,7 +276,7 @@ const MeetingAdd = (props) => {
     project: 2,
     start: '',
     end: '',
-    attendeeUsers: [],
+    attendeeUsers: [9, 10],
   };
 
   const onSubmit = (values) => {
@@ -274,9 +290,8 @@ const MeetingAdd = (props) => {
       project: parseInt(chosenProjectId),
       startTime: values.start,
       endTime: values.end,
-      attendeeUsers: asigneeIds,
+      attendeeUsers: [38, 9],
     };
-    console.log(meetingData);
     onMeetingAddHandler(meetingData);
   };
 

@@ -103,7 +103,6 @@ const MeetingsView = (props) => {
   useEffect(() => {
     const loadData = async () => {
       const res = await Promise.all([Api.getUserMeetings(Api.getUserId(), props.date)]);
-      console.log(res[0].data.data);
       res[0].data.data.sort(compare);
 
       setUserMeetings(res[0].data.data);
