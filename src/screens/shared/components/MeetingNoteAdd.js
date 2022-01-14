@@ -107,7 +107,7 @@ function MeetingNoteAdd(props) {
   const classes = useStyles();
   const { onClose, open } = props;
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const meeting = props.meetingId;
   const handleClose = () => {
     onClose();
   };
@@ -116,7 +116,7 @@ function MeetingNoteAdd(props) {
     title: '',
     subject: '',
     author: Api.getUserId(),
-    meeting: 16,
+    meeting,
     note1: '',
     createdOn: new Date(),
     lastModified: new Date(),
@@ -136,7 +136,7 @@ function MeetingNoteAdd(props) {
       title: values.title,
       subject: values.subject,
       author: Api.getUserId(),
-      meeting: 16,
+      meeting,
       note1: values.note1,
       createdOn: new Date(),
       lastModified: new Date(),

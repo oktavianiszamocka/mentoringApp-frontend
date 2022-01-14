@@ -18,6 +18,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import Alert from '@material-ui/lab/Alert';
 import Api from '../../../api/index';
 import MeetingNoteAdd from './MeetingNoteAdd';
+import MeetingDetail from './MeetingDetail';
 
 const StyledDiv = styled.div`
   background-color: #F5F5F5;
@@ -49,7 +50,10 @@ const MeetingList = (props) => {
   const [notes, setNotes] = useState([]);
   const [author, setAuthor] = useState('');
   const [open, setOpen] = React.useState(false);
+  const [noteDetailOpen, setNoteDetailOpen] = React.useState(false);
+  const [noteDetails, setNoteDetails] = React.useState();
 
+  const { meetingid } = props;
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -59,7 +63,8 @@ const MeetingList = (props) => {
   };
 
   const loadMeetingData = async () => {
-    const res = await Promise.all([Api.getMeetingNotes(16)]);
+    const res = await Promise.all([Api.getMeetingNotes(props.meetingid)]);
+
     setNotes(res[0].data.data);
   };
 
@@ -107,9 +112,9 @@ const MeetingList = (props) => {
               <TableBody>
                 {notes.map((row) => (
                   <TableRow
-                    component={Link}
-                    to={{ pathname: '/meeting_details', detailProps: { allData: row } }}
+                 //   to={{ pathname: '/meeting_details', detailProps: { allData: row } }}
                     key={row.id}
+                    onClick={() => { setNoteDetailOpen(true); setNoteDetails(row); }}
                     style={{ textDecoration: 'none', color: 'black' }}
                     hover
                   >
@@ -128,13 +133,28 @@ const MeetingList = (props) => {
               </TableBody>
             </Table>
           </TableContainer>
-          <MeetingNoteAdd open={open} onClose={handleClose} />
+          <MeetingNoteAdd open={open} onClose={handleClose} meetingId={meetingid} />
+          {noteDetailOpen ? (
+            <MeetingDetail details={noteDetails} />
+          ) : <div />}
         </div>
       )
         : (
           <div>
-            {' '}
-            <Alert severity="info">You have no project notes for now</Alert>
+            <TableContainer component={Paper} style={{ maxWidth: 750 }}>
+              <Table className={classes.table} size="small" aria-label="a dense table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="left">Note title</TableCell>
+                    <TableCell align="left">Authors</TableCell>
+                    <TableCell align="left">Subject</TableCell>
+                    <TableCell align="left"> </TableCell>
+                  </TableRow>
+                </TableHead>
+              </Table>
+            </TableContainer>
+            <Alert severity="info">No meeting notes</Alert>
+            <MeetingNoteAdd open={open} onClose={handleClose} meetingId={meetingid} />
           </div>
         )}
     </StyledDiv>

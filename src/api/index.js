@@ -138,6 +138,7 @@ const getMeetingNotes = (meetingId) => axios.get(`${apiUrl}/meeting-notes/${meet
 const addMeetingNote = (noteData) => axios.post(`${apiUrl}/meeting-notes`, noteData);
 const deleteMeetingNote = (idNote) => axios.delete(`${apiUrl}/meeting-notes/${idNote}`);
 const deleteProject = (idProject) => axios.delete(`${apiUrl}/projects/${idProject}`);
+const getProjectMeetings = (idProject, date) => axios.get(`${apiUrl}/meetings/project/${idProject}?date=${date}`);
 
 export default {
   getUserId,
@@ -219,4 +220,5 @@ export default {
   deleteProject,
   addMeetingNote,
   deleteMeetingNote,
+  getProjectMeetings,
 };

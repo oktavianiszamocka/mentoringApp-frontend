@@ -12,10 +12,11 @@ import {
 import DateFnsUtils from '@date-io/date-fns';
 import { useParams } from 'react-router-dom';
 import AllNotes from 'screens/shared/components/AllNotes';
-import CalendarForm from './CalendarForm';
+import MeetingList from 'screens/shared/components/MeetingList';
+import CalendarForm from '../CalendarForm';
 import MeetingsViewProject from './MeetingsViewProject';
-import Header from '../components/Header';
-import ProjectBar from '../components/ProjectBar';
+import Header from '../../components/Header';
+import ProjectBar from '../../components/ProjectBar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +40,9 @@ function CalendarMainProject() {
   const [spacing, setSpacing] = React.useState(2);
   const classes = useStyles();
 
+  const [showNotes, setShowNotes] = useState(false);
+  const [clickedMeetingId, setClickedMeetingId] = useState(0);
+
   const formatDate = (date) => {
     let month = `${date.getMonth() + 1}`;
     let day = `${date.getDate()}`;
@@ -53,32 +57,44 @@ function CalendarMainProject() {
 
   return (
     <div style={{ marginTop: '6rem' }}>
-      <Grid container>
+      <Grid container spacing={0}>
         <Header />
         <Grid item xs={2}>
           <ProjectBar />
         </Grid>
-        <Grid item xs={10}>
-          <Typography variant="h4" gutterBottom style={{ marginBottom: '4vh' }}>Project Calendar</Typography>
-
-          <Grid container justifyContent="center" direction="row" spacing={0}>
-
+        <Grid item xs={5}>
+          <Grid container direction="column">
             <Grid item>
-              <MuiPickersUtilsProvider
-                utils={DateFnsUtils}
-              >
-                <KeyboardDatePicker
-                  variant="static"
-                  format="MM/dd/yyyy"
-                  value={value}
-                  onChange={onChange}
-                />
-              </MuiPickersUtilsProvider>
+              <Typography variant="h4" gutterBottom style={{ marginBottom: '4vh' }}>Project Calendar</Typography>
             </Grid>
             <Grid item>
-              <MeetingsViewProject date={formatDate(value)} />
+              <Grid container justifyContent="center" direction="row" spacing={0}>
+                <Grid item justifyContent="center">
+                  <MuiPickersUtilsProvider
+                    utils={DateFnsUtils}
+                  >
+                    <KeyboardDatePicker
+                      variant="static"
+                      format="MM/dd/yyyy"
+                      value={value}
+                      onChange={onChange}
+                    />
+                  </MuiPickersUtilsProvider>
+                </Grid>
+                <Grid item>
+                  <MeetingsViewProject date={formatDate(value)} showNotes={setShowNotes} setMeeting={setClickedMeetingId} />
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
+        </Grid>
+        <Grid item xs={5}>
+          <Typography variant="h4" gutterBottom style={{ marginBottom: '4vh' }}>Meeting Notes</Typography>
+          {showNotes ? (
+            <div>
+              <MeetingList meetingid={clickedMeetingId} />
+            </div>
+          ) : <div />}
         </Grid>
       </Grid>
     </div>

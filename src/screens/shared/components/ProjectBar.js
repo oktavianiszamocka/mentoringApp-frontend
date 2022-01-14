@@ -136,14 +136,6 @@ const ProjectBar = () => {
           </Button>
         </Grid>
         <Grid item xs={12}>
-          <Button size="small" className={classes.buttonStyle} href={`/project-promoters/${IdProject}`}>
-            <div className={classes.divItem}>
-              <NoteOutlinedIcon className={classes.IconStyle} />
-              <StyledP>Note</StyledP>
-            </div>
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
           <Button size="small" className={classes.buttonStyle} href={`/task/${IdProject}`}>
             <div className={classes.divItem}>
               <FormatListBulletedIcon className={classes.IconStyle} />

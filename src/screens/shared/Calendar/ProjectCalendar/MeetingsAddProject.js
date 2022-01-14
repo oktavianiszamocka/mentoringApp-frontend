@@ -18,7 +18,7 @@ import {
 import * as Yup from 'yup';
 import Chip from '@material-ui/core/Chip';
 import { useParams } from 'react-router-dom';
-import Api from '../../../api/index';
+import Api from '../../../../api/index';
 
 const StyledDiv = styled.div`
   background-color: white;
@@ -187,7 +187,16 @@ const MeetingsAddProject = (props) => {
 
   const getTaskAsignees = async () => {
     const res = await Promise.all([Api.getTasksAsignees(IdProject)]);
-    setAsignees(res[0].data.data);
+    const res2 = await Promise.all([Api.getProjectPromoters(IdProject)]);
+    const { mainMentor } = res2[0].data.data;
+    const { additionalMentors } = res2[0].data.data;
+    console.log(mainMentor);
+    const students = res[0].data.data;
+    students.push(mainMentor);
+    const allMembers = students.concat(additionalMentors);
+    console.log();
+
+    setAsignees(allMembers);
   };
 
   const handleChange = (event) => {
@@ -200,11 +209,9 @@ const MeetingsAddProject = (props) => {
     };
 
     loadData();
-  }, []);
+  }, [props.close]);
 
   const onMeetingAddHandler = async (meetingData) => {
-    console.log('from handler');
-
     console.log(meetingData);
     await Api.addMeeting(meetingData)
       .then(async () => {
@@ -258,7 +265,7 @@ const MeetingsAddProject = (props) => {
       meetingDate: props.date,
       location: values.location,
       description: values.description,
-      project: IdProject,
+      project: parseInt(IdProject),
       startTime: values.start,
       endTime: values.end,
       AttendeeUsers: asigneeIds,

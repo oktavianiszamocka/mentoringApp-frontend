@@ -25,7 +25,8 @@ import {
 import * as Yup from 'yup';
 import Chip from '@material-ui/core/Chip';
 import MaterialAvatar from '@material-ui/core/Avatar';
-import Api from '../../../api/index';
+import { useParams } from 'react-router-dom';
+import Api from '../../../../api/index';
 
 const StyledDiv = styled.div`
   background-color: white;
@@ -255,8 +256,15 @@ const MeetingEditProject = (props) => {
 
   const getProjectPeople = async () => {
     const res = await Promise.all([Api.getTasksAsignees(IdProject)]);
-    console.log(res);
-    setAsignees(res[0].data.data);
+    const res2 = await Promise.all([Api.getProjectPromoters(IdProject)]);
+
+    const { mainMentor } = res2[0].data.data;
+    const { additionalMentors } = res2[0].data.data;
+    const students = res[0].data.data;
+    students.push(mainMentor);
+    const allMembers = students.concat(additionalMentors);
+
+    setAsignees(allMembers);
   };
 
   const addIds = () => {

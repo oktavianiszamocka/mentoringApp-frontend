@@ -12,8 +12,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import Api from '../../../api/index';
-import MeetingEdit from './MeetingEdit';
+import Api from '../../../../api/index';
+import MeetingEdit from '../MeetingEdit';
+import MeetingEditProject from './MeetingEditProject';
 
 const StyledDiv = styled.div`
   background-color: white;
@@ -154,8 +155,10 @@ const MeetingDetailProject = (props) => {
       setEnd(res[0].data.data.endTime);
       setLocation(res[0].data.data.location);
       setAssignedUsers(res[0].data.data.meetingAttendee);
-      setAttendanceId(res[0].data.data.meetingAttendee.find((x) => x.idUser == Api.getUserId()).idAttendence);
-      setloggedUserAttend(res[0].data.data.meetingAttendee.find((x) => x.idUser == Api.getUserId()).isAttend);
+      if (res[0].data.data.meetingAttendee.some((e) => e.idUser == Api.getUserId())) {
+        setAttendanceId(res[0].data.data.meetingAttendee.find((x) => x.idUser == Api.getUserId()).idAttendence);
+        setloggedUserAttend(res[0].data.data.meetingAttendee.find((x) => x.idUser == Api.getUserId()).isAttend);
+      }
     };
 
     loadData();
@@ -166,6 +169,7 @@ const MeetingDetailProject = (props) => {
   };
 
   const acceptMeeting = async () => {
+    console.log('accept');
     const attendanceAccept = {
       idAttendence: attendanceId,
       user: 9,
@@ -198,6 +202,8 @@ const MeetingDetailProject = (props) => {
       setEnd(res[0].data.data.endTime);
       setLocation(res[0].data.data.location);
       setAssignedUsers(res[0].data.data.meetingAttendee);
+      const meetingAttendeeIds = [];
+      console.log(meetingAttendeeIds);
       setAttendanceId(res[0].data.data.meetingAttendee.find((x) => x.idUser == Api.getUserId()).idAttendence);
       setloggedUserAttend(false);
     });
@@ -267,7 +273,7 @@ const MeetingDetailProject = (props) => {
             <div />
         )}
         {editMeetingVisible && (
-        <MeetingEdit
+        <MeetingEditProject
           close={setEditMeetingVisible}
           closeDetail={props.showDet}
           meetingId={props.meetingId}
@@ -283,40 +289,45 @@ const MeetingDetailProject = (props) => {
         )}
       </Grid>
       <Divider />
-      <Grid container direction="row">
-        <Grid item>
-          <StyledUnderTitleGoing>GOING?</StyledUnderTitleGoing>
+      {assignedUsers.some((e) => e.idUser == Api.getUserId()) ? (
+        <Grid container direction="row">
+          <Grid item>
+            <StyledUnderTitleGoing>GOING?</StyledUnderTitleGoing>
+          </Grid>
+          <Grid item>
+            { loggedUserAttend ? (
+              <Grid container direction="row">
+                <Grid item>
+                  <Button size="small" variant="contained" color="primary" className={classes.buttons_blue} onClick={acceptMeeting}>YES</Button>
+                </Grid>
+                <Grid item>
+                  <Button size="small" variant="contained" className={classes.buttons_white} onClick={declineMeeting}>NO</Button>
+                </Grid>
+              </Grid>
+            ) : loggedUserAttend === false ? (
+              <Grid container direction="row">
+                <Grid item>
+                  <Button size="small" variant="contained" className={classes.buttons_white} onClick={acceptMeeting}>YES</Button>
+                </Grid>
+                <Grid item>
+                  <Button size="small" variant="contained" color="primary" className={classes.buttons_blue} onClick={declineMeeting}>NO</Button>
+                </Grid>
+              </Grid>
+            ) : (
+              <Grid container direction="row">
+                <Grid item>
+                  <Button size="small" variant="contained" className={classes.buttons_white} onClick={acceptMeeting}>YES</Button>
+                </Grid>
+                <Grid item>
+                  <Button size="small" variant="contained" className={classes.buttons_white} onClick={declineMeeting}>NO</Button>
+                </Grid>
+              </Grid>
+            )}
+          </Grid>
         </Grid>
-        <Grid item>
-          { loggedUserAttend ? (
-            <Grid container direction="row">
-              <Grid item>
-                <Button size="small" variant="contained" color="primary" className={classes.buttons_blue} onClick={acceptMeeting}>YES</Button>
-              </Grid>
-              <Grid item>
-                <Button size="small" variant="contained" className={classes.buttons_white} onClick={declineMeeting}>NO</Button>
-              </Grid>
-            </Grid>
-          ) : loggedUserAttend === false ? (
-            <Grid container direction="row">
-              <Grid item>
-                <Button size="small" variant="contained" className={classes.buttons_white} onClick={acceptMeeting}>YES</Button>
-              </Grid>
-              <Grid item>
-                <Button size="small" variant="contained" color="primary" className={classes.buttons_blue} onClick={declineMeeting}>NO</Button>
-              </Grid>
-            </Grid>
-          ) : (
-            <Grid container direction="row">
-              <Grid item>
-                <Button size="small" variant="contained" className={classes.buttons_white} onClick={acceptMeeting}>YES</Button>
-              </Grid>
-              <Grid item>
-                <Button size="small" variant="contained" className={classes.buttons_white} onClick={declineMeeting}>NO</Button>
-              </Grid>
-            </Grid>
-          )}
-        </Grid>
+      ) : <div />}
+      <Grid item>
+        <Button size="small" variant="contained" color="primary" style={{ margin: '5px' }} onClick={() => props.showNotes(true)}>See meeting notes</Button>
       </Grid>
     </StyledDiv>
   );

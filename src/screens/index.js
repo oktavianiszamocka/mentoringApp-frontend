@@ -31,7 +31,7 @@ import EditProjectFormDashboard from './ProjectForm/EditFormDashboard';
 import ChangePassword from './Auth/ChangePassword';
 import MeetingList from './shared/components/MeetingList';
 import MeetingDetail from './shared/components/MeetingDetail';
-import CalendarMainProject from './shared/Calendar/CalendarMainProject';
+import CalendarMainProject from './shared/Calendar/ProjectCalendar/CalendarMainProject';
 
 const App = () => {
   const { token, setToken } = UseToken();

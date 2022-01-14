@@ -7,11 +7,10 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { Button, Grid } from '@material-ui/core';
 
 const StyledDiv = styled.div`
-  background-color: #F5F5F5;
   position: absolute;
   padding: 10px;
   max-width: 600px;
-  min-width: 400px;
+  min-width: 420px;
   min-height: 400px;
 `;
 
@@ -63,28 +62,29 @@ const MeetingDetails = (props) => {
       <Grid container direction="row">
         <Grid item lg={9}>
           <Typography variant="h6" className={classes.title}>
-            {props.location.detailProps.allData.title}
+            {props.details.title}
           </Typography>
         </Grid>
-        <Grid item lg={3}>
-          <Button variant="contained" color="primary" className={classes.button} onClick={routeChange}>Back</Button>
-        </Grid>
+
       </Grid>
       <div className={classes.demo}>
         <StyledP>
           Subject:
           {' '}
-          {props.location.detailProps.allData.subject}
+          {props.details.subject}
         </StyledP>
         <StyledP>
           Author:
           {' '}
-          {props.location.detailProps.allData.author}
+
+          {props.details.authorFirstName}
+          {' '}
+          {props.details.authorLastName}
         </StyledP>
       </div>
       <Paper className={classes.noteContainer}>
         <StyledP2>
-          {props.location.detailProps.allData.note1}
+          {props.details.note1}
 
         </StyledP2>
       </Paper>

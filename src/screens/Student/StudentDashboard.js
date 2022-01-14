@@ -199,7 +199,7 @@ const StudentDashboard = () => {
         direction="row"
       >
         {Header()}
-        <Grid item lg={4} md={4}>
+        <Grid item lg={3} md={3}>
           <Grid container direction="column">
             <Grid
               item
@@ -222,7 +222,7 @@ const StudentDashboard = () => {
           </Grid>
         </Grid>
 
-        <Grid item lg={8} md={8} s={12} xs={12}>
+        <Grid item lg={9} md={9} s={12} xs={12}>
           {!showProjectBar
           && (
           <FormControl className={classes.formControl}>

@@ -9,16 +9,17 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import EditIcon from '@material-ui/icons/Edit';
-import MeetingDetail from './MeetingDetail';
-import MeetingAdd from './MeetingAdd';
-import Api from '../../../api/index';
+import { useParams } from 'react-router-dom';
+import MeetingDetail from '../MeetingDetail';
+import MeetingAdd from '../MeetingAdd';
+import Api from '../../../../api/index';
 import MeetingsAddProject from './MeetingsAddProject';
 import MeetingDetailProject from './MeetingDetailProject';
 
 const StyledDiv = styled.div`
   background-color: white;
-  max-width: 150px;
-  min-height: 360px;
+  min-width: 350px;
+  min-height: 46vh;
   border-left: 1px solid #9e9e99;
 `;
 const StyledDiv2 = styled.div`
@@ -87,6 +88,7 @@ const useStyles = makeStyles({
 
 const MeetingsViewProject = (props) => {
   const classes = useStyles();
+  const { IdProject } = useParams();
   const [checked, setChecked] = React.useState([1]);
   const [showDetail, setShowDetail] = useState(false);
   const [cardPosition, setcardPosition] = useState([]);
@@ -104,23 +106,20 @@ const MeetingsViewProject = (props) => {
 
   useEffect(() => {
     const loadData = async () => {
-      const res = await Promise.all([Api.getUserMeetings(Api.getUserId(), props.date)]);
-      console.log(res[0].data.data);
+      const res = await Promise.all([Api.getProjectMeetings(IdProject, props.date)]);
       res[0].data.data.sort(compare);
 
       setUserMeetings(res[0].data.data);
     };
 
     loadData();
-  }, [props.date]);
+  }, [props.date, userMeetings]);
 
   const delMeeting = async (id) => {
-    await Api.deleteMeeting(id)
-      .then(async () => {
-        const res = await Promise.all([Api.getUserMeetings(props.date)]);
-        res[0].data.data.sort(compare);
-        setUserMeetings(res[0].data.data);
-      });
+    const res = await Promise.all([Api.deleteMeeting(id)]);
+    const res2 = await Promise.all([Api.getUserMeetings(props.date)]);
+    res2[0].data.data.sort(compare);
+    setUserMeetings(res2[0].data.data);
   };
 
   const handleToggle = (value) => () => {
@@ -151,6 +150,7 @@ const MeetingsViewProject = (props) => {
     if (id && id !== 'del_button') {
       const meetingId = id.slice(id.indexOf('list-item ') + 'list-item '.length);
       setClickedMeeting(meetingId);
+      props.setMeeting(meetingId);
       setShowDetail(true);
     }
     console.log(className);
@@ -221,7 +221,7 @@ const MeetingsViewProject = (props) => {
         {(() => {
           if (showDetail) {
             return (
-              <MeetingDetailProject cardPosition={cardPosition} showDet={hideDet} meetingId={clickedMeeting} date={props.date} setMeetings={setUserMeetings} />
+              <MeetingDetailProject cardPosition={cardPosition} showDet={hideDet} meetingId={clickedMeeting} date={props.date} setMeetings={setUserMeetings} showNotes={props.showNotes} />
             );
           }
         })()}

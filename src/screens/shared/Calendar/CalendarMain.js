@@ -59,9 +59,6 @@ function CalendarMain() {
           />
         </MuiPickersUtilsProvider>
       </Grid>
-      <Grid item>
-        <MeetingsView date={formatDate(value)} />
-      </Grid>
     </Grid>
   );
 }
