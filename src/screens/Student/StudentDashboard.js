@@ -194,12 +194,12 @@ const StudentDashboard = () => {
       <EditPostDialog {...editPostDialogOptions} onDialogClosed={onPostEditDialogClosed} handleSubmit={onPostEditSubmit} />
       <Grid
         container
-        spacing={1}
+        spacing={2}
         justify="center"
         direction="row"
       >
         {Header()}
-        <Grid item lg={4}>
+        <Grid item lg={4} md={4}>
           <Grid container direction="column">
             <Grid
               item

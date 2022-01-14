@@ -17,6 +17,7 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import Chip from '@material-ui/core/Chip';
+import { useParams } from 'react-router-dom';
 import Api from '../../../api/index';
 
 const StyledDiv = styled.div`
@@ -169,14 +170,12 @@ const MenuProps = {
   },
 };
 
-const MeetingAdd = (props) => {
+const MeetingsAddProject = (props) => {
+  const { IdProject } = useParams();
   const theme = useTheme();
   const classes = useStyles();
   const [asignees, setAsignees] = useState([]);
   const [asigneeIds, setAsigneeIds] = React.useState([]);
-  const [userProjects, setUserProjects] = useState([]);
-  const [userChosenProject, setUserChosenProject] = useState('');
-  const [chosenProjectId, setchosenProjectId] = useState('');
 
   const compare = (a, b) => {
     const time1 = parseFloat(a.startTime.slice(0, -3).replace(':', '.'));
@@ -187,37 +186,25 @@ const MeetingAdd = (props) => {
   };
 
   const getTaskAsignees = async () => {
-    const res = await Promise.all([Api.getTasksAsignees(userChosenProject.idProject)]);
+    const res = await Promise.all([Api.getTasksAsignees(IdProject)]);
     setAsignees(res[0].data.data);
-  };
-
-  const getUserProjects = async () => {
-    const res = await Promise.all([Api.getUserProject()]);
-    setUserProjects(res[0].data.data);
   };
 
   const handleChange = (event) => {
     setAsigneeIds(event.target.value);
   };
 
-  const handleProjectChange = async (event, child) => {
-    setUserChosenProject(event.target.value);
-    const res = await Promise.all([Api.getTasksAsignees(child.key.match(/\d+/)[0])]);
-
-    setAsignees(res[0].data.data);
-    setchosenProjectId(child.key.match(/\d+/)[0]);
-  };
-
   useEffect(() => {
     const loadData = async () => {
-      // getTaskAsignees();
-      getUserProjects();
+      getTaskAsignees();
     };
 
     loadData();
   }, []);
 
   const onMeetingAddHandler = async (meetingData) => {
+    console.log('from handler');
+
     console.log(meetingData);
     await Api.addMeeting(meetingData)
       .then(async () => {
@@ -257,7 +244,7 @@ const MeetingAdd = (props) => {
     date: props.date,
     location: '',
     description: '',
-    project: 2,
+    project: IdProject,
     start: '',
     end: '',
     attendeeUsers: [],
@@ -271,12 +258,12 @@ const MeetingAdd = (props) => {
       meetingDate: props.date,
       location: values.location,
       description: values.description,
-      project: parseInt(chosenProjectId),
+      project: IdProject,
       startTime: values.start,
       endTime: values.end,
-      attendeeUsers: asigneeIds,
+      AttendeeUsers: asigneeIds,
     };
-    console.log(meetingData);
+    console.log(asigneeIds);
     onMeetingAddHandler(meetingData);
   };
 
@@ -444,27 +431,6 @@ const MeetingAdd = (props) => {
 
                 </Grid>
               </Grid>
-
-              <Grid item>
-                <FormControl className={classes.formControl}>
-                  <InputLabel className={classes.attendees} id="demo-mutiple-chip-label">Project</InputLabel>
-                  <Field
-                    as={Select}
-                    type="text"
-                    name="project"
-                    value={userChosenProject}
-                    onChange={(event, child) => handleProjectChange(event, child)}
-                    label="Project"
-                  >
-                    {userProjects.map((project) => (
-                      <MenuItem key={project.idProject} value={project.name}>
-                        {`${project.name}`}
-                      </MenuItem>
-                    ))}
-                  </Field>
-                </FormControl>
-              </Grid>
-
               <Grid item>
                 <FormControl className={classes.formControl}>
                   <InputLabel className={classes.attendees} id="demo-mutiple-chip-label">Attendees</InputLabel>
@@ -514,4 +480,4 @@ const MeetingAdd = (props) => {
   );
 };
 
-export default MeetingAdd;
+export default MeetingsAddProject;
