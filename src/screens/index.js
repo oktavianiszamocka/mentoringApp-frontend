@@ -6,7 +6,6 @@ import StudentDashboard from './Student/StudentDashboard';
 import MyProfileDashboard from './Profile/MyProfileDashboard';
 import Message from './MessagePage/MessagePage2';
 import EditForm from './Profile/EditFormDashboard';
-// import Admin from './Admin/routes';
 import Login from './Auth/Login';
 import ForgottenPassword from './Auth/ForgottenPassword';
 import UpsertPassword from './Auth/UpsertPassword';
@@ -18,14 +17,9 @@ import ProjectFormBoard from './ProjectForm/ProjectFormDashboard';
 import InvitationPage from './Invitations/InvitationPageFull';
 import Signup from './shared/components/Signup';
 import TaskDashboard from './ProjectForm/TaskPage/TaskDashborad';
-import TaskDetail from './ProjectForm/TaskPage/TaskDetail';
-import TaskAdd from './ProjectForm/TaskPage/TaskAdd';
-import CalendarMain from './shared/Calendar/CalendarMain';
 import Milestone from './Milestone/MilestoneDashboard';
 import ForgotPassword from './Auth/ForgotPassword';
 import ResetPassword from './Auth/ResetPassword';
-import MessageItem from './MessagePage/MessageItem';
-// const renderRoute = (route) => <Route key={route.path} {...route} />;
 import UseToken from './UseToken';
 import EditProjectFormDashboard from './ProjectForm/EditFormDashboard';
 import ChangePassword from './Auth/ChangePassword';
@@ -69,8 +63,6 @@ const App = () => {
         <Route path="/invitations" component={InvitationPage} />
         <Route path="/signup" component={Signup} />
         <Route path="/task/:IdProject" component={TaskDashboard} />
-        <Route path="/task-detail" component={TaskDetail} />
-        <Route path="/task-add" component={TaskAdd} />
         <Route path="/change-password" component={ChangePassword} />
         <Route path="/milestones/:IdProject" component={Milestone} />
         <Route path="/forgot-password" component={ForgotPassword} />
@@ -78,7 +70,6 @@ const App = () => {
         <Route path="/wall/:IdProject" component={StudentDashboard} />
         <Route path="/meeting_notes" component={MeetingList} />
         <Route path="/meeting_details" component={MeetingDetail} />
-        <Route path="/mitem" component={MessageItem} />
         <Route path="/calendar/:IdProject" component={CalendarMainProject} />
       </Switch>
     </BrowserRouter>

@@ -115,11 +115,11 @@ const Header = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('idUser');
+    localStorage.removeItem('userRole');
   };
 
   const handleLogout = async (e) => {
     removeLocalStorage();
-
     window.location.href = '/login';
   };
 
@@ -220,14 +220,27 @@ const Header = () => {
           >
             {user
               && (
-                <Avatar
-                  firstName={user.firstName}
-                  lastName={user.lastName}
-                  imageUrl={user.imageUrl}
-                  imgTheme={imgTheme}
-                  width="50px"
-                />
+                <MenuItem>
+                  <Link
+                    href={`/profile/${user.idUser}`}
+                    color="inherit"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    My Profile
+                  </Link>
+                </MenuItem>
               )}
+
+            <Divider />
+            <MenuItem>
+              <Link
+                href="/change-password"
+                color="inherit"
+                style={{ textDecoration: 'none' }}
+              >
+                Change Password
+              </Link>
+            </MenuItem>
 
             <Divider />
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
