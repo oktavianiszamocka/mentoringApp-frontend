@@ -200,7 +200,17 @@ const StudentDashboard = () => {
       >
         {Header()}
         <Grid item lg={3} md={3}>
-          <Grid container direction="column">
+          <Grid container direction="column" spacing={3}>
+            <Grid
+              item
+              lg={2}
+              md={3}
+              s={12}
+            >
+              {showProjectBar && <ProjectBar />}
+
+              {!showProjectBar && <AllNotes /> }
+            </Grid>
             <Grid
               item
               lg={12}
