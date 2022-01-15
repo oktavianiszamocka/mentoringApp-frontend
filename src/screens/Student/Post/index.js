@@ -211,18 +211,23 @@ const Post = ({
                     </StyledData>
                   </div>
                 </Grid>
-                <Grid item xs={0.5}>
-                  <EditIcon
-                    className={classes.iconStyle}
-                    onClick={() => onEditHandler(postData.idPost, postData.title, postData.content, postData.tags, user)}
-                  />
-                </Grid>
-                <Grid item xs={0.5}>
-                  <DeleteIcon
-                    className={classes.iconStyle}
-                    onClick={() => onDeleteHandler(postData.idPost)}
-                  />
-                </Grid>
+
+                {(user.idUser === currentUser.idUser) && (
+                  <div>
+                    <Grid item xs={0.5}>
+                      <EditIcon
+                        className={classes.iconStyle}
+                        onClick={() => onEditHandler(postData.idPost, postData.title, postData.content, postData.tags, user)}
+                      />
+                    </Grid>
+                    <Grid item xs={0.5}>
+                      <DeleteIcon
+                        className={classes.iconStyle}
+                        onClick={() => onDeleteHandler(postData.idPost)}
+                      />
+                    </Grid>
+                  </div>
+                )}
               </Grid>
             </StyledHeader>
             {postData && (
