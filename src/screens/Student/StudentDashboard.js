@@ -219,16 +219,7 @@ const StudentDashboard = () => {
             >
               <CalendarMain className={classes.calendar} />
             </Grid>
-            <Grid
-              item
-              lg={2}
-              md={3}
-              s={12}
-            >
-              {showProjectBar && <ProjectBar />}
 
-              {!showProjectBar && <AllNotes /> }
-            </Grid>
           </Grid>
         </Grid>
 
