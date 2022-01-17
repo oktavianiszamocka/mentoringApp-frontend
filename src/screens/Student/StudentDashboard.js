@@ -76,6 +76,7 @@ const StudentDashboard = () => {
   const [projects, setProjects] = useState([]);
   const [newPost, setNewPost] = useState(defaultInitialValuePost);
   const [showProjectBar, setShowProjectBar] = useState(!!IdProject);
+  const [showAllComments, setShowAllComments] = useState(false);
 
   const loadData = async () => {
     const postType = project === 'General' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
@@ -183,6 +184,7 @@ const StudentDashboard = () => {
 
   const handlePageChange = (e, value) => {
     setPage(value);
+    setShowAllComments(false);
   };
 
   const handleChange = (event) => {
@@ -261,6 +263,8 @@ const StudentDashboard = () => {
               <Grid item lg={12} m={12} s={12} xs={12}>
                 <Post
                   postData={post}
+                  hideComments={setShowAllComments}
+                  allCommentsVal={showAllComments}
                   user={post.writer}
                   onDeleteHandler={() => onPostDeleteHandler(post.idPost)}
                   onEditHandler={() => onPostEditHandler(post.idPost, post.title, post.content, post.tags, post.writer)}

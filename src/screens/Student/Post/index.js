@@ -115,10 +115,10 @@ const StyledDiv = styled.div`
   `;
 
 const Post = ({
-  user, postData, onDeleteHandler, onEditHandler, currentUser,
+  user, postData, hideComments, onDeleteHandler, onEditHandler, currentUser, allCommentsVal,
 }) => {
   const classes = useStyles();
-  const [showAllComments, setShowAllComments] = useState(false);
+  // const [showAllComments, setShowAllComments] = useState(false);
   const [postComments, setPostComments] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
   const [deleteCommentDialogOptions, setDeleteCommentDialogOptions] = useState({
@@ -179,7 +179,8 @@ const Post = ({
   };
 
   const handleAllComments = () => {
-    setShowAllComments(true);
+    // setShowAllComments(true);
+    hideComments(true);
     loadComments();
   };
 
@@ -248,7 +249,7 @@ const Post = ({
             <StyledC>
               {postData && <TagsComponent tags={postData.tags} />}
               <hr />
-              {!showAllComments && (
+              {!allCommentsVal && (
                 <div className={classes.divAllComment}>
 
                   {postData.hasMoreThanOneComment && (
@@ -270,7 +271,7 @@ const Post = ({
                 </div>
               )}
               <div className={classes.divComment}>
-                {showAllComments && (postComments.map((comment) => (
+                {allCommentsVal && (postComments.map((comment) => (
                   <Comment
                     comment={comment}
                     loggedUser={currentUser}
