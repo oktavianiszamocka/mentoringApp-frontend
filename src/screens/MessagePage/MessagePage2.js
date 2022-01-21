@@ -8,12 +8,9 @@ import Alert from '@material-ui/lab/Alert';
 import SearchIcon from '@material-ui/icons/Search';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import AvatarImage from '../../assets/images/avatar.jpg';
 import UserAvailability from './UserAvailability';
-import SearchBar from '../shared/components/SearchBar';
 import Header from '../shared/components/Header';
 import MessageList from './MessagesList';
-import MessageFull from './MessageFull';
 // import MessageForm from '../shared/components/MessageForm'
 import Api from '../../api/index';
 import SenderMessage from './SenderMessage';
