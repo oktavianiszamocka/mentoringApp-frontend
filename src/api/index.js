@@ -126,7 +126,7 @@ const getProjectStudies = () => axios.get(`${apiUrl}/projects/studies`);
 const getProjectModes = () => axios.get(`${apiUrl}/projects/mode`);
 const getAllMessages = () => axios.get(`${apiUrl}/messages/${getUserId()}`);
 const messageSearch = (string) => axios.get(`${apiUrl}/messages/receiverList?search=${string}`);
-const getDetailMessages = (senderId, recieverId) => axios.get(`${apiUrl}/messages/detail?sender=${senderId}&receiver=${recieverId}`);
+const getDetailMessages = (senderId, recieverId) => axios.get(`${apiUrl}/messages/detail?sender=${senderId}&receiver=${recieverId}&current-user=${getUserId()}`);
 const sendMessage = (messageData) => axios.post(`${apiUrl}/messages`, messageData);
 const postProjectIconUrl = (idProject, urlIcon) => axios.patch(`${apiUrl}/projects/project-icon?project=${idProject}&icon=${urlIcon}`);
 const getProjectUrlTypes = () => axios.get(`${apiUrl}/projects/url-types`);

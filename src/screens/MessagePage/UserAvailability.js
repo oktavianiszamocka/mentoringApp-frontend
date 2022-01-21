@@ -22,7 +22,7 @@ const userAvailability = ({ user, active }) => {
       <Grid container>
         <Grid Item style={{ padding: 10, height: 20 }} xs="auto">
           <Grid container direction="row" spacing={0}>
-            <Avatar firstName={user.firstName} lastName={user.lastName} imageUrl={user.imageUrl} />
+            <Avatar firstName={user.firstName} lastName={user.lastName} imageUrl={user.imageUrl} idUser={user.idUser} />
           </Grid>
         </Grid>
       </Grid>

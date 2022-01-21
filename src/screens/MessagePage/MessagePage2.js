@@ -67,6 +67,7 @@ export default function MessagePage() {
   const [reciever, setReciever] = useState();
   const [sender, setSender] = useState();
   const [errorMsg, setErrorMsg] = useState();
+  const [senderId, setSenderId] = useState();
   const [senderName, setSenderName] = useState();
   const [senderSurname, setSenderSurname] = useState();
   const [senderImg, setSenderImg] = useState();
@@ -79,6 +80,7 @@ export default function MessagePage() {
   const icon = <SearchIcon className={classes.icon} />;
 
   const user = {
+    idUser: senderId,
     firstName: senderName,
     lastName: senderSurname,
     imageUrl: senderImg,
@@ -103,6 +105,7 @@ export default function MessagePage() {
         if (response.data.data.length === 0) {
           setHasMessages(false);
         } else if (response.data.data[0].senderId != Api.getUserId()) {
+          setSenderId(response.data.data[0].senderUser.idUser);
           setSenderName(response.data.data[0].senderUser.firstName);
           setSenderSurname(response.data.data[0].senderUser.lastName);
           setSenderImg(response.data.data[0].senderUser.imageUrl);
@@ -140,6 +143,7 @@ export default function MessagePage() {
 
   const handleChildCallback = (messageData, senderData, recieverUser) => {
     setMessages(messageData);
+    setSenderId(senderData.idUser);
     setSenderName(senderData.firstName);
     setSenderSurname(senderData.lastName);
     setSenderImg(senderData.imageUrl);
@@ -166,6 +170,7 @@ export default function MessagePage() {
           setHasMessages(false);
         } else {
           setHasMessages(true);
+          setSenderId(response.data.data.receiverUser.idUser);
           setSenderName(response.data.data.receiverUser.firstName);
           setSenderSurname(response.data.data.receiverUser.lastName);
           setSenderImg(response.data.data.receiverUser.imageUrl);
