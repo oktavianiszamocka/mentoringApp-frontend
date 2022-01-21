@@ -60,7 +60,6 @@ export default function Login({
         setRefreshToken(response.data.refreshToken);
         setIdUser(response.data.idUser);
         setUserRole(response.data.role);
-        // localStorage.setItem('idUser', response.data.idUser);
         window.location.href = '/';
       })
       .catch((err) => {
