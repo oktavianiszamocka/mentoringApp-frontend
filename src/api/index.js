@@ -46,7 +46,6 @@ axios.interceptors.response.use((response) => response,
           }
         })
         .catch((err) => {
-          console.log(err.response.data);
           localStorage.removeItem('token');
           window.location.href = '/login';
         });
