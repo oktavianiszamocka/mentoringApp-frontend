@@ -11,7 +11,6 @@ import ListItem from '@material-ui/core/ListItem';
 import UserAvailability from './UserAvailability';
 import Header from '../shared/components/Header';
 import MessageList from './MessagesList';
-// import MessageForm from '../shared/components/MessageForm'
 import Api from '../../api/index';
 import SenderMessage from './SenderMessage';
 import RecieverMessage from './RecieverMessage';
@@ -91,7 +90,6 @@ export default function MessagePage() {
         setSender(response.data.data.receiverUser);
         setReciever(response.data.data.senderUser);
       }).catch((err) => {
-        // setErrorMsg(err.response.data);
       });
   };
 
@@ -110,7 +108,6 @@ export default function MessagePage() {
           loadMessData(response.data.data[0].senderUser.idUser);
         }
       }).catch((err) => {
-        // setErrorMsg(err.response.data);
       });
   };
 

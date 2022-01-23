@@ -1,16 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Paper, Grid } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
+import { Grid } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import PropTypes from 'prop-types';
 
-const StyledTitle = styled.p`
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    color: black;
-`;
 const StyledMessage = styled.p`
     font-family: 'Roboto', sans-serif;
     font-size: 13px;
@@ -41,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const RecieverMessage = ({
-  message, recieverUser, img,
+  message, recieverUser,
 }) => {
   const classes = useStyles();
   return (
@@ -60,6 +54,11 @@ const RecieverMessage = ({
       </Grid>
     </Grid>
   );
+};
+
+RecieverMessage.prototypes = {
+  message: PropTypes.object.isRequired,
+  senderUser: PropTypes.object.isRequired,
 };
 
 export default RecieverMessage;
