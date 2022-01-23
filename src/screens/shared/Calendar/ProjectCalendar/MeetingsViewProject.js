@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
-  Grid, Button, Paper, Typography,
+  Grid, Button, Typography,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import EditIcon from '@material-ui/icons/Edit';
 import { useParams } from 'react-router-dom';
-import MeetingDetail from '../MeetingDetail';
-import MeetingAdd from '../MeetingAdd';
 import Api from '../../../../api/index';
 import MeetingsAddProject from './MeetingsAddProject';
 import MeetingDetailProject from './MeetingDetailProject';
@@ -89,7 +86,6 @@ const useStyles = makeStyles({
 const MeetingsViewProject = (props) => {
   const classes = useStyles();
   const { IdProject } = useParams();
-  const [checked, setChecked] = React.useState([1]);
   const [showDetail, setShowDetail] = useState(false);
   const [cardPosition, setcardPosition] = useState([]);
   const [newMeetingVisible, setNewMeetingVisible] = useState(false);
@@ -122,28 +118,6 @@ const MeetingsViewProject = (props) => {
     setUserMeetings(res2[0].data.data);
   };
 
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
-
-  const getPositionXY = (labelId) => {
-    const element = document.getElementById(labelId);
-    console.log(element);
-    const rect = element.getBoundingClientRect();
-    const { x } = rect;
-    const { y } = rect;
-    setcardPosition([x, y]);
-  };
-
   const showDetails = (e) => {
     const className = e.target.getAttribute('class');
     const id = e.target.getAttribute('id');
@@ -153,16 +127,13 @@ const MeetingsViewProject = (props) => {
       props.setMeeting(meetingId);
       setShowDetail(true);
     }
-    console.log(className);
 
     if (className === 'MuiSvgIcon-root makeStyles-deleteIcon-8') {
     } else {
     }
-  // getPositionXY(e.target.id);
   };
 
   const hideDet = () => {
-    console.log('hidding...');
     setShowDetail(false);
   };
 
@@ -174,46 +145,43 @@ const MeetingsViewProject = (props) => {
         </StyledDiv2>
         <List dense className={classes.list}>
           {userMeetings.length > 0 ? (
-            userMeetings.map((item) => {
-              const labelId = `list-item ${item.idMeeting}`;
-              return (
-                <ListItem
-                  key={item.idMeeting}
-                  button
-                  onClick={showDetails}
-                  id={`list-item ${item.idMeeting}`}
-                >
-                  <ListItemText
-                    disableTypography
-                    primary={(
-                      <div>
-                        <Typography
-                          type="body2"
-                          id={`list-item ${item.idMeeting}`}
-                          className={classes.title}
-                        >
-                          {item.title}
-                        </Typography>
-                        <Typography
-                          type="body2"
-                          id={`list-item ${item.idMeeting}`}
-                          className={classes.time}
-                        >
-                          {' '}
-                          {item.startTime.slice(0, -3)}
-                          {' '}
-                          -
-                          {' '}
-                          {item.endTime.slice(0, -3)}
-                        </Typography>
+            userMeetings.map((item) => (
+              <ListItem
+                key={item.idMeeting}
+                button
+                onClick={showDetails}
+                id={`list-item ${item.idMeeting}`}
+              >
+                <ListItemText
+                  disableTypography
+                  primary={(
+                    <div>
+                      <Typography
+                        type="body2"
+                        id={`list-item ${item.idMeeting}`}
+                        className={classes.title}
+                      >
+                        {item.title}
+                      </Typography>
+                      <Typography
+                        type="body2"
+                        id={`list-item ${item.idMeeting}`}
+                        className={classes.time}
+                      >
+                        {' '}
+                        {item.startTime.slice(0, -3)}
+                        {' '}
+                        -
+                        {' '}
+                        {item.endTime.slice(0, -3)}
+                      </Typography>
 
-                      </div>
+                    </div>
                     )}
-                  />
-                  <HighlightOffIcon id="del_button" className={classes.deleteIcon} onClick={() => delMeeting(item.idMeeting)} />
-                </ListItem>
-              );
-            })
+                />
+                <HighlightOffIcon id="del_button" className={classes.deleteIcon} onClick={() => delMeeting(item.idMeeting)} />
+              </ListItem>
+            ))
           ) : (
             <div />
           )}

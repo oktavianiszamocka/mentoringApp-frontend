@@ -193,13 +193,11 @@ const NewFormikEditForm = ({ profileInfo }) => {
   };
 
   const onSubmit = (values) => {
-    console.log(values);
     const profileData = {
       idUser: profileInfo.user,
       idProfile: profileInfo.idProfile,
       ...values,
     };
-    console.log(`prfile data ${profileData}`);
     onProfileUpdateHandler(profileData);
   };
 
@@ -457,7 +455,6 @@ const NewFormikEditForm = ({ profileInfo }) => {
                                       name={`skills[${index}]`}
                                       color="primary"
                                       onDelete={() => {
-                                        console.log(values);
                                         remove(index);
                                       }}
                                       label={skill}

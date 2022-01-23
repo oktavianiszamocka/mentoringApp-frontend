@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {
   Grid, Button,
 } from '@material-ui/core';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@material-ui/core/TextField';
@@ -13,7 +13,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import 'date-fns';
 import {
-  Formik, Form, Field, ErrorMessage, FieldArray,
+  Formik, Form, Field, ErrorMessage,
 } from 'formik';
 import * as Yup from 'yup';
 import Chip from '@material-ui/core/Chip';
@@ -44,14 +44,6 @@ const StyledUnderTitle = styled.p`
    font-size: 12px;
    font-weight: bold;
    color: #4f5052;
-`;
-
-const StyledP = styled.p`
-  font-family: 'Roboto', sans-serif;
-  word-break: break-word;
-  font-size: 12px;
-  color: #4f5052;
-  margin: 0px;
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -172,7 +164,6 @@ const MenuProps = {
 
 const MeetingsAddProject = (props) => {
   const { IdProject } = useParams();
-  const theme = useTheme();
   const classes = useStyles();
   const [asignees, setAsignees] = useState([]);
   const [asigneeIds, setAsigneeIds] = React.useState([]);
@@ -190,11 +181,9 @@ const MeetingsAddProject = (props) => {
     const res2 = await Promise.all([Api.getProjectPromoters(IdProject)]);
     const { mainMentor } = res2[0].data.data;
     const { additionalMentors } = res2[0].data.data;
-    console.log(mainMentor);
     const students = res[0].data.data;
     students.push(mainMentor);
     const allMembers = students.concat(additionalMentors);
-    console.log();
 
     setAsignees(allMembers);
   };
@@ -212,7 +201,6 @@ const MeetingsAddProject = (props) => {
   }, [props.close]);
 
   const onMeetingAddHandler = async (meetingData) => {
-    console.log(meetingData);
     await Api.addMeeting(meetingData)
       .then(async () => {
         props.close(false);
@@ -270,7 +258,6 @@ const MeetingsAddProject = (props) => {
       endTime: values.end,
       AttendeeUsers: asigneeIds,
     };
-    console.log(asigneeIds);
     onMeetingAddHandler(meetingData);
   };
 

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
-  Grid, Button, Typography,
+  Grid, Button,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import moment from 'moment';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@material-ui/core/TextField';
@@ -12,19 +11,13 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
+
 import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
 import {
-  Formik, Form, Field, ErrorMessage, FieldArray,
+  Formik, Form, Field, ErrorMessage,
 } from 'formik';
 import * as Yup from 'yup';
 import Chip from '@material-ui/core/Chip';
-import MaterialAvatar from '@material-ui/core/Avatar';
 import { useParams } from 'react-router-dom';
 import Api from '../../../../api/index';
 
@@ -52,14 +45,6 @@ const StyledUnderTitle = styled.p`
    font-size: 12px;
    font-weight: bold;
    color: #4f5052;
-`;
-
-const StyledP = styled.p`
-  font-family: 'Roboto', sans-serif;
-  word-break: break-word;
-  font-size: 12px;
-  color: #4f5052;
-  margin: 0px;
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -179,7 +164,6 @@ const MenuProps = {
 };
 
 const MeetingEditProject = (props) => {
-  const theme = useTheme();
   const { IdProject } = useParams();
 
   const styles = {
@@ -283,7 +267,7 @@ const MeetingEditProject = (props) => {
     };
 
     loadData();
-  }, []);
+  }, [props.setMeetings]);
 
   const closeAdd = () => {
     props.close(false);
@@ -291,7 +275,6 @@ const MeetingEditProject = (props) => {
   };
 
   const onMeetingEditHandler = async (meetingData) => {
-    console.log(meetingData);
     await Api.updateMeeting(meetingData)
       .then(async () => {
         closeAdd();
@@ -299,6 +282,7 @@ const MeetingEditProject = (props) => {
         res[0].data.data.sort(compare);
         props.setMeetings(res[0].data.data);
       });
+    closeAdd();
   };
 
   const getNameIdPair = () => {
@@ -333,7 +317,7 @@ const MeetingEditProject = (props) => {
       meetingDate: props.date,
       location: values.location,
       description: values.description,
-      project: 2,
+      project: parseInt(IdProject),
       startTime: values.start,
       endTime: values.end,
       IsRemoveAttendee: peopleRemove,

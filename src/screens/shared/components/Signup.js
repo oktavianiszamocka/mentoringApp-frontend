@@ -191,7 +191,6 @@ const Signup = (props) => {
     const loginData = {
       ...values,
     };
-    console.log(loginData);
     const response = await Api.register(loginData)
       .then((data) => {
         setOpen(true);

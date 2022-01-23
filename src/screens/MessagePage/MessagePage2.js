@@ -216,7 +216,7 @@ export default function MessagePage() {
                       ? (
                         <List component="nav" aria-label="secondary mailbox folders">
                           {searchResults.map((item) => (
-                            <ListItem button onClick={() => { getDetailSearch(item); console.log(searchUserClicked); }}>
+                            <ListItem button onClick={() => { getDetailSearch(item); }}>
                               <MessageItem user={item} />
                             </ListItem>
                           ))}

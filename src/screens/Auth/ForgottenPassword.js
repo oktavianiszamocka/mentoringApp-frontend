@@ -72,22 +72,7 @@ export default function ForgottenPassword({ setToken, setRefreshToken }) {
   const emailRegExp = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   const submitLogin = async (values) => {
-    // setErrorLogin('');
-    // const responseToken = await Api.login(values)
-    //   .then((response) => {
-    //     setToken(response.data.token);
-    //     setRefreshToken(response.data.refreshToken);
-    //     localStorage.setItem('idUser', response.data.idUser);
-    //   })
-    //   .catch((err) => {
-    //     setErrorLogin(err.response.data);
-    //   });
 
-    /// setToken(responseToken.token);
-    //  setRefreshToken(responseToken.refreshToken);
-    //  console.log(responseToken.token);
-
-    // console.log(responseToken.refreshToken);
   };
 
   const validationSchema = Yup.object({

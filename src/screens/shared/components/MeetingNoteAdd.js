@@ -4,32 +4,20 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import styled from 'styled-components';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {
-  Formik, Form, Field, ErrorMessage, FieldArray,
+  Formik, Form, Field, ErrorMessage,
 } from 'formik';
 import {
   Grid, Button,
 } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
+
 import 'date-fns';
 import * as Yup from 'yup';
-import Chip from '@material-ui/core/Chip';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
-import { blue } from '@material-ui/core/colors';
 import Api from '../../../api/index';
-
-const StyledDiv = styled.div`
-  background-color: #F5F5F5;
-  position: absolute;
-  padding: 10px;
-`;
 
 const StyledUnderTitle = styled.p`
    font-family: 'Roboto', sans-serif;
@@ -123,10 +111,8 @@ function MeetingNoteAdd(props) {
   };
 
   const onNoteAddHandler = async (noteData) => {
-    console.log(noteData);
     await Api.addMeetingNote(noteData)
       .then(async () => {
-        console.log('sucess');
         handleClose();
       });
   };

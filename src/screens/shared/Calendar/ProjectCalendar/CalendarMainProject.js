@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Grid, Button, Typography,
+  Grid, Typography,
 } from '@material-ui/core';
-import Calendar from 'react-calendar';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { useParams } from 'react-router-dom';
-import AllNotes from 'screens/shared/components/AllNotes';
 import MeetingList from 'screens/shared/components/MeetingList';
-import CalendarForm from '../CalendarForm';
 import MeetingsViewProject from './MeetingsViewProject';
 import Header from '../../components/Header';
 import ProjectBar from '../../components/ProjectBar';
@@ -35,11 +31,6 @@ const useStyles = makeStyles((theme) => ({
 function CalendarMainProject() {
   const { IdProject } = useParams();
   const [value, onChange] = useState(new Date());
-  const [showForm, setShowForm] = useState(false);
-
-  const [spacing, setSpacing] = React.useState(2);
-  const classes = useStyles();
-
   const [showNotes, setShowNotes] = useState(false);
   const [clickedMeetingId, setClickedMeetingId] = useState(0);
 
@@ -50,7 +41,6 @@ function CalendarMainProject() {
 
     if (month.length < 2) { month = `0${month}`; }
     if (day.length < 2) { day = `0${day}`; }
-    console.log(IdProject);
 
     return [year, month, day].join('-');
   };

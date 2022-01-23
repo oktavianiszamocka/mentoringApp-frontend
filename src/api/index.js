@@ -46,7 +46,6 @@ axios.interceptors.response.use((response) => response,
           }
         })
         .catch((err) => {
-          console.log(err.response.data);
           window.location.href = '/login';
         });
     }
