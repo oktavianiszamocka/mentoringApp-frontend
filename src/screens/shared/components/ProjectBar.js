@@ -106,7 +106,7 @@ const ProjectBar = () => {
           <Button size="small" className={classes.buttonStyle} href={`/project-promoters/${IdProject}`}>
             <div className={classes.divItem}>
               <PersonOutlineOutlinedIcon className={classes.IconStyle} />
-              <StyledP>Supervisors</StyledP>
+              <StyledP>Promoters</StyledP>
             </div>
           </Button>
         </Grid>

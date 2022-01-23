@@ -7,8 +7,6 @@ import MyProfileDashboard from './Profile/MyProfileDashboard';
 import Message from './MessagePage/MessagePage2';
 import EditForm from './Profile/EditFormDashboard';
 import Login from './Auth/Login';
-import ForgottenPassword from './Auth/ForgottenPassword';
-import UpsertPassword from './Auth/UpsertPassword';
 import MyProject from './MyProject/myProject';
 import ProjectDetailsDashboard from './MyProject/ProjectDetailsDashboard';
 import ProjectMembersBoard from './ProjectMembers/projectMembers';

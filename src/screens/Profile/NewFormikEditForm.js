@@ -193,13 +193,12 @@ const NewFormikEditForm = ({ profileInfo }) => {
   };
 
   const onSubmit = (values) => {
-    console.log(values);
     const profileData = {
       idUser: profileInfo.user,
       idProfile: profileInfo.idProfile,
       ...values,
     };
-    console.log(`prfile data ${profileData}`);
+
     onProfileUpdateHandler(profileData);
   };
 
