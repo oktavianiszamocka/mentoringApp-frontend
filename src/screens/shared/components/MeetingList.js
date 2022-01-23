@@ -16,6 +16,7 @@ import Dialog from '@material-ui/core/Dialog';
 import { TableRowColumn } from 'material-ui';
 import ClearIcon from '@material-ui/icons/Clear';
 import Alert from '@material-ui/lab/Alert';
+import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
 import Api from '../../../api/index';
 import MeetingNoteAdd from './MeetingNoteAdd';
 import MeetingDetail from './MeetingDetail';
@@ -48,10 +49,15 @@ const useStyles = makeStyles({
 const MeetingList = (props) => {
   const classes = useStyles();
   const [notes, setNotes] = useState([]);
-  const [author, setAuthor] = useState('');
   const [open, setOpen] = React.useState(false);
   const [noteDetailOpen, setNoteDetailOpen] = React.useState(false);
   const [noteDetails, setNoteDetails] = React.useState();
+  const [deleteMeetingNoteDialogOptions, setDeleteMeetingNoteDialogOptions] = useState({
+    title: 'Delete Meeting Note',
+    mainText: 'Are you sure you want to delete this Meeting Note?',
+    id: null,
+    open: false,
+  });
 
   const { meetingid } = props;
   const handleClickOpen = () => {
@@ -68,25 +74,31 @@ const MeetingList = (props) => {
     setNotes(res[0].data.data);
   };
 
-  const loadAuthorData = async (id) => {
-    const res2 = await Promise.all([Api.getUserProfile(id)]);
-    const name = (res2[0].data.data.firstName);
-    const surname = (res2[0].data.data.lastName);
-    setAuthor(`${name} ${surname}`);
+  const onMeetingNoteDeleteDialogClosed = async (confirmed, id) => {
+    if (confirmed) {
+      await Api.deleteMeetingNote(id);
+    }
+
+    setDeleteMeetingNoteDialogOptions({
+      ...deleteMeetingNoteDialogOptions,
+      open: false,
+    });
   };
 
-  const deleteNote = async (e, id) => {
-    e.preventDefault();
-    const res = await Promise.all([Api.deleteMeetingNote(id)]);
+  const onMeetingNoteDeleteHandler = (id) => {
+    setDeleteMeetingNoteDialogOptions({
+      ...deleteMeetingNoteDialogOptions,
+      open: true,
+      id,
+    });
   };
-
   useEffect(() => {
     loadMeetingData();
-    loadAuthorData();
   });
 
   return (
     <StyledDiv>
+      <ConfirmDialog {...deleteMeetingNoteDialogOptions} onDialogClosed={onMeetingNoteDeleteDialogClosed} />
       <Grid container direction="row">
         <Grid item lg={9}>
           <Typography variant="h6" className={classes.title}>
@@ -126,7 +138,7 @@ const MeetingList = (props) => {
                     </TableCell>
                     <TableCell align="left">{row.subject}</TableCell>
                     <TableCell padding="checkbox">
-                      <ClearIcon className={classes.delete} onClick={(e) => deleteNote(e, row.idNote)} />
+                      <ClearIcon className={classes.delete} onClick={() => onMeetingNoteDeleteHandler(row.idNote)} />
                     </TableCell>
                   </TableRow>
                 ))}
