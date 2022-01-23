@@ -15,6 +15,7 @@ import MeetingAdd from '../MeetingAdd';
 import Api from '../../../../api/index';
 import MeetingsAddProject from './MeetingsAddProject';
 import MeetingDetailProject from './MeetingDetailProject';
+import ConfirmDialog from '../../components/ConfirmDialog';
 
 const StyledDiv = styled.div`
   background-color: white;
@@ -88,6 +89,13 @@ const useStyles = makeStyles({
 
 const MeetingsViewProject = (props) => {
   const classes = useStyles();
+  const [deleteMeetingDialogOptions, setDeleteMeetingDialogOptions] = useState({
+    title: 'Delete Meeting',
+    mainText: 'Are you sure you want to delete this meeting?',
+    id: null,
+    open: false,
+  });
+
   const { IdProject } = useParams();
   const [checked, setChecked] = React.useState([1]);
   const [showDetail, setShowDetail] = useState(false);
@@ -95,6 +103,7 @@ const MeetingsViewProject = (props) => {
   const [newMeetingVisible, setNewMeetingVisible] = useState(false);
   const [userMeetings, setUserMeetings] = useState([]);
   const [clickedMeeting, setClickedMeeting] = useState(0);
+  const [errorMsg, setErrorMessage] = useState(0);
 
   const compare = (a, b) => {
     const time1 = parseFloat(a.startTime.slice(0, -3).replace(':', '.'));
@@ -117,7 +126,7 @@ const MeetingsViewProject = (props) => {
 
   const delMeeting = async (id) => {
     const res = await Promise.all([Api.deleteMeeting(id)]);
-    const res2 = await Promise.all([Api.getUserMeetings(props.date)]);
+    const res2 = await Promise.all([Api.getProjectMeetings(IdProject, props.date)]);
     res2[0].data.data.sort(compare);
     setUserMeetings(res2[0].data.data);
   };
@@ -153,7 +162,6 @@ const MeetingsViewProject = (props) => {
       props.setMeeting(meetingId);
       setShowDetail(true);
     }
-    console.log(className);
 
     if (className === 'MuiSvgIcon-root makeStyles-deleteIcon-8') {
     } else {
@@ -161,14 +169,39 @@ const MeetingsViewProject = (props) => {
   // getPositionXY(e.target.id);
   };
 
+  const onMeetingDeleteHandler = (id) => {
+    setDeleteMeetingDialogOptions({
+      ...deleteMeetingDialogOptions,
+      open: true,
+      id,
+    });
+  };
+  const onPostDeleteDialogClosed = async (confirmed, idMeeting) => {
+    if (confirmed) {
+      await Api.deleteMeeting(idMeeting);
+      await Api.getProjectMeetings(IdProject, props.date)
+        .then((res) => {
+          res.data.data.sort(compare);
+          setUserMeetings(res.data.data);
+        }).catch((err) => {
+          setErrorMessage(err.response.data);
+        });
+    }
+
+    setDeleteMeetingDialogOptions({
+      ...deleteMeetingDialogOptions,
+      open: false,
+    });
+  };
+
   const hideDet = () => {
-    console.log('hidding...');
     setShowDetail(false);
   };
 
   return (
     <StyledDiv>
       <Grid container direction="column" className={classes.grid}>
+        <ConfirmDialog {...deleteMeetingDialogOptions} onDialogClosed={onPostDeleteDialogClosed} />
         <StyledDiv2>
           <StyledP>Meetings</StyledP>
         </StyledDiv2>
@@ -210,7 +243,7 @@ const MeetingsViewProject = (props) => {
                       </div>
                     )}
                   />
-                  <HighlightOffIcon id="del_button" className={classes.deleteIcon} onClick={() => delMeeting(item.idMeeting)} />
+                  <HighlightOffIcon id="del_button" className={classes.deleteIcon} onClick={() => onMeetingDeleteHandler(item.idMeeting)} />
                 </ListItem>
               );
             })

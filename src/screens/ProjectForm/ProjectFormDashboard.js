@@ -190,6 +190,7 @@ const ProjectFormBoard = () => {
 
   const handleProjectInfoSubmit = async (e) => {
     setProjectInfoError('');
+    console.log(e);
 
     const postProject = await Api.postNewProject(e)
       .then((response) => {

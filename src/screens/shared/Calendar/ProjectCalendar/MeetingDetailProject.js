@@ -172,7 +172,6 @@ const MeetingDetailProject = (props) => {
     console.log('accept');
     const attendanceAccept = {
       idAttendence: attendanceId,
-      user: 9,
       isAttend: true,
     };
     await Promise.all([Api.updateMeetingAttendance(attendanceAccept)]).then(async () => {
@@ -191,7 +190,6 @@ const MeetingDetailProject = (props) => {
   const declineMeeting = async () => {
     const attendanceDecline = {
       idAttendence: attendanceId,
-      user: 9,
       isAttend: false,
     };
     await Promise.all([Api.updateMeetingAttendance(attendanceDecline)]).then(async () => {
@@ -203,7 +201,6 @@ const MeetingDetailProject = (props) => {
       setLocation(res[0].data.data.location);
       setAssignedUsers(res[0].data.data.meetingAttendee);
       const meetingAttendeeIds = [];
-      console.log(meetingAttendeeIds);
       setAttendanceId(res[0].data.data.meetingAttendee.find((x) => x.idUser == Api.getUserId()).idAttendence);
       setloggedUserAttend(false);
     });
@@ -225,11 +222,11 @@ const MeetingDetailProject = (props) => {
       </Grid>
       <StyledUnderTitle>TIME</StyledUnderTitle>
       <StyledTime>
-        {start}
+        {start.slice(0, -3)}
         {' '}
         -
         {' '}
-        {end}
+        {end.slice(0, -3)}
       </StyledTime>
       <Divider />
 

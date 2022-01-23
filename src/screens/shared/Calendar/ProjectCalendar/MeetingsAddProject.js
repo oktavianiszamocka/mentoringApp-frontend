@@ -18,6 +18,11 @@ import {
 import * as Yup from 'yup';
 import Chip from '@material-ui/core/Chip';
 import { useParams } from 'react-router-dom';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import { KeyboardTimePicker, KeyboardDatePicker } from 'material-ui-formik-components';
+import moment from 'moment';
+import MuiAlert from '@material-ui/lab/Alert';
 import Api from '../../../../api/index';
 
 const StyledDiv = styled.div`
@@ -53,6 +58,9 @@ const StyledP = styled.p`
   color: #4f5052;
   margin: 0px;
 `;
+function Alert(props) {
+  return <MuiAlert style={{ marginTop: '5px' }} elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
   avatar1: {
@@ -101,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
   times: {
     marginBottom: '5px',
     marginTop: '-2px',
-    width: '90px',
+    width: '110px',
   },
   times_grid: {
     marginRight: '25px',
@@ -176,6 +184,8 @@ const MeetingsAddProject = (props) => {
   const classes = useStyles();
   const [asignees, setAsignees] = useState([]);
   const [asigneeIds, setAsigneeIds] = React.useState([]);
+  const [error, setError] = useState();
+  const [success, setSuccess] = useState(false);
 
   const compare = (a, b) => {
     const time1 = parseFloat(a.startTime.slice(0, -3).replace(':', '.'));
@@ -190,11 +200,10 @@ const MeetingsAddProject = (props) => {
     const res2 = await Promise.all([Api.getProjectPromoters(IdProject)]);
     const { mainMentor } = res2[0].data.data;
     const { additionalMentors } = res2[0].data.data;
-    console.log(mainMentor);
+
     const students = res[0].data.data;
     students.push(mainMentor);
     const allMembers = students.concat(additionalMentors);
-    console.log();
 
     setAsignees(allMembers);
   };
@@ -211,14 +220,26 @@ const MeetingsAddProject = (props) => {
     loadData();
   }, [props.close]);
 
+  const loadSubmittedMeeting = async (meetingDateSubmitDate) => {
+    const res = await Api.getProjectMeetings(IdProject, meetingDateSubmitDate);
+    res.data.data.sort(compare);
+    props.setMeetings(res.data.data);
+  };
+
   const onMeetingAddHandler = async (meetingData) => {
-    console.log(meetingData);
+    setError(false);
     await Api.addMeeting(meetingData)
       .then(async () => {
-        props.close(false);
-        const res = await Promise.all([Api.getUserMeetings(props.date)]);
-        res[0].data.data.sort(compare);
-        props.setMeetings(res[0].data.data);
+        setSuccess(true);
+
+        setTimeout(() => {
+          setSuccess(false);
+          props.close(false);
+          const meetingDateToCheck = moment(meetingData.meetingDate).format('YYYY-MM-DD');
+          loadSubmittedMeeting(meetingDateToCheck);
+        }, 2000);
+      }).catch((err) => {
+        setError(true);
       });
   };
 
@@ -260,26 +281,27 @@ const MeetingsAddProject = (props) => {
   const onSubmit = (values) => {
     const attendees = [];
     attendees.push(values.attendees);
+    const startTimeParse = moment(values.start).format('HH:mm');
+    const endTimeParse = moment(values.end).format('HH:mm');
     const meetingData = {
       title: values.title,
-      meetingDate: props.date,
+      meetingDate: values.date,
       location: values.location,
       description: values.description,
       project: parseInt(IdProject),
-      startTime: values.start,
-      endTime: values.end,
+      startTime: startTimeParse,
+      endTime: endTimeParse,
       AttendeeUsers: asigneeIds,
     };
-    console.log(asigneeIds);
+
     onMeetingAddHandler(meetingData);
   };
 
   const validate = Yup.object({
     title: Yup.string().max(20, 'Must be 20 characters or less').required('Required'),
-    location: Yup.string().required('Required'),
     description: Yup.string().min(10, 'Must be at least 10 characters'),
-    start: Yup.string().matches(/^(?:\d|[01]\d|2[0-3]):[0-5]\d$/, 'Hour not valid').required('Required'),
-    end: Yup.string().matches(/^(?:\d|[01]\d|2[0-3]):[0-5]\d$/, 'Hour not valid').required('Required'),
+    date: Yup.date(),
+
   });
 
   return (
@@ -294,9 +316,13 @@ const MeetingsAddProject = (props) => {
         } = formik;
         return (
           <StyledDiv style={styles}>
+            {error && <Alert severity="error">Error in server</Alert>}
+            {success && <Alert severity="success">Your meeting has been submittted!</Alert>}
+
             <Form>
               <Grid container direction="row" className={classes.grid}>
                 <Grid item>
+
                   <StyledTitle>Add Meeting</StyledTitle>
                 </Grid>
                 <CloseIcon className={classes.close} onClick={closeAdd} />
@@ -322,6 +348,25 @@ const MeetingsAddProject = (props) => {
                     />
                   </div>
                 </Grid>
+                <Grid item>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Field
+                      className={classes.fieldStyle}
+                      component={KeyboardDatePicker}
+                      name="date"
+                      label="Meeting Date"
+                      format="dd/MM/yyyy"
+                      clearable
+                      autoOk
+                      fullWidth
+                      inputVariant="outlined"
+                      error={!!(errors.date && touched.date)}
+                      helperText={errors.date && touched.date ? errors.date : null}
+                    />
+
+                  </MuiPickersUtilsProvider>
+
+                </Grid>
               </Grid>
               <Grid
                 container
@@ -337,23 +382,27 @@ const MeetingsAddProject = (props) => {
                       <StyledUnderTitle>START TIME</StyledUnderTitle>
                     </Grid>
                     <Grid item>
-                      <Field
-                        as={TextField}
-                        id="start"
-                        name="start"
-                        className={classes.times}
-                        InputProps={{
-                          classes: {
-                            input: classes.resize_time,
-                          },
-                        }}
-                        variant="outlined"
-                      />
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Field
+                          component={KeyboardTimePicker}
+                          id="start"
+                          name="start"
+                          ampm={false}
+                          className={classes.times}
+                          InputProps={{
+                            classes: {
+                              input: classes.resize_time,
+                            },
+                          }}
+                          variant="outlined"
+                        />
+                      </MuiPickersUtilsProvider>
                       <ErrorMessage
                         name="start"
                         component="div"
                         className={classes.error2}
                       />
+
                     </Grid>
                   </Grid>
                 </Grid>
@@ -363,18 +412,21 @@ const MeetingsAddProject = (props) => {
                       <StyledUnderTitle>END TIME</StyledUnderTitle>
                     </Grid>
                     <Grid item>
-                      <Field
-                        as={TextField}
-                        id="end"
-                        name="end"
-                        className={classes.times}
-                        InputProps={{
-                          classes: {
-                            input: classes.resize_time,
-                          },
-                        }}
-                        variant="outlined"
-                      />
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Field
+                          component={KeyboardTimePicker}
+                          ampm={false}
+                          id="end"
+                          name="end"
+                          className={classes.times}
+                          InputProps={{
+                            classes: {
+                              input: classes.resize_time,
+                            },
+                          }}
+                          variant="outlined"
+                        />
+                      </MuiPickersUtilsProvider>
                       <ErrorMessage
                         name="end"
                         component="div"
