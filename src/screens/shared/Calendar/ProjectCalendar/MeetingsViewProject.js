@@ -120,13 +120,6 @@ const MeetingsViewProject = (props) => {
     loadData();
   }, [props.date, userMeetings]);
 
-  const delMeeting = async (id) => {
-    const res = await Promise.all([Api.deleteMeeting(id)]);
-    const res2 = await Promise.all([Api.getProjectMeetings(IdProject, props.date)]);
-    res2[0].data.data.sort(compare);
-    setUserMeetings(res2[0].data.data);
-  };
-
   const showDetails = (e) => {
     const className = e.target.getAttribute('class');
     const id = e.target.getAttribute('id');
@@ -213,11 +206,10 @@ const MeetingsViewProject = (props) => {
 
                     </div>
                     )}
-                  />
-                  <HighlightOffIcon id="del_button" className={classes.deleteIcon} onClick={() => onMeetingDeleteHandler(item.idMeeting)} />
-                </ListItem>
-              );
-            })
+                />
+                <HighlightOffIcon id="del_button" className={classes.deleteIcon} onClick={() => onMeetingDeleteHandler(item.idMeeting)} />
+              </ListItem>
+            ))
           ) : (
             <div />
           )}
