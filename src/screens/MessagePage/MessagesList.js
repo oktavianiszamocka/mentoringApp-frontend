@@ -1,38 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Paper, Grid } from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
+import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
 import MessageItem from './MessageItem';
 import Api from '../../api/index';
-
-const StyledTitle = styled.p`
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    color: black;
-`;
-const StyledMessage = styled.p`
-    font-family: 'Roboto', sans-serif;
-    font-size: 11px;
-    color: #4f5052;
-`;
-
-const StyledNumber = styled.p`
-    font-family: 'Roboto', sans-serif;
-    font-size: 11px;
-    background-color: #01a389;
-    color: white;
-    text-align: center;
-    border-radius: 4px;
-`;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,7 +32,6 @@ const MessageList = ({
       .then((response) => {
         parentCallback(response.data.data.messages.sort((a, b) => ((a.createdOn > b.createdOn) ? 1 : -1)), recieverUser, response.data.data.senderUser);
       }).catch((err) => {
-        //   // setErrorMsg(err.response.data);
       });
 
     e.preventDefault();
@@ -75,7 +45,6 @@ const MessageList = ({
             <ListItem
               button
               onClick={(e) => {
-                console.log(item);
                 onTrigger(e, item.recieverUser, item.senderUser);
               }}
             >

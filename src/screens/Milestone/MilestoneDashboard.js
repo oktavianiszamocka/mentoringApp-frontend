@@ -70,9 +70,7 @@ const MilestoneDashboard = () => {
   const [errorMsg, setErrorMsg] = useState('');
 
   const loadData = async () => {
-    console.log(IdProject);
     const res = await Promise.all([Api.getProjectMilestones(IdProject)]);
-    console.log(res[0].data.data);
     setMilestones(res[0].data.data);
   };
 

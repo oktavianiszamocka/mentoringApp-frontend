@@ -13,16 +13,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Link from '@material-ui/core/Link';
 import Divider from '@material-ui/core/Divider';
-import UseToken from 'screens/UseToken';
 import Font from '../../../globals/font';
 import Avatar from './Avatar';
 import Api from '../../../api/index';
 import InvitationPopOver from '../../Invitations/InvitationsPopOver';
-
-const imgTheme = {
-  width: '60px',
-  borderRadius: '50%',
-};
 
 const StyledImg = styled.img`
   width: 6rem;
@@ -69,7 +63,6 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-// TODO update the URLS
 const menuOptions = [
   {
     title: 'Main page',

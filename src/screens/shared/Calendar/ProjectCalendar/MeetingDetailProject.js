@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
-  Grid, Button, Paper, Typography,
+  Grid, Button,
 } from '@material-ui/core';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
@@ -13,14 +12,13 @@ import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Api from '../../../../api/index';
-import MeetingEdit from '../MeetingEdit';
 import MeetingEditProject from './MeetingEditProject';
 
 const StyledDiv = styled.div`
   background-color: white;
   position: absolute;
   max-width: 250px;
-  max-height: 450px;
+  max-height: 650px;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #9e9e99;
@@ -121,9 +119,6 @@ const useStyles = makeStyles((theme) => ({
 
 const MeetingDetailProject = (props) => {
   const classes = useStyles();
-  const positionX = `${props.cardPosition[0]}`;
-  const positionY = `${props.cardPosition[1]}`;
-
   const [editMeetingVisible, setEditMeetingVisible] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -132,11 +127,7 @@ const MeetingDetailProject = (props) => {
   const [location, setLocation] = useState('');
   const [assignedUsers, setAssignedUsers] = useState([]);
   const [attendanceId, setAttendanceId] = useState([]);
-  const [assignedUsersForEdit, setAssignedUsersForEdit] = useState([]);
   const [loggedUserAttend, setloggedUserAttend] = useState(false);
-  const [userProjects, setUserProjects] = useState([]);
-
-  // let loggedUserAttend = false;
 
   const styles = {
     top: '150px',
@@ -148,7 +139,6 @@ const MeetingDetailProject = (props) => {
   useEffect(() => {
     const loadData = async () => {
       const res = await Promise.all([Api.getMeetingDetail(props.meetingId)]);
-      console.log(res);
       setTitle(res[0].data.data.title);
       setDescription(res[0].data.data.description);
       setStart(res[0].data.data.startTime);
@@ -169,11 +159,12 @@ const MeetingDetailProject = (props) => {
   };
 
   const acceptMeeting = async () => {
-    console.log('accept');
     const attendanceAccept = {
       idAttendence: attendanceId,
+      user: Api.getUserId(),
       isAttend: true,
     };
+
     await Promise.all([Api.updateMeetingAttendance(attendanceAccept)]).then(async () => {
       const res = await Promise.all([Api.getMeetingDetail(props.meetingId)]);
       setTitle(res[0].data.data.title);
@@ -190,8 +181,10 @@ const MeetingDetailProject = (props) => {
   const declineMeeting = async () => {
     const attendanceDecline = {
       idAttendence: attendanceId,
+      user: Api.getUserId(),
       isAttend: false,
     };
+
     await Promise.all([Api.updateMeetingAttendance(attendanceDecline)]).then(async () => {
       const res = await Promise.all([Api.getMeetingDetail(props.meetingId)]);
       setTitle(res[0].data.data.title);
@@ -205,8 +198,6 @@ const MeetingDetailProject = (props) => {
       setloggedUserAttend(false);
     });
   };
-
-  // setLogged();
 
   return (
     <StyledDiv style={styles}>

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
-  Grid, Button, Typography,
+  Grid, Button,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import moment from 'moment';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@material-ui/core/TextField';
@@ -15,8 +14,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import DateFnsUtils from '@date-io/date-fns';
 import { KeyboardTimePicker, KeyboardDatePicker } from 'material-ui-formik-components';
 import MuiAlert from '@material-ui/lab/Alert';
+import 'date-fns';
 import {
-  Formik, Form, Field, ErrorMessage, FieldArray,
+  Formik, Form, Field, ErrorMessage,
 } from 'formik';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import * as Yup from 'yup';
@@ -48,14 +48,6 @@ const StyledUnderTitle = styled.p`
    font-size: 12px;
    font-weight: bold;
    color: #4f5052;
-`;
-
-const StyledP = styled.p`
-  font-family: 'Roboto', sans-serif;
-  word-break: break-word;
-  font-size: 12px;
-  color: #4f5052;
-  margin: 0px;
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -179,7 +171,6 @@ function Alert(props) {
 }
 
 const MeetingEditProject = (props) => {
-  const theme = useTheme();
   const { IdProject } = useParams();
 
   const styles = {
@@ -291,7 +282,7 @@ const MeetingEditProject = (props) => {
     };
 
     loadData();
-  }, []);
+  }, [props.setMeetings]);
 
   const closeAdd = () => {
     props.close(false);
@@ -300,7 +291,6 @@ const MeetingEditProject = (props) => {
 
   const onMeetingEditHandler = async (meetingData) => {
     setError(false);
-
     await Api.updateMeeting(meetingData)
       .then(async () => {
         setSuccess(true);
@@ -313,6 +303,7 @@ const MeetingEditProject = (props) => {
       }).catch((err) => {
         setError(true);
       });
+    closeAdd();
   };
 
   const getNameIdPair = () => {

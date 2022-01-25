@@ -447,7 +447,6 @@ const EditProjectFormDashboard = () => {
           initialProjectSupervisors.superviser5Email = '';
           break;
         default:
-          console.log('unexpected case');
       }
 
       setDeleteProjectSupervisorDialogOptions({
@@ -510,7 +509,6 @@ const EditProjectFormDashboard = () => {
   };
 
   const postProjectUrl = async (e) => {
-    console.log(e);
     convertToProjectUrlArr(e);
     setUrlErrorMessage('');
     await Api.postProjectUrls(projectLinks)

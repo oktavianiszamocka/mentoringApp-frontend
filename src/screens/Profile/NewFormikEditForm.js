@@ -198,7 +198,6 @@ const NewFormikEditForm = ({ profileInfo }) => {
       idProfile: profileInfo.idProfile,
       ...values,
     };
-
     onProfileUpdateHandler(profileData);
   };
 
@@ -456,7 +455,6 @@ const NewFormikEditForm = ({ profileInfo }) => {
                                       name={`skills[${index}]`}
                                       color="primary"
                                       onDelete={() => {
-                                        console.log(values);
                                         remove(index);
                                       }}
                                       label={skill}

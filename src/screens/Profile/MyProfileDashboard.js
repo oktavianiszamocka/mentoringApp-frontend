@@ -35,7 +35,6 @@ const MyProfileDashboard = () => {
   const loadData = async () => {
     const res = await Promise.all([Api.getUserProfile(IdUser)]);
     setProfile(res[0].data.data);
-    console.log(res[0].data.data);
     isShowEditButton();
   };
 

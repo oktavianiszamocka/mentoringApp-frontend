@@ -50,12 +50,6 @@ const useStyles = makeStyles({
 
 const MeetingDetails = (props) => {
   const classes = useStyles();
-  const history = useHistory();
-
-  const routeChange = () => {
-    const path = '/meeting_notes';
-    history.push(path);
-  };
 
   return (
     <StyledDiv>

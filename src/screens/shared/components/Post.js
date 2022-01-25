@@ -75,7 +75,6 @@ const Post = ({ user }) => {
     setPostData(res.data);
   }, []);
 
-  console.log('postData', postData);
   return (
     <>
       <StyledSection>

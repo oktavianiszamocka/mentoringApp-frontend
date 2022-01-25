@@ -49,7 +49,6 @@ const ProjectDetailsDashboard = () => {
 
   const deleteProject = async (confirmed, idProject) => {
     if (confirmed) {
-      console.log('delete project');
       setErrorMsg(null);
       await Api.deleteProject(idProject)
         .then(() => {

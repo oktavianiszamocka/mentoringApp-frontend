@@ -124,7 +124,6 @@ const MeetingList = (props) => {
               <TableBody>
                 {notes.map((row) => (
                   <TableRow
-                 //   to={{ pathname: '/meeting_details', detailProps: { allData: row } }}
                     key={row.id}
                     onClick={() => { setNoteDetailOpen(true); setNoteDetails(row); }}
                     style={{ textDecoration: 'none', color: 'black' }}

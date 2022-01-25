@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Grid } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
-import Api from '../../api/index';
 
 const StyledTitle = styled.p`
     font-family: 'Roboto', sans-serif;
@@ -16,15 +14,6 @@ const StyledMessage = styled.p`
     font-family: 'Roboto', sans-serif;
     font-size: 11px;
     color: #4f5052;
-`;
-
-const StyledNumber = styled.p`
-    font-family: 'Roboto', sans-serif;
-    font-size: 11px;
-    background-color: #01a389;
-    color: white;
-    text-align: center;
-    border-radius: 4px;
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -94,7 +83,6 @@ const MessageItem = ({
         </Grid>
         <Grid item className={classes.messageTime}>
           {lastmessage ? <StyledMessage>{lastmessage.split('T').pop().substr(0, 5)}</StyledMessage> : <div />}
-
         </Grid>
       </Grid>
     </Paper>

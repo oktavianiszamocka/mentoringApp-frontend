@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {
   Grid, Button,
 } from '@material-ui/core';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import CloseIcon from '@material-ui/icons/Close';
 import TextField from '@material-ui/core/TextField';
@@ -13,7 +13,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import 'date-fns';
 import {
-  Formik, Form, Field, ErrorMessage, FieldArray,
+  Formik, Form, Field, ErrorMessage,
 } from 'formik';
 import * as Yup from 'yup';
 import Chip from '@material-ui/core/Chip';
@@ -180,7 +180,6 @@ const MenuProps = {
 
 const MeetingsAddProject = (props) => {
   const { IdProject } = useParams();
-  const theme = useTheme();
   const classes = useStyles();
   const [asignees, setAsignees] = useState([]);
   const [asigneeIds, setAsigneeIds] = React.useState([]);
@@ -200,7 +199,6 @@ const MeetingsAddProject = (props) => {
     const res2 = await Promise.all([Api.getProjectPromoters(IdProject)]);
     const { mainMentor } = res2[0].data.data;
     const { additionalMentors } = res2[0].data.data;
-
     const students = res[0].data.data;
     students.push(mainMentor);
     const allMembers = students.concat(additionalMentors);
@@ -293,7 +291,6 @@ const MeetingsAddProject = (props) => {
       endTime: endTimeParse,
       AttendeeUsers: asigneeIds,
     };
-
     onMeetingAddHandler(meetingData);
   };
 
