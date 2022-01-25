@@ -2,7 +2,7 @@ import axios from 'axios';
 import UseToken from 'screens/UseToken';
 import React, { useState, useEffect } from 'react';
 
-const apiUrl = 'http://localhost:57864/api';
+const apiUrl = 'https://mentoring-app-backend.azurewebsites.net/api';
 
 // TODO - just for development. Otherwise token should be received
 // after login request.
