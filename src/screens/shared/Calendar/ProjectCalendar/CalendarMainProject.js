@@ -79,9 +79,10 @@ function CalendarMainProject() {
           </Grid>
         </Grid>
         <Grid item xs={5}>
-          <Typography variant="h4" gutterBottom style={{ marginBottom: '4vh' }}>Meeting Notes</Typography>
+
           {showNotes ? (
             <div>
+              <Typography variant="h4" gutterBottom style={{ marginBottom: '4vh' }}>Meeting Notes</Typography>
               <MeetingList meetingid={clickedMeetingId} />
             </div>
           ) : <div />}

@@ -15,6 +15,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import { TableRowColumn } from 'material-ui';
 import ClearIcon from '@material-ui/icons/Clear';
+import EditIcon from '@material-ui/icons/Edit';
 import Alert from '@material-ui/lab/Alert';
 import ConfirmDialog from 'screens/shared/components/ConfirmDialog';
 import Api from '../../../api/index';
@@ -52,6 +53,7 @@ const MeetingList = (props) => {
   const [open, setOpen] = React.useState(false);
   const [noteDetailOpen, setNoteDetailOpen] = React.useState(false);
   const [noteDetails, setNoteDetails] = React.useState();
+  const [isEdit, setIsEdit] = useState(false);
   const [deleteMeetingNoteDialogOptions, setDeleteMeetingNoteDialogOptions] = useState({
     title: 'Delete Meeting Note',
     mainText: 'Are you sure you want to delete this Meeting Note?',
@@ -59,13 +61,30 @@ const MeetingList = (props) => {
     open: false,
   });
 
+  const [idMeetingNote, setIdMeetingNote] = useState('');
+
   const { meetingid } = props;
+
+  const defaultMeetingNoteValue = {
+    idNote: '',
+    title: '',
+    subject: '',
+    author: Api.getUserId(),
+    meeting: meetingid,
+    note1: '',
+    createdOn: new Date(),
+    lastModified: new Date(),
+  };
+  const [initialMeetingNoteValue, setInitialMeetingNoteValue] = useState(defaultMeetingNoteValue);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setIsEdit(false);
+    setInitialMeetingNoteValue(defaultMeetingNoteValue);
   };
 
   const loadMeetingData = async () => {
@@ -95,6 +114,59 @@ const MeetingList = (props) => {
   useEffect(() => {
     loadMeetingData();
   });
+
+  const onMeetingNoteEditHandler = async (id) => {
+    setIdMeetingNote(id);
+    const meetingNoteDetail = notes.filter((note) => note.idNote === id)[0];
+
+    setIsEdit(true);
+    setInitialMeetingNoteValue({
+      ...initialMeetingNoteValue,
+      idNote: meetingNoteDetail.idNote,
+      title: meetingNoteDetail.title,
+      subject: meetingNoteDetail.subject,
+      note1: meetingNoteDetail.note1,
+    });
+    setIsEdit(true);
+
+    setOpen(true);
+  };
+
+  const onMeetingNotePostHandler = async (e) => {
+    const noteData = {
+      title: e.title,
+      subject: e.subject,
+      author: Api.getUserId(),
+      meeting: meetingid,
+      note1: e.note1,
+      createdOn: new Date(),
+      lastModified: new Date(),
+    };
+
+    await Api.addMeetingNote(noteData)
+      .then(async () => {
+        handleClose();
+      });
+  };
+
+  const onMeetingNoteEditSubmit = async (e) => {
+    const noteData = {
+      idNote: idMeetingNote,
+      title: e.title,
+      subject: e.subject,
+      author: Api.getUserId(),
+      meeting: meetingid,
+      note1: e.note1,
+      lastModified: new Date(),
+    };
+
+    await Api.editMeetingNote(noteData)
+      .then(async () => {
+        setIsEdit(false);
+        handleClose();
+        setInitialMeetingNoteValue(defaultMeetingNoteValue);
+      });
+  };
 
   return (
     <StyledDiv>
@@ -137,6 +209,9 @@ const MeetingList = (props) => {
                     </TableCell>
                     <TableCell align="left">{row.subject}</TableCell>
                     <TableCell padding="checkbox">
+                      <EditIcon className={classes.delete} onClick={() => onMeetingNoteEditHandler(row.idNote)} />
+                    </TableCell>
+                    <TableCell padding="checkbox">
                       <ClearIcon className={classes.delete} onClick={() => onMeetingNoteDeleteHandler(row.idNote)} />
                     </TableCell>
                   </TableRow>
@@ -144,7 +219,8 @@ const MeetingList = (props) => {
               </TableBody>
             </Table>
           </TableContainer>
-          <MeetingNoteAdd open={open} onClose={handleClose} meetingId={meetingid} />
+
+          <MeetingNoteAdd open={open} onClose={handleClose} onSubmit={isEdit ? onMeetingNoteEditSubmit : onMeetingNotePostHandler} initialValues={initialMeetingNoteValue} isEdit={isEdit} />
           {noteDetailOpen ? (
             <MeetingDetail details={noteDetails} />
           ) : <div />}
@@ -165,7 +241,7 @@ const MeetingList = (props) => {
               </Table>
             </TableContainer>
             <Alert severity="info">No meeting notes</Alert>
-            <MeetingNoteAdd open={open} onClose={handleClose} meetingId={meetingid} />
+            <MeetingNoteAdd open={open} onSubmit={isEdit ? onMeetingNoteEditSubmit : onMeetingNotePostHandler} onClose={handleClose} initialValues={initialMeetingNoteValue} isEdit={isEdit} />
           </div>
         )}
     </StyledDiv>

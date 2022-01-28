@@ -162,6 +162,7 @@ const MeetingsViewProject = (props) => {
 
   const hideDet = () => {
     setShowDetail(false);
+    props.showNotes(false);
   };
 
   return (
@@ -172,7 +173,7 @@ const MeetingsViewProject = (props) => {
           <StyledP>Meetings</StyledP>
         </StyledDiv2>
         <List dense className={classes.list}>
-          {userMeetings.length > 0 ? (
+          { userMeetings && userMeetings.length > 0 ? (
             userMeetings.map((item) => (
               <ListItem
                 key={item.idMeeting}
