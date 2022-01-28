@@ -4,9 +4,8 @@ import React, { useState, useEffect } from 'react';
 
 const apiUrl = 'https://mentoring-app-backend.azurewebsites.net/api';
 
-// TODO - just for development. Otherwise token should be received
-// after login request.
-// eslint-disable-next-line max-len
+// 'https://mentoring-app-backend.azurewebsites.net/api';
+// 'http://localhost:57864/api';
 
 axios.interceptors.request.use(
   (config) => {
@@ -14,7 +13,6 @@ axios.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    // config.headers['Content-Type'] = 'application/json';
     return config;
   },
   (error) => {
@@ -138,6 +136,7 @@ const addMeetingNote = (noteData) => axios.post(`${apiUrl}/meeting-notes`, noteD
 const deleteMeetingNote = (idNote) => axios.delete(`${apiUrl}/meeting-notes/${idNote}`);
 const deleteProject = (idProject) => axios.delete(`${apiUrl}/projects/${idProject}`);
 const getProjectMeetings = (idProject, date) => axios.get(`${apiUrl}/meetings/project/${idProject}?date=${date}`);
+const editMeetingNote = (noteData) => axios.patch(`${apiUrl}/meeting-notes`, noteData);
 
 export default {
   getUserId,
@@ -220,4 +219,5 @@ export default {
   addMeetingNote,
   deleteMeetingNote,
   getProjectMeetings,
+  editMeetingNote,
 };

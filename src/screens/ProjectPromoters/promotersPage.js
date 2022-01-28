@@ -68,16 +68,18 @@ const ProjectPromotersBoard = () => {
 
             && <PromoterAvatar promoter={promoters.mainMentor} />}
 
+            { promoters && promoters.additionalMentors.length > 0 && (
             <div className={classes.additionalText}>
               <Typography align="center" variant="h4" gutterBottom> Additional Promoters</Typography>
 
             </div>
+            )}
 
           </Grid>
 
           <Grid item xs={12} container spacing={3} justify="center">
 
-            {promoters && promoters.additionalMentors.map((promoter) => (
+            { promoters && promoters.additionalMentors.map((promoter) => (
               <Grid item xs={3}>
                 <PromoterAvatar promoter={promoter} />
 

@@ -95,39 +95,9 @@ function MeetingNoteAdd(props) {
   const classes = useStyles();
   const { onClose, open } = props;
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const meeting = props.meetingId;
+
   const handleClose = () => {
     onClose();
-  };
-
-  const initialValues = {
-    title: '',
-    subject: '',
-    author: Api.getUserId(),
-    meeting,
-    note1: '',
-    createdOn: new Date(),
-    lastModified: new Date(),
-  };
-
-  const onNoteAddHandler = async (noteData) => {
-    await Api.addMeetingNote(noteData)
-      .then(async () => {
-        handleClose();
-      });
-  };
-
-  const onSubmit = (values) => {
-    const noteData = {
-      title: values.title,
-      subject: values.subject,
-      author: Api.getUserId(),
-      meeting,
-      note1: values.note1,
-      createdOn: new Date(),
-      lastModified: new Date(),
-    };
-    onNoteAddHandler(noteData);
   };
 
   const validate = Yup.object({
@@ -141,8 +111,8 @@ function MeetingNoteAdd(props) {
     <div>
       <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} fullScreen={fullScreen}>
         <Formik
-          initialValues={initialValues}
-          onSubmit={onSubmit}
+          initialValues={props.initialValues}
+          onSubmit={props.onSubmit}
           validationSchema={validate}
         >
           {(formik) => {
@@ -153,7 +123,7 @@ function MeetingNoteAdd(props) {
               <Form>
                 <Grid container direction="row" className={classes.grid}>
                   <Grid item lg={10}>
-                    <DialogTitle id="simple-dialog-title">Add meeting note</DialogTitle>
+                    <DialogTitle id="simple-dialog-title">{props.isEdit ? 'Edit meeting note' : 'Add meeting note' }</DialogTitle>
                   </Grid>
                   <Grid item lg={2}>
                     <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
@@ -282,4 +252,16 @@ MeetingNoteAdd.propTypes = {
   open: PropTypes.bool.isRequired,
 };
 
+MeetingNoteAdd.defaultProps = {
+  initialValues: {
+    idNote: '',
+    title: '',
+    subject: '',
+    author: Api.getUserId(),
+    meeting: '',
+    note1: '',
+    createdOn: new Date(),
+    lastModified: new Date(),
+  },
+};
 export default MeetingNoteAdd;
