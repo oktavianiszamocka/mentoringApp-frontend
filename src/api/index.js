@@ -3,9 +3,7 @@ import UseToken from 'screens/UseToken';
 import React, { useState, useEffect } from 'react';
 
 const apiUrl = 'https://mentoring-app-backend.azurewebsites.net/api';
-
-// 'https://mentoring-app-backend.azurewebsites.net/api';
-// 'http://localhost:57864/api';
+// const apiUrl = 'http://localhost:57864/api';
 
 axios.interceptors.request.use(
   (config) => {
@@ -78,7 +76,7 @@ const postNewPost = (postData) => axios.post(`${apiUrl}/posts`, postData);
 const deletePost = (idPost) => axios.delete(`${apiUrl}/posts/${idPost}`);
 const updatePost = (postData) => axios.patch(`${apiUrl}/posts`, postData);
 const updateProfileData = (profileData) => axios.patch(`${apiUrl}/profiles`, profileData);
-const getMyProject = (pageNumber) => axios.get(`${apiUrl}/projects/user-projects/${getUserId()}?pageNumber=${pageNumber}&pageSize=5`);
+const getMyProject = (pageNumber, pageSize) => axios.get(`${apiUrl}/projects/user-projects/${getUserId()}?pageNumber=${pageNumber}&pageSize=${pageSize}`);
 const getMyProjectBySearch = (additionalSearchUrl, pageNumber) => axios.get(`${apiUrl}/projects/user-projects/${getUserId()}/search?${additionalSearchUrl}pageNumber=${pageNumber}&pageSize=5`);
 const getProjectMembers = (idProject) => axios.get(`${apiUrl}/project-members/${idProject}`);
 const getProjectPromoters = (idProject) => axios.get(`${apiUrl}/project-promoters/${idProject}`);
