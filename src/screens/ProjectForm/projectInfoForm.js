@@ -177,7 +177,7 @@ const ProjectInfoForm = (props) => {
                       fullWidth
                       variant="outlined"
                       name="superviserEmail"
-                      label="Superviser Email"
+                      label="Supervisor Email"
                       className={classes.fieldStyle}
                       error={!!(errors.superviserEmail && touched.superviserEmail)}
                       helperText={errors.superviserEmail ? errors.superviserEmail : null}
@@ -210,6 +210,7 @@ const ProjectInfoForm = (props) => {
                       <Field
                         className={classes.fieldStyle}
                         component={KeyboardDatePicker}
+                        InputLabelProps={{ shrink: true }}
                         name="endDate"
                         label="End Date"
                         format="dd/MM/yyyy"
@@ -276,6 +277,7 @@ ProjectInfoForm.defaultProps = {
     endDate: null,
     superviserEmail: '',
     status: '',
+    endDate: '',
 
   },
 

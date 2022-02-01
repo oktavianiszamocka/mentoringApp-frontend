@@ -56,7 +56,8 @@ const AllNotes = () => {
 
   useEffect(() => {
     loadData();
-  });
+  },
+  []);
 
   const handleNotePostSubmit = async (e) => {
     const noteData = {

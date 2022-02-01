@@ -25,7 +25,7 @@ const MessageList = ({
 
   useEffect(() => {
     loadData();
-  });
+  }, []);
 
   const onTrigger = async (e, senderUser, recieverUser) => {
     await Api.getDetailMessages(Api.getUserId(), recieverUser.idUser)

@@ -90,7 +90,7 @@ const StudentDashboard = () => {
 
   useEffect(() => {
     loadData();
-  }, [page, projects]);
+  }, [page, project]);
 
   const onPostDeleteHandler = (id) => {
     setDeletePostDialogOptions({

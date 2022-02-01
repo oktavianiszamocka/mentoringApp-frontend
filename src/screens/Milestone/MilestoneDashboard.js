@@ -76,7 +76,7 @@ const MilestoneDashboard = () => {
 
   useEffect(() => {
     loadData();
-  });
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);

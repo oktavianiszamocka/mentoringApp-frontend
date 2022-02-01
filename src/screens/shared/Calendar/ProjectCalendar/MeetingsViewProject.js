@@ -118,7 +118,8 @@ const MeetingsViewProject = (props) => {
     };
 
     loadData();
-  }, [props.date, userMeetings]);
+  }, [props.date]);
+  // }, [props.date, userMeetings]);
 
   const showDetails = (e) => {
     const className = e.target.getAttribute('class');
