@@ -77,10 +77,12 @@ const StudentDashboard = () => {
   const [newPost, setNewPost] = useState(defaultInitialValuePost);
   const [showProjectBar, setShowProjectBar] = useState(!!IdProject);
   const [showAllComments, setShowAllComments] = useState(false);
+  const DEFAULT_SIZE = 20;
+  const DEFAULT_PAGE = 1;
 
   const loadData = async () => {
     const postType = project === 'General' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
-    const res = await Promise.all([postType, Api.getUserProject(), Api.getUserAvaAndName()]);
+    const res = await Promise.all([postType, Api.getMyProject(DEFAULT_PAGE, DEFAULT_SIZE), Api.getUserAvaAndName()]);
 
     setPosts(res[0].data.data);
     setCount(res[0].data.totalPages);

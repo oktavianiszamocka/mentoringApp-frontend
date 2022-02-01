@@ -61,9 +61,10 @@ const MyProject = () => {
   const [selectedMode, setSelectedMode] = useState('');
   const [searchWord, setSearchWord] = useState('');
   const [errorMsg, setErrorMsg] = useState(defaultErrorMsg);
+  const DEFAULT_SIZE = 5;
 
   const loadData = async () => {
-    const response = await Promise.all([Api.getMyProject(page), Api.getProjectStudies(), Api.getProjectModes()]);
+    const response = await Promise.all([Api.getMyProject(page, DEFAULT_SIZE), Api.getProjectStudies(), Api.getProjectModes()]);
     setProjects(response[0].data.data);
     setCount(response[0].data.totalPages);
     setStudies(response[1].data.data);
