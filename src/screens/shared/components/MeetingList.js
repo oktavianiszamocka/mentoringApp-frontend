@@ -113,7 +113,7 @@ const MeetingList = (props) => {
   };
   useEffect(() => {
     loadMeetingData();
-  });
+  }, []);
 
   const onMeetingNoteEditHandler = async (id) => {
     setIdMeetingNote(id);

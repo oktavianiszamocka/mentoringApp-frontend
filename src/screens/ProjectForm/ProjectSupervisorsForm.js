@@ -71,8 +71,7 @@ const ProjectSupervisorsForm = (props) => {
                       id="superviser-2"
                       as={TextField}
                       name="superviser2Email"
-
-                      label="Superviser 2 Email"
+                      label="Supervisor 2 Email"
                       variant="outlined"
                       className={classes.fieldStyle}
                       error={!!(errors.superviser2Email && touched.superviser2Email)}
@@ -88,7 +87,7 @@ const ProjectSupervisorsForm = (props) => {
                       id="superviser-3"
                       as={TextField}
                       name="superviser3Email"
-                      label="Superviser 3 Email"
+                      label="Supervisor 3 Email"
                       variant="outlined"
                       className={classes.fieldStyle}
                       error={!!(errors.superviser3Email && touched.superviser3Email)}
@@ -103,7 +102,7 @@ const ProjectSupervisorsForm = (props) => {
                       id="superviser-4"
                       as={TextField}
                       name="superviser4Email"
-                      label="Superviser 4 Email"
+                      label="Supervisor 4 Email"
                       variant="outlined"
                       className={classes.fieldStyle}
                       error={!!(errors.superviser4Email && touched.superviser4Email)}
@@ -118,7 +117,7 @@ const ProjectSupervisorsForm = (props) => {
                       id="superviser-5"
                       as={TextField}
                       name="superviser5Email"
-                      label="Superviser 5 Email"
+                      label="Supervisor 5 Email"
                       variant="outlined"
                       className={classes.fieldStyle}
                       error={!!(errors.superviser5Email && touched.superviser5Email)}
