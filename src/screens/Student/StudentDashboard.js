@@ -82,12 +82,17 @@ const StudentDashboard = () => {
 
   const loadData = async () => {
     const postType = project === 'General' ? Api.getGeneralPosts(page) : Api.getProjectPosts(page, project);
-    const res = await Promise.all([postType, Api.getMyProject(DEFAULT_PAGE, DEFAULT_SIZE), Api.getUserAvaAndName()]);
+    const res = await Promise.all([postType, Api.getUserAvaAndName()]);
 
     setPosts(res[0].data.data);
     setCount(res[0].data.totalPages);
-    setProjects(res[1].data.data);
-    setUser(res[2].data.data);
+    setUser(res[1].data.data);
+
+    await Api.getMyProject(DEFAULT_PAGE, DEFAULT_SIZE).then((response) => {
+      setProjects(response.data.data);
+    }).catch((err) => {
+
+    });
   };
 
   useEffect(() => {
