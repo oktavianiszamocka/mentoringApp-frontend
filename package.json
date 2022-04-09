@@ -27,7 +27,7 @@
     "material-ui": "^0.20.2",
     "material-ui-dropzone": "^3.0.0",
     "material-ui-formik-components": "^0.7.3",
-    "moment": "^2.26.0",
+    "moment": "^2.29.2",
     "mui-rte": "^1.26.2",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
